@@ -1,0 +1,22 @@
+name: Main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  lint-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '14.3.x'
+      - name: Install
+        run: yarn
+      - name: Lint
+        run: yarn format:check
+      - name: Test
+        run: yarn test
