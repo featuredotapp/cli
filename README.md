@@ -1,4 +1,4 @@
-mailscript cli
+MailScript cli
 ==============
 
 Configure and use mailscript from the command-line
@@ -19,7 +19,7 @@ $ npm install -g mailscriptcli
 $ mailscript COMMAND
 running command...
 $ mailscript (-v|--version|version)
-mailscriptcli/0.1.0 darwin-x64 node-v14.15.0
+mailscriptcli/0.1.0 darwin-x64 node-v14.3.0
 $ mailscript --help [COMMAND]
 USAGE
   $ mailscript COMMAND
@@ -28,11 +28,9 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-- [mailscript cli](#mailscript-cli)
-- [Usage](#usage)
-- [Commands](#commands)
-  - [`mailscript hello`](#mailscript-hello)
-  - [`mailscript help [COMMAND]`](#mailscript-help-command)
+* [`mailscript hello`](#mailscript-hello)
+* [`mailscript help [COMMAND]`](#mailscript-help-command)
+* [`mailscript register`](#mailscript-register)
 
 ## `mailscript hello`
 
@@ -50,7 +48,7 @@ DESCRIPTION
   Extra documentation goes here
 ```
 
-_See code: [src/commands/hello.js](https://github.com/getmailscript/mailscriptcli/blob/v0.1.0/src/commands/hello.js)_
+_See code: [src/commands/hello.js](https://github.com/getmailscript/cli/blob/v0.1.0/src/commands/hello.js)_
 
 ## `mailscript help [COMMAND]`
 
@@ -68,4 +66,22 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.0/src/commands/help.ts)_
+
+## `mailscript register`
+
+Describe the command here
+
+```
+USAGE
+  $ mailscript register
+
+OPTIONS
+  -n, --name=name  name to print
+
+DESCRIPTION
+  ...
+  Extra documentation goes here
+```
+
+_See code: [src/commands/register.js](https://github.com/getmailscript/cli/blob/v0.1.0/src/commands/register.js)_
 <!-- commandsstop -->

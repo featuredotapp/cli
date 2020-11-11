@@ -10,7 +10,11 @@
   "dependencies": {
     "@oclif/command": "^1",
     "@oclif/config": "^1",
-    "@oclif/plugin-help": "^3"
+    "@oclif/plugin-help": "^3",
+    "body-parser": "^1.19.0",
+    "cli-ux": "^5.5.0",
+    "express": "^4.17.1",
+    "jose": "^2.0.3"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1",
