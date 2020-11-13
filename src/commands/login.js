@@ -7,10 +7,6 @@ const { Command } = require('@oclif/command')
 const { cli } = require('cli-ux')
 const express = require('express')
 const bodyParser = require('body-parser')
-const {
-  JWK: { None },
-  JWT,
-} = require('jose')
 const writeFile = promisify(fs.writeFile)
 
 const port = 14578
@@ -30,10 +26,9 @@ class LoginCommand extends Command {
       cli.action.stop()
 
       try {
-        const verifiedToken = JWT.verify(req.query.token, None)
+        const verifiedToken = req.query.token
 
-        const config =
-          JSON.stringify({ accessKey: verifiedToken.accessKey }, null, 2) + '\n'
+        const config = JSON.stringify({ apiKey: verifiedToken }, null, 2) + '\n'
 
         writeFile(path.join(os.homedir(), '.mailscript'), config)
 
