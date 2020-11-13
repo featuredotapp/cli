@@ -15,6 +15,7 @@
     "cli-ux": "^5.5.1",
     "express": "^4.17.1",
     "jose": "^2.0.3",
+    "node-fetch": "^2.6.1",
     "tslib": "^1"
   },
   "devDependencies": {
@@ -24,6 +25,7 @@
     "@types/express": "^4.17.9",
     "@types/mocha": "^5",
     "@types/node": "^10",
+    "@types/node-fetch": "^2.5.7",
     "chai": "^4",
     "eslint": "^5.13",
     "eslint-config-oclif": "^3.1",
@@ -32,6 +34,7 @@
     "globby": "^10",
     "mocha": "^5",
     "nyc": "^14",
+    "oazapfts": "^3.1.2",
     "prettier": "^2.1.2",
     "ts-node": "^8",
     "typescript": "^3.3"
@@ -66,7 +69,8 @@
     "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif-dev readme && git add README.md",
     "format": "prettier --write \"./src/**/*.{ts,tsx,js,jsx}\"",
-    "format:check": "prettier --check \"./src/**/*.{ts,tsx,js,jsx}\""
+    "format:check": "prettier --check \"./src/**/*.{ts,tsx,js,jsx}\"",
+    "swagger:client-compile": "./scripts/compile-client.sh"
   },
   "types": "lib/index.d.ts"
 }

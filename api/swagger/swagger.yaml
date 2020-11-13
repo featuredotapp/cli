@@ -1,0 +1,214 @@
+openapi: '3.0.0'
+info:
+  version: 0.1.0
+  title: Mailscript
+  license:
+    name: MIT
+servers:
+  - url: http://localhost:7000/v1
+    description: Local development server
+    variables:
+      port:
+        enum:
+          - '7000'
+          - '443'
+        default: '7000'
+paths:
+  /workspaces:
+    post:
+      tags:
+        - 'workspaces'
+      summary: 'Claim a Mailscript workspace'
+      description: 'An attendant address will be created as well'
+      operationId: 'addWorkspace'
+      requestBody:
+        description: request body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddWorkspaceRequest'
+      responses:
+        '201':
+          description: 'successful operation'
+        '400':
+          description: 'Internal error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '405':
+          description: 'Invalid input'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      tags:
+        - 'workspaces'
+      summary: 'Get all workspaces you have access to'
+      description: ''
+      operationId: 'getAllWorkspaces'
+      responses:
+        '200':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllWorkspacesResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '405':
+          description: 'Invalid input'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /addresses:
+    post:
+      tags:
+        - 'addresses'
+      summary: 'Claim a new Mailscript address'
+      description: ''
+      operationId: 'addAddress'
+      requestBody:
+        description: Address body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddAddressRequest'
+      responses:
+        '200':
+          description: 'successful operation'
+        '403':
+          description: 'Bad credentials'
+        '405':
+          description: 'Invalid input'
+    get:
+      tags:
+        - 'addresses'
+      summary: 'Get all addresses you have access to'
+      description: ''
+      operationId: 'getAllAddresses'
+      responses:
+        '200':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllAddressesResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '405':
+          description: 'Invalid input'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /addresses/{address}:
+    delete:
+      tags:
+        - 'addresses'
+      summary: 'Delete a mailscript address'
+      description: ''
+      operationId: 'deleteAddress'
+      parameters:
+        - name: address
+          in: path
+          description: ID of address
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'successful operation'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '405':
+          description: 'Invalid input'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    Workspace:
+      properties:
+        id:
+          type: string
+        owner:
+          type: string
+        createdAt:
+          type: integer
+        createdBy:
+          type: string
+    Address:
+      properties:
+        id:
+          type: string
+        owner:
+          type: string
+        createdAt:
+          type: integer
+        createdBy:
+          type: string
+    ErrorResponse:
+      required:
+        - error
+      properties:
+        error:
+          type: string
+    AddWorkspaceRequest:
+      required:
+        - workspace
+      properties:
+        workspace:
+          type: string
+    GetAllWorkspacesResponse:
+      properties:
+        list:
+          type: array
+          items:
+            type: object
+            oneOf:
+              - $ref: '#/components/schemas/Workspace'
+    AddAddressRequest:
+      required:
+        - address
+      properties:
+        address:
+          type: string
+    GetAllAddressesResponse:
+      properties:
+        list:
+          type: array
+          items:
+            type: object
+            oneOf:
+              - $ref: '#/components/schemas/Address'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
