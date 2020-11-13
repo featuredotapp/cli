@@ -101,7 +101,23 @@ export function addAddress(
   addAddressRequest: AddAddressRequest,
   opts?: Oazapfts.RequestOpts,
 ) {
-  return oazapfts.fetchText(
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 405
+        data: ErrorResponse
+      }
+  >(
     '/addresses',
     oazapfts.json({
       ...opts,
