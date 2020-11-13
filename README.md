@@ -28,9 +28,26 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
+* [`mailscript address [FILE]`](#mailscript-address-file)
 * [`mailscript help [COMMAND]`](#mailscript-help-command)
 * [`mailscript login`](#mailscript-login)
-* [`mailscript workspace [FILE]`](#mailscript-workspace-file)
+* [`mailscript workspace SUBCOMMAND`](#mailscript-workspace-subcommand)
+
+## `mailscript address [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ mailscript address [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [src/commands/address.ts](https://github.com/getmailscript/cli/blob/v0.1.0/src/commands/address.ts)_
 
 ## `mailscript help [COMMAND]`
 
@@ -63,18 +80,17 @@ DESCRIPTION
 
 _See code: [src/commands/login.ts](https://github.com/getmailscript/cli/blob/v0.1.0/src/commands/login.ts)_
 
-## `mailscript workspace [FILE]`
+## `mailscript workspace SUBCOMMAND`
 
-describe the command here
+manipulate workspaces
 
 ```
 USAGE
-  $ mailscript workspace [FILE]
+  $ mailscript workspace SUBCOMMAND
 
 OPTIONS
-  -f, --force
   -h, --help       show CLI help
-  -n, --name=name  name to print
+  -n, --name=name  name of the workspace
 ```
 
 _See code: [src/commands/workspace.ts](https://github.com/getmailscript/cli/blob/v0.1.0/src/commands/workspace.ts)_

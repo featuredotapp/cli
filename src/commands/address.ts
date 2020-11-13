@@ -10,12 +10,12 @@ enum Subcommand {
   add = 'add',
 }
 
-export default class Workspace extends Command {
-  static description = 'manipulate workspaces'
+export default class Address extends Command {
+  static description = 'manipulate addresses'
 
   static flags = {
     help: flags.help({ char: 'h' }),
-    name: flags.string({ char: 'n', description: 'name of the workspace' }),
+    address: flags.string({ char: 'n', description: 'the address' }),
   }
 
   static args = [
@@ -28,7 +28,7 @@ export default class Workspace extends Command {
   ]
 
   async run() {
-    const { args, flags } = this.parse(Workspace)
+    const { args, flags } = this.parse(Address)
 
     const subcommand: Subcommand = args.subcommand
 
@@ -46,20 +46,20 @@ export default class Workspace extends Command {
 
   async list(client: typeof api): Promise<void> {
     return handle(
-      client.getAllWorkspaces(),
+      client.getAllAddresses(),
       withStandardErrors(
         {
-          '200': ({ list }: api.GetAllWorkspacesResponse) => {
+          '200': ({ list }: api.GetAllAddressesResponse) => {
             if (!list || list.length === 0) {
               this.log(
-                `you don't have a workspace currently, create one with: mailscript workspace add`,
+                `you don't have any addresses currently, create one with: mailscript address add`,
               )
               this.exit(0)
             }
 
-            this.log('Workspaces')
-            for (const workspace of list || []) {
-              this.log(`  ${workspace.id}`)
+            this.log('Addresses')
+            for (const address of list || []) {
+              this.log(`  ${address.id}`)
             }
           },
         },
@@ -69,19 +69,19 @@ export default class Workspace extends Command {
   }
 
   async add(client: typeof api, flags: any): Promise<void> {
-    if (!flags.name) {
+    if (!flags.address) {
       this.log(
-        'Please provide a name: mailscript workspace add --name <example>',
+        'Please provide an address to add: mailscript address add --address example@workspace.mailscript.com',
       )
       this.exit(1)
     }
 
     return handle(
-      client.addWorkspace({ workspace: flags.name }),
+      client.addAddress({ address: flags.address }),
       withStandardErrors(
         {
-          '201': (response: any) => {
-            this.log(response)
+          '201': () => {
+            this.log(`Address added: ${flags.address}`)
           },
         },
         this,
