@@ -15,11 +15,11 @@ Configure and use mailscript from the command-line
 # Usage
 <!-- usage -->
 ```sh-session
-$ npm install -g mailscriptcli
+$ npm install -g mailscript
 $ mailscript COMMAND
 running command...
 $ mailscript (-v|--version|version)
-mailscriptcli/0.1.0 darwin-x64 node-v14.15.0
+mailscript/0.2.0 darwin-x64 node-v14.3.0
 $ mailscript --help [COMMAND]
 USAGE
   $ mailscript COMMAND
@@ -28,26 +28,25 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`mailscript address [FILE]`](#mailscript-address-file)
+* [`mailscript address SUBCOMMAND`](#mailscript-address-subcommand)
 * [`mailscript help [COMMAND]`](#mailscript-help-command)
 * [`mailscript login`](#mailscript-login)
 * [`mailscript workspace SUBCOMMAND`](#mailscript-workspace-subcommand)
 
-## `mailscript address [FILE]`
+## `mailscript address SUBCOMMAND`
 
-describe the command here
+manipulate addresses
 
 ```
 USAGE
-  $ mailscript address [FILE]
+  $ mailscript address SUBCOMMAND
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -h, --help             show CLI help
+  -n, --address=address  the address
 ```
 
-_See code: [src/commands/address.ts](https://github.com/getmailscript/cli/blob/v0.1.0/src/commands/address.ts)_
+_See code: [src/commands/address.ts](https://github.com/getmailscript/cli/blob/v0.2.0/src/commands/address.ts)_
 
 ## `mailscript help [COMMAND]`
 
@@ -78,7 +77,7 @@ DESCRIPTION
   Link or create your MailScript account
 ```
 
-_See code: [src/commands/login.ts](https://github.com/getmailscript/cli/blob/v0.1.0/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/getmailscript/cli/blob/v0.2.0/src/commands/login.ts)_
 
 ## `mailscript workspace SUBCOMMAND`
 
@@ -93,5 +92,5 @@ OPTIONS
   -n, --name=name  name of the workspace
 ```
 
-_See code: [src/commands/workspace.ts](https://github.com/getmailscript/cli/blob/v0.1.0/src/commands/workspace.ts)_
+_See code: [src/commands/workspace.ts](https://github.com/getmailscript/cli/blob/v0.2.0/src/commands/workspace.ts)_
 <!-- commandsstop -->
