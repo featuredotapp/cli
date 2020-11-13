@@ -1,24 +1,24 @@
-const os = require('os')
-const path = require('path')
-const fs = require('fs')
-const promisify = require('util').promisify
+import * as os from 'os'
+import * as path from 'path'
+import * as http from 'http'
+import { writeFile as writeFileRaw } from 'fs'
+import { promisify } from 'util'
 
-const { Command } = require('@oclif/command')
-const { cli } = require('cli-ux')
-const express = require('express')
-const bodyParser = require('body-parser')
-const writeFile = promisify(fs.writeFile)
+import { Command } from '@oclif/command'
+import { cli } from 'cli-ux'
+import * as express from 'express'
+import * as bodyParser from 'body-parser'
+const writeFile = promisify(writeFileRaw)
 
 const port = 14578
 const remoteLoginUrl = 'http://localhost:3000'
 
 class LoginCommand extends Command {
   async run() {
-    let server
-    // const { flags } = this.parse(RegisterCommand)
-    // const name = flags.name || 'world'
+    // eslint-disable-next-line prefer-const
+    let server: http.Server
 
-    const app = express()
+    const app: express.Application = express()
     app.use(bodyParser.urlencoded({ extended: false }))
 
     app.get('/token', (req, res) => {
@@ -35,7 +35,6 @@ class LoginCommand extends Command {
         cli.info('Cli configured')
       } catch (error) {
         cli.error(error)
-        cli.exit(1)
       }
 
       res.send('All setup, you can close the page now and go back to the cli!')
@@ -56,8 +55,6 @@ LoginCommand.description = `
 Link or create your MailScript account
 `
 
-LoginCommand.flags = {
-  // name: flags.string({char: 'n', description: 'name to print'}),
-}
+LoginCommand.flags = {}
 
 module.exports = LoginCommand

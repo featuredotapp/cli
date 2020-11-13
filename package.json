@@ -1,8 +1,8 @@
 {
   "name": "mailscriptcli",
-  "description": "Configure and use mailscript from the command-line",
+  "description": "Configure and manipulate email pipeline in Mailscript from the cli",
   "version": "0.1.0",
-  "author": "mailscript team",
+  "author": "team <team@mailscript.com>",
   "bin": {
     "mailscript": "./bin/run"
   },
@@ -12,39 +12,47 @@
     "@oclif/config": "^1",
     "@oclif/plugin-help": "^3",
     "body-parser": "^1.19.0",
-    "cli-ux": "^5.5.0",
+    "cli-ux": "^5.5.1",
     "express": "^4.17.1",
-    "jose": "^2.0.3"
+    "jose": "^2.0.3",
+    "tslib": "^1"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1",
     "@oclif/test": "^1",
+    "@types/chai": "^4",
+    "@types/express": "^4.17.9",
+    "@types/mocha": "^5",
+    "@types/node": "^10",
     "chai": "^4",
     "eslint": "^5.13",
     "eslint-config-oclif": "^3.1",
+    "eslint-config-oclif-typescript": "^0.1",
     "eslint-config-prettier": "^6.15.0",
     "globby": "^10",
     "mocha": "^5",
     "nyc": "^14",
-    "prettier": "^2.1.2"
+    "prettier": "^2.1.2",
+    "ts-node": "^8",
+    "typescript": "^3.3"
   },
   "engines": {
     "node": ">=8.0.0"
   },
   "files": [
     "/bin",
+    "/lib",
     "/npm-shrinkwrap.json",
-    "/oclif.manifest.json",
-    "/src"
+    "/oclif.manifest.json"
   ],
   "homepage": "https://github.com/getmailscript/cli",
   "keywords": [
     "oclif"
   ],
   "license": "MIT",
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "oclif": {
-    "commands": "./src/commands",
+    "commands": "./lib/commands",
     "bin": "mailscript",
     "plugins": [
       "@oclif/plugin-help"
@@ -53,11 +61,12 @@
   "repository": "getmailscript/cli",
   "scripts": {
     "postpack": "rm -f oclif.manifest.json",
-    "posttest": "eslint .",
-    "prepack": "oclif-dev manifest && oclif-dev readme",
-    "test": "nyc mocha --forbid-only \"test/**/*.test.js\"",
+    "posttest": "eslint . --ext .ts --config .eslintrc",
+    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif-dev readme && git add README.md",
-    "format": "prettier --write \"./src/**/*.{js,jsx}\"",
-    "format:check": "prettier --check \"./src/**/*.{js,jsx}\""
-  }
+    "format": "prettier --write \"./src/**/*.{ts,tsx,js,jsx}\"",
+    "format:check": "prettier --check \"./src/**/*.{ts,tsx,js,jsx}\""
+  },
+  "types": "lib/index.d.ts"
 }
