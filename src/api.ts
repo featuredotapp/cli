@@ -220,6 +220,27 @@ export function getAllAccessories(opts?: Oazapfts.RequestOpts) {
   })
 }
 /**
+ * Get an accessory
+ */
+export function getAccessory(id: string, opts?: Oazapfts.RequestOpts) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+        data: Accessory
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 405
+        data: ErrorResponse
+      }
+  >(`/accessories/${id}`, {
+    ...opts,
+  })
+}
+/**
  * Setup an automation
  */
 export function addAutomation(

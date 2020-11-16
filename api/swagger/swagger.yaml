@@ -189,6 +189,39 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /accessories/{id}:
+    get:
+      tags:
+        - 'accessories'
+      summary: 'Get an accessory'
+      description: ''
+      operationId: 'getAccessory'
+      parameters:
+        - name: id
+          in: path
+          description: ID of accessory
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Accessory'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '405':
+          description: 'Invalid input'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /automations:
     post:
       tags:

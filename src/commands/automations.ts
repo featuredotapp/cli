@@ -94,18 +94,37 @@ export default class Automations extends Command {
       this.exit(1)
     }
 
+    const triggerAccessoryResponse = await api.getAccessory(flags.trigger)
+
+    if (triggerAccessoryResponse.status !== 200) {
+      this.log(`Error: not an available accessory`)
+      this.exit(1)
+      return
+    }
+
+    const triggerAccessory: api.Accessory = triggerAccessoryResponse.data
+
     const actionConfig = flags.forward
       ? {
-          type: 'FORWARD',
-          forwardTo: flags.forward,
+          type: 'forward',
+          forward: flags.forward,
         }
       : {}
+
+    const criterias =
+      triggerAccessory.type === 'mailscript-email'
+        ? [
+            {
+              sentTo: triggerAccessory.address,
+            },
+          ]
+        : []
 
     const payload: api.AddAutomationRequest = {
       trigger: {
         accessoryId: flags.trigger,
         config: {
-          criterias: [],
+          criterias,
         },
       },
       actions: [
