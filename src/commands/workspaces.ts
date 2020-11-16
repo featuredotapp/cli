@@ -81,7 +81,7 @@ export default class Workspaces extends Command {
       withStandardErrors(
         {
           '201': (response: any) => {
-            this.log(response)
+            this.log(`Workspace '${response.id}' added`)
           },
         },
         this,
