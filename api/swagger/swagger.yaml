@@ -163,6 +163,66 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /automations:
+    post:
+      tags:
+        - 'automations'
+      summary: 'Setup an automation'
+      description: ''
+      operationId: 'addAutomation'
+      requestBody:
+        description: Automation body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddAutomationRequest'
+      responses:
+        '201':
+          description: 'successful operation'
+        '400':
+          description: 'Internal error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '405':
+          description: 'Invalid input'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      tags:
+        - 'automations'
+      summary: 'Get all automations you have access to'
+      description: ''
+      operationId: 'getAllAutomations'
+      responses:
+        '200':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllAutomationsResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '405':
+          description: 'Invalid input'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
     Workspace:
@@ -180,6 +240,14 @@ components:
         id:
           type: string
         owner:
+          type: string
+        createdAt:
+          type: integer
+        createdBy:
+          type: string
+    Automation:
+      properties:
+        id:
           type: string
         createdAt:
           type: integer
@@ -219,6 +287,32 @@ components:
             type: object
             oneOf:
               - $ref: '#/components/schemas/Address'
+    GetAllAutomationsResponse:
+      properties:
+        list:
+          type: array
+          items:
+            type: object
+            oneOf:
+              - $ref: '#/components/schemas/Automation'
+    AddAutomationRequest:
+      properties:
+        trigger:
+          type: object
+          properties:
+            accessoryId:
+              type: string
+            config:
+              type: object
+        actions:
+          type: array
+          items:
+            type: object
+            properties:
+              accessoryId:
+                type: string
+              config:
+                type: object
   securitySchemes:
     bearerAuth:
       type: http

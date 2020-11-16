@@ -41,6 +41,24 @@ export type Address = {
 export type GetAllAddressesResponse = {
   list?: Address[]
 }
+export type AddAutomationRequest = {
+  trigger?: {
+    accessoryId?: string
+    config?: object
+  }
+  actions?: {
+    accessoryId?: string
+    config?: object
+  }[]
+}
+export type Automation = {
+  id?: string
+  createdAt?: number
+  createdBy?: string
+}
+export type GetAllAutomationsResponse = {
+  list?: Automation[]
+}
 /**
  * Claim a Mailscript workspace
  */
@@ -166,5 +184,58 @@ export function deleteAddress(address: string, opts?: Oazapfts.RequestOpts) {
   >(`/addresses/${address}`, {
     ...opts,
     method: 'DELETE',
+  })
+}
+/**
+ * Setup an automation
+ */
+export function addAutomation(
+  addAutomationRequest: AddAutomationRequest,
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 201
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 405
+        data: ErrorResponse
+      }
+  >(
+    '/automations',
+    oazapfts.json({
+      ...opts,
+      method: 'POST',
+      body: addAutomationRequest,
+    }),
+  )
+}
+/**
+ * Get all automations you have access to
+ */
+export function getAllAutomations(opts?: Oazapfts.RequestOpts) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+        data: GetAllAutomationsResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 405
+        data: ErrorResponse
+      }
+  >('/automations', {
+    ...opts,
   })
 }
