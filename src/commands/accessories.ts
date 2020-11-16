@@ -7,15 +7,13 @@ import withStandardErrors from '../utils/errorHandling'
 
 enum Subcommand {
   list = 'list',
-  add = 'add',
 }
 
-export default class Workspaces extends Command {
-  static description = 'manipulate workspaces'
+export default class Accessories extends Command {
+  static description = 'manipulate accessories'
 
   static flags = {
     help: flags.help({ char: 'h' }),
-    name: flags.string({ char: 'n', description: 'name of the workspace' }),
   }
 
   static args = [
@@ -28,7 +26,7 @@ export default class Workspaces extends Command {
   ]
 
   async run() {
-    const { args, flags } = this.parse(Workspaces)
+    const { args } = this.parse(Accessories)
 
     const subcommand: Subcommand = args.subcommand
 
@@ -37,8 +35,8 @@ export default class Workspaces extends Command {
     switch (subcommand) {
       case Subcommand.list:
         return this.list(client)
-      case Subcommand.add:
-        return this.add(client, flags)
+      // case Subcommand.add:
+      //   return this.add(client, flags)
       default:
         assertNever(subcommand)
     }
@@ -46,42 +44,21 @@ export default class Workspaces extends Command {
 
   async list(client: typeof api): Promise<void> {
     return handle(
-      client.getAllWorkspaces(),
+      client.getAllAccessories(),
       withStandardErrors(
         {
-          '200': ({ list }: api.GetAllWorkspacesResponse) => {
+          '200': ({ list }: api.GetAllAccessoriesResponse) => {
             if (!list || list.length === 0) {
               this.log(
-                `you don't have a workspace currently, create one with: mailscript workspace add`,
+                `you don't have a accessories currently, create an address to add one: mailscript addresses add --address example@workspace.mailscript.com`,
               )
               this.exit(0)
             }
 
-            this.log('Workspaces')
-            for (const workspace of list || []) {
-              this.log(`  ${workspace.id}`)
+            this.log('Accessories')
+            for (const accessory of list || []) {
+              this.log(`  ${accessory.id}`)
             }
-          },
-        },
-        this,
-      ),
-    )
-  }
-
-  async add(client: typeof api, flags: any): Promise<void> {
-    if (!flags.name) {
-      this.log(
-        'Please provide a name: mailscript workspace add --name <example>',
-      )
-      this.exit(1)
-    }
-
-    return handle(
-      client.addWorkspace({ workspace: flags.name }),
-      withStandardErrors(
-        {
-          '201': (response: any) => {
-            this.log(response)
           },
         },
         this,

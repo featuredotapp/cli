@@ -10,7 +10,7 @@ enum Subcommand {
   add = 'add',
 }
 
-export default class Address extends Command {
+export default class Addresses extends Command {
   static description = 'manipulate addresses'
 
   static flags = {
@@ -28,7 +28,7 @@ export default class Address extends Command {
   ]
 
   async run() {
-    const { args, flags } = this.parse(Address)
+    const { args, flags } = this.parse(Addresses)
 
     const subcommand: Subcommand = args.subcommand
 

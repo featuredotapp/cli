@@ -163,6 +163,32 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /accessories:
+    get:
+      tags:
+        - 'accessories'
+      summary: 'Get all accessories you have access to'
+      description: ''
+      operationId: 'getAllAccessories'
+      responses:
+        '200':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllAccessoriesResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '405':
+          description: 'Invalid input'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /automations:
     post:
       tags:
@@ -253,6 +279,23 @@ components:
           type: integer
         createdBy:
           type: string
+    Accessory:
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: ['mailscript-email']
+        createdAt:
+          type: integer
+        createdBy:
+          type: string
+        address:
+          type: string
+        sms:
+          type: string
+        key:
+          type: string
     ErrorResponse:
       required:
         - error
@@ -313,6 +356,14 @@ components:
                 type: string
               config:
                 type: object
+    GetAllAccessoriesResponse:
+      properties:
+        list:
+          type: array
+          items:
+            type: object
+            oneOf:
+              - $ref: '#/components/schemas/Accessory'
   securitySchemes:
     bearerAuth:
       type: http

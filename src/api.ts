@@ -41,6 +41,18 @@ export type Address = {
 export type GetAllAddressesResponse = {
   list?: Address[]
 }
+export type Accessory = {
+  id?: string
+  type?: 'mailscript-email'
+  createdAt?: number
+  createdBy?: string
+  address?: string
+  sms?: string
+  key?: string
+}
+export type GetAllAccessoriesResponse = {
+  list?: Accessory[]
+}
 export type AddAutomationRequest = {
   trigger?: {
     accessoryId?: string
@@ -184,6 +196,27 @@ export function deleteAddress(address: string, opts?: Oazapfts.RequestOpts) {
   >(`/addresses/${address}`, {
     ...opts,
     method: 'DELETE',
+  })
+}
+/**
+ * Get all accessories you have access to
+ */
+export function getAllAccessories(opts?: Oazapfts.RequestOpts) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+        data: GetAllAccessoriesResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 405
+        data: ErrorResponse
+      }
+  >('/accessories', {
+    ...opts,
   })
 }
 /**
