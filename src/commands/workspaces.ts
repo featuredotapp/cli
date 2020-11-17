@@ -52,11 +52,10 @@ export default class Workspaces extends Command {
           '200': ({ list }: api.GetAllWorkspacesResponse) => {
             if (!list || list.length === 0) {
               this.log(
-                `you don't have a workspace currently, create one with: mailscript workspace add`,
+                `you don't have a workspace currently, create one with: mailscript workspaces add`,
               )
               this.exit(0)
             }
-
             this.log('Workspaces')
             for (const workspace of list || []) {
               this.log(`  ${workspace.id}`)

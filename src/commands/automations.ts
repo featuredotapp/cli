@@ -78,7 +78,7 @@ export default class Automations extends Command {
           '200': ({ list }: api.GetAllAutomationsResponse) => {
             if (!list || list.length === 0) {
               this.log(
-                `you don't have an automation currently, create one with: mailscript automation add`,
+                `you don't have an automation currently, create one with: mailscript automations add`,
               )
               this.exit(0)
             }
@@ -139,8 +139,6 @@ export default class Automations extends Command {
         },
       ],
     }
-
-    console.log(payload)
 
     return handle(
       client.addAutomation(payload),
