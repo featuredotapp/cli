@@ -123,5 +123,93 @@ describe('Automations', () => {
           })
         })
     })
+
+    describe('reply', () => {
+      test
+        .stdout()
+        .nock('http://localhost:7000', nockAdd)
+        .command([
+          'automations',
+          'add',
+          '--trigger',
+          'test@mailscript.io',
+          '--reply',
+          '--text',
+          'text',
+        ])
+        .it('add reply automation', (ctx) => {
+          expect(ctx.stdout).to.contain('auto-xxx-yyy-zzz')
+          expect(postBody.actions[0].config).to.eql({
+            type: 'reply',
+            text: 'text',
+          })
+        })
+    })
+
+    describe('reply all', () => {
+      test
+        .stdout()
+        .nock('http://localhost:7000', nockAdd)
+        .command([
+          'automations',
+          'add',
+          '--trigger',
+          'test@mailscript.io',
+          '--replyall',
+          '--text',
+          'text',
+        ])
+        .it('add reply all automation', (ctx) => {
+          expect(ctx.stdout).to.contain('auto-xxx-yyy-zzz')
+          expect(postBody.actions[0].config).to.eql({
+            type: 'replyAll',
+            text: 'text',
+          })
+        })
+    })
+
+    describe('alias', () => {
+      test
+        .stdout()
+        .nock('http://localhost:7000', nockAdd)
+        .command([
+          'automations',
+          'add',
+          '--trigger',
+          'test@mailscript.io',
+          '--alias',
+          'another@mailscript.io',
+          '--text',
+          'text',
+        ])
+        .it('add reply all automation', (ctx) => {
+          expect(ctx.stdout).to.contain('auto-xxx-yyy-zzz')
+          expect(postBody.actions[0].config).to.eql({
+            type: 'alias',
+            alias: 'another@mailscript.io',
+          })
+        })
+    })
+
+    describe('multiple types', () => {
+      test
+        .stdout()
+        .command([
+          'automations',
+          'add',
+          '--trigger',
+          'test@mailscript.io',
+          '--alias',
+          'another@mailscript.io',
+          '--send',
+          'another@mailscript.io',
+          '--text',
+          'text',
+        ])
+        .exit(1)
+        .it('it errors', (ctx) => {
+          expect(ctx.stdout).to.contain('Please provide one type flag either')
+        })
+    })
   })
 })

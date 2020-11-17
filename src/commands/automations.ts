@@ -10,6 +10,8 @@ enum Subcommand {
   add = 'add',
 }
 
+const automationTypeFlags = ['send', 'alias', 'forward', 'reply', 'replyall']
+
 export default class Automations extends Command {
   static description = 'manipulate automations'
 
@@ -27,8 +29,18 @@ export default class Automations extends Command {
       char: 'f',
       description: 'email address for forward action',
     }),
+    reply: flags.boolean({
+      char: 'r',
+      description: 'email address for reply action',
+    }),
+    replyall: flags.boolean({
+      description: 'email address for reply all action',
+    }),
     send: flags.string({
       description: 'email address for send action',
+    }),
+    alias: flags.string({
+      description: 'email address for alias action',
     }),
     subject: flags.string({
       char: 's',
@@ -98,6 +110,17 @@ export default class Automations extends Command {
     if (!flags.trigger) {
       this.log(
         'Please provide a trigger: mailscript automation add --trigger <accessory-id>',
+      )
+      this.exit(1)
+    }
+
+    if (
+      automationTypeFlags.map((atf) => flags[atf]).filter((f) => Boolean(f))
+        .length !== 1
+    ) {
+      this.log(
+        'Please provide one type flag either: \n  --' +
+          automationTypeFlags.join('\n  --'),
       )
       this.exit(1)
     }
@@ -178,6 +201,39 @@ export default class Automations extends Command {
         subject: flags.subject,
         text: flags.text,
         html: flags.html,
+      }
+    }
+
+    if (flags.reply) {
+      if (!flags.text && !flags.html) {
+        this.log('Please provide either --text or --html')
+        this.exit(1)
+      }
+
+      return {
+        type: 'reply',
+        text: flags.text,
+        html: flags.html,
+      }
+    }
+
+    if (flags.replyall) {
+      if (!flags.text && !flags.html) {
+        this.log('Please provide either --text or --html')
+        this.exit(1)
+      }
+
+      return {
+        type: 'replyAll',
+        text: flags.text,
+        html: flags.html,
+      }
+    }
+
+    if (flags.alias) {
+      return {
+        type: 'alias',
+        alias: flags.alias,
       }
     }
 
