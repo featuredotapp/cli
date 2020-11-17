@@ -170,6 +170,12 @@ paths:
       summary: 'Get all accessories you have access to'
       description: ''
       operationId: 'getAllAccessories'
+      parameters:
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: 'successful operation'
@@ -322,6 +328,8 @@ components:
         createdAt:
           type: integer
         createdBy:
+          type: string
+        name:
           type: string
         address:
           type: string

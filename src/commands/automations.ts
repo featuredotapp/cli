@@ -27,6 +27,21 @@ export default class Automations extends Command {
       char: 'f',
       description: 'email address for forward action',
     }),
+    send: flags.string({
+      description: 'email address for send action',
+    }),
+    subject: flags.string({
+      char: 's',
+      description: 'subject of the email',
+    }),
+    text: flags.string({
+      char: 't',
+      description: 'text of the email',
+    }),
+    html: flags.string({
+      char: 'h',
+      description: 'html of the email',
+    }),
   }
 
   static args = [
@@ -87,29 +102,17 @@ export default class Automations extends Command {
       this.exit(1)
     }
 
-    if (!flags.action) {
-      this.log(
-        'Please provide an action: mailscript automation add --action <accessory-id>',
-      )
-      this.exit(1)
-    }
+    // if (!flags.action) {
+    //   this.log(
+    //     'Please provide an action: mailscript automation add --action <accessory-id>',
+    //   )
+    //   this.exit(1)
+    // }
 
-    const triggerAccessoryResponse = await api.getAccessory(flags.trigger)
-
-    if (triggerAccessoryResponse.status !== 200) {
-      this.log(`Error: not an available accessory`)
-      this.exit(1)
-      return
-    }
-
-    const triggerAccessory: api.Accessory = triggerAccessoryResponse.data
-
-    const actionConfig = flags.forward
-      ? {
-          type: 'forward',
-          forward: flags.forward,
-        }
-      : {}
+    const triggerAccessory = await this._lookupAccessory(flags.trigger)
+    const actionAccessory = flags.action
+      ? await this._lookupAccessory(flags.action)
+      : triggerAccessory
 
     const criterias =
       triggerAccessory.type === 'mailscript-email'
@@ -120,20 +123,24 @@ export default class Automations extends Command {
           ]
         : []
 
+    const actionConfig = this._resolveConfig(flags)
+
     const payload: api.AddAutomationRequest = {
       trigger: {
-        accessoryId: flags.trigger,
+        accessoryId: triggerAccessory.id,
         config: {
           criterias,
         },
       },
       actions: [
         {
-          accessoryId: flags.action,
+          accessoryId: actionAccessory.id,
           config: actionConfig,
         },
       ],
     }
+
+    console.log(payload)
 
     return handle(
       client.addAutomation(payload),
@@ -146,5 +153,60 @@ export default class Automations extends Command {
         this,
       ),
     )
+  }
+
+  private _resolveConfig(flags: any) {
+    if (flags.forward) {
+      return {
+        type: 'forward',
+        forward: flags.forward,
+      }
+    }
+
+    if (flags.send) {
+      if (!flags.subject) {
+        this.log('Please provide --subject')
+        this.exit(1)
+      }
+
+      if (!flags.text && !flags.html) {
+        this.log('Please provide either --text or --html')
+        this.exit(1)
+      }
+
+      return {
+        type: 'send',
+        to: flags.send,
+        subject: flags.subject,
+        text: flags.text,
+        html: flags.html,
+      }
+    }
+
+    return {}
+  }
+
+  private async _lookupAccessory(nameOrId: string): Promise<api.Accessory> {
+    const triggerByNameResponse = await api.getAllAccessories({
+      name: nameOrId,
+    })
+
+    if (
+      triggerByNameResponse.status === 200 &&
+      triggerByNameResponse.data.list?.length === 1
+    ) {
+      return triggerByNameResponse.data.list[0]
+    }
+
+    const triggerAccessoryResponse = await api.getAccessory(nameOrId)
+
+    if (triggerAccessoryResponse.status !== 200) {
+      this.log(`Error: not an available accessory: ${nameOrId}`)
+      this.exit(1)
+    }
+
+    const triggerAccessory: api.Accessory = triggerAccessoryResponse.data
+
+    return triggerAccessory
   }
 }

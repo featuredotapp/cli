@@ -6,6 +6,7 @@
  * See https://www.npmjs.com/package/oazapfts
  */
 import * as Oazapfts from 'oazapfts/lib/runtime'
+import * as QS from 'oazapfts/lib/runtime/query'
 export const defaults: Oazapfts.RequestOpts = {
   baseUrl: 'http://localhost:7000/v1',
 }
@@ -46,6 +47,7 @@ export type Accessory = {
   type?: 'mailscript-email'
   createdAt?: number
   createdBy?: string
+  name?: string
   address?: string
   sms?: string
   key?: string
@@ -201,7 +203,14 @@ export function deleteAddress(address: string, opts?: Oazapfts.RequestOpts) {
 /**
  * Get all accessories you have access to
  */
-export function getAllAccessories(opts?: Oazapfts.RequestOpts) {
+export function getAllAccessories(
+  {
+    name,
+  }: {
+    name?: string
+  } = {},
+  opts?: Oazapfts.RequestOpts,
+) {
   return oazapfts.fetchJson<
     | {
         status: 200
@@ -215,9 +224,16 @@ export function getAllAccessories(opts?: Oazapfts.RequestOpts) {
         status: 405
         data: ErrorResponse
       }
-  >('/accessories', {
-    ...opts,
-  })
+  >(
+    `/accessories${QS.query(
+      QS.form({
+        name,
+      }),
+    )}`,
+    {
+      ...opts,
+    },
+  )
 }
 /**
  * Get an accessory

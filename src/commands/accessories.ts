@@ -57,7 +57,7 @@ export default class Accessories extends Command {
 
             this.log('Accessories')
             for (const accessory of list || []) {
-              this.log(`  ${accessory.id}`)
+              this.log(`  ${accessory.name}`)
             }
           },
         },
