@@ -24,9 +24,6 @@ class LoginCommand extends Command {
     app.use(express.static(path.join(__dirname, '../../www')))
 
     app.get('/token', (req, res) => {
-      server.close()
-      cli.action.stop()
-
       try {
         const verifiedToken = req.query.token
 
@@ -40,6 +37,11 @@ class LoginCommand extends Command {
       }
 
       res.redirect('/LoginComplete.html')
+
+      setTimeout(() => {
+        server.close()
+        cli.action.stop()
+      }, 500)
     })
 
     server = app.listen(port)
