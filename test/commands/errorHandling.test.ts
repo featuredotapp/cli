@@ -22,7 +22,7 @@ describe('Error handling', () => {
     .command(['workspaces', 'list'])
     .exit(1)
     .it('shows error for general bad request', (ctx) => {
-      expect(ctx.stdout).to.contain('Error - bad request: bad request boo!')
+      expect(ctx.stdout).to.contain('Error: bad request boo!')
     })
 
   test

@@ -6,7 +6,7 @@ export default function withStandardErrors(obj: any, command: Command) {
     {},
     {
       '400': ({ error }: api.ErrorResponse) => {
-        command.log(`Error - bad request: ${error}`)
+        command.log(`Error: ${error}`)
         command.exit(1)
       },
       '403': ({ error }: api.ErrorResponse) => {
