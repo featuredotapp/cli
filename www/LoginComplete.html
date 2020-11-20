@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Mailscript</title>
+    <link rel="icon" href="images/favicon.png" />
+    <style>
+      body {
+        margin: 0;
+        overflow-x: hidden;
+        height: 100vh;
+      }
+
+      .page {
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+      }
+
+      .page-header {
+        display: grid;
+        grid-template-columns: auto auto 1fr;
+        grid-column-gap: 1rem;
+        align-items: center;
+        padding-left: 16px;
+        padding-top: 8px;
+        height: 48px;
+      }
+
+      .page-header-logo-circle {
+        height: 48px;
+        width: 48px;
+        border-radius: 50%;
+        background: linear-gradient(180deg, #000000 24.44%, #2c3f55 100%);
+        filter: drop-shadow(6px 16px 26px #a8a8a8);
+      }
+
+      .page-header-logo {
+        position: relative;
+
+        height: 1.1rem;
+        left: 1px;
+        top: 14px;
+      }
+
+      .page-header-text {
+        width: 8rem;
+      }
+
+      .page-main {
+        display: grid;
+        place-items: center;
+        height: calc(100vh - 56px - 32px);
+        text-align:center;
+      }
+
+      .page-footer {
+        display: grid;
+        place-items: center;
+        height: 32px;
+      }
+
+      .contact-link {
+        text-decoration: none;
+
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 19px;
+        text-align: center;
+
+        color: #000000;
+      }
+
+      .image-wrap {
+        display: grid;
+        place-items: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="page">
+      <header class="page-header">
+        <div class="page-header-logo-circle">
+          <img
+            class="page-header-logo"
+            src="./images/mailscript_logo_white.png"
+            alt="Mailscript logo"
+          />
+        </div>
+
+        <img
+          class="page-header-text"
+          src="./images/mailscript_black_min.png"
+          alt="Mailscript"
+        />
+      </header>
+
+      <main class="page-main">
+        <div class="wrap">
+          <div class="image-wrap">
+            <img src="images/success.svg" />
+          </div>
+
+          <h2>Mailscript cli configured.</h2>
+          <h3>You can close this page.</h3>
+        </div>
+      </main>
+
+      <footer class="page-footer">
+        <a class="contact-link" href="mailto:team@mailscrtip.com">
+          Contact our team
+        </a>
+      </footer>
+    </div>
+  </body>
+</html>

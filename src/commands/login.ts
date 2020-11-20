@@ -21,6 +21,8 @@ class LoginCommand extends Command {
     const app: express.Application = express()
     app.use(bodyParser.urlencoded({ extended: false }))
 
+    app.use(express.static(path.join(__dirname, '../../www')))
+
     app.get('/token', (req, res) => {
       server.close()
       cli.action.stop()
@@ -37,7 +39,7 @@ class LoginCommand extends Command {
         cli.error(error)
       }
 
-      res.send('All setup, you can close the page now and go back to the cli!')
+      res.redirect('/LoginComplete.html')
     })
 
     server = app.listen(port)
