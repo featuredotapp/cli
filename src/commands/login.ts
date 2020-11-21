@@ -4,7 +4,7 @@ import * as http from 'http'
 import { writeFile as writeFileRaw } from 'fs'
 import { promisify } from 'util'
 
-import { Command } from '@oclif/command'
+import { Command, flags } from '@oclif/command'
 import { cli } from 'cli-ux'
 import * as express from 'express'
 import * as bodyParser from 'body-parser'
@@ -14,7 +14,25 @@ const port = 14578
 const remoteLoginUrl = 'http://localhost:3000'
 
 class LoginCommand extends Command {
+  static description = `
+Link or create your MailScript account
+`
+
+  static flags = {
+    offline: flags.boolean({ char: 'o', default: false, required: false }),
+  }
+
   async run() {
+    const { flags } = this.parse(LoginCommand)
+
+    if (flags.offline) {
+      return this.runOfflineLogin()
+    }
+
+    return this.runWebLogin()
+  }
+
+  private runWebLogin() {
     // eslint-disable-next-line prefer-const
     let server: http.Server
 
@@ -23,15 +41,13 @@ class LoginCommand extends Command {
 
     app.use(express.static(path.join(__dirname, '../../www')))
 
-    app.get('/token', (req, res) => {
+    app.get('/token', async (req, res) => {
       try {
-        const verifiedToken = req.query.token
+        const token = req.query.token
 
-        const config = JSON.stringify({ apiKey: verifiedToken }, null, 2) + '\n'
+        await this.writeConfigFile(token as string)
 
-        writeFile(path.join(os.homedir(), '.mailscript'), config)
-
-        cli.info('Cli configured')
+        cli.info('🎉 Success - cli configured 🎉')
       } catch (error) {
         cli.error(error)
       }
@@ -53,12 +69,29 @@ class LoginCommand extends Command {
       ).toString('base64')}`,
     )
   }
+
+  private async runOfflineLogin() {
+    cli.log('Logging in using offline mode')
+    cli.log('')
+    cli.log('Copy and open the link: ')
+    const link = this.generateOfflineLink()
+    cli.url(link, link)
+    cli.log('')
+    const token = await cli.prompt('Enter the code from the link')
+    this.writeConfigFile(token)
+    cli.log('')
+    cli.info('🎉 Success - cli configured 🎉')
+  }
+
+  private generateOfflineLink() {
+    return `${remoteLoginUrl}`
+  }
+
+  private async writeConfigFile(token: string) {
+    const config = JSON.stringify({ apiKey: token }, null, 2) + '\n'
+
+    return writeFile(path.join(os.homedir(), '.mailscript'), config)
+  }
 }
-
-LoginCommand.description = `
-Link or create your MailScript account
-`
-
-LoginCommand.flags = {}
 
 module.exports = LoginCommand
