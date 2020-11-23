@@ -40,16 +40,18 @@ describe('Automations', () => {
       api
         .persist()
         .get('/v1/accessories')
-        .query({ name: 'test@mailscript.io' })
         .reply(200, {
-          id: 'access-01-xxx-yyy-zzz',
-          name: 'test@mailscript.io',
+          list: [
+            {
+              id: 'access-01-xxx-yyy-zzz',
+              name: 'test@mailscript.io',
+            },
+            {
+              id: 'webhook-xyz',
+              name: 'webhook',
+            },
+          ],
         })
-
-      api.persist().get('/v1/accessories/test@mailscript.io').reply(200, {
-        id: 'access-01-xxx-yyy-zzz',
-        name: 'test@mailscript.io',
-      })
 
       return api
         .post('/v1/automations', (body: any) => {
@@ -187,6 +189,35 @@ describe('Automations', () => {
           expect(postBody.actions[0].config).to.eql({
             type: 'alias',
             alias: 'another@mailscript.io',
+          })
+        })
+    })
+
+    describe('webhook', () => {
+      test
+        .stdout()
+        .nock('http://localhost:7000', nockAdd)
+        .command([
+          'automations',
+          'add',
+          '--trigger',
+          'test@mailscript.io',
+          '--webhook',
+          'http://example.com/webhook',
+        ])
+        .it('add webhook automation', (ctx) => {
+          expect(ctx.stdout).to.contain('auto-xxx-yyy-zzz')
+          expect(postBody.actions[0].accessoryId.startsWith('webhook-'))
+          expect(postBody.actions[0].config).to.eql({
+            type: 'webhook',
+            url: 'http://example.com/webhook',
+            opts: {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              method: 'POST',
+            },
+            body: '',
           })
         })
     })

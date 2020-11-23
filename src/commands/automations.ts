@@ -1,6 +1,7 @@
 import { Command, flags } from '@oclif/command'
-import * as api from '../api'
+import * as fs from 'fs'
 import { handle } from 'oazapfts'
+import * as api from '../api'
 import { assertNever } from '../utils/assertNever'
 import setupApiClient from '../setupApiClient'
 import withStandardErrors from '../utils/errorHandling'
@@ -10,7 +11,14 @@ enum Subcommand {
   add = 'add',
 }
 
-const automationTypeFlags = ['send', 'alias', 'forward', 'reply', 'replyall']
+const automationTypeFlags = [
+  'send',
+  'alias',
+  'forward',
+  'reply',
+  'replyall',
+  'webhook',
+]
 
 export default class Automations extends Command {
   static description = 'manipulate automations'
@@ -53,6 +61,21 @@ export default class Automations extends Command {
     html: flags.string({
       char: 'h',
       description: 'html of the email',
+    }),
+    webhook: flags.string({
+      char: 'w',
+      description: 'url of the webhook to call',
+    }),
+    method: flags.enum({
+      options: ['PUT', 'POST', 'GET'],
+      default: 'POST',
+      description: 'HTTP method to use in webhook',
+    }),
+    headers: flags.string({
+      description: 'file to take webhook headers from',
+    }),
+    body: flags.string({
+      description: 'file to take webhook body from',
     }),
   }
 
@@ -132,10 +155,10 @@ export default class Automations extends Command {
     //   this.exit(1)
     // }
 
-    const triggerAccessory = await this._lookupAccessory(flags.trigger)
-    const actionAccessory = flags.action
-      ? await this._lookupAccessory(flags.action)
-      : triggerAccessory
+    const accessories = await this._getAllAccessories()
+
+    const triggerAccessory = this._findAccessoryBy(accessories, flags.trigger)
+    const actionAccessory = this._resolveActionAccessory(flags, accessories)
 
     const criterias =
       triggerAccessory.type === 'mailscript-email'
@@ -237,30 +260,75 @@ export default class Automations extends Command {
       }
     }
 
+    if (flags.webhook) {
+      const method = flags.method ? flags.method : 'POST'
+
+      const body = flags.body ? fs.readFileSync(flags.body).toString() : ''
+
+      const headers = flags.headers
+        ? Object.assign(
+            {
+              'Content-Type': 'application/json',
+            },
+            JSON.parse(fs.readFileSync(flags.headers).toString()),
+          )
+        : {
+            'Content-Type': 'application/json',
+          }
+
+      return {
+        type: 'webhook',
+        url: flags.webhook,
+        opts: {
+          headers: headers,
+          method,
+        },
+        body,
+      }
+    }
+
     return {}
   }
 
-  private async _lookupAccessory(nameOrId: string): Promise<api.Accessory> {
-    const triggerByNameResponse = await api.getAllAccessories({
-      name: nameOrId,
-    })
-
-    if (
-      triggerByNameResponse.status === 200 &&
-      triggerByNameResponse.data.list?.length === 1
-    ) {
-      return triggerByNameResponse.data.list[0]
+  private _resolveActionAccessory(
+    flags: any,
+    accessories: Array<api.Accessory>,
+  ) {
+    if (flags.webhook) {
+      return this._findAccessoryBy(accessories, 'webhook')
     }
 
-    const triggerAccessoryResponse = await api.getAccessory(nameOrId)
+    if (flags.action) {
+      return this._findAccessoryBy(accessories, flags.action)
+    }
 
-    if (triggerAccessoryResponse.status !== 200) {
+    return this._findAccessoryBy(accessories, flags.trigger)
+  }
+
+  private async _getAllAccessories(): Promise<Array<api.Accessory>> {
+    const response = await api.getAllAccessories()
+
+    if (response.status !== 200) {
+      this.log(`Error: unable to read accessories - ${response.data.error}`)
+      this.exit(1)
+    }
+
+    return response.data.list || []
+  }
+
+  private _findAccessoryBy(
+    accessories: Array<api.Accessory>,
+    nameOrId: string,
+  ): api.Accessory {
+    const accessory = accessories.find(
+      (a) => a.id === nameOrId || a.name === nameOrId,
+    )
+
+    if (!accessory) {
       this.log(`Error: not an available accessory: ${nameOrId}`)
       this.exit(1)
     }
 
-    const triggerAccessory: api.Accessory = triggerAccessoryResponse.data
-
-    return triggerAccessory
+    return accessory
   }
 }
