@@ -44,7 +44,7 @@ export type GetAllAddressesResponse = {
 }
 export type Accessory = {
   id?: string
-  type?: 'mailscript-email'
+  type?: 'mailscript-email' | 'sms'
   createdAt?: number
   createdBy?: string
   name?: string
@@ -54,6 +54,11 @@ export type Accessory = {
 }
 export type GetAllAccessoriesResponse = {
   list?: Accessory[]
+}
+export type AddAccessoryRequest = {
+  name: string
+  type: 'sms'
+  sms: string
 }
 export type AddAutomationRequest = {
   trigger?: {
@@ -233,6 +238,38 @@ export function getAllAccessories(
     {
       ...opts,
     },
+  )
+}
+/**
+ * Setup an accessory
+ */
+export function addAccessory(
+  addAccessoryRequest: AddAccessoryRequest,
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 201
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 405
+        data: ErrorResponse
+      }
+  >(
+    '/accessories',
+    oazapfts.json({
+      ...opts,
+      method: 'POST',
+      body: addAccessoryRequest,
+    }),
   )
 }
 /**
