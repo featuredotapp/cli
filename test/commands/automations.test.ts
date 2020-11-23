@@ -214,7 +214,7 @@ describe('Automations', () => {
               },
               method: 'POST',
             },
-            body: {},
+            body: '',
           })
         })
     })
