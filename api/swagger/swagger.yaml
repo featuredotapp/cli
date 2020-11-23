@@ -195,6 +195,40 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+        - 'accessories'
+      summary: 'Setup an accessory'
+      description: ''
+      operationId: 'addAccessory'
+      requestBody:
+        description: Accessory body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddAccessoryRequest'
+      responses:
+        '201':
+          description: 'successful operation'
+        '400':
+          description: 'Internal error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '405':
+          description: 'Invalid input'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /accessories/{id}:
     get:
       tags:
@@ -324,7 +358,7 @@ components:
           type: string
         type:
           type: string
-          enum: ['mailscript-email']
+          enum: ['mailscript-email', 'sms']
         createdAt:
           type: integer
         createdBy:
@@ -379,6 +413,19 @@ components:
             type: object
             oneOf:
               - $ref: '#/components/schemas/Automation'
+    AddAccessoryRequest:
+      required:
+        - name
+        - type
+        - sms
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: ['sms']
+        sms:
+          type: string
     AddAutomationRequest:
       properties:
         trigger:

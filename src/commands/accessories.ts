@@ -5,15 +5,31 @@ import { assertNever } from '../utils/assertNever'
 import setupApiClient from '../setupApiClient'
 import withStandardErrors from '../utils/errorHandling'
 
+type FlagsType = {
+  help: void
+  name: string | undefined
+  sms: string | undefined
+}
+
 enum Subcommand {
   list = 'list',
+  add = 'add',
 }
+
+const accessoryTypeFlags = ['sms']
 
 export default class Accessories extends Command {
   static description = 'manipulate accessories'
 
   static flags = {
     help: flags.help({ char: 'h' }),
+    name: flags.string({
+      char: 'n',
+      description: 'the name of the automation',
+    }),
+    sms: flags.string({
+      description: 'the telephone number to send the sms too',
+    }),
   }
 
   static args = [
@@ -26,7 +42,7 @@ export default class Accessories extends Command {
   ]
 
   async run() {
-    const { args } = this.parse(Accessories)
+    const { args, flags } = this.parse(Accessories)
 
     const subcommand: Subcommand = args.subcommand
 
@@ -35,8 +51,8 @@ export default class Accessories extends Command {
     switch (subcommand) {
       case Subcommand.list:
         return this.list(client)
-      // case Subcommand.add:
-      //   return this.add(client, flags)
+      case Subcommand.add:
+        return this.add(client, flags)
       default:
         assertNever(subcommand)
     }
@@ -64,5 +80,38 @@ export default class Accessories extends Command {
         this,
       ),
     )
+  }
+
+  async add(client: typeof api, flags: FlagsType): Promise<void> {
+    if (!flags.name) {
+      this.log('Please provide a name for the accessory: \n  --name')
+      this.exit(1)
+    }
+
+    if (flags.sms) {
+      const payload: api.AddAccessoryRequest = {
+        name: flags.name,
+        type: 'sms',
+        sms: flags.sms,
+      }
+
+      return handle(
+        client.addAccessory(payload),
+        withStandardErrors(
+          {
+            '201': (_response: any) => {
+              this.log(`Accessory setup: ${flags.name}`)
+            },
+          },
+          this,
+        ),
+      )
+    }
+
+    this.log(
+      'Please provide one type flag either: \n  --' +
+        accessoryTypeFlags.join('\n  --'),
+    )
+    this.exit(1)
   }
 }
