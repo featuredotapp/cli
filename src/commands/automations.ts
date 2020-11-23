@@ -1,6 +1,7 @@
 import { Command, flags } from '@oclif/command'
-import * as api from '../api'
+import * as fs from 'fs'
 import { handle } from 'oazapfts'
+import * as api from '../api'
 import { assertNever } from '../utils/assertNever'
 import setupApiClient from '../setupApiClient'
 import withStandardErrors from '../utils/errorHandling'
@@ -64,6 +65,17 @@ export default class Automations extends Command {
     webhook: flags.string({
       char: 'w',
       description: 'url of the webhook to call',
+    }),
+    method: flags.enum({
+      options: ['PUT', 'POST', 'GET'],
+      default: 'POST',
+      description: 'HTTP method to use in webhook',
+    }),
+    headers: flags.string({
+      description: 'file to take webhook headers from',
+    }),
+    body: flags.string({
+      description: 'file to take webhook body from',
     }),
   }
 
@@ -249,16 +261,31 @@ export default class Automations extends Command {
     }
 
     if (flags.webhook) {
+      const method = flags.method ? flags.method : 'POST'
+
+      const body = flags.body
+        ? JSON.parse(fs.readFileSync(flags.body).toString())
+        : {}
+
+      const headers = flags.headers
+        ? Object.assign(
+            {
+              'Content-Type': 'application/json',
+            },
+            JSON.parse(fs.readFileSync(flags.headers).toString()),
+          )
+        : {
+            'Content-Type': 'application/json',
+          }
+
       return {
         type: 'webhook',
         url: flags.webhook,
         opts: {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          method: 'POST',
+          headers: headers,
+          method,
         },
-        body: {},
+        body,
       }
     }
 
