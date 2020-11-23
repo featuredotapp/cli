@@ -10,7 +10,14 @@ enum Subcommand {
   add = 'add',
 }
 
-const automationTypeFlags = ['send', 'alias', 'forward', 'reply', 'replyall']
+const automationTypeFlags = [
+  'send',
+  'alias',
+  'forward',
+  'reply',
+  'replyall',
+  'webhook',
+]
 
 export default class Automations extends Command {
   static description = 'manipulate automations'
@@ -53,6 +60,10 @@ export default class Automations extends Command {
     html: flags.string({
       char: 'h',
       description: 'html of the email',
+    }),
+    webhook: flags.string({
+      char: 'w',
+      description: 'url of the webhook to call',
     }),
   }
 
@@ -234,6 +245,20 @@ export default class Automations extends Command {
       return {
         type: 'alias',
         alias: flags.alias,
+      }
+    }
+
+    if (flags.webhook) {
+      return {
+        type: 'webhook',
+        url: flags.webhook,
+        opts: {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          method: 'POST',
+        },
+        body: {},
       }
     }
 

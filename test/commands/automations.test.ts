@@ -191,6 +191,34 @@ describe('Automations', () => {
         })
     })
 
+    describe('webhook', () => {
+      test
+        .stdout()
+        .nock('http://localhost:7000', nockAdd)
+        .command([
+          'automations',
+          'add',
+          '--trigger',
+          'test@mailscript.io',
+          '--webhook',
+          'http://example.com/webhook',
+        ])
+        .it('add webhook automation', (ctx) => {
+          expect(ctx.stdout).to.contain('auto-xxx-yyy-zzz')
+          expect(postBody.actions[0].config).to.eql({
+            type: 'webhook',
+            url: 'http://example.com/webhook',
+            opts: {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              method: 'POST',
+            },
+            body: {},
+          })
+        })
+    })
+
     describe('multiple types', () => {
       test
         .stdout()
