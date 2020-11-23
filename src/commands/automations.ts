@@ -263,9 +263,7 @@ export default class Automations extends Command {
     if (flags.webhook) {
       const method = flags.method ? flags.method : 'POST'
 
-      const body = flags.body
-        ? JSON.parse(fs.readFileSync(flags.body).toString())
-        : {}
+      const body = flags.body ? fs.readFileSync(flags.body).toString() : ''
 
       const headers = flags.headers
         ? Object.assign(
