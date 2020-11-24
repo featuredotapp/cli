@@ -11,6 +11,7 @@ Configure and use mailscript from the command-line
 <!-- toc -->
 * [Usage](#usage)
 * [Commands](#commands)
+* [Development](#development)
 <!-- tocstop -->
 # Usage
 <!-- usage -->
@@ -19,7 +20,7 @@ $ npm install -g mailscript
 $ mailscript COMMAND
 running command...
 $ mailscript (-v|--version|version)
-mailscript/0.2.0 darwin-x64 node-v14.15.0
+mailscript/0.3.0 darwin-x64 node-v14.15.0
 $ mailscript --help [COMMAND]
 USAGE
   $ mailscript COMMAND
@@ -28,28 +29,28 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`mailscript accessories [FILE]`](#mailscript-accessories-file)
+* [`mailscript accessories SUBCOMMAND`](#mailscript-accessories-subcommand)
 * [`mailscript addresses SUBCOMMAND`](#mailscript-addresses-subcommand)
 * [`mailscript automations SUBCOMMAND`](#mailscript-automations-subcommand)
 * [`mailscript help [COMMAND]`](#mailscript-help-command)
 * [`mailscript login`](#mailscript-login)
 * [`mailscript workspaces SUBCOMMAND`](#mailscript-workspaces-subcommand)
 
-## `mailscript accessories [FILE]`
+## `mailscript accessories SUBCOMMAND`
 
-describe the command here
+manipulate accessories
 
 ```
 USAGE
-  $ mailscript accessories [FILE]
+  $ mailscript accessories SUBCOMMAND
 
 OPTIONS
-  -f, --force
   -h, --help       show CLI help
-  -n, --name=name  name to print
+  -n, --name=name  the name of the automation
+  --sms=sms        the telephone number to send the sms too
 ```
 
-_See code: [src/commands/accessories.ts](https://github.com/getmailscript/cli/blob/v0.2.0/src/commands/accessories.ts)_
+_See code: [src/commands/accessories.ts](https://github.com/getmailscript/cli/blob/v0.3.0/src/commands/accessories.ts)_
 
 ## `mailscript addresses SUBCOMMAND`
 
@@ -64,23 +65,35 @@ OPTIONS
   -n, --address=address  the address
 ```
 
-_See code: [src/commands/addresses.ts](https://github.com/getmailscript/cli/blob/v0.2.0/src/commands/addresses.ts)_
+_See code: [src/commands/addresses.ts](https://github.com/getmailscript/cli/blob/v0.3.0/src/commands/addresses.ts)_
 
 ## `mailscript automations SUBCOMMAND`
 
-manipulate workspaces
+manipulate automations
 
 ```
 USAGE
   $ mailscript automations SUBCOMMAND
 
 OPTIONS
-  -a, --action=action    id of the action accessory
-  -h, --help             show CLI help
-  -t, --trigger=trigger  id of the trigger accessory
+  -a, --action=action      id of the action accessory
+  -f, --forward=forward    email address for forward action
+  -h, --help               show CLI help
+  -h, --html=html          html of the email
+  -r, --reply              email address for reply action
+  -s, --subject=subject    subject of the email
+  -t, --text=text          text of the email
+  -t, --trigger=trigger    id of the trigger accessory
+  -w, --webhook=webhook    url of the webhook to call
+  --alias=alias            email address for alias action
+  --body=body              file to take webhook body from
+  --headers=headers        file to take webhook headers from
+  --method=(PUT|POST|GET)  [default: POST] HTTP method to use in webhook
+  --replyall               email address for reply all action
+  --send=send              email address for send action
 ```
 
-_See code: [src/commands/automations.ts](https://github.com/getmailscript/cli/blob/v0.2.0/src/commands/automations.ts)_
+_See code: [src/commands/automations.ts](https://github.com/getmailscript/cli/blob/v0.3.0/src/commands/automations.ts)_
 
 ## `mailscript help [COMMAND]`
 
@@ -107,11 +120,14 @@ Link or create your MailScript account
 USAGE
   $ mailscript login
 
+OPTIONS
+  -o, --offline
+
 DESCRIPTION
   Link or create your MailScript account
 ```
 
-_See code: [src/commands/login.ts](https://github.com/getmailscript/cli/blob/v0.2.0/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/getmailscript/cli/blob/v0.3.0/src/commands/login.ts)_
 
 ## `mailscript workspaces SUBCOMMAND`
 
@@ -126,7 +142,7 @@ OPTIONS
   -n, --name=name  name of the workspace
 ```
 
-_See code: [src/commands/workspaces.ts](https://github.com/getmailscript/cli/blob/v0.2.0/src/commands/workspaces.ts)_
+_See code: [src/commands/workspaces.ts](https://github.com/getmailscript/cli/blob/v0.3.0/src/commands/workspaces.ts)_
 <!-- commandsstop -->
 
 # Development
@@ -144,4 +160,3 @@ To run a command:
 nvm use
 node bin/run accessories
 ```
-
