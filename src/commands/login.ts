@@ -52,17 +52,20 @@ Link or create your MailScript account
         const token = req.query.token
 
         await this.writeConfigFile(token as string)
-
-        cli.info('🎉 Success - cli configured 🎉')
       } catch (error) {
         cli.error(error)
       }
 
       res.redirect('/LoginComplete.html')
+    })
+
+    app.post('/complete', async (req, res) => {
+      res.status(200).send('complete received')
 
       setTimeout(() => {
         server.close()
         cli.action.stop()
+        cli.info('🎉 Success - cli configured 🎉')
       }, 500)
     })
 
