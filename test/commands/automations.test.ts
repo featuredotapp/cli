@@ -36,6 +36,30 @@ describe('Automations', () => {
       postBody = {}
     })
 
+    const nockRead = (api: any) => {
+      return api
+        .persist()
+        .get('/v1/accessories')
+        .reply(200, {
+          list: [
+            {
+              id: 'access-01-xxx-yyy-zzz',
+              name: 'test@mailscript.io',
+            },
+            {
+              id: 'webhook-xyz',
+              name: 'webhook',
+            },
+            {
+              id: 'access-03-xxx-yyy-zzz',
+              name: 'test-sms',
+              type: 'sms',
+              sms: '+7766767556',
+            },
+          ],
+        })
+    }
+
     const nockAdd = (api: any) => {
       api
         .persist()
@@ -49,6 +73,12 @@ describe('Automations', () => {
             {
               id: 'webhook-xyz',
               name: 'webhook',
+            },
+            {
+              id: 'access-03-xxx-yyy-zzz',
+              name: 'test-sms',
+              type: 'sms',
+              sms: '+7766767556',
             },
           ],
         })
@@ -222,9 +252,36 @@ describe('Automations', () => {
         })
     })
 
+    describe('sms', () => {
+      test
+        .stdout()
+        .nock('http://localhost:7000', nockAdd)
+        .command([
+          'automations',
+          'add',
+          '--trigger',
+          'test@mailscript.io',
+          '--action',
+          'test-sms',
+          '--text',
+          'from mailscript - {{subject}}',
+        ])
+        .it('add sms automation', (ctx) => {
+          expect(ctx.stdout).to.contain('auto-xxx-yyy-zzz')
+          expect(postBody.actions[0].accessoryId).to.eql(
+            'access-03-xxx-yyy-zzz',
+          )
+          expect(postBody.actions[0].config).to.eql({
+            type: 'sms',
+            text: 'from mailscript - {{subject}}',
+          })
+        })
+    })
+
     describe('multiple types', () => {
       test
         .stdout()
+        .nock('http://localhost:7000', nockRead)
         .command([
           'automations',
           'add',
