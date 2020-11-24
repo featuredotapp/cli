@@ -134,7 +134,8 @@ _See code: [src/commands/workspaces.ts](https://github.com/getmailscript/cli/blo
 In development a `.env` file is used:
 
 ```shell
-MAILSCRIPT_LOGIN_URL=http://localhost:3000
+MAILSCRIPT_LOGIN_URL=http://localhost:3000 # login website url
+MAILSCRIPT_CONFIG_PATH=.mailscript-test # path to use for .mailscript config file
 ```
 
 To run a command:
