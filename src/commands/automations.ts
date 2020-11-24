@@ -137,17 +137,6 @@ export default class Automations extends Command {
       this.exit(1)
     }
 
-    if (
-      automationTypeFlags.map((atf) => flags[atf]).filter((f) => Boolean(f))
-        .length !== 1
-    ) {
-      this.log(
-        'Please provide one type flag either: \n  --' +
-          automationTypeFlags.join('\n  --'),
-      )
-      this.exit(1)
-    }
-
     // if (!flags.action) {
     //   this.log(
     //     'Please provide an action: mailscript automation add --action <accessory-id>',
@@ -160,6 +149,18 @@ export default class Automations extends Command {
     const triggerAccessory = this._findAccessoryBy(accessories, flags.trigger)
     const actionAccessory = this._resolveActionAccessory(flags, accessories)
 
+    if (
+      actionAccessory.type !== 'sms' &&
+      automationTypeFlags.map((atf) => flags[atf]).filter((f) => Boolean(f))
+        .length !== 1
+    ) {
+      this.log(
+        'Please provide one type flag either: \n  --' +
+          automationTypeFlags.join('\n  --'),
+      )
+      this.exit(1)
+    }
+
     const criterias =
       triggerAccessory.type === 'mailscript-email'
         ? [
@@ -169,7 +170,7 @@ export default class Automations extends Command {
           ]
         : []
 
-    const actionConfig = this._resolveConfig(flags)
+    const actionConfig = this._resolveConfig(flags, actionAccessory)
 
     const payload: api.AddAutomationRequest = {
       trigger: {
@@ -199,7 +200,19 @@ export default class Automations extends Command {
     )
   }
 
-  private _resolveConfig(flags: any) {
+  private _resolveConfig(flags: any, actionAccessory: api.Accessory) {
+    if (actionAccessory && actionAccessory.type === 'sms') {
+      if (!flags.text) {
+        this.log('Please provide --text')
+        this.exit(1)
+      }
+
+      return {
+        type: 'sms',
+        text: flags.text,
+      }
+    }
+
     if (flags.forward) {
       return {
         type: 'forward',
