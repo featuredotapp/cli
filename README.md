@@ -20,7 +20,7 @@ $ npm install -g mailscript
 $ mailscript COMMAND
 running command...
 $ mailscript (-v|--version|version)
-mailscript/0.3.1 darwin-x64 node-v14.15.0
+mailscript/0.3.2 darwin-x64 node-v14.15.0
 $ mailscript --help [COMMAND]
 USAGE
   $ mailscript COMMAND
@@ -50,7 +50,7 @@ OPTIONS
   --sms=sms        the telephone number to send the sms too
 ```
 
-_See code: [src/commands/accessories.ts](https://github.com/getmailscript/cli/blob/v0.3.1/src/commands/accessories.ts)_
+_See code: [src/commands/accessories.ts](https://github.com/getmailscript/cli/blob/v0.3.2/src/commands/accessories.ts)_
 
 ## `mailscript addresses SUBCOMMAND`
 
@@ -65,7 +65,7 @@ OPTIONS
   -n, --address=address  the address
 ```
 
-_See code: [src/commands/addresses.ts](https://github.com/getmailscript/cli/blob/v0.3.1/src/commands/addresses.ts)_
+_See code: [src/commands/addresses.ts](https://github.com/getmailscript/cli/blob/v0.3.2/src/commands/addresses.ts)_
 
 ## `mailscript automations SUBCOMMAND`
 
@@ -93,7 +93,7 @@ OPTIONS
   --send=send              email address for send action
 ```
 
-_See code: [src/commands/automations.ts](https://github.com/getmailscript/cli/blob/v0.3.1/src/commands/automations.ts)_
+_See code: [src/commands/automations.ts](https://github.com/getmailscript/cli/blob/v0.3.2/src/commands/automations.ts)_
 
 ## `mailscript help [COMMAND]`
 
@@ -127,7 +127,7 @@ DESCRIPTION
   Link or create your MailScript account
 ```
 
-_See code: [src/commands/login.ts](https://github.com/getmailscript/cli/blob/v0.3.1/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/getmailscript/cli/blob/v0.3.2/src/commands/login.ts)_
 
 ## `mailscript workspaces SUBCOMMAND`
 
@@ -142,7 +142,7 @@ OPTIONS
   -n, --name=name  name of the workspace
 ```
 
-_See code: [src/commands/workspaces.ts](https://github.com/getmailscript/cli/blob/v0.3.1/src/commands/workspaces.ts)_
+_See code: [src/commands/workspaces.ts](https://github.com/getmailscript/cli/blob/v0.3.2/src/commands/workspaces.ts)_
 <!-- commandsstop -->
 
 # Development
