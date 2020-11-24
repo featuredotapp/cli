@@ -5,14 +5,8 @@ info:
   license:
     name: MIT
 servers:
-  - url: http://localhost:7000/v1
-    description: Local development server
-    variables:
-      port:
-        enum:
-          - '7000'
-          - '443'
-        default: '7000'
+  - url: https://mailscript-api.herokuapp.com/v1
+    description: Production server
 paths:
   /workspaces:
     post:

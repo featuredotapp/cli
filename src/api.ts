@@ -12,8 +12,7 @@ export const defaults: Oazapfts.RequestOpts = {
 }
 const oazapfts = Oazapfts.runtime(defaults)
 export const servers = {
-  localDevelopmentServer: ({ port = '7000' }: { port: '7000' | '443' }) =>
-    `http://localhost:7000/v1`,
+  productionServer: 'https://mailscript-api.herokuapp.com/v1',
 }
 export type AddWorkspaceRequest = {
   workspace: string

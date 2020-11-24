@@ -29,12 +29,16 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`mailscript accessories SUBCOMMAND`](#mailscript-accessories-subcommand)
-* [`mailscript addresses SUBCOMMAND`](#mailscript-addresses-subcommand)
-* [`mailscript automations SUBCOMMAND`](#mailscript-automations-subcommand)
-* [`mailscript help [COMMAND]`](#mailscript-help-command)
-* [`mailscript login`](#mailscript-login)
-* [`mailscript workspaces SUBCOMMAND`](#mailscript-workspaces-subcommand)
+- [MailScript cli](#mailscript-cli)
+- [Usage](#usage)
+- [Commands](#commands)
+  - [`mailscript accessories SUBCOMMAND`](#mailscript-accessories-subcommand)
+  - [`mailscript addresses SUBCOMMAND`](#mailscript-addresses-subcommand)
+  - [`mailscript automations SUBCOMMAND`](#mailscript-automations-subcommand)
+  - [`mailscript help [COMMAND]`](#mailscript-help-command)
+  - [`mailscript login`](#mailscript-login)
+  - [`mailscript workspaces SUBCOMMAND`](#mailscript-workspaces-subcommand)
+- [Development](#development)
 
 ## `mailscript accessories SUBCOMMAND`
 
@@ -150,13 +154,14 @@ _See code: [src/commands/workspaces.ts](https://github.com/getmailscript/cli/blo
 In development a `.env` file is used:
 
 ```shell
-MAILSCRIPT_LOGIN_URL=http://localhost:3000 # login website url
 MAILSCRIPT_CONFIG_PATH=.mailscript-test # path to use for .mailscript config file
+MAILSCRIPT_LOGIN_URL=http://localhost:3000 # login website url
+MAILSCRIPT_API_SERVER=http://localhost:7000/v1 # api server url
 ```
 
 To run a command:
 
 ```shell
 nvm use
-node bin/run accessories
+node bin/run version
 ```

@@ -9,6 +9,7 @@ const readFile = promisify(readFileRaw)
 
 const {
   MAILSCRIPT_CONFIG_PATH = path.join(os.homedir(), '.mailscript'),
+  MAILSCRIPT_API_SERVER = undefined,
 } = process.env
 
 async function setupApiClient(): Promise<typeof api> {
@@ -21,6 +22,10 @@ async function setupApiClient(): Promise<typeof api> {
   }
 
   api.defaults.fetch = nodeFetch as any
+
+  if (MAILSCRIPT_API_SERVER) {
+    api.defaults.baseUrl = MAILSCRIPT_API_SERVER
+  }
 
   return api
 }
