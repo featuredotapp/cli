@@ -128,3 +128,19 @@ OPTIONS
 
 _See code: [src/commands/workspaces.ts](https://github.com/getmailscript/cli/blob/v0.2.0/src/commands/workspaces.ts)_
 <!-- commandsstop -->
+
+# Development
+
+In development a `.env` file is used:
+
+```shell
+MAILSCRIPT_LOGIN_URL=http://localhost:3000
+```
+
+To run a command:
+
+```shell
+nvm use
+node bin/run accessories
+```
+

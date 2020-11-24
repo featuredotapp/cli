@@ -11,7 +11,10 @@ import * as bodyParser from 'body-parser'
 const writeFile = promisify(writeFileRaw)
 
 const port = 14578
-const remoteLoginUrl = 'http://localhost:3000'
+
+const {
+  MAILSCRIPT_LOGIN_URL: remoteLoginUrl = 'https://mailscript-firebase.web.app',
+} = process.env
 
 class LoginCommand extends Command {
   static description = `
