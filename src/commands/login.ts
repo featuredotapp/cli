@@ -10,8 +10,14 @@ import * as express from 'express'
 import * as bodyParser from 'body-parser'
 const writeFile = promisify(writeFileRaw)
 
-const port = 14578
-const remoteLoginUrl = 'http://localhost:3000'
+const {
+  MAILSCRIPT_LOGIN_URL: remoteLoginUrl = 'https://mailscript-firebase.web.app',
+  MAILSCRIPT_CONFIG_PATH: configFilePath = path.join(
+    os.homedir(),
+    '.mailscript',
+  ),
+  MAILSCRIPT_LOGIN_PORT: port = 14578,
+} = process.env
 
 class LoginCommand extends Command {
   static description = `
@@ -46,17 +52,20 @@ Link or create your MailScript account
         const token = req.query.token
 
         await this.writeConfigFile(token as string)
-
-        cli.info('🎉 Success - cli configured 🎉')
       } catch (error) {
         cli.error(error)
       }
 
       res.redirect('/LoginComplete.html')
+    })
+
+    app.post('/complete', async (req, res) => {
+      res.status(200).send('complete received')
 
       setTimeout(() => {
         server.close()
         cli.action.stop()
+        cli.info('🎉 Success - cli configured 🎉')
       }, 500)
     })
 
@@ -90,7 +99,7 @@ Link or create your MailScript account
   private async writeConfigFile(token: string) {
     const config = JSON.stringify({ apiKey: token }, null, 2) + '\n'
 
-    return writeFile(path.join(os.homedir(), '.mailscript'), config)
+    return writeFile(configFilePath, config)
   }
 }
 
