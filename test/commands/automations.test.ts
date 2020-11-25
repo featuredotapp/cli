@@ -195,32 +195,6 @@ describe('Automations', () => {
           })
       })
 
-      describe('sentTo', () => {
-        test
-          .stdout()
-          .nock(MailscriptApiServer, nockAdd)
-          .command([
-            'automations',
-            'add',
-            '--trigger',
-            'test@mailscript.io',
-            '--forward',
-            'another@example.com',
-            '--sentto',
-            'test+spam@mailscript.io',
-          ])
-          .it('adds automation on the server', (ctx) => {
-            expect(ctx.stdout).to.contain('Automation setup: auto-xxx-yyy-zzz')
-            expect(postBody.trigger.config).to.eql({
-              criterias: [
-                {
-                  sentTo: 'test+spam@mailscript.io',
-                },
-              ],
-            })
-          })
-      })
-
       describe('subjectContains', () => {
         test
           .stdout()
@@ -337,8 +311,6 @@ describe('Automations', () => {
             'another@example.com',
             '--from',
             'smith@example.com',
-            '--sentto',
-            'test@mailscript.io',
             '--subjectcontains',
             'a subject',
             '--domain',
@@ -356,7 +328,6 @@ describe('Automations', () => {
                   from: 'smith@example.com',
                   hasAttachments: true,
                   hasTheWords: 'alert',
-                  sentTo: 'test@mailscript.io',
                   subjectContains: 'a subject',
                 },
               ],
