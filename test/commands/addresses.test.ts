@@ -1,10 +1,11 @@
 import { expect, test } from '@oclif/test'
+import { MailscriptApiServer } from './constants'
 
 describe('Addresses', () => {
   test
     .stdout()
-    .nock('http://localhost:7000', (api) =>
-      api.get('/v1/addresses').reply(200, { list: [] }),
+    .nock(MailscriptApiServer, (api) =>
+      api.get('/addresses').reply(200, { list: [] }),
     )
     .command(['addresses', 'list'])
     .exit(0)
@@ -16,9 +17,9 @@ describe('Addresses', () => {
 
   test
     .stdout()
-    .nock('http://localhost:7000', (api) =>
+    .nock(MailscriptApiServer, (api) =>
       api
-        .get('/v1/addresses')
+        .get('/addresses')
         .reply(200, { list: [{ id: 'test@mailscript.io' }] }),
     )
     .command(['addresses', 'list'])

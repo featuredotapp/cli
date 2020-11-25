@@ -56,7 +56,9 @@ export default class Workspaces extends Command {
               )
               this.exit(0)
             }
+
             this.log('Workspaces')
+
             for (const workspace of list || []) {
               this.log(`  ${workspace.id}`)
             }

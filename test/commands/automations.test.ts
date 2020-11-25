@@ -1,12 +1,13 @@
 /* eslint-disable max-nested-callbacks */
 import { expect, test } from '@oclif/test'
+import { MailscriptApiServer } from './constants'
 
 describe('Automations', () => {
   describe('list', () => {
     test
       .stdout()
-      .nock('http://localhost:7000', (api) =>
-        api.get('/v1/automations').reply(200, { list: [] }),
+      .nock(MailscriptApiServer, (api) =>
+        api.get('/automations').reply(200, { list: [] }),
       )
       .command(['automations', 'list'])
       .exit(0)
@@ -18,10 +19,8 @@ describe('Automations', () => {
 
     test
       .stdout()
-      .nock('http://localhost:7000', (api) =>
-        api
-          .get('/v1/automations')
-          .reply(200, { list: [{ id: 'dR862asdfgh' }] }),
+      .nock(MailscriptApiServer, (api) =>
+        api.get('/automations').reply(200, { list: [{ id: 'dR862asdfgh' }] }),
       )
       .command(['automations', 'list'])
       .it('lists automations by id', (ctx) => {
@@ -39,7 +38,7 @@ describe('Automations', () => {
     const nockRead = (api: any) => {
       return api
         .persist()
-        .get('/v1/accessories')
+        .get('/accessories')
         .reply(200, {
           list: [
             {
@@ -63,7 +62,7 @@ describe('Automations', () => {
     const nockAdd = (api: any) => {
       api
         .persist()
-        .get('/v1/accessories')
+        .get('/accessories')
         .reply(200, {
           list: [
             {
@@ -84,7 +83,7 @@ describe('Automations', () => {
         })
 
       return api
-        .post('/v1/automations', (body: any) => {
+        .post('/automations', (body: any) => {
           postBody = body
           return true
         })
@@ -94,7 +93,7 @@ describe('Automations', () => {
     describe('forward', () => {
       test
         .stdout()
-        .nock('http://localhost:7000', nockAdd)
+        .nock(MailscriptApiServer, nockAdd)
         .command([
           'automations',
           'add',
@@ -115,7 +114,7 @@ describe('Automations', () => {
 
       test
         .stdout()
-        .nock('http://localhost:7000', nockAdd)
+        .nock(MailscriptApiServer, nockAdd)
         .command([
           'automations',
           'add',
@@ -132,7 +131,7 @@ describe('Automations', () => {
     describe('send', () => {
       test
         .stdout()
-        .nock('http://localhost:7000', nockAdd)
+        .nock(MailscriptApiServer, nockAdd)
         .command([
           'automations',
           'add',
@@ -159,7 +158,7 @@ describe('Automations', () => {
     describe('reply', () => {
       test
         .stdout()
-        .nock('http://localhost:7000', nockAdd)
+        .nock(MailscriptApiServer, nockAdd)
         .command([
           'automations',
           'add',
@@ -181,7 +180,7 @@ describe('Automations', () => {
     describe('reply all', () => {
       test
         .stdout()
-        .nock('http://localhost:7000', nockAdd)
+        .nock(MailscriptApiServer, nockAdd)
         .command([
           'automations',
           'add',
@@ -203,7 +202,7 @@ describe('Automations', () => {
     describe('alias', () => {
       test
         .stdout()
-        .nock('http://localhost:7000', nockAdd)
+        .nock(MailscriptApiServer, nockAdd)
         .command([
           'automations',
           'add',
@@ -226,7 +225,7 @@ describe('Automations', () => {
     describe('webhook', () => {
       test
         .stdout()
-        .nock('http://localhost:7000', nockAdd)
+        .nock(MailscriptApiServer, nockAdd)
         .command([
           'automations',
           'add',
@@ -255,7 +254,7 @@ describe('Automations', () => {
     describe('sms', () => {
       test
         .stdout()
-        .nock('http://localhost:7000', nockAdd)
+        .nock(MailscriptApiServer, nockAdd)
         .command([
           'automations',
           'add',
@@ -281,7 +280,7 @@ describe('Automations', () => {
     describe('multiple types', () => {
       test
         .stdout()
-        .nock('http://localhost:7000', nockRead)
+        .nock(MailscriptApiServer, nockRead)
         .command([
           'automations',
           'add',

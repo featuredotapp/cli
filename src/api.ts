@@ -14,11 +14,17 @@ const oazapfts = Oazapfts.runtime(defaults)
 export const servers = {
   productionServer: 'https://mailscript-api.herokuapp.com/v1',
 }
-export type AddWorkspaceRequest = {
-  workspace: string
+export type SendRequest = {
+  to: string
+  from: string
+  subject: string
+  text?: string
 }
 export type ErrorResponse = {
   error: string
+}
+export type AddWorkspaceRequest = {
+  workspace: string
 }
 export type Workspace = {
   id?: string
@@ -76,6 +82,31 @@ export type Automation = {
 }
 export type GetAllAutomationsResponse = {
   list?: Automation[]
+}
+/**
+ * Send an email
+ */
+export function send(sendRequest: SendRequest, opts?: Oazapfts.RequestOpts) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+  >(
+    '/send',
+    oazapfts.json({
+      ...opts,
+      method: 'POST',
+      body: sendRequest,
+    }),
+  )
 }
 /**
  * Claim a Mailscript workspace

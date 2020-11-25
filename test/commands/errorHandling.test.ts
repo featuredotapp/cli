@@ -1,10 +1,11 @@
 import { expect, test } from '@oclif/test'
+import { MailscriptApiServer } from './constants'
 
 describe('Error handling', () => {
   test
     .stdout()
-    .nock('http://localhost:7000', (api) =>
-      api.get('/v1/workspaces').reply(403, { error: 'No credentials sent!' }),
+    .nock(MailscriptApiServer, (api) =>
+      api.get('/workspaces').reply(403, { error: 'No credentials sent!' }),
     )
     .command(['workspaces', 'list'])
     .exit(1)
@@ -16,8 +17,8 @@ describe('Error handling', () => {
 
   test
     .stdout()
-    .nock('http://localhost:7000', (api) =>
-      api.get('/v1/workspaces').reply(400, { error: 'bad request boo!' }),
+    .nock(MailscriptApiServer, (api) =>
+      api.get('/workspaces').reply(400, { error: 'bad request boo!' }),
     )
     .command(['workspaces', 'list'])
     .exit(1)
@@ -27,8 +28,8 @@ describe('Error handling', () => {
 
   test
     .stdout()
-    .nock('http://localhost:7000', (api) =>
-      api.get('/v1/workspaces').reply(777, { aaa: 'bbb' }),
+    .nock(MailscriptApiServer, (api) =>
+      api.get('/workspaces').reply(777, { aaa: 'bbb' }),
     )
     .command(['workspaces', 'list'])
     .exit(1)
