@@ -83,6 +83,23 @@ export default class Automations extends Command {
     seconds: flags.string({
       description: 'period of time to calculate the trigger over',
     }),
+    from: flags.string({
+      description: 'constrain trigger to emails from the specified address',
+    }),
+    subjectcontains: flags.string({
+      description:
+        'constrain trigger to emails whose subject contains the specified text',
+    }),
+    domain: flags.string({
+      description:
+        'constrain trigger to emails are from an email address with the given domain',
+    }),
+    hasthewords: flags.string({
+      description: 'constrain trigger to emails that have the words specified',
+    }),
+    hasattachments: flags.boolean({
+      description: 'constrain trigger to emails with attachments',
+    }),
   }
 
   static args = [
@@ -201,14 +218,30 @@ export default class Automations extends Command {
       this.exit(1)
     }
 
-    const criterias =
-      triggerAccessory.type === 'mailscript-email'
-        ? [
-            {
-              sentTo: triggerAccessory.address,
-            },
-          ]
-        : []
+    let criterias: Array<any> = []
+    if (
+      flags.from ||
+      flags.hasthewords ||
+      flags.domain ||
+      flags.subjectcontains ||
+      flags.hasattachments
+    ) {
+      criterias = [
+        {
+          from: flags.from,
+          hasTheWords: flags.hasthewords,
+          domain: flags.domain,
+          subjectContains: flags.subjectcontains,
+          hasAttachments: flags.hasattachments,
+        },
+      ]
+    } else if (triggerAccessory.type === 'mailscript-email') {
+      criterias = [
+        {
+          sentTo: triggerAccessory.address,
+        },
+      ]
+    }
 
     return flags.times && flags.seconds
       ? {
