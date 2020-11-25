@@ -20,7 +20,7 @@ $ npm install -g mailscript
 $ mailscript COMMAND
 running command...
 $ mailscript (-v|--version|version)
-mailscript/0.3.8 darwin-x64 node-v14.3.0
+mailscript/0.3.9 darwin-x64 node-v14.3.0
 $ mailscript --help [COMMAND]
 USAGE
   $ mailscript COMMAND
@@ -51,7 +51,7 @@ OPTIONS
   --sms=sms        the telephone number to send the sms too
 ```
 
-_See code: [src/commands/accessories.ts](https://github.com/getmailscript/cli/blob/v0.3.8/src/commands/accessories.ts)_
+_See code: [src/commands/accessories.ts](https://github.com/getmailscript/cli/blob/v0.3.9/src/commands/accessories.ts)_
 
 ## `mailscript addresses SUBCOMMAND`
 
@@ -66,7 +66,7 @@ OPTIONS
   -n, --address=address  the address
 ```
 
-_See code: [src/commands/addresses.ts](https://github.com/getmailscript/cli/blob/v0.3.8/src/commands/addresses.ts)_
+_See code: [src/commands/addresses.ts](https://github.com/getmailscript/cli/blob/v0.3.9/src/commands/addresses.ts)_
 
 ## `mailscript automations SUBCOMMAND`
 
@@ -77,26 +77,31 @@ USAGE
   $ mailscript automations SUBCOMMAND
 
 OPTIONS
-  -a, --action=action      id of the action accessory
-  -f, --forward=forward    email address for forward action
-  -h, --help               show CLI help
-  -h, --html=html          html of the email
-  -r, --reply              email address for reply action
-  -s, --subject=subject    subject of the email
-  -t, --text=text          text of the email
-  -t, --trigger=trigger    id of the trigger accessory
-  -w, --webhook=webhook    url of the webhook to call
-  --alias=alias            email address for alias action
-  --body=body              file to take webhook body from
-  --headers=headers        file to take webhook headers from
-  --method=(PUT|POST|GET)  [default: POST] HTTP method to use in webhook
-  --replyall               email address for reply all action
-  --seconds=seconds        period of time to calculate the trigger over
-  --send=send              email address for send action
-  --times=times            number of emails in a period for trigger to activate
+  -a, --action=action                id of the action accessory
+  -f, --forward=forward              email address for forward action
+  -h, --help                         show CLI help
+  -h, --html=html                    html of the email
+  -r, --reply                        email address for reply action
+  -s, --subject=subject              subject of the email
+  -t, --text=text                    text of the email
+  -t, --trigger=trigger              id of the trigger accessory
+  -w, --webhook=webhook              url of the webhook to call
+  --alias=alias                      email address for alias action
+  --body=body                        file to take webhook body from
+  --domain=domain                    constrain trigger to emails are from an email address with the given domain
+  --from=from                        constrain trigger to emails from the specified address
+  --hasattachments                   constrain trigger to emails with attachments
+  --hasthewords=hasthewords          constrain trigger to emails that have the words specified
+  --headers=headers                  file to take webhook headers from
+  --method=(PUT|POST|GET)            [default: POST] HTTP method to use in webhook
+  --replyall                         email address for reply all action
+  --seconds=seconds                  period of time to calculate the trigger over
+  --send=send                        email address for send action
+  --subjectcontains=subjectcontains  constrain trigger to emails whose subject contains the specified text
+  --times=times                      number of emails in a period for trigger to activate
 ```
 
-_See code: [src/commands/automations.ts](https://github.com/getmailscript/cli/blob/v0.3.8/src/commands/automations.ts)_
+_See code: [src/commands/automations.ts](https://github.com/getmailscript/cli/blob/v0.3.9/src/commands/automations.ts)_
 
 ## `mailscript help [COMMAND]`
 
@@ -130,7 +135,7 @@ DESCRIPTION
   Link or create your MailScript account
 ```
 
-_See code: [src/commands/login.ts](https://github.com/getmailscript/cli/blob/v0.3.8/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/getmailscript/cli/blob/v0.3.9/src/commands/login.ts)_
 
 ## `mailscript send [FILE]`
 
@@ -148,7 +153,7 @@ OPTIONS
   -t, --to=to            (required) email address to send to
 ```
 
-_See code: [src/commands/send.ts](https://github.com/getmailscript/cli/blob/v0.3.8/src/commands/send.ts)_
+_See code: [src/commands/send.ts](https://github.com/getmailscript/cli/blob/v0.3.9/src/commands/send.ts)_
 
 ## `mailscript workspaces SUBCOMMAND`
 
@@ -163,7 +168,7 @@ OPTIONS
   -n, --name=name  name of the workspace
 ```
 
-_See code: [src/commands/workspaces.ts](https://github.com/getmailscript/cli/blob/v0.3.8/src/commands/workspaces.ts)_
+_See code: [src/commands/workspaces.ts](https://github.com/getmailscript/cli/blob/v0.3.9/src/commands/workspaces.ts)_
 <!-- commandsstop -->
 
 # Development
