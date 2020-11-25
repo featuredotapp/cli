@@ -168,6 +168,201 @@ describe('Automations', () => {
             )
           })
       })
+
+      describe('from', () => {
+        test
+          .stdout()
+          .nock(MailscriptApiServer, nockAdd)
+          .command([
+            'automations',
+            'add',
+            '--trigger',
+            'test@mailscript.io',
+            '--forward',
+            'another@example.com',
+            '--from',
+            'smith@example.com',
+          ])
+          .it('adds automation on the server', (ctx) => {
+            expect(ctx.stdout).to.contain('Automation setup: auto-xxx-yyy-zzz')
+            expect(postBody.trigger.config).to.eql({
+              criterias: [
+                {
+                  from: 'smith@example.com',
+                },
+              ],
+            })
+          })
+      })
+
+      describe('sentTo', () => {
+        test
+          .stdout()
+          .nock(MailscriptApiServer, nockAdd)
+          .command([
+            'automations',
+            'add',
+            '--trigger',
+            'test@mailscript.io',
+            '--forward',
+            'another@example.com',
+            '--sentto',
+            'test+spam@mailscript.io',
+          ])
+          .it('adds automation on the server', (ctx) => {
+            expect(ctx.stdout).to.contain('Automation setup: auto-xxx-yyy-zzz')
+            expect(postBody.trigger.config).to.eql({
+              criterias: [
+                {
+                  sentTo: 'test+spam@mailscript.io',
+                },
+              ],
+            })
+          })
+      })
+
+      describe('subjectContains', () => {
+        test
+          .stdout()
+          .nock(MailscriptApiServer, nockAdd)
+          .command([
+            'automations',
+            'add',
+            '--trigger',
+            'test@mailscript.io',
+            '--forward',
+            'another@example.com',
+            '--subjectcontains',
+            'alert',
+          ])
+          .it('adds automation on the server', (ctx) => {
+            expect(ctx.stdout).to.contain('Automation setup: auto-xxx-yyy-zzz')
+            expect(postBody.trigger.config).to.eql({
+              criterias: [
+                {
+                  subjectContains: 'alert',
+                },
+              ],
+            })
+          })
+      })
+
+      describe('domain', () => {
+        test
+          .stdout()
+          .nock(MailscriptApiServer, nockAdd)
+          .command([
+            'automations',
+            'add',
+            '--trigger',
+            'test@mailscript.io',
+            '--forward',
+            'another@example.com',
+            '--domain',
+            'example.com',
+          ])
+          .it('adds automation on the server', (ctx) => {
+            expect(ctx.stdout).to.contain('Automation setup: auto-xxx-yyy-zzz')
+            expect(postBody.trigger.config).to.eql({
+              criterias: [
+                {
+                  domain: 'example.com',
+                },
+              ],
+            })
+          })
+      })
+
+      describe('hasTheWords', () => {
+        test
+          .stdout()
+          .nock(MailscriptApiServer, nockAdd)
+          .command([
+            'automations',
+            'add',
+            '--trigger',
+            'test@mailscript.io',
+            '--forward',
+            'another@example.com',
+            '--hasthewords',
+            'alert',
+          ])
+          .it('adds automation on the server', (ctx) => {
+            expect(ctx.stdout).to.contain('Automation setup: auto-xxx-yyy-zzz')
+            expect(postBody.trigger.config).to.eql({
+              criterias: [
+                {
+                  hasTheWords: 'alert',
+                },
+              ],
+            })
+          })
+      })
+
+      describe('hasAttachments', () => {
+        test
+          .stdout()
+          .nock(MailscriptApiServer, nockAdd)
+          .command([
+            'automations',
+            'add',
+            '--trigger',
+            'test@mailscript.io',
+            '--forward',
+            'another@example.com',
+            '--hasattachments',
+          ])
+          .it('adds automation on the server', (ctx) => {
+            expect(ctx.stdout).to.contain('Automation setup: auto-xxx-yyy-zzz')
+            expect(postBody.trigger.config).to.eql({
+              criterias: [
+                {
+                  hasAttachments: true,
+                },
+              ],
+            })
+          })
+      })
+
+      describe('all', () => {
+        test
+          .stdout()
+          .nock(MailscriptApiServer, nockAdd)
+          .command([
+            'automations',
+            'add',
+            '--trigger',
+            'test@mailscript.io',
+            '--forward',
+            'another@example.com',
+            '--from',
+            'smith@example.com',
+            '--sentto',
+            'test@mailscript.io',
+            '--subjectcontains',
+            'a subject',
+            '--domain',
+            'example.com',
+            '--hasthewords',
+            'alert',
+            '--hasattachments',
+          ])
+          .it('adds automation on the server', (ctx) => {
+            expect(ctx.stdout).to.contain('Automation setup: auto-xxx-yyy-zzz')
+            expect(postBody.trigger.config).to.eql({
+              criterias: [
+                {
+                  domain: 'example.com',
+                  from: 'smith@example.com',
+                  hasAttachments: true,
+                  hasTheWords: 'alert',
+                  sentTo: 'test@mailscript.io',
+                  subjectContains: 'a subject',
+                },
+              ],
+            })
+          })
+      })
     })
 
     describe('types', () => {
