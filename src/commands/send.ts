@@ -4,7 +4,7 @@ import setupApiClient from '../setupApiClient'
 import withStandardErrors from '../utils/errorHandling'
 
 export default class Send extends Command {
-  static description = 'describe the command here'
+  static description = 'send an email from a mailscript address'
 
   static flags = {
     help: flags.help({ char: 'h' }),
