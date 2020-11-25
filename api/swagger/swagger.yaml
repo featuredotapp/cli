@@ -8,6 +8,34 @@ servers:
   - url: https://mailscript-api.herokuapp.com/v1
     description: Production server
 paths:
+  /send:
+    post:
+      tags:
+        - 'send'
+      summary: 'Send an email'
+      operationId: 'send'
+      requestBody:
+        description: request body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendRequest'
+      responses:
+        '200':
+          description: 'successful operation'
+        '400':
+          description: 'Invalid input'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /workspaces:
     post:
       tags:
@@ -446,6 +474,20 @@ components:
             type: object
             oneOf:
               - $ref: '#/components/schemas/Accessory'
+    SendRequest:
+      required:
+        - 'to'
+        - 'from'
+        - 'subject'
+      properties:
+        to:
+          type: string
+        from:
+          type: string
+        subject:
+          type: string
+        text:
+          type: string
   securitySchemes:
     bearerAuth:
       type: http

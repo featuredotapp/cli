@@ -34,6 +34,7 @@ USAGE
 * [`mailscript automations SUBCOMMAND`](#mailscript-automations-subcommand)
 * [`mailscript help [COMMAND]`](#mailscript-help-command)
 * [`mailscript login`](#mailscript-login)
+* [`mailscript send [FILE]`](#mailscript-send-file)
 * [`mailscript workspaces SUBCOMMAND`](#mailscript-workspaces-subcommand)
 
 ## `mailscript accessories SUBCOMMAND`
@@ -128,6 +129,22 @@ DESCRIPTION
 ```
 
 _See code: [src/commands/login.ts](https://github.com/getmailscript/cli/blob/v0.3.5/src/commands/login.ts)_
+
+## `mailscript send [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ mailscript send [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [src/commands/send.ts](https://github.com/getmailscript/cli/blob/v0.3.5/src/commands/send.ts)_
 
 ## `mailscript workspaces SUBCOMMAND`
 

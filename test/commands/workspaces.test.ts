@@ -1,10 +1,11 @@
 import { expect, test } from '@oclif/test'
+import { MailscriptApiServer } from './constants'
 
 describe('Workspaces', () => {
   test
     .stdout()
-    .nock('http://localhost:7000', (api) =>
-      api.get('/v1/workspaces').reply(200, { list: [] }),
+    .nock(MailscriptApiServer, (api) =>
+      api.get('/workspaces').reply(200, { list: [] }),
     )
     .command(['workspaces', 'list'])
     .exit(0)
@@ -16,8 +17,8 @@ describe('Workspaces', () => {
 
   test
     .stdout()
-    .nock('http://localhost:7000', (api) =>
-      api.get('/v1/workspaces').reply(200, { list: [{ id: 'test' }] }),
+    .nock(MailscriptApiServer, (api) =>
+      api.get('/workspaces').reply(200, { list: [{ id: 'test' }] }),
     )
     .command(['workspaces', 'list'])
     .it('lists workspaces by ids (name)', (ctx) => {

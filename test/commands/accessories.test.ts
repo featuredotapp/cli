@@ -1,11 +1,12 @@
 import { expect, test } from '@oclif/test'
+import { MailscriptApiServer } from './constants'
 
 describe('Accessories', () => {
   describe('get', () => {
     test
       .stdout()
-      .nock('http://localhost:7000', (api) =>
-        api.get('/v1/accessories').reply(200, { list: [] }),
+      .nock(MailscriptApiServer, (api) =>
+        api.get('/accessories').reply(200, { list: [] }),
       )
       .command(['accessories', 'list'])
       .exit(0)
@@ -17,9 +18,9 @@ describe('Accessories', () => {
 
     test
       .stdout()
-      .nock('http://localhost:7000', (api) =>
+      .nock(MailscriptApiServer, (api) =>
         api
-          .get('/v1/accessories')
+          .get('/accessories')
           .reply(200, { list: [{ name: 'test@mailscript.io' }] }),
       )
       .command(['accessories', 'list'])
@@ -37,7 +38,7 @@ describe('Accessories', () => {
 
     const nockAdd = (api: any) => {
       return api
-        .post('/v1/accessories', (body: any) => {
+        .post('/accessories', (body: any) => {
           postBody = body
           return true
         })
@@ -46,7 +47,7 @@ describe('Accessories', () => {
 
     test
       .stdout()
-      .nock('http://localhost:7000', nockAdd)
+      .nock(MailscriptApiServer, nockAdd)
       .command([
         'accessories',
         'add',
