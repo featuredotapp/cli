@@ -77,6 +77,12 @@ export default class Automations extends Command {
     body: flags.string({
       description: 'file to take webhook body from',
     }),
+    times: flags.string({
+      description: 'number of emails in a period for trigger to activate',
+    }),
+    seconds: flags.string({
+      description: 'period of time to calculate the trigger over',
+    }),
   }
 
   static args = [
@@ -137,13 +143,6 @@ export default class Automations extends Command {
       this.exit(1)
     }
 
-    // if (!flags.action) {
-    //   this.log(
-    //     'Please provide an action: mailscript automation add --action <accessory-id>',
-    //   )
-    //   this.exit(1)
-    // }
-
     const accessories = await this._getAllAccessories()
 
     const triggerAccessory = this._findAccessoryBy(accessories, flags.trigger)
@@ -161,23 +160,14 @@ export default class Automations extends Command {
       this.exit(1)
     }
 
-    const criterias =
-      triggerAccessory.type === 'mailscript-email'
-        ? [
-            {
-              sentTo: triggerAccessory.address,
-            },
-          ]
-        : []
+    const triggerConfig = this._resolveTriggerConfig(flags, triggerAccessory)
 
-    const actionConfig = this._resolveConfig(flags, actionAccessory)
+    const actionConfig = this._resolveActionConfig(flags, actionAccessory)
 
     const payload: api.AddAutomationRequest = {
       trigger: {
         accessoryId: triggerAccessory.id,
-        config: {
-          criterias,
-        },
+        config: triggerConfig,
       },
       actions: [
         {
@@ -200,7 +190,40 @@ export default class Automations extends Command {
     )
   }
 
-  private _resolveConfig(flags: any, actionAccessory: api.Accessory) {
+  private _resolveTriggerConfig(flags: any, triggerAccessory: api.Accessory) {
+    if (flags.times && !flags.seconds) {
+      this.log('Flag --seconds required when using --times')
+      this.exit(1)
+    }
+
+    if (!flags.times && flags.seconds) {
+      this.log('Flag --times required when using --seconds')
+      this.exit(1)
+    }
+
+    const criterias =
+      triggerAccessory.type === 'mailscript-email'
+        ? [
+            {
+              sentTo: triggerAccessory.address,
+            },
+          ]
+        : []
+
+    return flags.times && flags.seconds
+      ? {
+          times: {
+            thisManyTimes: parseInt(flags.times, 10),
+            thisManySeconds: parseInt(flags.seconds, 10),
+          },
+          criterias,
+        }
+      : {
+          criterias,
+        }
+  }
+
+  private _resolveActionConfig(flags: any, actionAccessory: api.Accessory) {
     if (actionAccessory && actionAccessory.type === 'sms') {
       if (!flags.text) {
         this.log('Please provide --text')
