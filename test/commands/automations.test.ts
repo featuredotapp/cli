@@ -27,6 +27,16 @@ describe('Automations', () => {
       .it('lists automations by id', (ctx) => {
         expect(ctx.stdout).to.contain('dR862asdfgh')
       })
+
+    test
+      .stdout()
+      .nock(MailscriptApiServer, (api) =>
+        api.get('/automations').reply(200, { list: [{ id: 'dR862asdfgh' }] }),
+      )
+      .command(['automations'])
+      .it('defaults to list', (ctx) => {
+        expect(ctx.stdout).to.contain('dR862asdfgh')
+      })
   })
 
   describe('add', () => {

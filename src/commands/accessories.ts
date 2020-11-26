@@ -36,6 +36,7 @@ export default class Accessories extends Command {
     {
       name: 'subcommand',
       required: true,
+      default: Subcommand.list,
       options: Object.keys(Subcommand),
       parse: (input: string) => Subcommand[input as keyof typeof Subcommand],
     },

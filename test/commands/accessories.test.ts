@@ -27,6 +27,18 @@ describe('Accessories', () => {
       .it('lists accessories by name', (ctx) => {
         expect(ctx.stdout).to.contain('test@mailscript.io')
       })
+
+    test
+      .stdout()
+      .nock(MailscriptApiServer, (api) =>
+        api
+          .get('/accessories')
+          .reply(200, { list: [{ name: 'test@mailscript.io' }] }),
+      )
+      .command(['accessories'])
+      .it('defaults to list', (ctx) => {
+        expect(ctx.stdout).to.contain('test@mailscript.io')
+      })
   })
 
   describe('add', () => {
