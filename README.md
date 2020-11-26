@@ -20,7 +20,7 @@ $ npm install -g mailscript
 $ mailscript COMMAND
 running command...
 $ mailscript (-v|--version|version)
-mailscript/0.3.9 darwin-x64 node-v14.3.0
+mailscript/0.3.10 darwin-x64 node-v14.15.0
 $ mailscript --help [COMMAND]
 USAGE
   $ mailscript COMMAND
@@ -35,7 +35,7 @@ USAGE
 * [`mailscript help [COMMAND]`](#mailscript-help-command)
 * [`mailscript login`](#mailscript-login)
 * [`mailscript send [FILE]`](#mailscript-send-file)
-* [`mailscript workspaces SUBCOMMAND`](#mailscript-workspaces-subcommand)
+* [`mailscript usernames SUBCOMMAND`](#mailscript-usernames-subcommand)
 
 ## `mailscript accessories SUBCOMMAND`
 
@@ -51,7 +51,7 @@ OPTIONS
   --sms=sms        the telephone number to send the sms too
 ```
 
-_See code: [src/commands/accessories.ts](https://github.com/getmailscript/cli/blob/v0.3.9/src/commands/accessories.ts)_
+_See code: [src/commands/accessories.ts](https://github.com/getmailscript/cli/blob/v0.3.10/src/commands/accessories.ts)_
 
 ## `mailscript addresses SUBCOMMAND`
 
@@ -66,7 +66,7 @@ OPTIONS
   -n, --address=address  the address
 ```
 
-_See code: [src/commands/addresses.ts](https://github.com/getmailscript/cli/blob/v0.3.9/src/commands/addresses.ts)_
+_See code: [src/commands/addresses.ts](https://github.com/getmailscript/cli/blob/v0.3.10/src/commands/addresses.ts)_
 
 ## `mailscript automations SUBCOMMAND`
 
@@ -101,7 +101,7 @@ OPTIONS
   --times=times                      number of emails in a period for trigger to activate
 ```
 
-_See code: [src/commands/automations.ts](https://github.com/getmailscript/cli/blob/v0.3.9/src/commands/automations.ts)_
+_See code: [src/commands/automations.ts](https://github.com/getmailscript/cli/blob/v0.3.10/src/commands/automations.ts)_
 
 ## `mailscript help [COMMAND]`
 
@@ -135,7 +135,7 @@ DESCRIPTION
   Link or create your MailScript account
 ```
 
-_See code: [src/commands/login.ts](https://github.com/getmailscript/cli/blob/v0.3.9/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/getmailscript/cli/blob/v0.3.10/src/commands/login.ts)_
 
 ## `mailscript send [FILE]`
 
@@ -153,22 +153,22 @@ OPTIONS
   -t, --to=to            (required) email address to send to
 ```
 
-_See code: [src/commands/send.ts](https://github.com/getmailscript/cli/blob/v0.3.9/src/commands/send.ts)_
+_See code: [src/commands/send.ts](https://github.com/getmailscript/cli/blob/v0.3.10/src/commands/send.ts)_
 
-## `mailscript workspaces SUBCOMMAND`
+## `mailscript usernames SUBCOMMAND`
 
-manipulate workspaces
+manipulate usernames
 
 ```
 USAGE
-  $ mailscript workspaces SUBCOMMAND
+  $ mailscript usernames SUBCOMMAND
 
 OPTIONS
-  -h, --help       show CLI help
-  -n, --name=name  name of the workspace
+  -h, --help               show CLI help
+  -n, --username=username  the username to claim
 ```
 
-_See code: [src/commands/workspaces.ts](https://github.com/getmailscript/cli/blob/v0.3.9/src/commands/workspaces.ts)_
+_See code: [src/commands/usernames.ts](https://github.com/getmailscript/cli/blob/v0.3.10/src/commands/usernames.ts)_
 <!-- commandsstop -->
 
 # Development
