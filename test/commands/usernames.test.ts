@@ -1,17 +1,17 @@
 import { expect, test } from '@oclif/test'
 import { MailscriptApiServer } from './constants'
 
-describe('Workspaces', () => {
+describe('Usernames', () => {
   test
     .stdout()
     .nock(MailscriptApiServer, (api) =>
       api.get('/workspaces').reply(200, { list: [] }),
     )
-    .command(['workspaces', 'list'])
+    .command(['usernames', 'list'])
     .exit(0)
-    .it('gives message if no workspaces', (ctx) => {
+    .it('gives message if no usernames', (ctx) => {
       expect(ctx.stdout).to.contain(
-        "you don't have a workspace currently, create one with: mailscript workspaces add",
+        "you don't have a username currently, create one with: mailscript usernames add",
       )
     })
 
@@ -20,8 +20,8 @@ describe('Workspaces', () => {
     .nock(MailscriptApiServer, (api) =>
       api.get('/workspaces').reply(200, { list: [{ id: 'test' }] }),
     )
-    .command(['workspaces', 'list'])
-    .it('lists workspaces by ids (name)', (ctx) => {
+    .command(['usernames', 'list'])
+    .it('lists usernames by ids (name)', (ctx) => {
       expect(ctx.stdout).to.contain('test')
     })
 })

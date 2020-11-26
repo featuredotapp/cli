@@ -7,7 +7,7 @@ describe('Error handling', () => {
     .nock(MailscriptApiServer, (api) =>
       api.get('/workspaces').reply(403, { error: 'No credentials sent!' }),
     )
-    .command(['workspaces', 'list'])
+    .command(['usernames', 'list'])
     .exit(1)
     .it('warns on no credentials', (ctx) => {
       expect(ctx.stdout).to.contain(
@@ -20,7 +20,7 @@ describe('Error handling', () => {
     .nock(MailscriptApiServer, (api) =>
       api.get('/workspaces').reply(400, { error: 'bad request boo!' }),
     )
-    .command(['workspaces', 'list'])
+    .command(['usernames', 'list'])
     .exit(1)
     .it('shows error for general bad request', (ctx) => {
       expect(ctx.stdout).to.contain('Error: bad request boo!')
@@ -31,7 +31,7 @@ describe('Error handling', () => {
     .nock(MailscriptApiServer, (api) =>
       api.get('/workspaces').reply(777, { aaa: 'bbb' }),
     )
-    .command(['workspaces', 'list'])
+    .command(['usernames', 'list'])
     .exit(1)
     .it('shows response and exits for unknown status code', (ctx) => {
       expect(ctx.stdout).to.contain('Unknown status code 777')
