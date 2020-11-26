@@ -10,12 +10,12 @@ enum Subcommand {
   add = 'add',
 }
 
-export default class Workspaces extends Command {
-  static description = 'manipulate workspaces'
+export default class Usernames extends Command {
+  static description = 'manipulate usernames'
 
   static flags = {
     help: flags.help({ char: 'h' }),
-    name: flags.string({ char: 'n', description: 'name of the workspace' }),
+    username: flags.string({ char: 'n', description: 'the username to claim' }),
   }
 
   static args = [
@@ -28,7 +28,7 @@ export default class Workspaces extends Command {
   ]
 
   async run() {
-    const { args, flags } = this.parse(Workspaces)
+    const { args, flags } = this.parse(Usernames)
 
     const subcommand: Subcommand = args.subcommand
 
@@ -52,12 +52,12 @@ export default class Workspaces extends Command {
           '200': ({ list }: api.GetAllWorkspacesResponse) => {
             if (!list || list.length === 0) {
               this.log(
-                `you don't have a workspace currently, create one with: mailscript workspaces add`,
+                `you don't have a username currently, create one with: mailscript usernames add`,
               )
               this.exit(0)
             }
 
-            this.log('Workspaces')
+            this.log('Usernames')
 
             for (const workspace of list || []) {
               this.log(`  ${workspace.id}`)
@@ -70,19 +70,19 @@ export default class Workspaces extends Command {
   }
 
   async add(client: typeof api, flags: any): Promise<void> {
-    if (!flags.name) {
+    if (!flags.username) {
       this.log(
-        'Please provide a name: mailscript workspace add --name <example>',
+        'Please provide a username: mailscript usernames add --username <example>',
       )
       this.exit(1)
     }
 
     return handle(
-      client.addWorkspace({ workspace: flags.name }),
+      client.addWorkspace({ workspace: flags.username }),
       withStandardErrors(
         {
           '201': (response: any) => {
-            this.log(`Workspace '${response.id}' added`)
+            this.log(`Username '${response.id}' added`)
           },
         },
         this,
