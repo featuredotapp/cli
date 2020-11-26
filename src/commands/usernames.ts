@@ -22,6 +22,7 @@ export default class Usernames extends Command {
     {
       name: 'subcommand',
       required: true,
+      default: Subcommand.list,
       options: Object.keys(Subcommand),
       parse: (input: string) => Subcommand[input as keyof typeof Subcommand],
     },

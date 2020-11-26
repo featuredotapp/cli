@@ -26,4 +26,16 @@ describe('Addresses', () => {
     .it('lists addresses by id', (ctx) => {
       expect(ctx.stdout).to.contain('test@mailscript.io')
     })
+
+  test
+    .stdout()
+    .nock(MailscriptApiServer, (api) =>
+      api
+        .get('/addresses')
+        .reply(200, { list: [{ id: 'test@mailscript.io' }] }),
+    )
+    .command(['addresses'])
+    .it('defaults to list', (ctx) => {
+      expect(ctx.stdout).to.contain('test@mailscript.io')
+    })
 })
