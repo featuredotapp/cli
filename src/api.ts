@@ -20,6 +20,7 @@ export type SendRequest = {
   from: string
   subject: string
   text?: string
+  html?: string
 }
 export type ErrorResponse = {
   error: string
@@ -28,38 +29,38 @@ export type AddWorkspaceRequest = {
   workspace: string
 }
 export type Workspace = {
-  id?: string
-  owner?: string
-  createdAt?: string
-  createdBy?: string
+  id: string
+  owner: string
+  createdAt: string
+  createdBy: string
 }
 export type GetAllWorkspacesResponse = {
-  list?: Workspace[]
+  list: Workspace[]
 }
 export type AddAddressRequest = {
   address: string
 }
 export type Address = {
-  id?: string
-  owner?: string
-  createdAt?: string
-  createdBy?: string
+  id: string
+  owner: string
+  createdAt: string
+  createdBy: string
 }
 export type GetAllAddressesResponse = {
-  list?: Address[]
+  list: Address[]
 }
 export type Accessory = {
-  id?: string
-  type?: 'mailscript-email' | 'sms'
-  createdAt?: string
-  createdBy?: string
-  name?: string
+  id: string
+  type: 'mailscript-email' | 'sms'
+  createdAt: string
+  createdBy: string
+  name: string
   address?: string
   sms?: string
-  key?: string
+  key: string
 }
 export type GetAllAccessoriesResponse = {
-  list?: Accessory[]
+  list: Accessory[]
 }
 export type AddAccessoryRequest = {
   name: string
@@ -67,39 +68,39 @@ export type AddAccessoryRequest = {
   sms: string
 }
 export type AddAutomationRequest = {
-  trigger?: {
+  trigger: {
     accessoryId?: string
     config?: object
   }
-  actions?: {
+  actions: {
     accessoryId?: string
     config?: object
   }[]
 }
 export type Automation = {
-  id?: string
-  createdAt?: string
-  createdBy?: string
+  id: string
+  owner: string
+  createdAt: string
+  createdBy: string
 }
 export type GetAllAutomationsResponse = {
-  list?: Automation[]
+  list: Automation[]
 }
 export type Key = {
   id: string
   read: boolean
   write: boolean
-  createdBy?: string
-  createdAt?: string
+  createdBy: string
+  createdAt: string
 }
 export type GetAllKeysResponse = {
-  list?: Key[]
+  list: Key[]
 }
 export type AddKeyRequest = {
   read: boolean
   write: boolean
 }
 export type AddKeyResponse = {
-  success?: boolean
   id?: string
 }
 export type UpdateKeyRequest = {

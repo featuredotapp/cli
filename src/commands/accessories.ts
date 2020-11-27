@@ -4,16 +4,19 @@ import { handle } from 'oazapfts'
 import { assertNever } from '../utils/assertNever'
 import setupApiClient from '../setupApiClient'
 import withStandardErrors from '../utils/errorHandling'
+import { cli } from 'cli-ux'
 
 type FlagsType = {
   help: void
   name: string | undefined
   sms: string | undefined
+  accessory: string | undefined
 }
 
 enum Subcommand {
   list = 'list',
   add = 'add',
+  delete = 'delete',
 }
 
 const accessoryTypeFlags = ['sms']
@@ -23,6 +26,10 @@ export default class Accessories extends Command {
 
   static flags = {
     help: flags.help({ char: 'h' }),
+    accessory: flags.string({
+      char: 'a',
+      description: 'id of the accessory to act upon',
+    }),
     name: flags.string({
       char: 'n',
       description: 'the name of the automation',
@@ -54,6 +61,8 @@ export default class Accessories extends Command {
         return this.list(client)
       case Subcommand.add:
         return this.add(client, flags)
+      case Subcommand.delete:
+        return this.delete(client, flags)
       default:
         assertNever(subcommand)
     }
@@ -72,10 +81,33 @@ export default class Accessories extends Command {
               this.exit(0)
             }
 
+            this.log('')
             this.log('Accessories')
-            for (const accessory of list || []) {
-              this.log(`  ${accessory.name}`)
-            }
+            this.log('')
+
+            cli.table(
+              list,
+              {
+                id: {
+                  header: 'Id',
+                  get: (row) => row.id,
+                },
+                name: {
+                  header: 'Name',
+                  get: (row) => row.name,
+                },
+                type: {
+                  header: 'Type',
+                  get: (row) => row.type,
+                },
+              },
+              { printLine: this.log },
+            )
+
+            // this.log('Accessories')
+            // for (const accessory of list || []) {
+            //   this.log(`  ${accessory.name}`)
+            // }
           },
         },
         this,
@@ -114,5 +146,26 @@ export default class Accessories extends Command {
         accessoryTypeFlags.join('\n  --'),
     )
     this.exit(1)
+  }
+
+  async delete(client: typeof api, flags: FlagsType): Promise<void> {
+    if (!flags.accessory) {
+      this.log(
+        'Please provide the accessory id: mailscript accessories delete --accessory <accessory-id>',
+      )
+      this.exit(1)
+    }
+
+    return handle(
+      client.deleteAccessory(flags.accessory),
+      withStandardErrors(
+        {
+          '204': (_response: any) => {
+            this.log(`Accessory deleted: ${flags.accessory}`)
+          },
+        },
+        this,
+      ),
+    )
   }
 }

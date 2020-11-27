@@ -614,6 +614,11 @@ paths:
 components:
   schemas:
     Workspace:
+      required:
+        - id
+        - owner
+        - createdAt
+        - createdBy
       properties:
         id:
           type: string
@@ -625,6 +630,11 @@ components:
         createdBy:
           type: string
     Address:
+      required:
+        - id
+        - owner
+        - createdAt
+        - createdBy
       properties:
         id:
           type: string
@@ -636,8 +646,15 @@ components:
         createdBy:
           type: string
     Automation:
+      required:
+        - id
+        - owner
+        - createdAt
+        - createdBy
       properties:
         id:
+          type: string
+        owner:
           type: string
         createdAt:
           type: string
@@ -645,6 +662,13 @@ components:
         createdBy:
           type: string
     Accessory:
+      required:
+        - id
+        - type
+        - name
+        - key
+        - createdAt
+        - createdBy
       properties:
         id:
           type: string
@@ -669,6 +693,8 @@ components:
         - id
         - read
         - write
+        - createdBy
+        - createdAt
       properties:
         id:
           type: string
@@ -694,6 +720,8 @@ components:
         workspace:
           type: string
     GetAllWorkspacesResponse:
+      required:
+        - list
       properties:
         list:
           type: array
@@ -708,6 +736,8 @@ components:
         address:
           type: string
     GetAllAddressesResponse:
+      required:
+        - list
       properties:
         list:
           type: array
@@ -716,6 +746,8 @@ components:
             oneOf:
               - $ref: '#/components/schemas/Address'
     GetAllAutomationsResponse:
+      required:
+        - list
       properties:
         list:
           type: array
@@ -737,6 +769,9 @@ components:
         sms:
           type: string
     AddAutomationRequest:
+      required:
+        - trigger
+        - actions
       properties:
         trigger:
           type: object
@@ -755,6 +790,8 @@ components:
               config:
                 type: object
     GetAllAccessoriesResponse:
+      required:
+        - list
       properties:
         list:
           type: array
@@ -776,7 +813,11 @@ components:
           type: string
         text:
           type: string
+        html:
+          type: string
     GetAllKeysResponse:
+      required:
+        - list
       properties:
         list:
           type: array
@@ -804,8 +845,6 @@ components:
           type: boolean
     AddKeyResponse:
       properties:
-        success:
-          type: boolean
         id:
           type: string
   securitySchemes:

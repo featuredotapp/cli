@@ -97,4 +97,26 @@ describe('Accessories', () => {
         )
       })
   })
+
+  describe('delete', () => {
+    test
+      .stdout()
+      .nock(MailscriptApiServer, (api) => {
+        return api.delete('/accessories/access-xxx-yyy-zzz').reply(204)
+      })
+      .command(['accessories', 'delete', '--accessory', 'access-xxx-yyy-zzz'])
+      .it('deletes accessory on the server', (ctx) => {
+        expect(ctx.stdout).to.contain('Accessory deleted: access-xxx-yyy-zzz')
+      })
+
+    test
+      .stdout()
+      .command(['accessories', 'delete'])
+      .exit(1)
+      .it('errors if no accessory id provided', (ctx) => {
+        expect(ctx.stdout).to.contain(
+          'Please provide the accessory id: mailscript accessories delete --accessory <accessory-id>',
+        )
+      })
+  })
 })
