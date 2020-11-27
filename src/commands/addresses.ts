@@ -8,6 +8,7 @@ import withStandardErrors from '../utils/errorHandling'
 enum Subcommand {
   list = 'list',
   add = 'add',
+  delete = 'delete',
 }
 
 export default class Addresses extends Command {
@@ -15,7 +16,7 @@ export default class Addresses extends Command {
 
   static flags = {
     help: flags.help({ char: 'h' }),
-    address: flags.string({ char: 'n', description: 'the address' }),
+    address: flags.string({ char: 'a', description: 'the address' }),
   }
 
   static args = [
@@ -40,6 +41,8 @@ export default class Addresses extends Command {
         return this.list(client)
       case Subcommand.add:
         return this.add(client, flags)
+      case Subcommand.delete:
+        return this.delete(client, flags)
       default:
         assertNever(subcommand)
     }
@@ -83,6 +86,27 @@ export default class Addresses extends Command {
         {
           '201': () => {
             this.log(`Address added: ${flags.address}`)
+          },
+        },
+        this,
+      ),
+    )
+  }
+
+  async delete(client: typeof api, flags: any): Promise<void> {
+    if (!flags.address) {
+      this.log(
+        'Please provide the address: mailscript addresses delete --address <smith@example.com>',
+      )
+      this.exit(1)
+    }
+
+    return handle(
+      client.deleteAddress(flags.address),
+      withStandardErrors(
+        {
+          '204': (_response: any) => {
+            this.log(`Address deleted: ${flags.address}`)
           },
         },
         this,

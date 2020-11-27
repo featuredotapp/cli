@@ -173,8 +173,8 @@ paths:
           schema:
             type: string
       responses:
-        '200':
-          description: 'successful operation'
+        '204':
+          description: 'successful delete operation'
         '403':
           description: 'Bad credentials'
           content:
@@ -286,6 +286,40 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - 'accessories'
+      summary: 'Delete an accessory'
+      description: ''
+      operationId: 'deleteAccessory'
+      parameters:
+        - name: id
+          in: path
+          description: ID of accessory
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: 'Successful delete operation'
+        '400':
+          description: 'Failure'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 'Key not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /automations:
     post:
       tags:
@@ -342,6 +376,40 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '405':
           description: 'Invalid input'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /automations/{automation}:
+    delete:
+      tags:
+        - 'automations'
+      summary: 'Delete an automation'
+      operationId: 'deleteAutomation'
+      parameters:
+        - name: automation
+          in: path
+          description: ID of the automation
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: 'Successful delete operation'
+        '400':
+          description: 'Failure'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 'Key not found'
           content:
             application/json:
               schema:
@@ -523,12 +591,8 @@ paths:
           schema:
             type: string
       responses:
-        '200':
-          description: 'Successful operation'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Key'
+        '204':
+          description: 'Successful delete operation'
         '400':
           description: 'Failure'
           content:
@@ -550,6 +614,11 @@ paths:
 components:
   schemas:
     Workspace:
+      required:
+        - id
+        - owner
+        - createdAt
+        - createdBy
       properties:
         id:
           type: string
@@ -561,6 +630,11 @@ components:
         createdBy:
           type: string
     Address:
+      required:
+        - id
+        - owner
+        - createdAt
+        - createdBy
       properties:
         id:
           type: string
@@ -572,8 +646,15 @@ components:
         createdBy:
           type: string
     Automation:
+      required:
+        - id
+        - owner
+        - createdAt
+        - createdBy
       properties:
         id:
+          type: string
+        owner:
           type: string
         createdAt:
           type: string
@@ -581,6 +662,13 @@ components:
         createdBy:
           type: string
     Accessory:
+      required:
+        - id
+        - type
+        - name
+        - key
+        - createdAt
+        - createdBy
       properties:
         id:
           type: string
@@ -605,6 +693,8 @@ components:
         - id
         - read
         - write
+        - createdBy
+        - createdAt
       properties:
         id:
           type: string
@@ -630,6 +720,8 @@ components:
         workspace:
           type: string
     GetAllWorkspacesResponse:
+      required:
+        - list
       properties:
         list:
           type: array
@@ -644,6 +736,8 @@ components:
         address:
           type: string
     GetAllAddressesResponse:
+      required:
+        - list
       properties:
         list:
           type: array
@@ -652,6 +746,8 @@ components:
             oneOf:
               - $ref: '#/components/schemas/Address'
     GetAllAutomationsResponse:
+      required:
+        - list
       properties:
         list:
           type: array
@@ -673,6 +769,9 @@ components:
         sms:
           type: string
     AddAutomationRequest:
+      required:
+        - trigger
+        - actions
       properties:
         trigger:
           type: object
@@ -691,6 +790,8 @@ components:
               config:
                 type: object
     GetAllAccessoriesResponse:
+      required:
+        - list
       properties:
         list:
           type: array
@@ -712,7 +813,11 @@ components:
           type: string
         text:
           type: string
+        html:
+          type: string
     GetAllKeysResponse:
+      required:
+        - list
       properties:
         list:
           type: array
@@ -740,8 +845,6 @@ components:
           type: boolean
     AddKeyResponse:
       properties:
-        success:
-          type: boolean
         id:
           type: string
   securitySchemes:
