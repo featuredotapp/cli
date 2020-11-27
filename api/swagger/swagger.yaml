@@ -454,6 +454,56 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+    put:
+      tags:
+        - 'keys'
+      summary: 'Update an address key'
+      operationId: 'updateKey'
+      parameters:
+        - name: address
+          in: path
+          description: ID of address
+          required: true
+          schema:
+            type: string
+        - name: key
+          in: path
+          description: ID of key
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Key body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateKeyRequest'
+      responses:
+        '200':
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Key'
+        '400':
+          description: 'Failure'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 'Key not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     delete:
       tags:
         - 'keys'
@@ -671,6 +721,15 @@ components:
             oneOf:
               - $ref: '#/components/schemas/Key'
     AddKeyRequest:
+      required:
+        - 'read'
+        - 'write'
+      properties:
+        read:
+          type: boolean
+        write:
+          type: boolean
+    UpdateKeyRequest:
       required:
         - 'read'
         - 'write'

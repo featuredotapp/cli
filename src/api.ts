@@ -102,6 +102,10 @@ export type AddKeyResponse = {
   success?: boolean
   id?: string
 }
+export type UpdateKeyRequest = {
+  read: boolean
+  write: boolean
+}
 /**
  * Send an email
  */
@@ -470,6 +474,41 @@ export function getKey(
   >(`/addresses/${address}/keys/${key}`, {
     ...opts,
   })
+}
+/**
+ * Update an address key
+ */
+export function updateKey(
+  address: string,
+  key: string,
+  updateKeyRequest: UpdateKeyRequest,
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+        data: Key
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 404
+        data: ErrorResponse
+      }
+  >(
+    `/addresses/${address}/keys/${key}`,
+    oazapfts.json({
+      ...opts,
+      method: 'PUT',
+      body: updateKeyRequest,
+    }),
+  )
 }
 /**
  * Delete address key

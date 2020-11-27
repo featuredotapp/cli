@@ -9,6 +9,8 @@ import { cli } from 'cli-ux'
 enum Subcommand {
   list = 'list',
   add = 'add',
+  update = 'update',
+  delete = 'delete',
 }
 
 export default class Keys extends Command {
@@ -18,6 +20,17 @@ export default class Keys extends Command {
     help: flags.help({ char: 'h' }),
     address: flags.string({
       description: 'the email address to look for keys against',
+    }),
+    key: flags.string({
+      description: 'the id of the address key',
+    }),
+    read: flags.boolean({
+      default: false,
+      description: 'set the key with read permissions',
+    }),
+    write: flags.boolean({
+      default: false,
+      description: 'set the key with write permissions',
     }),
   }
 
@@ -42,7 +55,11 @@ export default class Keys extends Command {
       case Subcommand.list:
         return this.list(client, flags)
       case Subcommand.add:
-        return this.add()
+        return this.add(client, flags)
+      case Subcommand.update:
+        return this.update(client, flags)
+      case Subcommand.delete:
+        return this.delete(client, flags)
       default:
         assertNever(subcommand)
     }
@@ -95,7 +112,108 @@ export default class Keys extends Command {
     )
   }
 
-  async add(): Promise<void> {
-    this.log('TBD')
+  async add(client: typeof api, flags: any): Promise<void> {
+    if (!flags.address) {
+      this.log(
+        'Please provide an address: mailscript keys add --address example@workspace.mailscript.com',
+      )
+      this.exit(1)
+    }
+
+    if (!flags.write && !flags.read) {
+      this.log(`A key must have either read or write permission`)
+      this.exit(1)
+    }
+
+    return handle(
+      client.addKey(flags.address, {
+        read: flags.read,
+        write: flags.write,
+      }),
+      withStandardErrors(
+        {
+          '201': ({ id }: api.AddKeyResponse) => {
+            this.log(`Key added: ${id}`)
+          },
+          '404': () => {
+            this.log(`Unknown address: ${flags.address}`)
+            this.exit(1)
+          },
+        },
+        this,
+      ),
+    )
+  }
+
+  async update(client: typeof api, flags: any): Promise<void> {
+    if (!flags.address) {
+      this.log(
+        'Please provide an address: mailscript keys update --address example@workspace.mailscript.com',
+      )
+      this.exit(1)
+    }
+
+    if (!flags.key) {
+      this.log(
+        'Please provide the key id: mailscript keys update --address example@workspace.mailscript.com --key xxx',
+      )
+      this.exit(1)
+    }
+
+    if (!flags.write && !flags.read) {
+      this.log(`A key must have either read or write permission`)
+      this.exit(1)
+    }
+
+    return handle(
+      client.updateKey(flags.address, flags.key, {
+        read: flags.read,
+        write: flags.write,
+      }),
+      withStandardErrors(
+        {
+          '200': ({ id }: api.AddKeyResponse) => {
+            this.log(`Key updated: ${id}`)
+          },
+          '404': ({ error }: api.ErrorResponse) => {
+            this.log(error)
+            this.exit(1)
+          },
+        },
+        this,
+      ),
+    )
+  }
+
+  async delete(client: typeof api, flags: any): Promise<void> {
+    if (!flags.address) {
+      this.log(
+        'Please provide an address: mailscript keys delete --address example@workspace.mailscript.com',
+      )
+      this.exit(1)
+    }
+
+    if (!flags.key) {
+      this.log(
+        'Please provide the key id: mailscript keys delete --address example@workspace.mailscript.com --key xxx',
+      )
+      this.exit(1)
+    }
+
+    return handle(
+      client.deleteKey(flags.address, flags.key),
+      withStandardErrors(
+        {
+          '200': (_response: any) => {
+            this.log(`Key deleted: ${flags.key}`)
+          },
+          '404': ({ error }: api.ErrorResponse) => {
+            this.log(error)
+            this.exit(1)
+          },
+        },
+        this,
+      ),
+    )
   }
 }
