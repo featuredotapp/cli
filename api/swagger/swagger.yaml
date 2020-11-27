@@ -173,8 +173,8 @@ paths:
           schema:
             type: string
       responses:
-        '200':
-          description: 'successful operation'
+        '204':
+          description: 'successful delete operation'
         '403':
           description: 'Bad credentials'
           content:
@@ -286,6 +286,40 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - 'accessories'
+      summary: 'Delete an accessory'
+      description: ''
+      operationId: 'deleteAccessory'
+      parameters:
+        - name: id
+          in: path
+          description: ID of accessory
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: 'Successful delete operation'
+        '400':
+          description: 'Failure'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 'Key not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /automations:
     post:
       tags:
@@ -342,6 +376,40 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '405':
           description: 'Invalid input'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /automations/{automation}:
+    delete:
+      tags:
+        - 'automations'
+      summary: 'Delete an automation'
+      operationId: 'deleteAutomation'
+      parameters:
+        - name: automation
+          in: path
+          description: ID of the automation
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: 'Successful delete operation'
+        '400':
+          description: 'Failure'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 'Key not found'
           content:
             application/json:
               schema:
@@ -523,12 +591,8 @@ paths:
           schema:
             type: string
       responses:
-        '200':
-          description: 'Successful operation'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Key'
+        '204':
+          description: 'Successful delete operation'
         '400':
           description: 'Failure'
           content:

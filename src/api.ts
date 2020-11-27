@@ -243,7 +243,7 @@ export function getAllAddresses(opts?: Oazapfts.RequestOpts) {
 export function deleteAddress(address: string, opts?: Oazapfts.RequestOpts) {
   return oazapfts.fetchJson<
     | {
-        status: 200
+        status: 204
       }
     | {
         status: 403
@@ -347,6 +347,31 @@ export function getAccessory(id: string, opts?: Oazapfts.RequestOpts) {
   })
 }
 /**
+ * Delete an accessory
+ */
+export function deleteAccessory(id: string, opts?: Oazapfts.RequestOpts) {
+  return oazapfts.fetchJson<
+    | {
+        status: 204
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 404
+        data: ErrorResponse
+      }
+  >(`/accessories/${id}`, {
+    ...opts,
+    method: 'DELETE',
+  })
+}
+/**
  * Setup an automation
  */
 export function addAutomation(
@@ -397,6 +422,34 @@ export function getAllAutomations(opts?: Oazapfts.RequestOpts) {
       }
   >('/automations', {
     ...opts,
+  })
+}
+/**
+ * Delete an automation
+ */
+export function deleteAutomation(
+  automation: string,
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 204
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 404
+        data: ErrorResponse
+      }
+  >(`/automations/${automation}`, {
+    ...opts,
+    method: 'DELETE',
   })
 }
 /**
@@ -520,8 +573,7 @@ export function deleteKey(
 ) {
   return oazapfts.fetchJson<
     | {
-        status: 200
-        data: Key
+        status: 204
       }
     | {
         status: 400

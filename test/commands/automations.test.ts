@@ -585,4 +585,26 @@ describe('Automations', () => {
       })
     })
   })
+
+  describe('delete', () => {
+    test
+      .stdout()
+      .nock(MailscriptApiServer, (api) => {
+        return api.delete('/automations/auto-01-xxx-yyy-zzz').reply(204)
+      })
+      .command(['automations', 'delete', '--automation', 'auto-01-xxx-yyy-zzz'])
+      .it('deletes automation on the server', (ctx) => {
+        expect(ctx.stdout).to.contain('Automation deleted: auto-01-xxx-yyy-zzz')
+      })
+
+    test
+      .stdout()
+      .command(['automations', 'delete'])
+      .exit(1)
+      .it('errors if no automation id provided', (ctx) => {
+        expect(ctx.stdout).to.contain(
+          'Please provide the automation id: mailscript automation delete --automation <automation-id>',
+        )
+      })
+  })
 })

@@ -9,6 +9,7 @@ import withStandardErrors from '../utils/errorHandling'
 enum Subcommand {
   list = 'list',
   add = 'add',
+  delete = 'delete',
 }
 
 const automationTypeFlags = [
@@ -25,6 +26,9 @@ export default class Automations extends Command {
 
   static flags = {
     help: flags.help({ char: 'h' }),
+    automation: flags.string({
+      description: 'id of the automation to be acted on',
+    }),
     trigger: flags.string({
       char: 't',
       description: 'id of the trigger accessory',
@@ -127,6 +131,8 @@ export default class Automations extends Command {
         return this.list(client)
       case Subcommand.add:
         return this.add(client, flags)
+      case Subcommand.delete:
+        return this.delete(client, flags)
       default:
         assertNever(subcommand)
     }
@@ -204,6 +210,27 @@ export default class Automations extends Command {
         {
           '201': (response: any) => {
             this.log(`Automation setup: ${response.id}`)
+          },
+        },
+        this,
+      ),
+    )
+  }
+
+  async delete(client: typeof api, flags: any): Promise<void> {
+    if (!flags.automation) {
+      this.log(
+        'Please provide the automation id: mailscript automation delete --automation <automation-id>',
+      )
+      this.exit(1)
+    }
+
+    return handle(
+      client.deleteAutomation(flags.automation),
+      withStandardErrors(
+        {
+          '204': (_response: any) => {
+            this.log(`Automation deleted: ${flags.automation}`)
           },
         },
         this,
