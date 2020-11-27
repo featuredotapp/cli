@@ -86,6 +86,9 @@ export default class Automations extends Command {
     from: flags.string({
       description: 'constrain trigger to emails from the specified address',
     }),
+    sentto: flags.string({
+      description: 'constrain trigger to emails sent to the specified address',
+    }),
     subjectcontains: flags.string({
       description:
         'constrain trigger to emails whose subject contains the specified text',
@@ -222,6 +225,7 @@ export default class Automations extends Command {
     let criterias: Array<any> = []
     if (
       flags.from ||
+      flags.sentto ||
       flags.hasthewords ||
       flags.domain ||
       flags.subjectcontains ||
@@ -230,6 +234,7 @@ export default class Automations extends Command {
       criterias = [
         {
           from: flags.from,
+          sentTo: flags.sentto,
           hasTheWords: flags.hasthewords,
           domain: flags.domain,
           subjectContains: flags.subjectcontains,
