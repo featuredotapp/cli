@@ -346,6 +346,8 @@ describe('Automations', () => {
             'another@example.com',
             '--from',
             'smith@example.com',
+            '--sentto',
+            'test+spam@mailscript.io',
             '--subjectcontains',
             'a subject',
             '--domain',
@@ -361,6 +363,7 @@ describe('Automations', () => {
                 {
                   domain: 'example.com',
                   from: 'smith@example.com',
+                  sentTo: 'test+spam@mailscript.io',
                   hasAttachments: true,
                   hasTheWords: 'alert',
                   subjectContains: 'a subject',
