@@ -7,6 +7,8 @@ info:
 servers:
   - url: https://mailscript-api.herokuapp.com/v1
     description: Production server
+  - url: http://localhost:7000/v1
+    description: Local development server
 paths:
   /send:
     post:
@@ -344,6 +346,207 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /addresses/{address}/keys:
+    get:
+      tags:
+        - 'keys'
+      summary: 'List address keys'
+      operationId: getAllKeys
+      parameters:
+        - name: address
+          in: path
+          description: ID of address
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllKeysResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 'Address not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+        - 'keys'
+      summary: 'Add address key'
+      operationId: addKey
+      parameters:
+        - name: address
+          in: path
+          description: ID of address
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Key body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddKeyRequest'
+      responses:
+        '201':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddKeyResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 'Address not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /addresses/{address}/keys/{key}:
+    get:
+      tags:
+        - 'keys'
+      summary: 'Get address key'
+      operationId: getKey
+      parameters:
+        - name: address
+          in: path
+          description: ID of address
+          required: true
+          schema:
+            type: string
+        - name: key
+          in: path
+          description: ID of key
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Key'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 'Key not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      tags:
+        - 'keys'
+      summary: 'Update an address key'
+      operationId: 'updateKey'
+      parameters:
+        - name: address
+          in: path
+          description: ID of address
+          required: true
+          schema:
+            type: string
+        - name: key
+          in: path
+          description: ID of key
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Key body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateKeyRequest'
+      responses:
+        '200':
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Key'
+        '400':
+          description: 'Failure'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 'Key not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - 'keys'
+      summary: 'Delete address key'
+      operationId: deleteKey
+      parameters:
+        - name: address
+          in: path
+          description: ID of address
+          required: true
+          schema:
+            type: string
+        - name: key
+          in: path
+          description: ID of key
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Key'
+        '400':
+          description: 'Failure'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 'Key not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
     Workspace:
@@ -353,7 +556,8 @@ components:
         owner:
           type: string
         createdAt:
-          type: integer
+          type: string
+          format: date-time
         createdBy:
           type: string
     Address:
@@ -363,7 +567,8 @@ components:
         owner:
           type: string
         createdAt:
-          type: integer
+          type: string
+          format: date-time
         createdBy:
           type: string
     Automation:
@@ -371,7 +576,8 @@ components:
         id:
           type: string
         createdAt:
-          type: integer
+          type: string
+          format: date-time
         createdBy:
           type: string
     Accessory:
@@ -382,7 +588,8 @@ components:
           type: string
           enum: ['mailscript-email', 'sms']
         createdAt:
-          type: integer
+          type: string
+          format: date-time
         createdBy:
           type: string
         name:
@@ -393,6 +600,23 @@ components:
           type: string
         key:
           type: string
+    Key:
+      required:
+        - id
+        - read
+        - write
+      properties:
+        id:
+          type: string
+        read:
+          type: boolean
+        write:
+          type: boolean
+        createdBy:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
     ErrorResponse:
       required:
         - error
@@ -487,6 +711,38 @@ components:
         subject:
           type: string
         text:
+          type: string
+    GetAllKeysResponse:
+      properties:
+        list:
+          type: array
+          items:
+            type: object
+            oneOf:
+              - $ref: '#/components/schemas/Key'
+    AddKeyRequest:
+      required:
+        - 'read'
+        - 'write'
+      properties:
+        read:
+          type: boolean
+        write:
+          type: boolean
+    UpdateKeyRequest:
+      required:
+        - 'read'
+        - 'write'
+      properties:
+        read:
+          type: boolean
+        write:
+          type: boolean
+    AddKeyResponse:
+      properties:
+        success:
+          type: boolean
+        id:
           type: string
   securitySchemes:
     bearerAuth:

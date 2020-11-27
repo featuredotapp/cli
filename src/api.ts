@@ -13,6 +13,7 @@ export const defaults: Oazapfts.RequestOpts = {
 const oazapfts = Oazapfts.runtime(defaults)
 export const servers = {
   productionServer: 'https://mailscript-api.herokuapp.com/v1',
+  localDevelopmentServer: 'http://localhost:7000/v1',
 }
 export type SendRequest = {
   to: string
@@ -29,7 +30,7 @@ export type AddWorkspaceRequest = {
 export type Workspace = {
   id?: string
   owner?: string
-  createdAt?: number
+  createdAt?: string
   createdBy?: string
 }
 export type GetAllWorkspacesResponse = {
@@ -41,7 +42,7 @@ export type AddAddressRequest = {
 export type Address = {
   id?: string
   owner?: string
-  createdAt?: number
+  createdAt?: string
   createdBy?: string
 }
 export type GetAllAddressesResponse = {
@@ -50,7 +51,7 @@ export type GetAllAddressesResponse = {
 export type Accessory = {
   id?: string
   type?: 'mailscript-email' | 'sms'
-  createdAt?: number
+  createdAt?: string
   createdBy?: string
   name?: string
   address?: string
@@ -77,11 +78,33 @@ export type AddAutomationRequest = {
 }
 export type Automation = {
   id?: string
-  createdAt?: number
+  createdAt?: string
   createdBy?: string
 }
 export type GetAllAutomationsResponse = {
   list?: Automation[]
+}
+export type Key = {
+  id: string
+  read: boolean
+  write: boolean
+  createdBy?: string
+  createdAt?: string
+}
+export type GetAllKeysResponse = {
+  list?: Key[]
+}
+export type AddKeyRequest = {
+  read: boolean
+  write: boolean
+}
+export type AddKeyResponse = {
+  success?: boolean
+  id?: string
+}
+export type UpdateKeyRequest = {
+  read: boolean
+  write: boolean
 }
 /**
  * Send an email
@@ -374,5 +397,146 @@ export function getAllAutomations(opts?: Oazapfts.RequestOpts) {
       }
   >('/automations', {
     ...opts,
+  })
+}
+/**
+ * List address keys
+ */
+export function getAllKeys(address: string, opts?: Oazapfts.RequestOpts) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+        data: GetAllKeysResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 404
+        data: ErrorResponse
+      }
+  >(`/addresses/${address}/keys`, {
+    ...opts,
+  })
+}
+/**
+ * Add address key
+ */
+export function addKey(
+  address: string,
+  addKeyRequest: AddKeyRequest,
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 201
+        data: AddKeyResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 404
+        data: ErrorResponse
+      }
+  >(
+    `/addresses/${address}/keys`,
+    oazapfts.json({
+      ...opts,
+      method: 'POST',
+      body: addKeyRequest,
+    }),
+  )
+}
+/**
+ * Get address key
+ */
+export function getKey(
+  address: string,
+  key: string,
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+        data: Key
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 404
+        data: ErrorResponse
+      }
+  >(`/addresses/${address}/keys/${key}`, {
+    ...opts,
+  })
+}
+/**
+ * Update an address key
+ */
+export function updateKey(
+  address: string,
+  key: string,
+  updateKeyRequest: UpdateKeyRequest,
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+        data: Key
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 404
+        data: ErrorResponse
+      }
+  >(
+    `/addresses/${address}/keys/${key}`,
+    oazapfts.json({
+      ...opts,
+      method: 'PUT',
+      body: updateKeyRequest,
+    }),
+  )
+}
+/**
+ * Delete address key
+ */
+export function deleteKey(
+  address: string,
+  key: string,
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+        data: Key
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 404
+        data: ErrorResponse
+      }
+  >(`/addresses/${address}/keys/${key}`, {
+    ...opts,
+    method: 'DELETE',
   })
 }

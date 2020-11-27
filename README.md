@@ -20,7 +20,7 @@ $ npm install -g mailscript
 $ mailscript COMMAND
 running command...
 $ mailscript (-v|--version|version)
-mailscript/0.3.10 darwin-x64 node-v14.15.0
+mailscript/0.3.10 darwin-x64 node-v14.3.0
 $ mailscript --help [COMMAND]
 USAGE
   $ mailscript COMMAND
@@ -33,6 +33,7 @@ USAGE
 * [`mailscript addresses SUBCOMMAND`](#mailscript-addresses-subcommand)
 * [`mailscript automations SUBCOMMAND`](#mailscript-automations-subcommand)
 * [`mailscript help [COMMAND]`](#mailscript-help-command)
+* [`mailscript keys [FILE]`](#mailscript-keys-file)
 * [`mailscript login`](#mailscript-login)
 * [`mailscript send [FILE]`](#mailscript-send-file)
 * [`mailscript usernames SUBCOMMAND`](#mailscript-usernames-subcommand)
@@ -119,6 +120,22 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.0/src/commands/help.ts)_
+
+## `mailscript keys [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ mailscript keys [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [src/commands/keys.ts](https://github.com/getmailscript/cli/blob/v0.3.10/src/commands/keys.ts)_
 
 ## `mailscript login`
 
