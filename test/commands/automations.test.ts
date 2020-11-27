@@ -1,6 +1,5 @@
 /* eslint-disable max-nested-callbacks */
 import { expect, test } from '@oclif/test'
-import { exit } from 'process'
 import { MailscriptApiServer } from './constants'
 
 describe('Automations', () => {
@@ -199,6 +198,32 @@ describe('Automations', () => {
               criterias: [
                 {
                   from: 'smith@example.com',
+                },
+              ],
+            })
+          })
+      })
+
+      describe('sentto', () => {
+        test
+          .stdout()
+          .nock(MailscriptApiServer, nockAdd)
+          .command([
+            'automations',
+            'add',
+            '--trigger',
+            'test@mailscript.io',
+            '--forward',
+            'another@example.com',
+            '--sentto',
+            'test+spam@mailscript.io',
+          ])
+          .it('adds automation on the server', (ctx) => {
+            expect(ctx.stdout).to.contain('Automation setup: auto-xxx-yyy-zzz')
+            expect(postBody.trigger.config).to.eql({
+              criterias: [
+                {
+                  sentTo: 'test+spam@mailscript.io',
                 },
               ],
             })
