@@ -38,4 +38,28 @@ describe('Addresses', () => {
     .it('defaults to list', (ctx) => {
       expect(ctx.stdout).to.contain('test@mailscript.io')
     })
+
+  describe('delete', () => {
+    describe('delete', () => {
+      test
+        .stdout()
+        .nock(MailscriptApiServer, (api) => {
+          return api.delete('/addresses/smith@example.com').reply(204)
+        })
+        .command(['addresses', 'delete', '--address', 'smith@example.com'])
+        .it('deletes address on the server', (ctx) => {
+          expect(ctx.stdout).to.contain('Address deleted: smith@example.com')
+        })
+
+      test
+        .stdout()
+        .command(['addresses', 'delete'])
+        .exit(1)
+        .it('errors if no accessory id provided', (ctx) => {
+          expect(ctx.stdout).to.contain(
+            'lease provide the address: mailscript addresses delete --address <smith@example.com>',
+          )
+        })
+    })
+  })
 })

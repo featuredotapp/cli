@@ -103,11 +103,6 @@ export default class Accessories extends Command {
               },
               { printLine: this.log },
             )
-
-            // this.log('Accessories')
-            // for (const accessory of list || []) {
-            //   this.log(`  ${accessory.name}`)
-            // }
           },
         },
         this,
