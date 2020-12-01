@@ -661,6 +661,10 @@ components:
           format: date-time
         createdBy:
           type: string
+        trigger:
+          type: object
+        actions:
+          type: array
     Accessory:
       required:
         - id
@@ -675,6 +679,8 @@ components:
         type:
           type: string
           enum: ['mailscript-email', 'sms']
+        owner:
+          type: string
         createdAt:
           type: string
           format: date-time

@@ -52,6 +52,7 @@ export type GetAllAddressesResponse = {
 export type Accessory = {
   id: string
   type: 'mailscript-email' | 'sms'
+  owner?: string
   createdAt: string
   createdBy: string
   name: string
@@ -82,6 +83,8 @@ export type Automation = {
   owner: string
   createdAt: string
   createdBy: string
+  trigger?: object
+  actions?: any
 }
 export type GetAllAutomationsResponse = {
   list: Automation[]

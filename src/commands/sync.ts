@@ -47,7 +47,7 @@ export default class Sync extends Command {
 
     switch (subcommand) {
       case Subcommand.update:
-        return this.update(client)
+        return this.update()
       case Subcommand.export:
         return this.export(client, flags)
       case Subcommand.import:
@@ -57,46 +57,54 @@ export default class Sync extends Command {
     }
   }
 
-  async update(client: typeof api): Promise<void> {}
+  async update(): Promise<void> {
+    this.log('TBD')
+  }
 
   async import(client: typeof api, flags: FlagsType): Promise<void> {
     if (!flags.path) {
       this.log('Please provide a file to read from --path')
       this.exit(1)
     }
-    const data = yaml.safeLoad(fs.readFileSync(flags.path, 'utf8'))
-    //console.log(data)
 
-    const {
-      address = [],
-      keys: allKeys = [],
-      accessories = [],
-      automations = [],
-    } = data
+    this.log('TBD')
+
+    // const data = yaml.safeLoad(fs.readFileSync(flags.path, 'utf8'))
+    // console.log(data)
+
+    // const {
+    //   addresses = [],
+    //   keys: allKeys = [],
+    //   accessories = [],
+    //   automations = [],
+    // } = data
+
     // addresses
-    for (const address of addresses) {
-      await handle(client.addAddress({ address }), withStandardErrors({}, this))
-    }
+    // for (const address of addresses) {
+    //   await handle(client.addAddress({ address }), withStandardErrors({}, this))
+    // }
+
     // keys
-    for (const { address, read, write } of allKeys) {
-      await handle(
-        client.addKey(address, { read, write }),
-        withStandardErrors({}, this),
-      )
-    }
+    // for (const { address, read, write } of allKeys) {
+    //   await handle(
+    //     client.addKey(address, { read, write }),
+    //     withStandardErrors({}, this),
+    //   )
+    // }
+
     // accessories
-    const accessoriesMap = new Map()
-    for (const accessory of accessories) {
-      const id = await handle(
-        client.addAccessory({}),
-        withStandardErrors({ '201': ({ id }) => id }, this),
-      )
-    }
+    // const accessoriesMap = new Map()
+    // for (const accessory of accessories) {
+    //   const id = await handle(
+    //     client.addAccessory({}),
+    //     withStandardErrors({ '201': ({ id }) => id }, this),
+    //   )
+    // }
     // automations
   }
 
   async export(client: typeof api, flags: FlagsType): Promise<void> {
-    const addresses = (
+    const addresses: Array<string> = (
       await handle(
         client.getAllAddresses(),
         withStandardErrors(
@@ -104,7 +112,7 @@ export default class Sync extends Command {
           this,
         ),
       )
-    ).map(({ id }) => id)
+    ).map(({ id }: api.Address) => id)
 
     const keys = await Promise.all(
       addresses.map(async (address) => {
@@ -116,7 +124,7 @@ export default class Sync extends Command {
               this,
             ),
           )
-        ).map(({ id, read, write }) => ({ key: id, read, write }))
+        ).map(({ id, read, write }: api.Key) => ({ key: id, read, write }))
         return { address, keys }
       }),
     )
@@ -129,12 +137,19 @@ export default class Sync extends Command {
           this,
         ),
       )
-    ).map(({ owner, createdAt, createdBy, ...rest }) => ({
-      ...Object.entries(rest).reduce(
-        (p, [k, v]) => ({ ...p, ...(v ? { [k]: v } : []) }),
-        {},
-      ),
-    }))
+    ).map(
+      ({
+        owner: _owner,
+        createdAt: _createdAt,
+        createdBy: _createdBy,
+        ...rest
+      }: api.Accessory) => ({
+        ...Object.entries(rest).reduce(
+          (p, [k, v]) => ({ ...p, ...(v ? { [k]: v } : []) }),
+          {},
+        ),
+      }),
+    )
 
     const automations = (
       await handle(
@@ -144,7 +159,7 @@ export default class Sync extends Command {
           this,
         ),
       )
-    ).map(({ trigger, actions }) => ({ trigger, actions }))
+    ).map(({ trigger, actions }: api.Automation) => ({ trigger, actions }))
 
     const data = yaml.dump({
       addresses,
