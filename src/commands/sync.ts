@@ -2,10 +2,12 @@ import { Command, flags } from '@oclif/command'
 import { handle } from 'oazapfts'
 import * as yaml from 'js-yaml'
 import * as fs from 'fs'
+import cli from 'cli-ux'
 import * as api from '../api'
 import { assertNever } from '../utils/assertNever'
 import setupApiClient from '../setupApiClient'
 import withStandardErrors from '../utils/errorHandling'
+import resolveAddAccessoryRequestFrom from '../utils/resolveAddAccessoryRequestFrom'
 
 type FlagsType = {
   help: void
@@ -67,40 +69,28 @@ export default class Sync extends Command {
       this.exit(1)
     }
 
-    this.log('TBD')
+    const data: any = yaml.safeLoad(fs.readFileSync(flags.path, 'utf8'))
 
-    // const data = yaml.safeLoad(fs.readFileSync(flags.path, 'utf8'))
-    // console.log(data)
+    if (!data) {
+      this.log('Problem parsing yaml file')
+      this.exit(1)
+    }
 
-    // const {
-    //   addresses = [],
-    //   keys: allKeys = [],
-    //   accessories = [],
-    //   automations = [],
-    // } = data
+    const {
+      addresses = [],
+      keys = [],
+      accessories = [],
+      automations = [],
+    } = data
 
-    // addresses
-    // for (const address of addresses) {
-    //   await handle(client.addAddress({ address }), withStandardErrors({}, this))
-    // }
+    this.log('')
+    this.log('Syncing to Mailscript')
+    this.log('')
 
-    // keys
-    // for (const { address, read, write } of allKeys) {
-    //   await handle(
-    //     client.addKey(address, { read, write }),
-    //     withStandardErrors({}, this),
-    //   )
-    // }
-
-    // accessories
-    // const accessoriesMap = new Map()
-    // for (const accessory of accessories) {
-    //   const id = await handle(
-    //     client.addAccessory({}),
-    //     withStandardErrors({ '201': ({ id }) => id }, this),
-    //   )
-    // }
-    // automations
+    await this._syncAddresses(client, addresses)
+    await this._syncKeys(client, keys)
+    await this._syncAccessories(client, accessories)
+    await this._syncAutomations(client, automations)
   }
 
   async export(client: typeof api, flags: FlagsType): Promise<void> {
@@ -175,5 +165,193 @@ export default class Sync extends Command {
     }
 
     this.exit(0)
+  }
+
+  private async _syncAddresses(client: typeof api, addresses: Array<any>) {
+    cli.action.start('Syncing addresses')
+    const response = await client.getAllAddresses()
+
+    if (response.status !== 200) {
+      this.log('Error syncing addresses')
+      this.exit(1)
+    }
+
+    const {
+      data: { list: existingAddresses },
+    } = response
+
+    // addresses
+    for (const address of addresses) {
+      const existingAddress = existingAddresses.find((a) => a.id === address)
+
+      if (existingAddress) {
+        continue
+      }
+
+      // add address
+      // eslint-disable-next-line no-await-in-loop
+      await handle(
+        client.addAddress({ address }),
+        withStandardErrors(
+          {
+            201: () => {
+              // no-op
+            },
+          },
+          this,
+        ),
+      )
+    }
+
+    cli.action.stop()
+  }
+
+  private async _syncKeys(client: typeof api, yamlKeys: Array<any>) {
+    cli.action.start('Syncing keys')
+
+    for (const { address, keys } of yamlKeys) {
+      // eslint-disable-next-line no-await-in-loop
+      const existingKeysResponse = await client.getAllKeys(address)
+
+      if (existingKeysResponse.status !== 200) {
+        this.log('Error syncing keys')
+        this.exit(1)
+      }
+
+      const {
+        data: { list: existingKeys },
+      } = existingKeysResponse
+
+      for (const key of keys) {
+        const existingKey = existingKeys.find((ek) => ek.id === key.key)
+
+        // add if missing
+        if (!existingKey) {
+          this.log('Adding')
+          // eslint-disable-next-line no-await-in-loop
+          await handle(
+            client.addKey(address, {
+              read: key.read,
+              write: key.write,
+            }),
+            withStandardErrors({}, this),
+          )
+
+          continue
+        }
+
+        // update if different
+        if (existingKey.read !== key.read || existingKey.write !== key.write) {
+          this.log('Updating')
+
+          // eslint-disable-next-line no-await-in-loop
+          await handle(
+            client.updateKey(address, key.key, {
+              read: key.read,
+              write: key.write,
+            }),
+            withStandardErrors({}, this),
+          )
+
+          continue
+        }
+      }
+    }
+
+    cli.action.stop()
+  }
+
+  private async _syncAccessories(
+    client: typeof api,
+    yamlAccessories: Array<any>,
+  ) {
+    cli.action.start('Sync accessories')
+
+    const existingAccessoriesResponse = await client.getAllAccessories()
+
+    if (existingAccessoriesResponse.status !== 200) {
+      cli.action.stop('Error reading accessories')
+      this.exit(1)
+    }
+
+    const {
+      data: { list: existingAccessories },
+    } = existingAccessoriesResponse
+
+    for (const accessory of yamlAccessories) {
+      if (accessory.type === 'webhook') {
+        continue
+      }
+
+      const existingAccessory = existingAccessories.find(
+        (ea) => ea.id === accessory.id,
+      )
+
+      if (!existingAccessory) {
+        this.log('Adding accessory')
+
+        const addAccessoryRequest = resolveAddAccessoryRequestFrom(accessory)
+
+        // eslint-disable-next-line no-await-in-loop
+        await handle(
+          client.addAccessory(addAccessoryRequest),
+          withStandardErrors({}, this),
+        )
+
+        continue
+      }
+
+      if (
+        accessory.type === 'mailscript-email' &&
+        (existingAccessory.type !== accessory.type ||
+          existingAccessory.address !== accessory.address)
+      ) {
+        this.log('TBD - update the accessory')
+      } else if (
+        accessory.type === 'sms' &&
+        (existingAccessory.type !== accessory.type ||
+          existingAccessory.sms !== accessory.sms)
+      ) {
+        this.log('TBD - update the accessory')
+      }
+    }
+
+    cli.action.stop()
+  }
+
+  private async _syncAutomations(
+    client: typeof api,
+    yamlAutomations: Array<any>,
+  ) {
+    cli.action.start('Syncing automations')
+
+    const existingAutomationsResponse = await client.getAllAutomations()
+
+    if (existingAutomationsResponse.status !== 200) {
+      this.log('Error reading automations')
+      this.exit(1)
+    }
+
+    const {
+      data: { list: existingAutomations },
+    } = existingAutomationsResponse
+
+    for (const automation of yamlAutomations) {
+      const existingAutomation = existingAutomations.find(
+        (ea) => ea.id === automation.id,
+      )
+
+      if (!existingAutomation) {
+        this.log('Adding automation')
+
+        continue
+      }
+
+      // Determine whether to update
+      console.log(existingAutomation)
+      console.log(automation)
+    }
+
+    cli.action.stop()
   }
 }

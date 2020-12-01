@@ -231,7 +231,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddAccessoryRequest'
+              oneOf:
+                - $ref: '#/components/schemas/AddSmsAccessoryRequest'
+                - $ref: '#/components/schemas/AddMailscriptEmailAccessoryRequest'
       responses:
         '201':
           description: 'successful operation'
@@ -761,7 +763,7 @@ components:
             type: object
             oneOf:
               - $ref: '#/components/schemas/Automation'
-    AddAccessoryRequest:
+    AddSmsAccessoryRequest:
       required:
         - name
         - type
@@ -771,8 +773,21 @@ components:
           type: string
         type:
           type: string
-          enum: ['sms']
+          enum: ['mailscript-email', 'sms']
         sms:
+          type: string
+    AddMailscriptEmailAccessoryRequest:
+      required:
+        - name
+        - type
+        - address
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: ['mailscript-email', 'sms']
+        address:
           type: string
     AddAutomationRequest:
       required:

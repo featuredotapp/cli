@@ -63,10 +63,15 @@ export type Accessory = {
 export type GetAllAccessoriesResponse = {
   list: Accessory[]
 }
-export type AddAccessoryRequest = {
+export type AddSmsAccessoryRequest = {
   name: string
-  type: 'sms'
+  type: 'mailscript-email' | 'sms'
   sms: string
+}
+export type AddMailscriptEmailAccessoryRequest = {
+  name: string
+  type: 'mailscript-email' | 'sms'
+  address: string
 }
 export type AddAutomationRequest = {
   trigger: {
@@ -301,7 +306,7 @@ export function getAllAccessories(
  * Setup an accessory
  */
 export function addAccessory(
-  addAccessoryRequest: AddAccessoryRequest,
+  body: AddSmsAccessoryRequest | AddMailscriptEmailAccessoryRequest,
   opts?: Oazapfts.RequestOpts,
 ) {
   return oazapfts.fetchJson<
@@ -325,7 +330,7 @@ export function addAccessory(
     oazapfts.json({
       ...opts,
       method: 'POST',
-      body: addAccessoryRequest,
+      body,
     }),
   )
 }

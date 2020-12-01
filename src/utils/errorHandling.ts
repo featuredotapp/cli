@@ -5,6 +5,12 @@ export default function withStandardErrors(obj: any, command: Command) {
   return Object.assign(
     {},
     {
+      '200': () => {
+        // no-op
+      },
+      '201': () => {
+        // no-op
+      },
       '400': ({ error }: api.ErrorResponse) => {
         command.log(`Error: ${error}`)
         command.exit(1)
