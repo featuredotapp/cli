@@ -9,6 +9,7 @@ export default function resolveAddAccessoryRequestFrom(
         name: accessory.name,
         type: accessory.type,
         address: accessory.address,
+        key: accessory.key,
       }
     case 'sms':
       return {

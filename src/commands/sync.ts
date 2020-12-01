@@ -127,19 +127,21 @@ export default class Sync extends Command {
           this,
         ),
       )
-    ).map(
-      ({
-        owner: _owner,
-        createdAt: _createdAt,
-        createdBy: _createdBy,
-        ...rest
-      }: api.Accessory) => ({
-        ...Object.entries(rest).reduce(
-          (p, [k, v]) => ({ ...p, ...(v ? { [k]: v } : []) }),
-          {},
-        ),
-      }),
     )
+      .filter(({ type }: api.Accessory) => type !== 'webhook')
+      .map(
+        ({
+          owner: _owner,
+          createdAt: _createdAt,
+          createdBy: _createdBy,
+          ...rest
+        }: api.Accessory) => ({
+          ...Object.entries(rest).reduce(
+            (p, [k, v]) => ({ ...p, ...(v ? { [k]: v } : []) }),
+            {},
+          ),
+        }),
+      )
 
     const automations = (
       await handle(
@@ -348,8 +350,8 @@ export default class Sync extends Command {
       }
 
       // Determine whether to update
-      console.log(existingAutomation)
-      console.log(automation)
+      this.log(JSON.stringify(existingAutomation, null, 2))
+      this.log(automation)
     }
 
     cli.action.stop()

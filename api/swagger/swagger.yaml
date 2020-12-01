@@ -680,7 +680,7 @@ components:
           type: string
         type:
           type: string
-          enum: ['mailscript-email', 'sms']
+          enum: ['mailscript-email', 'sms', 'webhook']
         owner:
           type: string
         createdAt:
@@ -781,6 +781,7 @@ components:
         - name
         - type
         - address
+        - key
       properties:
         name:
           type: string
@@ -788,6 +789,8 @@ components:
           type: string
           enum: ['mailscript-email', 'sms']
         address:
+          type: string
+        key:
           type: string
     AddAutomationRequest:
       required:

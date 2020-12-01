@@ -117,7 +117,7 @@ export default class Accessories extends Command {
     }
 
     if (flags.sms) {
-      const payload: api.AddAccessoryRequest = {
+      const payload: api.AddSmsAccessoryRequest = {
         name: flags.name,
         type: 'sms',
         sms: flags.sms,

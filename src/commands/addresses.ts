@@ -80,17 +80,30 @@ export default class Addresses extends Command {
       this.exit(1)
     }
 
-    return handle(
+    await handle(
       client.addAddress({ address: flags.address }),
-      withStandardErrors(
-        {
-          '201': () => {
-            this.log(`Address added: ${flags.address}`)
-          },
-        },
-        this,
-      ),
+      withStandardErrors({}, this),
     )
+
+    const { id: key } = await handle(
+      client.addKey(flags.address, {
+        read: true,
+        write: true,
+      }),
+      withStandardErrors({}, this),
+    )
+
+    await handle(
+      client.addAccessory({
+        name: flags.address,
+        type: 'mailscript-email',
+        address: flags.address,
+        key,
+      }),
+      withStandardErrors({}, this),
+    )
+
+    this.log(`Address added: ${flags.address}`)
   }
 
   async delete(client: typeof api, flags: any): Promise<void> {

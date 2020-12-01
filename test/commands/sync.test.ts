@@ -138,9 +138,6 @@ accessories:
     type: mailscript-email
     name: smith@mailscript.io
     key: mivAW1KCbhZ4eGOW6D8X
-  - id: webhook-xyz
-    type: webhook
-    name: webhook
 automations:
   - trigger:
       accessoryId: jaLhjOMQ7THh1ei9hoVZ

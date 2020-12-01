@@ -5,11 +5,11 @@ export default function withStandardErrors(obj: any, command: Command) {
   return Object.assign(
     {},
     {
-      '200': () => {
-        // no-op
+      '200': (response: any) => {
+        return response
       },
-      '201': () => {
-        // no-op
+      '201': (response: any) => {
+        return response
       },
       '400': ({ error }: api.ErrorResponse) => {
         command.log(`Error: ${error}`)

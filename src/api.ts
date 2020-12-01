@@ -51,7 +51,7 @@ export type GetAllAddressesResponse = {
 }
 export type Accessory = {
   id: string
-  type: 'mailscript-email' | 'sms'
+  type: 'mailscript-email' | 'sms' | 'webhook'
   owner?: string
   createdAt: string
   createdBy: string
@@ -72,6 +72,7 @@ export type AddMailscriptEmailAccessoryRequest = {
   name: string
   type: 'mailscript-email' | 'sms'
   address: string
+  key: string
 }
 export type AddAutomationRequest = {
   trigger: {
