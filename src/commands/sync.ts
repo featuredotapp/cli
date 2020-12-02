@@ -8,6 +8,7 @@ import { assertNever } from '../utils/assertNever'
 import setupApiClient from '../setupApiClient'
 import withStandardErrors from '../utils/errorHandling'
 import resolveAddAccessoryRequestFrom from '../utils/resolveAddAccessoryRequestFrom'
+import resolveUpdateAccessoryRequestFrom from '../utils/resolveUpdateAccessoryRequestFrom'
 
 type FlagsType = {
   help: void
@@ -76,19 +77,14 @@ export default class Sync extends Command {
       this.exit(1)
     }
 
-    const {
-      addresses = [],
-      keys = [],
-      accessories = [],
-      automations = [],
-    } = data
+    const { addresses = [], accessories = [], automations = [] } = data
 
     this.log('')
     this.log('Syncing to Mailscript')
     this.log('')
 
     await this._syncAddresses(client, addresses)
-    await this._syncKeys(client, keys)
+    await this._syncKeys(client, addresses)
     await this._syncAccessories(client, accessories)
     await this._syncAutomations(client, automations)
   }
@@ -136,7 +132,7 @@ export default class Sync extends Command {
       .filter(({ type }: api.Accessory) => type !== 'webhook')
       .map(
         ({
-          id: _id,
+          id,
           owner: _owner,
           createdAt: _createdAt,
           createdBy: _createdBy,
@@ -144,6 +140,7 @@ export default class Sync extends Command {
           type,
           ...rest
         }: api.Accessory) => ({
+          id,
           name,
           type,
           ...rest,
@@ -159,7 +156,12 @@ export default class Sync extends Command {
           this,
         ),
       )
-    ).map(({ trigger, actions }: api.Automation) => ({ trigger, actions }))
+    ).map(({ trigger, actions }: api.Automation) => ({
+      trigger: this._mapAccessory(accessories, trigger),
+      actions: actions.map((action: any) =>
+        this._mapAccessory(accessories, action),
+      ),
+    }))
 
     const mergedAddressesAndKeys = Object.fromEntries(
       addresses.map((address) => {
@@ -183,7 +185,7 @@ export default class Sync extends Command {
     const data = yaml.dump({
       version: '0.1',
       addresses: mergedAddressesAndKeys,
-      accessories,
+      accessories: accessories.map(({ id: _id, ...rest }: any) => rest),
       automations,
     })
 
@@ -210,7 +212,7 @@ export default class Sync extends Command {
     } = response
 
     // addresses
-    for (const address of addresses) {
+    for (const address of Object.keys(addresses)) {
       const existingAddress = existingAddresses.find((a) => a.id === address)
 
       if (existingAddress) {
@@ -219,26 +221,16 @@ export default class Sync extends Command {
 
       // add address
       // eslint-disable-next-line no-await-in-loop
-      await handle(
-        client.addAddress({ address }),
-        withStandardErrors(
-          {
-            201: () => {
-              // no-op
-            },
-          },
-          this,
-        ),
-      )
+      await handle(client.addAddress({ address }), withStandardErrors({}, this))
     }
 
     cli.action.stop()
   }
 
-  private async _syncKeys(client: typeof api, yamlKeys: Array<any>) {
+  private async _syncKeys(client: typeof api, yamlAddresses: Array<any>) {
     cli.action.start('Syncing keys')
 
-    for (const { address, keys } of yamlKeys) {
+    for (const [address, { keys }] of Object.entries(yamlAddresses)) {
       // eslint-disable-next-line no-await-in-loop
       const existingKeysResponse = await client.getAllKeys(address)
 
@@ -314,7 +306,7 @@ export default class Sync extends Command {
       }
 
       const existingAccessory = existingAccessories.find(
-        (ea) => ea.id === accessory.id,
+        (ea) => ea.name === accessory.name,
       )
 
       if (!existingAccessory) {
@@ -334,15 +326,32 @@ export default class Sync extends Command {
       if (
         accessory.type === 'mailscript-email' &&
         (existingAccessory.type !== accessory.type ||
-          existingAccessory.address !== accessory.address)
+          existingAccessory.address !== accessory.address ||
+          existingAccessory.key !== accessory.key)
       ) {
-        this.log('TBD - update the accessory')
+        const updateAccessoryRequest = resolveUpdateAccessoryRequestFrom(
+          accessory,
+        )
+
+        // eslint-disable-next-line no-await-in-loop
+        await handle(
+          client.updateAccessory(accessory.id, updateAccessoryRequest),
+          withStandardErrors({}, this),
+        )
       } else if (
         accessory.type === 'sms' &&
         (existingAccessory.type !== accessory.type ||
           existingAccessory.sms !== accessory.sms)
       ) {
-        this.log('TBD - update the accessory')
+        const updateAccessoryRequest = resolveUpdateAccessoryRequestFrom(
+          accessory,
+        )
+
+        // eslint-disable-next-line no-await-in-loop
+        await handle(
+          client.updateAccessory(accessory.id, updateAccessoryRequest),
+          withStandardErrors({}, this),
+        )
       }
     }
 
@@ -406,5 +415,23 @@ export default class Sync extends Command {
     }
 
     return { key: key.name }
+  }
+
+  private _mapAccessory(
+    accessories: Array<any>,
+    { accessoryId, ...rest }: { accessoryId: string },
+  ) {
+    const accessory = accessories.find((acc) => acc.id === accessoryId)
+
+    if (!accessory) {
+      return {
+        ...rest,
+      }
+    }
+
+    return {
+      accessory: accessory.name,
+      ...rest,
+    }
   }
 }

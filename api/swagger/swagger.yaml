@@ -288,6 +288,43 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+    put:
+      tags:
+        - 'accessories'
+      summary: 'Update an accessory'
+      description: ''
+      operationId: 'updateAccessory'
+      parameters:
+        - name: id
+          in: path
+          description: ID of accessory
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Key body
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/UpdateSmsAccessoryRequest'
+                - $ref: '#/components/schemas/UpdateMailscriptEmailAccessoryRequest'
+      responses:
+        '200':
+          description: 'successful update operation'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '405':
+          description: 'Invalid input'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     delete:
       tags:
         - 'accessories'
@@ -653,6 +690,8 @@ components:
         - owner
         - createdAt
         - createdBy
+        - trigger
+        - actions
       properties:
         id:
           type: string
@@ -665,8 +704,56 @@ components:
           type: string
         trigger:
           type: object
+          required:
+            - accessoryId
+            - config
+          properties:
+            accessoryId:
+              type: string
+            config:
+              type: object
+              required:
+                - criterias
+              properties:
+                criterias:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Criteria'
         actions:
           type: array
+          items:
+            type: object
+            properties:
+              accessoryId:
+                type: string
+              config:
+                oneOf:
+                  - $ref: '#/components/schemas/ActionForwardConfig'
+    Criteria:
+      minProperties: 1
+      properties:
+        sentTo:
+          type: string
+        subjectContains:
+          type: string
+        from:
+          type: string
+        domain:
+          type: string
+        hasTheWords:
+          type: string
+        hasAttachments:
+          type: boolean
+    ActionForwardConfig:
+      required:
+        - type
+        - forward
+      properties:
+        type:
+          type: string
+          enum: ['forward']
+        forward:
+          type: string
     Accessory:
       required:
         - id
@@ -776,7 +863,20 @@ components:
           type: string
         type:
           type: string
-          enum: ['mailscript-email', 'sms']
+          enum: ['sms']
+        sms:
+          type: string
+    UpdateSmsAccessoryRequest:
+      required:
+        - name
+        - type
+        - sms
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: ['sms']
         sms:
           type: string
     AddMailscriptEmailAccessoryRequest:
@@ -790,7 +890,23 @@ components:
           type: string
         type:
           type: string
-          enum: ['mailscript-email', 'sms']
+          enum: ['sms']
+        address:
+          type: string
+        key:
+          type: string
+    UpdateMailscriptEmailAccessoryRequest:
+      required:
+        - name
+        - type
+        - address
+        - key
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: ['mailscript-email']
         address:
           type: string
         key:

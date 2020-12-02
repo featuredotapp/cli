@@ -65,12 +65,23 @@ export type GetAllAccessoriesResponse = {
 }
 export type AddSmsAccessoryRequest = {
   name: string
-  type: 'mailscript-email' | 'sms'
+  type: 'sms'
   sms: string
 }
 export type AddMailscriptEmailAccessoryRequest = {
   name: string
-  type: 'mailscript-email' | 'sms'
+  type: 'sms'
+  address: string
+  key: string
+}
+export type UpdateSmsAccessoryRequest = {
+  name: string
+  type: 'sms'
+  sms: string
+}
+export type UpdateMailscriptEmailAccessoryRequest = {
+  name: string
+  type: 'mailscript-email'
   address: string
   key: string
 }
@@ -84,13 +95,33 @@ export type AddAutomationRequest = {
     config?: object
   }[]
 }
+export type Criteria = {
+  sentTo?: string
+  subjectContains?: string
+  from?: string
+  domain?: string
+  hasTheWords?: string
+  hasAttachments?: boolean
+}
+export type ActionForwardConfig = {
+  type: 'forward'
+  forward: string
+}
 export type Automation = {
   id: string
   owner: string
   createdAt: string
   createdBy: string
-  trigger?: object
-  actions?: any
+  trigger: {
+    accessoryId: string
+    config: {
+      criterias: Criteria[]
+    }
+  }
+  actions: {
+    accessoryId?: string
+    config?: ActionForwardConfig
+  }[]
 }
 export type GetAllAutomationsResponse = {
   list: Automation[]
@@ -357,6 +388,35 @@ export function getAccessory(id: string, opts?: Oazapfts.RequestOpts) {
   >(`/accessories/${id}`, {
     ...opts,
   })
+}
+/**
+ * Update an accessory
+ */
+export function updateAccessory(
+  id: string,
+  body: UpdateSmsAccessoryRequest | UpdateMailscriptEmailAccessoryRequest,
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 405
+        data: ErrorResponse
+      }
+  >(
+    `/accessories/${id}`,
+    oazapfts.json({
+      ...opts,
+      method: 'PUT',
+      body,
+    }),
+  )
 }
 /**
  * Delete an accessory
