@@ -97,6 +97,7 @@ export type GetAllAutomationsResponse = {
 }
 export type Key = {
   id: string
+  name: string
   read: boolean
   write: boolean
   createdBy: string
@@ -106,6 +107,7 @@ export type GetAllKeysResponse = {
   list: Key[]
 }
 export type AddKeyRequest = {
+  name: string
   read: boolean
   write: boolean
 }

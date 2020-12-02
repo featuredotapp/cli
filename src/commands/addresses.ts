@@ -87,6 +87,7 @@ export default class Addresses extends Command {
 
     const { id: key } = await handle(
       client.addKey(flags.address, {
+        name: 'owner',
         read: true,
         write: true,
       }),

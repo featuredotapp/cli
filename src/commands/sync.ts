@@ -114,7 +114,7 @@ export default class Sync extends Command {
               this,
             ),
           )
-        ).map(({ id, read, write }: api.Key) => ({ key: id, read, write }))
+        ).map(({ name, read, write }: api.Key) => ({ name, read, write }))
         return { address, keys }
       }),
     )
@@ -225,7 +225,7 @@ export default class Sync extends Command {
       } = existingKeysResponse
 
       for (const key of keys) {
-        const existingKey = existingKeys.find((ek) => ek.id === key.key)
+        const existingKey = existingKeys.find((ek) => ek.name === key.name)
 
         // add if missing
         if (!existingKey) {
@@ -233,6 +233,7 @@ export default class Sync extends Command {
           // eslint-disable-next-line no-await-in-loop
           await handle(
             client.addKey(address, {
+              name: key.name,
               read: key.read,
               write: key.write,
             }),

@@ -699,12 +699,15 @@ components:
     Key:
       required:
         - id
+        - name
         - read
         - write
         - createdBy
         - createdAt
       properties:
         id:
+          type: string
+        name:
           type: string
         read:
           type: boolean
@@ -851,9 +854,12 @@ components:
               - $ref: '#/components/schemas/Key'
     AddKeyRequest:
       required:
+        - 'name'
         - 'read'
         - 'write'
       properties:
+        name:
+          type: string
         read:
           type: boolean
         write:
