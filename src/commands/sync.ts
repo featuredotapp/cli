@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import { Command, flags } from '@oclif/command'
 import { handle } from 'oazapfts'
 import * as yaml from 'js-yaml'
@@ -249,8 +250,6 @@ export default class Sync extends Command {
 
         // add if missing
         if (!existingKey) {
-          this.log('Adding')
-          // eslint-disable-next-line no-await-in-loop
           await handle(
             client.addKey(address, {
               name: key.name,
@@ -267,7 +266,6 @@ export default class Sync extends Command {
         if (existingKey.read !== key.read || existingKey.write !== key.write) {
           this.log('Updating')
 
-          // eslint-disable-next-line no-await-in-loop
           await handle(
             client.updateKey(address, key.key, {
               read: key.read,
@@ -288,7 +286,7 @@ export default class Sync extends Command {
     client: typeof api,
     yamlAccessories: Array<any>,
   ) {
-    cli.action.start('Sync accessories')
+    cli.action.start('Syncing accessories')
 
     const existingAccessoriesResponse = await client.getAllAccessories()
 
@@ -301,21 +299,24 @@ export default class Sync extends Command {
       data: { list: existingAccessories },
     } = existingAccessoriesResponse
 
-    for (const accessory of yamlAccessories) {
-      if (accessory.type === 'webhook') {
+    for (const yamlAccessory of yamlAccessories) {
+      if (yamlAccessory.type === 'webhook') {
         continue
       }
 
       const existingAccessory = existingAccessories.find(
-        (ea) => ea.name === accessory.name,
+        (ea) => ea.name === yamlAccessory.name,
+      )
+
+      // eslint-disable-next-line no-await-in-loop
+      const accessory = await this._accessoryKeySubstitution(
+        client,
+        yamlAccessory,
       )
 
       if (!existingAccessory) {
-        this.log('Adding accessory')
-
         const addAccessoryRequest = resolveAddAccessoryRequestFrom(accessory)
 
-        // eslint-disable-next-line no-await-in-loop
         await handle(
           client.addAccessory(addAccessoryRequest),
           withStandardErrors({}, this),
@@ -324,21 +325,21 @@ export default class Sync extends Command {
         continue
       }
 
-      if (
-        accessory.type === 'mailscript-email' &&
-        (existingAccessory.type !== accessory.type ||
+      if (yamlAccessory.type === 'mailscript-email') {
+        if (
+          existingAccessory.type !== accessory.type ||
           existingAccessory.address !== accessory.address ||
-          existingAccessory.key !== accessory.key)
-      ) {
-        const updateAccessoryRequest = resolveUpdateAccessoryRequestFrom(
-          accessory,
-        )
+          existingAccessory.key !== accessory.key
+        ) {
+          const updateAccessoryRequest = resolveUpdateAccessoryRequestFrom(
+            accessory,
+          )
 
-        // eslint-disable-next-line no-await-in-loop
-        await handle(
-          client.updateAccessory(accessory.id, updateAccessoryRequest),
-          withStandardErrors({}, this),
-        )
+          await handle(
+            client.updateAccessory(accessory.id, updateAccessoryRequest),
+            withStandardErrors({}, this),
+          )
+        }
       } else if (
         accessory.type === 'sms' &&
         (existingAccessory.type !== accessory.type ||
@@ -348,7 +349,6 @@ export default class Sync extends Command {
           accessory,
         )
 
-        // eslint-disable-next-line no-await-in-loop
         await handle(
           client.updateAccessory(accessory.id, updateAccessoryRequest),
           withStandardErrors({}, this),
@@ -376,13 +376,26 @@ export default class Sync extends Command {
       data: { list: existingAutomations },
     } = existingAutomationsResponse
 
+    const { list: allAccessories } = await handle(
+      client.getAllAccessories(),
+      withStandardErrors({}, this),
+    )
+
     for (const automation of yamlAutomations) {
       const existingAutomation = existingAutomations.find(
-        (ea) => ea.id === automation.id,
+        (ea) => ea.name === automation.name,
       )
 
       if (!existingAutomation) {
-        this.log('Adding automation')
+        const resolvedAutomation = this._substituteAccessoryIdAutomation(
+          allAccessories,
+          automation,
+        )
+
+        await handle(
+          client.addAutomation(resolvedAutomation),
+          withStandardErrors({}, this),
+        )
 
         continue
       }
@@ -432,6 +445,63 @@ export default class Sync extends Command {
 
     return {
       accessory: accessory.name,
+      ...rest,
+    }
+  }
+
+  private async _accessoryKeySubstitution(
+    client: typeof api,
+    yamlAccessory: any,
+  ) {
+    if (yamlAccessory.type !== 'mailscript-email') {
+      return yamlAccessory
+    }
+
+    // eslint-disable-next-line no-await-in-loop
+    const { list: addressKeys } = await handle(
+      client.getAllKeys(yamlAccessory.address!),
+      withStandardErrors({}, this),
+    )
+
+    const addressKey = addressKeys.find(
+      (ak: any) => ak.name === yamlAccessory.key,
+    )
+
+    if (!addressKey) {
+      cli.action.stop(`Error reading address key: ${yamlAccessory.key}`)
+      this.exit(1)
+    }
+
+    return {
+      ...yamlAccessory,
+      key: addressKey.id,
+    }
+  }
+
+  private _substituteAccessoryIdAutomation(
+    allAccessories: Array<any>,
+    yamlAutomation: any,
+  ) {
+    return {
+      ...yamlAutomation,
+      trigger: this._substituteAccessoryIdFor(
+        allAccessories,
+        yamlAutomation.trigger,
+      ),
+      actions: yamlAutomation.actions.map((action: any) =>
+        this._substituteAccessoryIdFor(allAccessories, action),
+      ),
+    }
+  }
+
+  private _substituteAccessoryIdFor(
+    allAccessories: Array<any>,
+    { accessory: name, ...rest }: any,
+  ) {
+    const accessory = allAccessories.find((a) => a.name === name)
+
+    return {
+      accessoryId: accessory.id,
       ...rest,
     }
   }
