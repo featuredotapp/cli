@@ -86,6 +86,7 @@ export type UpdateMailscriptEmailAccessoryRequest = {
   key: string
 }
 export type AddAutomationRequest = {
+  name: string
   trigger: {
     accessoryId?: string
     config?: object
@@ -109,6 +110,7 @@ export type ActionForwardConfig = {
 }
 export type Automation = {
   id: string
+  name: string
   owner: string
   createdAt: string
   createdBy: string

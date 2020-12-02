@@ -156,7 +156,8 @@ export default class Sync extends Command {
           this,
         ),
       )
-    ).map(({ trigger, actions }: api.Automation) => ({
+    ).map(({ name, trigger, actions }: api.Automation) => ({
+      name,
       trigger: this._mapAccessory(accessories, trigger),
       actions: actions.map((action: any) =>
         this._mapAccessory(accessories, action),

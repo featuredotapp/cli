@@ -687,6 +687,7 @@ components:
     Automation:
       required:
         - id
+        - name
         - owner
         - createdAt
         - createdBy
@@ -694,6 +695,8 @@ components:
         - actions
       properties:
         id:
+          type: string
+        name:
           type: string
         owner:
           type: string
@@ -913,9 +916,12 @@ components:
           type: string
     AddAutomationRequest:
       required:
+        - name
         - trigger
         - actions
       properties:
+        name:
+          type: string
         trigger:
           type: object
           properties:
