@@ -114,7 +114,12 @@ export default class Sync extends Command {
               this,
             ),
           )
-        ).map(({ name, read, write }: api.Key) => ({ name, read, write }))
+        ).map(({ id, name, read, write }: api.Key) => ({
+          id,
+          name,
+          read,
+          write,
+        }))
         return { address, keys }
       }),
     )
@@ -131,15 +136,18 @@ export default class Sync extends Command {
       .filter(({ type }: api.Accessory) => type !== 'webhook')
       .map(
         ({
+          id: _id,
           owner: _owner,
           createdAt: _createdAt,
           createdBy: _createdBy,
+          name,
+          type,
           ...rest
         }: api.Accessory) => ({
-          ...Object.entries(rest).reduce(
-            (p, [k, v]) => ({ ...p, ...(v ? { [k]: v } : []) }),
-            {},
-          ),
+          name,
+          type,
+          ...rest,
+          ...this._lookupKeyName(keys, rest.key),
         }),
       )
 
@@ -153,9 +161,28 @@ export default class Sync extends Command {
       )
     ).map(({ trigger, actions }: api.Automation) => ({ trigger, actions }))
 
+    const mergedAddressesAndKeys = Object.fromEntries(
+      addresses.map((address) => {
+        const keyEntry = keys.find((ke) => ke.address === address)
+
+        if (!keyEntry) {
+          return [address, {}]
+        }
+
+        return [
+          address,
+          {
+            keys: keyEntry.keys.map(({ id: _id, ...rest }: any) => ({
+              ...rest,
+            })),
+          },
+        ]
+      }),
+    )
+
     const data = yaml.dump({
-      addresses,
-      keys,
+      version: '0.1',
+      addresses: mergedAddressesAndKeys,
       accessories,
       automations,
     })
@@ -356,5 +383,28 @@ export default class Sync extends Command {
     }
 
     cli.action.stop()
+  }
+
+  private _lookupKeyName(
+    keys: {
+      address: string
+      keys: any
+    }[],
+    keyId: string,
+  ): {} {
+    if (!keyId) {
+      return {}
+    }
+
+    const key = keys
+      .map((ke) => ke.keys)
+      .flat()
+      .find((k: { id: string }) => k.id === keyId)
+
+    if (!key) {
+      return {}
+    }
+
+    return { key: key.name }
   }
 }
