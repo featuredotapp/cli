@@ -11,6 +11,9 @@ export default function withStandardErrors(obj: any, command: Command) {
       '201': (response: any) => {
         return response
       },
+      '204': (response: any) => {
+        return response
+      },
       '400': ({ error }: api.ErrorResponse) => {
         command.log(`Error: ${error}`)
         command.exit(1)

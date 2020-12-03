@@ -15,6 +15,7 @@ import resolveUpdateAccessoryRequestFrom from '../utils/resolveUpdateAccessoryRe
 type FlagsType = {
   help: void
   path: string | undefined
+  delete: boolean
 }
 
 enum Subcommand {
@@ -31,6 +32,11 @@ export default class Sync extends Command {
     path: flags.string({
       char: 'p',
       description: 'path to the file to read/write',
+    }),
+    delete: flags.boolean({
+      char: 'd',
+      default: false,
+      description: 'force delete of entities missing from import file',
     }),
   }
 
@@ -57,36 +63,6 @@ export default class Sync extends Command {
       default:
         assertNever(subcommand)
     }
-  }
-
-  async import(client: typeof api, flags: FlagsType): Promise<void> {
-    if (!flags.path) {
-      this.log('Please provide a file to read from --path')
-      this.exit(1)
-    }
-
-    if (!fs.existsSync(flags.path)) {
-      this.log('Path does not exist')
-      this.exit(1)
-    }
-
-    const data: any = yaml.safeLoad(fs.readFileSync(flags.path, 'utf8'))
-
-    if (!data) {
-      this.log('Problem parsing yaml file')
-      this.exit(1)
-    }
-
-    const { addresses = [], accessories = [], automations = [] } = data
-
-    this.log('')
-    this.log('Syncing to Mailscript')
-    this.log('')
-
-    await this._syncAddresses(client, addresses)
-    await this._syncKeys(client, addresses)
-    await this._syncAccessories(client, accessories)
-    await this._syncAutomations(client, automations)
   }
 
   async export(client: typeof api, flags: FlagsType): Promise<void> {
@@ -199,7 +175,43 @@ export default class Sync extends Command {
     this.exit(0)
   }
 
-  private async _syncAddresses(client: typeof api, addresses: Array<any>) {
+  async import(client: typeof api, flags: FlagsType): Promise<void> {
+    if (!flags.path) {
+      this.log('Please provide a file to read from --path')
+      this.exit(1)
+    }
+
+    if (!fs.existsSync(flags.path)) {
+      this.log('Path does not exist')
+      this.exit(1)
+    }
+
+    const data: any = yaml.safeLoad(fs.readFileSync(flags.path, 'utf8'))
+
+    if (!data) {
+      this.log('Problem parsing yaml file')
+      this.exit(1)
+    }
+
+    const { addresses = [], accessories = [], automations = [] } = data
+
+    this.log('')
+    this.log('Syncing to Mailscript')
+    this.log('')
+
+    const forceDelete = flags.delete
+
+    await this._syncAddresses(client, addresses, forceDelete)
+    await this._syncKeys(client, addresses, forceDelete)
+    await this._syncAccessories(client, accessories)
+    await this._syncAutomations(client, automations)
+  }
+
+  private async _syncAddresses(
+    client: typeof api,
+    addresses: Array<any>,
+    forceDelete: boolean,
+  ) {
     cli.action.start('Syncing addresses')
     const response = await client.getAllAddresses()
 
@@ -221,14 +233,33 @@ export default class Sync extends Command {
       }
 
       // add address
-      // eslint-disable-next-line no-await-in-loop
       await handle(client.addAddress({ address }), withStandardErrors({}, this))
+    }
+
+    if (forceDelete) {
+      const namesToRetain = Object.keys(addresses)
+
+      const addressesToDelete = existingAddresses.filter(
+        ({ id }) => !namesToRetain.includes(id),
+      )
+
+      for (const { id: address } of addressesToDelete) {
+        this.log(`Deleteing ${address}`)
+        await handle(
+          client.deleteAddress(address),
+          withStandardErrors({}, this),
+        )
+      }
     }
 
     cli.action.stop()
   }
 
-  private async _syncKeys(client: typeof api, yamlAddresses: Array<any>) {
+  private async _syncKeys(
+    client: typeof api,
+    yamlAddresses: Array<any>,
+    forceDelete: boolean,
+  ) {
     cli.action.start('Syncing keys')
 
     for (const [address, { keys }] of Object.entries(yamlAddresses)) {
@@ -274,6 +305,22 @@ export default class Sync extends Command {
           )
 
           continue
+        }
+      }
+
+      if (forceDelete) {
+        const namesToRetain = keys.map((k: { name: string }) => k.name)
+
+        const keysToDelete = existingKeys.filter(
+          ({ name }) => !namesToRetain.includes(name),
+        )
+
+        for (const { id: key } of keysToDelete) {
+          this.log(`Deleteing ${key}`)
+          await handle(
+            client.deleteKey(address, key),
+            withStandardErrors({}, this),
+          )
         }
       }
     }
