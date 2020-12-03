@@ -499,6 +499,39 @@ export function getAllAutomations(opts?: Oazapfts.RequestOpts) {
   })
 }
 /**
+ * Update an automation
+ */
+export function updateAutomation(
+  automation: string,
+  addAutomationRequest: AddAutomationRequest,
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 404
+        data: ErrorResponse
+      }
+  >(
+    `/automations/${automation}`,
+    oazapfts.json({
+      ...opts,
+      method: 'PUT',
+      body: addAutomationRequest,
+    }),
+  )
+}
+/**
  * Delete an automation
  */
 export function deleteAutomation(

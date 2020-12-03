@@ -420,6 +420,46 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
   /automations/{automation}:
+    put:
+      tags:
+        - 'automations'
+      summary: 'Update an automation'
+      operationId: 'updateAutomation'
+      parameters:
+        - name: automation
+          in: path
+          description: ID of the automation
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Automation body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddAutomationRequest'
+      responses:
+        '200':
+          description: 'Successful update operation'
+        '400':
+          description: 'Failure'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 'Key not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     delete:
       tags:
         - 'automations'

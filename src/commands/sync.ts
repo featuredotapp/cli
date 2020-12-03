@@ -4,6 +4,7 @@ import { handle } from 'oazapfts'
 import * as yaml from 'js-yaml'
 import * as fs from 'fs'
 import cli from 'cli-ux'
+import deepEqual from 'deep-equal'
 import * as api from '../api'
 import { assertNever } from '../utils/assertNever'
 import setupApiClient from '../setupApiClient'
@@ -386,12 +387,12 @@ export default class Sync extends Command {
         (ea) => ea.name === automation.name,
       )
 
-      if (!existingAutomation) {
-        const resolvedAutomation = this._substituteAccessoryIdAutomation(
-          allAccessories,
-          automation,
-        )
+      const resolvedAutomation = this._substituteAccessoryIdAutomation(
+        allAccessories,
+        automation,
+      )
 
+      if (!existingAutomation) {
         await handle(
           client.addAutomation(resolvedAutomation),
           withStandardErrors({}, this),
@@ -400,9 +401,15 @@ export default class Sync extends Command {
         continue
       }
 
-      // Determine whether to update
-      this.log(JSON.stringify(existingAutomation, null, 2))
-      this.log(automation)
+      if (
+        !deepEqual(existingAutomation.trigger, resolvedAutomation.trigger) ||
+        !deepEqual(existingAutomation.actions, resolvedAutomation.actions)
+      ) {
+        await handle(
+          client.updateAutomation(existingAutomation.id, resolvedAutomation),
+          withStandardErrors({}, this),
+        )
+      }
     }
 
     cli.action.stop()
