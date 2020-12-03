@@ -1,0 +1,25 @@
+version: '0.1'
+addresses:
+  smith@mailscript.io:
+    keys:
+      - name: owner
+        read: true
+        write: true
+accessories:
+  - name: smith@mailscript.io
+    type: mailscript-email
+    address: smith@mailscript.io
+    sms: null
+    key: owner
+automations:
+  - name: personal-forward
+    trigger:
+      accessory: smith@mailscript.io
+      config:
+        criterias:
+          - sentTo: smith@mailscript.io
+    actions:
+      - accessory: smith@mailscript.io
+        config:
+          forward: john@smith.me
+          type: forward

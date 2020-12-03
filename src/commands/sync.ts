@@ -20,7 +20,6 @@ type FlagsType = {
 enum Subcommand {
   export = 'export',
   import = 'import',
-  update = 'update',
 }
 
 export default class Sync extends Command {
@@ -51,8 +50,6 @@ export default class Sync extends Command {
     const subcommand: Subcommand = args.subcommand
 
     switch (subcommand) {
-      case Subcommand.update:
-        return this.update()
       case Subcommand.export:
         return this.export(client, flags)
       case Subcommand.import:
@@ -62,13 +59,14 @@ export default class Sync extends Command {
     }
   }
 
-  async update(): Promise<void> {
-    this.log('TBD')
-  }
-
   async import(client: typeof api, flags: FlagsType): Promise<void> {
     if (!flags.path) {
       this.log('Please provide a file to read from --path')
+      this.exit(1)
+    }
+
+    if (!fs.existsSync(flags.path)) {
+      this.log('Path does not exist')
       this.exit(1)
     }
 
