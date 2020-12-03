@@ -203,7 +203,7 @@ export default class Sync extends Command {
 
     await this._syncAddresses(client, addresses, forceDelete)
     await this._syncKeys(client, addresses, forceDelete)
-    await this._syncAccessories(client, accessories)
+    await this._syncAccessories(client, accessories, forceDelete)
     await this._syncAutomations(client, automations)
   }
 
@@ -331,6 +331,7 @@ export default class Sync extends Command {
   private async _syncAccessories(
     client: typeof api,
     yamlAccessories: Array<any>,
+    forceDelete: boolean,
   ) {
     cli.action.start('Syncing accessories')
 
@@ -397,6 +398,23 @@ export default class Sync extends Command {
 
         await handle(
           client.updateAccessory(accessory.id, updateAccessoryRequest),
+          withStandardErrors({}, this),
+        )
+      }
+    }
+
+    if (forceDelete) {
+      const namesToRetain = yamlAccessories.map(
+        (ya: { name: string }) => ya.name,
+      )
+
+      const accessoriesToDelete = existingAccessories
+        .filter(({ name }) => !namesToRetain.includes(name))
+        .filter(({ type }) => type !== 'webhook')
+
+      for (const { id: accessory } of accessoriesToDelete) {
+        await handle(
+          client.deleteAccessory(accessory),
           withStandardErrors({}, this),
         )
       }
