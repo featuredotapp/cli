@@ -8,7 +8,9 @@
     "strict": true,
     "target": "es6",
     "lib": ["es2019"],
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }

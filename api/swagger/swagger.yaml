@@ -933,7 +933,7 @@ components:
           type: string
         type:
           type: string
-          enum: ['sms']
+          enum: ['mailscript-email']
         address:
           type: string
         key:

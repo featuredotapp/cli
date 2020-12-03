@@ -70,7 +70,7 @@ export type AddSmsAccessoryRequest = {
 }
 export type AddMailscriptEmailAccessoryRequest = {
   name: string
-  type: 'sms'
+  type: 'mailscript-email'
   address: string
   key: string
 }
