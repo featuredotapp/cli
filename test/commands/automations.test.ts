@@ -105,6 +105,16 @@ describe('Automations', () => {
         .reply(201, { id: 'auto-xxx-yyy-zzz' })
     }
 
+    test
+      .stdout()
+      .command(['automations', 'add'])
+      .exit(1)
+      .it('fails if no name provided', (ctx) => {
+        expect(ctx.stdout).to.contain(
+          'Please provide a name: mailscript automation add --name <personal-forward>',
+        )
+      })
+
     describe('triggers', () => {
       describe('time based', () => {
         test
@@ -113,6 +123,8 @@ describe('Automations', () => {
           .command([
             'automations',
             'add',
+            '--name',
+            'auto-01',
             '--trigger',
             'test@mailscript.io',
             '--forward',
@@ -143,6 +155,8 @@ describe('Automations', () => {
           .command([
             'automations',
             'add',
+            '--name',
+            'auto-01',
             '--trigger',
             'test@mailscript.io',
             '--forward',
@@ -163,6 +177,8 @@ describe('Automations', () => {
           .command([
             'automations',
             'add',
+            '--name',
+            'auto-01',
             '--trigger',
             'test@mailscript.io',
             '--forward',
@@ -185,6 +201,8 @@ describe('Automations', () => {
           .command([
             'automations',
             'add',
+            '--name',
+            'auto-01',
             '--trigger',
             'test@mailscript.io',
             '--forward',
@@ -211,6 +229,8 @@ describe('Automations', () => {
           .command([
             'automations',
             'add',
+            '--name',
+            'auto-01',
             '--trigger',
             'test@mailscript.io',
             '--forward',
@@ -237,6 +257,8 @@ describe('Automations', () => {
           .command([
             'automations',
             'add',
+            '--name',
+            'auto-01',
             '--trigger',
             'test@mailscript.io',
             '--forward',
@@ -263,6 +285,8 @@ describe('Automations', () => {
           .command([
             'automations',
             'add',
+            '--name',
+            'auto-01',
             '--trigger',
             'test@mailscript.io',
             '--forward',
@@ -289,6 +313,8 @@ describe('Automations', () => {
           .command([
             'automations',
             'add',
+            '--name',
+            'auto-01',
             '--trigger',
             'test@mailscript.io',
             '--forward',
@@ -315,6 +341,8 @@ describe('Automations', () => {
           .command([
             'automations',
             'add',
+            '--name',
+            'auto-01',
             '--trigger',
             'test@mailscript.io',
             '--forward',
@@ -340,6 +368,8 @@ describe('Automations', () => {
           .command([
             'automations',
             'add',
+            '--name',
+            'auto-01',
             '--trigger',
             'test@mailscript.io',
             '--forward',
@@ -382,6 +412,8 @@ describe('Automations', () => {
           .command([
             'automations',
             'add',
+            '--name',
+            'auto-01',
             '--trigger',
             'test@mailscript.io',
             '--action',
@@ -403,6 +435,8 @@ describe('Automations', () => {
           .command([
             'automations',
             'add',
+            '--name',
+            'auto-01',
             '--trigger',
             'test@mailscript.io',
             '--forward',
@@ -420,6 +454,8 @@ describe('Automations', () => {
           .command([
             'automations',
             'add',
+            '--name',
+            'auto-01',
             '--trigger',
             'test@mailscript.io',
             '--send',
@@ -447,6 +483,8 @@ describe('Automations', () => {
           .command([
             'automations',
             'add',
+            '--name',
+            'auto-01',
             '--trigger',
             'test@mailscript.io',
             '--reply',
@@ -469,6 +507,8 @@ describe('Automations', () => {
           .command([
             'automations',
             'add',
+            '--name',
+            'auto-01',
             '--trigger',
             'test@mailscript.io',
             '--replyall',
@@ -491,6 +531,8 @@ describe('Automations', () => {
           .command([
             'automations',
             'add',
+            '--name',
+            'auto-01',
             '--trigger',
             'test@mailscript.io',
             '--alias',
@@ -514,6 +556,8 @@ describe('Automations', () => {
           .command([
             'automations',
             'add',
+            '--name',
+            'auto-01',
             '--trigger',
             'test@mailscript.io',
             '--webhook',
@@ -543,6 +587,8 @@ describe('Automations', () => {
           .command([
             'automations',
             'add',
+            '--name',
+            'auto-01',
             '--trigger',
             'test@mailscript.io',
             '--action',
@@ -569,6 +615,8 @@ describe('Automations', () => {
           .command([
             'automations',
             'add',
+            '--name',
+            'auto-01',
             '--trigger',
             'test@mailscript.io',
             '--alias',

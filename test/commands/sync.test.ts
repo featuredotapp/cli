@@ -25,8 +25,8 @@ describe('sync', () => {
         .it('gives skeleton yaml', (ctx) => {
           expect(ctx.stdout).to.contain(
             `
-addresses: []
-keys: []
+version: '0.1'
+addresses: {}
 accessories: []
 automations: []`.trim(),
           )
@@ -42,6 +42,7 @@ automations: []`.trim(),
             list: [
               {
                 id: 'smith@mailscript.io',
+                name: 'smith@mailscript.io',
                 owner: 'xyz',
                 createdAt: '2020-12-01T10:19:02.656Z',
                 createdBy: 'xyz',
@@ -53,6 +54,7 @@ automations: []`.trim(),
             list: [
               {
                 id: 'mivAW1KCbhZ4eGOW6D8X',
+                name: 'owner',
                 read: true,
                 createdAt: '2020-12-01T10:19:02.656Z',
                 createdBy: 'xyz',
@@ -89,6 +91,7 @@ automations: []`.trim(),
             list: [
               {
                 id: 'zcYyhU2V9zKlLGTpBYnE',
+                name: 'personal-forward',
                 owner: 'xyz',
                 trigger: {
                   accessoryId: 'jaLhjOMQ7THh1ei9hoVZ',
@@ -124,28 +127,28 @@ automations: []`.trim(),
         .it('outputs yaml', (ctx) => {
           expect(ctx.stdout).to.contain(
             `
+version: '0.1'
 addresses:
-  - smith@mailscript.io
-keys:
-  - address: smith@mailscript.io
+  smith@mailscript.io:
     keys:
-      - key: mivAW1KCbhZ4eGOW6D8X
+      - name: owner
         read: true
         write: true
 accessories:
-  - id: jaLhjOMQ7THh1ei9hoVZ
-    address: smith@mailscript.io
+  - name: smith@mailscript.io
     type: mailscript-email
-    name: smith@mailscript.io
-    key: mivAW1KCbhZ4eGOW6D8X
+    address: smith@mailscript.io
+    sms: null
+    key: owner
 automations:
-  - trigger:
-      accessoryId: jaLhjOMQ7THh1ei9hoVZ
+  - name: personal-forward
+    trigger:
+      accessory: smith@mailscript.io
       config:
         criterias:
           - sentTo: smith@mailscript.io
     actions:
-      - accessoryId: jaLhjOMQ7THh1ei9hoVZ
+      - accessory: smith@mailscript.io
         config:
           forward: john@smith.me
           type: forward`.trim(),
