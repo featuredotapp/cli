@@ -32,7 +32,7 @@ export default class Accessories extends Command {
     }),
     name: flags.string({
       char: 'n',
-      description: 'the name of the automation',
+      description: 'the name of the accessory',
     }),
     sms: flags.string({
       description: 'the telephone number to send the sms too',

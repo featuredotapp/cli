@@ -12,7 +12,7 @@ enum Subcommand {
   delete = 'delete',
 }
 
-const automationTypeFlags = [
+const workflowTypeFlags = [
   'send',
   'alias',
   'forward',
@@ -21,17 +21,17 @@ const automationTypeFlags = [
   'webhook',
 ]
 
-export default class Automations extends Command {
-  static description = 'manipulate automations'
+export default class Workflows extends Command {
+  static description = 'manipulate workflows'
 
   static flags = {
     help: flags.help({ char: 'h' }),
-    automation: flags.string({
-      description: 'id of the automation to be acted on',
+    workflow: flags.string({
+      description: 'id of the workflow to be acted on',
     }),
     name: flags.string({
       char: 't',
-      description: 'name of the automation',
+      description: 'name of the workflow',
     }),
     trigger: flags.string({
       char: 't',
@@ -124,7 +124,7 @@ export default class Automations extends Command {
   ]
 
   async run() {
-    const { args, flags } = this.parse(Automations)
+    const { args, flags } = this.parse(Workflows)
 
     const subcommand: Subcommand = args.subcommand
 
@@ -150,14 +150,14 @@ export default class Automations extends Command {
           '200': ({ list }: api.GetAllAutomationsResponse) => {
             if (!list || list.length === 0) {
               this.log(
-                `you don't have an automation currently, create one with: mailscript automations add`,
+                `you don't have an workflow currently, create one with: mailscript workflows add`,
               )
               this.exit(0)
             }
 
-            this.log('Automations')
-            for (const automation of list || []) {
-              this.log(`  ${automation.id}`)
+            this.log('workflows')
+            for (const workflow of list || []) {
+              this.log(`  ${workflow.id}`)
             }
           },
         },
@@ -169,14 +169,14 @@ export default class Automations extends Command {
   async add(client: typeof api, flags: any): Promise<void> {
     if (!flags.name) {
       this.log(
-        'Please provide a name: mailscript automation add --name <personal-forward>',
+        'Please provide a name: mailscript workflows add --name <personal-forward>',
       )
       this.exit(1)
     }
 
     if (!flags.trigger) {
       this.log(
-        'Please provide a trigger: mailscript automation add --trigger <accessory-id>',
+        'Please provide a trigger: mailscript workflows add --trigger <accessory-id>',
       )
       this.exit(1)
     }
@@ -188,12 +188,12 @@ export default class Automations extends Command {
 
     if (
       actionAccessory.type !== 'sms' &&
-      automationTypeFlags.map((atf) => flags[atf]).filter((f) => Boolean(f))
+      workflowTypeFlags.map((atf) => flags[atf]).filter((f) => Boolean(f))
         .length !== 1
     ) {
       this.log(
         'Please provide one type flag either: \n  --' +
-          automationTypeFlags.join('\n  --'),
+          workflowTypeFlags.join('\n  --'),
       )
       this.exit(1)
     }
@@ -221,7 +221,7 @@ export default class Automations extends Command {
       withStandardErrors(
         {
           '201': (response: any) => {
-            this.log(`Automation setup: ${response.id}`)
+            this.log(`Workflow setup: ${response.id}`)
           },
         },
         this,
@@ -230,19 +230,19 @@ export default class Automations extends Command {
   }
 
   async delete(client: typeof api, flags: any): Promise<void> {
-    if (!flags.automation) {
+    if (!flags.workflow) {
       this.log(
-        'Please provide the automation id: mailscript automation delete --automation <automation-id>',
+        'Please provide the workflow id: mailscript workflows delete --workflow <workflow-id>',
       )
       this.exit(1)
     }
 
     return handle(
-      client.deleteAutomation(flags.automation),
+      client.deleteAutomation(flags.workflow),
       withStandardErrors(
         {
           '204': (_response: any) => {
-            this.log(`Automation deleted: ${flags.automation}`)
+            this.log(`Workflow deleted: ${flags.workflow}`)
           },
         },
         this,

@@ -124,7 +124,7 @@ export default class Sync extends Command {
         }),
       )
 
-    const automations = (
+    const workflows = (
       await handle(
         client.getAllAutomations(),
         withStandardErrors(
@@ -163,7 +163,7 @@ export default class Sync extends Command {
       version: '0.1',
       addresses: mergedAddressesAndKeys,
       accessories: accessories.map(({ id: _id, ...rest }: any) => rest),
-      automations,
+      workflows: workflows,
     })
 
     if (flags.path) {
@@ -193,7 +193,7 @@ export default class Sync extends Command {
       this.exit(1)
     }
 
-    const { addresses = [], accessories = [], automations = [] } = data
+    const { addresses = [], accessories = [], workflows = [] } = data
 
     this.log('')
     this.log('Syncing to Mailscript')
@@ -204,7 +204,7 @@ export default class Sync extends Command {
     await this._syncAddresses(client, addresses, forceDelete)
     await this._syncKeys(client, addresses, forceDelete)
     await this._syncAccessories(client, accessories, forceDelete)
-    await this._syncAutomations(client, automations, forceDelete)
+    await this._syncWorkflows(client, workflows, forceDelete)
   }
 
   private async _syncAddresses(
@@ -423,42 +423,42 @@ export default class Sync extends Command {
     cli.action.stop()
   }
 
-  private async _syncAutomations(
+  private async _syncWorkflows(
     client: typeof api,
-    yamlAutomations: Array<any>,
+    yamlWorkflows: Array<any>,
     forceDelete: boolean,
   ) {
-    cli.action.start('Syncing automations')
+    cli.action.start('Syncing workflows')
 
-    const existingAutomationsResponse = await client.getAllAutomations()
+    const existingWorkflowsResponse = await client.getAllAutomations()
 
-    if (existingAutomationsResponse.status !== 200) {
-      this.log('Error reading automations')
+    if (existingWorkflowsResponse.status !== 200) {
+      this.log('Error reading workflows')
       this.exit(1)
     }
 
     const {
-      data: { list: existingAutomations },
-    } = existingAutomationsResponse
+      data: { list: existingWorkflows },
+    } = existingWorkflowsResponse
 
     const { list: allAccessories } = await handle(
       client.getAllAccessories(),
       withStandardErrors({}, this),
     )
 
-    for (const automation of yamlAutomations) {
-      const existingAutomation = existingAutomations.find(
-        (ea) => ea.name === automation.name,
+    for (const workflow of yamlWorkflows) {
+      const existingWorkflow = existingWorkflows.find(
+        (ea) => ea.name === workflow.name,
       )
 
-      const resolvedAutomation = this._substituteAccessoryIdAutomation(
+      const resolvedWorkflow = this._substituteAccessoryIdWorkflow(
         allAccessories,
-        automation,
+        workflow,
       )
 
-      if (!existingAutomation) {
+      if (!existingWorkflow) {
         await handle(
-          client.addAutomation(resolvedAutomation),
+          client.addAutomation(resolvedWorkflow),
           withStandardErrors({}, this),
         )
 
@@ -466,28 +466,26 @@ export default class Sync extends Command {
       }
 
       if (
-        !deepEqual(existingAutomation.trigger, resolvedAutomation.trigger) ||
-        !deepEqual(existingAutomation.actions, resolvedAutomation.actions)
+        !deepEqual(existingWorkflow.trigger, resolvedWorkflow.trigger) ||
+        !deepEqual(existingWorkflow.actions, resolvedWorkflow.actions)
       ) {
         await handle(
-          client.updateAutomation(existingAutomation.id, resolvedAutomation),
+          client.updateAutomation(existingWorkflow.id, resolvedWorkflow),
           withStandardErrors({}, this),
         )
       }
     }
 
     if (forceDelete) {
-      const namesToRetain = yamlAutomations.map(
-        (ya: { name: string }) => ya.name,
-      )
+      const namesToRetain = yamlWorkflows.map((ya: { name: string }) => ya.name)
 
-      const automationsToDelete = existingAutomations.filter(
+      const workflowsToDelete = existingWorkflows.filter(
         ({ name }) => !namesToRetain.includes(name),
       )
 
-      for (const { id: automation } of automationsToDelete) {
+      for (const { id: workflow } of workflowsToDelete) {
         await handle(
-          client.deleteAutomation(automation),
+          client.deleteAutomation(workflow),
           withStandardErrors({}, this),
         )
       }
@@ -566,17 +564,17 @@ export default class Sync extends Command {
     }
   }
 
-  private _substituteAccessoryIdAutomation(
+  private _substituteAccessoryIdWorkflow(
     allAccessories: Array<any>,
-    yamlAutomation: any,
+    yamlWorkflow: any,
   ) {
     return {
-      ...yamlAutomation,
+      ...yamlWorkflow,
       trigger: this._substituteAccessoryIdFor(
         allAccessories,
-        yamlAutomation.trigger,
+        yamlWorkflow.trigger,
       ),
-      actions: yamlAutomation.actions.map((action: any) =>
+      actions: yamlWorkflow.actions.map((action: any) =>
         this._substituteAccessoryIdFor(allAccessories, action),
       ),
     }
