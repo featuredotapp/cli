@@ -204,7 +204,7 @@ export default class Sync extends Command {
     await this._syncAddresses(client, addresses, forceDelete)
     await this._syncKeys(client, addresses, forceDelete)
     await this._syncAccessories(client, accessories, forceDelete)
-    await this._syncAutomations(client, automations)
+    await this._syncAutomations(client, automations, forceDelete)
   }
 
   private async _syncAddresses(
@@ -426,6 +426,7 @@ export default class Sync extends Command {
   private async _syncAutomations(
     client: typeof api,
     yamlAutomations: Array<any>,
+    forceDelete: boolean,
   ) {
     cli.action.start('Syncing automations')
 
@@ -470,6 +471,23 @@ export default class Sync extends Command {
       ) {
         await handle(
           client.updateAutomation(existingAutomation.id, resolvedAutomation),
+          withStandardErrors({}, this),
+        )
+      }
+    }
+
+    if (forceDelete) {
+      const namesToRetain = yamlAutomations.map(
+        (ya: { name: string }) => ya.name,
+      )
+
+      const automationsToDelete = existingAutomations.filter(
+        ({ name }) => !namesToRetain.includes(name),
+      )
+
+      for (const { id: automation } of automationsToDelete) {
+        await handle(
+          client.deleteAutomation(automation),
           withStandardErrors({}, this),
         )
       }
