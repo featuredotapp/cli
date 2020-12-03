@@ -144,10 +144,10 @@ export default class Workflows extends Command {
 
   async list(client: typeof api): Promise<void> {
     return handle(
-      client.getAllAutomations(),
+      client.getAllWorkflows(),
       withStandardErrors(
         {
-          '200': ({ list }: api.GetAllAutomationsResponse) => {
+          '200': ({ list }: api.GetAllWorkflowsResponse) => {
             if (!list || list.length === 0) {
               this.log(
                 `you don't have an workflow currently, create one with: mailscript workflows add`,
@@ -202,7 +202,7 @@ export default class Workflows extends Command {
 
     const actionConfig = this._resolveActionConfig(flags, actionAccessory)
 
-    const payload: api.AddAutomationRequest = {
+    const payload: api.AddWorkflowRequest = {
       name: flags.name,
       trigger: {
         accessoryId: triggerAccessory.id,
@@ -217,7 +217,7 @@ export default class Workflows extends Command {
     }
 
     return handle(
-      client.addAutomation(payload),
+      client.addWorkflow(payload),
       withStandardErrors(
         {
           '201': (response: any) => {
@@ -238,7 +238,7 @@ export default class Workflows extends Command {
     }
 
     return handle(
-      client.deleteAutomation(flags.workflow),
+      client.deleteWorkflow(flags.workflow),
       withStandardErrors(
         {
           '204': (_response: any) => {

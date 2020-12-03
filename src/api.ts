@@ -85,7 +85,7 @@ export type UpdateMailscriptEmailAccessoryRequest = {
   address: string
   key: string
 }
-export type AddAutomationRequest = {
+export type AddWorkflowRequest = {
   name: string
   trigger: {
     accessoryId?: string
@@ -108,7 +108,7 @@ export type ActionForwardConfig = {
   type: 'forward'
   forward: string
 }
-export type Automation = {
+export type Workflow = {
   id: string
   name: string
   owner: string
@@ -125,8 +125,8 @@ export type Automation = {
     config?: ActionForwardConfig
   }[]
 }
-export type GetAllAutomationsResponse = {
-  list: Automation[]
+export type GetAllWorkflowsResponse = {
+  list: Workflow[]
 }
 export type Key = {
   id: string
@@ -446,10 +446,10 @@ export function deleteAccessory(id: string, opts?: Oazapfts.RequestOpts) {
   })
 }
 /**
- * Setup an automation
+ * Setup workflow
  */
-export function addAutomation(
-  addAutomationRequest: AddAutomationRequest,
+export function addWorkflow(
+  addWorkflowRequest: AddWorkflowRequest,
   opts?: Oazapfts.RequestOpts,
 ) {
   return oazapfts.fetchJson<
@@ -469,22 +469,22 @@ export function addAutomation(
         data: ErrorResponse
       }
   >(
-    '/automations',
+    '/workflows',
     oazapfts.json({
       ...opts,
       method: 'POST',
-      body: addAutomationRequest,
+      body: addWorkflowRequest,
     }),
   )
 }
 /**
- * Get all automations you have access to
+ * Get all workflows you have access to
  */
-export function getAllAutomations(opts?: Oazapfts.RequestOpts) {
+export function getAllWorkflows(opts?: Oazapfts.RequestOpts) {
   return oazapfts.fetchJson<
     | {
         status: 200
-        data: GetAllAutomationsResponse
+        data: GetAllWorkflowsResponse
       }
     | {
         status: 403
@@ -494,16 +494,16 @@ export function getAllAutomations(opts?: Oazapfts.RequestOpts) {
         status: 405
         data: ErrorResponse
       }
-  >('/automations', {
+  >('/workflows', {
     ...opts,
   })
 }
 /**
- * Update an automation
+ * Update an workflow
  */
-export function updateAutomation(
-  automation: string,
-  addAutomationRequest: AddAutomationRequest,
+export function updateWorkflow(
+  workflow: string,
+  addWorkflowRequest: AddWorkflowRequest,
   opts?: Oazapfts.RequestOpts,
 ) {
   return oazapfts.fetchJson<
@@ -523,21 +523,18 @@ export function updateAutomation(
         data: ErrorResponse
       }
   >(
-    `/automations/${automation}`,
+    `/workflows/${workflow}`,
     oazapfts.json({
       ...opts,
       method: 'PUT',
-      body: addAutomationRequest,
+      body: addWorkflowRequest,
     }),
   )
 }
 /**
- * Delete an automation
+ * Delete a workflow
  */
-export function deleteAutomation(
-  automation: string,
-  opts?: Oazapfts.RequestOpts,
-) {
+export function deleteWorkflow(workflow: string, opts?: Oazapfts.RequestOpts) {
   return oazapfts.fetchJson<
     | {
         status: 204
@@ -554,7 +551,7 @@ export function deleteAutomation(
         status: 404
         data: ErrorResponse
       }
-  >(`/automations/${automation}`, {
+  >(`/workflows/${workflow}`, {
     ...opts,
     method: 'DELETE',
   })

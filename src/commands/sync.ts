@@ -126,13 +126,13 @@ export default class Sync extends Command {
 
     const workflows = (
       await handle(
-        client.getAllAutomations(),
+        client.getAllWorkflows(),
         withStandardErrors(
-          { '200': ({ list }: api.GetAllAutomationsResponse) => list },
+          { '200': ({ list }: api.GetAllWorkflowsResponse) => list },
           this,
         ),
       )
-    ).map(({ name, trigger, actions }: api.Automation) => ({
+    ).map(({ name, trigger, actions }: api.Workflow) => ({
       name,
       trigger: this._mapAccessory(accessories, trigger),
       actions: actions.map((action: any) =>
@@ -430,7 +430,7 @@ export default class Sync extends Command {
   ) {
     cli.action.start('Syncing workflows')
 
-    const existingWorkflowsResponse = await client.getAllAutomations()
+    const existingWorkflowsResponse = await client.getAllWorkflows()
 
     if (existingWorkflowsResponse.status !== 200) {
       this.log('Error reading workflows')
@@ -458,7 +458,7 @@ export default class Sync extends Command {
 
       if (!existingWorkflow) {
         await handle(
-          client.addAutomation(resolvedWorkflow),
+          client.addWorkflow(resolvedWorkflow),
           withStandardErrors({}, this),
         )
 
@@ -470,7 +470,7 @@ export default class Sync extends Command {
         !deepEqual(existingWorkflow.actions, resolvedWorkflow.actions)
       ) {
         await handle(
-          client.updateAutomation(existingWorkflow.id, resolvedWorkflow),
+          client.updateWorkflow(existingWorkflow.id, resolvedWorkflow),
           withStandardErrors({}, this),
         )
       }
@@ -485,7 +485,7 @@ export default class Sync extends Command {
 
       for (const { id: workflow } of workflowsToDelete) {
         await handle(
-          client.deleteAutomation(workflow),
+          client.deleteWorkflow(workflow),
           withStandardErrors({}, this),
         )
       }

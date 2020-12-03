@@ -17,7 +17,7 @@ describe('sync', () => {
           })
           .get('/accessories')
           .reply(200, { list: [] })
-          .get('/automations')
+          .get('/workflows')
           .reply(200, { list: [] })
       }
 
@@ -84,7 +84,7 @@ describe('sync', () => {
               },
             ],
           })
-          .get('/automations')
+          .get('/workflows')
           .reply(200, {
             list: [
               {
@@ -139,7 +139,7 @@ describe('sync', () => {
         })
         .get('/accessories')
         .reply(200, { list: [] })
-        .get('/automations')
+        .get('/workflows')
         .reply(200, { list: [] })
     }
 
@@ -158,7 +158,7 @@ describe('sync', () => {
         .reply(200, { list: [] })
         .get('/accessories')
         .reply(200, { list: [] })
-        .get('/automations')
+        .get('/workflows')
         .reply(200, { list: [] })
     }
 
@@ -214,7 +214,7 @@ describe('sync', () => {
             },
           ],
         })
-        .get('/automations')
+        .get('/workflows')
         .reply(200, {
           list: [
             {

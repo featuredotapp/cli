@@ -7,7 +7,7 @@ describe('workflows', () => {
     test
       .stdout()
       .nock(MailscriptApiServer, (api) =>
-        api.get('/automations').reply(200, { list: [] }),
+        api.get('/workflows').reply(200, { list: [] }),
       )
       .command(['workflows', 'list'])
       .exit(0)
@@ -20,7 +20,7 @@ describe('workflows', () => {
     test
       .stdout()
       .nock(MailscriptApiServer, (api) =>
-        api.get('/automations').reply(200, { list: [{ id: 'dR862asdfgh' }] }),
+        api.get('/workflows').reply(200, { list: [{ id: 'dR862asdfgh' }] }),
       )
       .command(['workflows', 'list'])
       .it('lists workflows by id', (ctx) => {
@@ -30,7 +30,7 @@ describe('workflows', () => {
     test
       .stdout()
       .nock(MailscriptApiServer, (api) =>
-        api.get('/automations').reply(200, { list: [{ id: 'dR862asdfgh' }] }),
+        api.get('/workflows').reply(200, { list: [{ id: 'dR862asdfgh' }] }),
       )
       .command(['workflows'])
       .it('defaults to list', (ctx) => {
@@ -98,7 +98,7 @@ describe('workflows', () => {
         })
 
       return api
-        .post('/automations', (body: any) => {
+        .post('/workflows', (body: any) => {
           postBody = body
           return true
         })
@@ -638,7 +638,7 @@ describe('workflows', () => {
     test
       .stdout()
       .nock(MailscriptApiServer, (api) => {
-        return api.delete('/automations/work-01-xxx-yyy-zzz').reply(204)
+        return api.delete('/workflows/work-01-xxx-yyy-zzz').reply(204)
       })
       .command(['workflows', 'delete', '--workflow', 'work-01-xxx-yyy-zzz'])
       .it('deletes workflow on the server', (ctx) => {

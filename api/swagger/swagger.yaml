@@ -359,20 +359,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /automations:
+  /workflows:
     post:
       tags:
-        - 'automations'
-      summary: 'Setup an automation'
+        - 'workflows'
+      summary: 'Setup workflow'
       description: ''
-      operationId: 'addAutomation'
+      operationId: 'addWorkflow'
       requestBody:
-        description: Automation body
+        description: Workflow body
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddAutomationRequest'
+              $ref: '#/components/schemas/AddWorkflowRequest'
       responses:
         '201':
           description: 'successful operation'
@@ -396,17 +396,17 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
     get:
       tags:
-        - 'automations'
-      summary: 'Get all automations you have access to'
+        - 'workflows'
+      summary: 'Get all workflows you have access to'
       description: ''
-      operationId: 'getAllAutomations'
+      operationId: 'getAllWorkflows'
       responses:
         '200':
           description: 'successful operation'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetAllAutomationsResponse'
+                $ref: '#/components/schemas/GetAllWorkflowsResponse'
         '403':
           description: 'Bad credentials'
           content:
@@ -419,26 +419,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /automations/{automation}:
+  /workflows/{workflow}:
     put:
       tags:
-        - 'automations'
-      summary: 'Update an automation'
-      operationId: 'updateAutomation'
+        - 'workflows'
+      summary: 'Update an workflow'
+      operationId: 'updateWorkflow'
       parameters:
-        - name: automation
+        - name: workflow
           in: path
-          description: ID of the automation
+          description: ID of the workflow
           required: true
           schema:
             type: string
       requestBody:
-        description: Automation body
+        description: Workflow body
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddAutomationRequest'
+              $ref: '#/components/schemas/AddWorkflowRequest'
       responses:
         '200':
           description: 'Successful update operation'
@@ -462,13 +462,13 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
     delete:
       tags:
-        - 'automations'
-      summary: 'Delete an automation'
-      operationId: 'deleteAutomation'
+        - 'workflows'
+      summary: 'Delete a workflow'
+      operationId: 'deleteWorkflow'
       parameters:
-        - name: automation
+        - name: workflow
           in: path
-          description: ID of the automation
+          description: ID of the workflow
           required: true
           schema:
             type: string
@@ -724,7 +724,7 @@ components:
           format: date-time
         createdBy:
           type: string
-    Automation:
+    Workflow:
       required:
         - id
         - name
@@ -886,7 +886,7 @@ components:
             type: object
             oneOf:
               - $ref: '#/components/schemas/Address'
-    GetAllAutomationsResponse:
+    GetAllWorkflowsResponse:
       required:
         - list
       properties:
@@ -895,7 +895,7 @@ components:
           items:
             type: object
             oneOf:
-              - $ref: '#/components/schemas/Automation'
+              - $ref: '#/components/schemas/Workflow'
     AddSmsAccessoryRequest:
       required:
         - name
@@ -954,7 +954,7 @@ components:
           type: string
         key:
           type: string
-    AddAutomationRequest:
+    AddWorkflowRequest:
       required:
         - name
         - trigger
