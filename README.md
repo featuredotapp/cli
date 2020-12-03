@@ -20,7 +20,7 @@ $ npm install -g mailscript
 $ mailscript COMMAND
 running command...
 $ mailscript (-v|--version|version)
-mailscript/0.3.13 darwin-x64 node-v14.3.0
+mailscript/0.3.14 darwin-x64 node-v14.3.0
 $ mailscript --help [COMMAND]
 USAGE
   $ mailscript COMMAND
@@ -36,6 +36,7 @@ USAGE
 * [`mailscript keys SUBCOMMAND`](#mailscript-keys-subcommand)
 * [`mailscript login`](#mailscript-login)
 * [`mailscript send [FILE]`](#mailscript-send-file)
+* [`mailscript sync SUBCOMMAND`](#mailscript-sync-subcommand)
 * [`mailscript usernames SUBCOMMAND`](#mailscript-usernames-subcommand)
 
 ## `mailscript accessories SUBCOMMAND`
@@ -53,7 +54,7 @@ OPTIONS
   --sms=sms                  the telephone number to send the sms too
 ```
 
-_See code: [src/commands/accessories.ts](https://github.com/getmailscript/cli/blob/v0.3.13/src/commands/accessories.ts)_
+_See code: [src/commands/accessories.ts](https://github.com/getmailscript/cli/blob/v0.3.14/src/commands/accessories.ts)_
 
 ## `mailscript addresses SUBCOMMAND`
 
@@ -68,7 +69,7 @@ OPTIONS
   -h, --help             show CLI help
 ```
 
-_See code: [src/commands/addresses.ts](https://github.com/getmailscript/cli/blob/v0.3.13/src/commands/addresses.ts)_
+_See code: [src/commands/addresses.ts](https://github.com/getmailscript/cli/blob/v0.3.14/src/commands/addresses.ts)_
 
 ## `mailscript automations SUBCOMMAND`
 
@@ -85,6 +86,7 @@ OPTIONS
   -h, --html=html                    html of the email
   -r, --reply                        email address for reply action
   -s, --subject=subject              subject of the email
+  -t, --name=name                    name of the automation
   -t, --text=text                    text of the email
   -t, --trigger=trigger              id of the trigger accessory
   -w, --webhook=webhook              url of the webhook to call
@@ -105,7 +107,7 @@ OPTIONS
   --times=times                      number of emails in a period for trigger to activate
 ```
 
-_See code: [src/commands/automations.ts](https://github.com/getmailscript/cli/blob/v0.3.13/src/commands/automations.ts)_
+_See code: [src/commands/automations.ts](https://github.com/getmailscript/cli/blob/v0.3.14/src/commands/automations.ts)_
 
 ## `mailscript help [COMMAND]`
 
@@ -136,11 +138,12 @@ OPTIONS
   -h, --help         show CLI help
   --address=address  the email address to look for keys against
   --key=key          the id of the address key
+  --name=name        the name for the key
   --read             set the key with read permissions
   --write            set the key with write permissions
 ```
 
-_See code: [src/commands/keys.ts](https://github.com/getmailscript/cli/blob/v0.3.13/src/commands/keys.ts)_
+_See code: [src/commands/keys.ts](https://github.com/getmailscript/cli/blob/v0.3.14/src/commands/keys.ts)_
 
 ## `mailscript login`
 
@@ -157,7 +160,7 @@ DESCRIPTION
   Link or create your MailScript account
 ```
 
-_See code: [src/commands/login.ts](https://github.com/getmailscript/cli/blob/v0.3.13/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/getmailscript/cli/blob/v0.3.14/src/commands/login.ts)_
 
 ## `mailscript send [FILE]`
 
@@ -175,7 +178,23 @@ OPTIONS
   -t, --to=to            (required) email address to send to
 ```
 
-_See code: [src/commands/send.ts](https://github.com/getmailscript/cli/blob/v0.3.13/src/commands/send.ts)_
+_See code: [src/commands/send.ts](https://github.com/getmailscript/cli/blob/v0.3.14/src/commands/send.ts)_
+
+## `mailscript sync SUBCOMMAND`
+
+allows current setup to be exported, imported, or/and updated
+
+```
+USAGE
+  $ mailscript sync SUBCOMMAND
+
+OPTIONS
+  -d, --delete     force delete of entities missing from import file
+  -h, --help       show CLI help
+  -p, --path=path  path to the file to read/write
+```
+
+_See code: [src/commands/sync.ts](https://github.com/getmailscript/cli/blob/v0.3.14/src/commands/sync.ts)_
 
 ## `mailscript usernames SUBCOMMAND`
 
@@ -190,7 +209,7 @@ OPTIONS
   -n, --username=username  the username to claim
 ```
 
-_See code: [src/commands/usernames.ts](https://github.com/getmailscript/cli/blob/v0.3.13/src/commands/usernames.ts)_
+_See code: [src/commands/usernames.ts](https://github.com/getmailscript/cli/blob/v0.3.14/src/commands/usernames.ts)_
 <!-- commandsstop -->
 
 # Development
