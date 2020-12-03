@@ -51,7 +51,8 @@ export type GetAllAddressesResponse = {
 }
 export type Accessory = {
   id: string
-  type: 'mailscript-email' | 'sms'
+  type: 'mailscript-email' | 'sms' | 'webhook'
+  owner?: string
   createdAt: string
   createdBy: string
   name: string
@@ -62,12 +63,30 @@ export type Accessory = {
 export type GetAllAccessoriesResponse = {
   list: Accessory[]
 }
-export type AddAccessoryRequest = {
+export type AddSmsAccessoryRequest = {
   name: string
   type: 'sms'
   sms: string
 }
+export type AddMailscriptEmailAccessoryRequest = {
+  name: string
+  type: 'mailscript-email'
+  address: string
+  key: string
+}
+export type UpdateSmsAccessoryRequest = {
+  name: string
+  type: 'sms'
+  sms: string
+}
+export type UpdateMailscriptEmailAccessoryRequest = {
+  name: string
+  type: 'mailscript-email'
+  address: string
+  key: string
+}
 export type AddAutomationRequest = {
+  name: string
   trigger: {
     accessoryId?: string
     config?: object
@@ -77,17 +96,41 @@ export type AddAutomationRequest = {
     config?: object
   }[]
 }
+export type Criteria = {
+  sentTo?: string
+  subjectContains?: string
+  from?: string
+  domain?: string
+  hasTheWords?: string
+  hasAttachments?: boolean
+}
+export type ActionForwardConfig = {
+  type: 'forward'
+  forward: string
+}
 export type Automation = {
   id: string
+  name: string
   owner: string
   createdAt: string
   createdBy: string
+  trigger: {
+    accessoryId: string
+    config: {
+      criterias: Criteria[]
+    }
+  }
+  actions: {
+    accessoryId?: string
+    config?: ActionForwardConfig
+  }[]
 }
 export type GetAllAutomationsResponse = {
   list: Automation[]
 }
 export type Key = {
   id: string
+  name: string
   read: boolean
   write: boolean
   createdBy: string
@@ -97,6 +140,7 @@ export type GetAllKeysResponse = {
   list: Key[]
 }
 export type AddKeyRequest = {
+  name: string
   read: boolean
   write: boolean
 }
@@ -298,7 +342,7 @@ export function getAllAccessories(
  * Setup an accessory
  */
 export function addAccessory(
-  addAccessoryRequest: AddAccessoryRequest,
+  body: AddSmsAccessoryRequest | AddMailscriptEmailAccessoryRequest,
   opts?: Oazapfts.RequestOpts,
 ) {
   return oazapfts.fetchJson<
@@ -322,7 +366,7 @@ export function addAccessory(
     oazapfts.json({
       ...opts,
       method: 'POST',
-      body: addAccessoryRequest,
+      body,
     }),
   )
 }
@@ -346,6 +390,35 @@ export function getAccessory(id: string, opts?: Oazapfts.RequestOpts) {
   >(`/accessories/${id}`, {
     ...opts,
   })
+}
+/**
+ * Update an accessory
+ */
+export function updateAccessory(
+  id: string,
+  body: UpdateSmsAccessoryRequest | UpdateMailscriptEmailAccessoryRequest,
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 405
+        data: ErrorResponse
+      }
+  >(
+    `/accessories/${id}`,
+    oazapfts.json({
+      ...opts,
+      method: 'PUT',
+      body,
+    }),
+  )
 }
 /**
  * Delete an accessory
@@ -424,6 +497,39 @@ export function getAllAutomations(opts?: Oazapfts.RequestOpts) {
   >('/automations', {
     ...opts,
   })
+}
+/**
+ * Update an automation
+ */
+export function updateAutomation(
+  automation: string,
+  addAutomationRequest: AddAutomationRequest,
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 404
+        data: ErrorResponse
+      }
+  >(
+    `/automations/${automation}`,
+    oazapfts.json({
+      ...opts,
+      method: 'PUT',
+      body: addAutomationRequest,
+    }),
+  )
 }
 /**
  * Delete an automation

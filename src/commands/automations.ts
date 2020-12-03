@@ -29,6 +29,10 @@ export default class Automations extends Command {
     automation: flags.string({
       description: 'id of the automation to be acted on',
     }),
+    name: flags.string({
+      char: 't',
+      description: 'name of the automation',
+    }),
     trigger: flags.string({
       char: 't',
       description: 'id of the trigger accessory',
@@ -163,6 +167,13 @@ export default class Automations extends Command {
   }
 
   async add(client: typeof api, flags: any): Promise<void> {
+    if (!flags.name) {
+      this.log(
+        'Please provide a name: mailscript automation add --name <personal-forward>',
+      )
+      this.exit(1)
+    }
+
     if (!flags.trigger) {
       this.log(
         'Please provide a trigger: mailscript automation add --trigger <accessory-id>',
@@ -192,6 +203,7 @@ export default class Automations extends Command {
     const actionConfig = this._resolveActionConfig(flags, actionAccessory)
 
     const payload: api.AddAutomationRequest = {
+      name: flags.name,
       trigger: {
         accessoryId: triggerAccessory.id,
         config: triggerConfig,

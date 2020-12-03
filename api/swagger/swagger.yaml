@@ -231,7 +231,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddAccessoryRequest'
+              oneOf:
+                - $ref: '#/components/schemas/AddSmsAccessoryRequest'
+                - $ref: '#/components/schemas/AddMailscriptEmailAccessoryRequest'
       responses:
         '201':
           description: 'successful operation'
@@ -274,6 +276,43 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Accessory'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '405':
+          description: 'Invalid input'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      tags:
+        - 'accessories'
+      summary: 'Update an accessory'
+      description: ''
+      operationId: 'updateAccessory'
+      parameters:
+        - name: id
+          in: path
+          description: ID of accessory
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Key body
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/UpdateSmsAccessoryRequest'
+                - $ref: '#/components/schemas/UpdateMailscriptEmailAccessoryRequest'
+      responses:
+        '200':
+          description: 'successful update operation'
         '403':
           description: 'Bad credentials'
           content:
@@ -381,6 +420,46 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
   /automations/{automation}:
+    put:
+      tags:
+        - 'automations'
+      summary: 'Update an automation'
+      operationId: 'updateAutomation'
+      parameters:
+        - name: automation
+          in: path
+          description: ID of the automation
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Automation body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddAutomationRequest'
+      responses:
+        '200':
+          description: 'Successful update operation'
+        '400':
+          description: 'Failure'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 'Key not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     delete:
       tags:
         - 'automations'
@@ -648,11 +727,16 @@ components:
     Automation:
       required:
         - id
+        - name
         - owner
         - createdAt
         - createdBy
+        - trigger
+        - actions
       properties:
         id:
+          type: string
+        name:
           type: string
         owner:
           type: string
@@ -660,6 +744,58 @@ components:
           type: string
           format: date-time
         createdBy:
+          type: string
+        trigger:
+          type: object
+          required:
+            - accessoryId
+            - config
+          properties:
+            accessoryId:
+              type: string
+            config:
+              type: object
+              required:
+                - criterias
+              properties:
+                criterias:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Criteria'
+        actions:
+          type: array
+          items:
+            type: object
+            properties:
+              accessoryId:
+                type: string
+              config:
+                oneOf:
+                  - $ref: '#/components/schemas/ActionForwardConfig'
+    Criteria:
+      minProperties: 1
+      properties:
+        sentTo:
+          type: string
+        subjectContains:
+          type: string
+        from:
+          type: string
+        domain:
+          type: string
+        hasTheWords:
+          type: string
+        hasAttachments:
+          type: boolean
+    ActionForwardConfig:
+      required:
+        - type
+        - forward
+      properties:
+        type:
+          type: string
+          enum: ['forward']
+        forward:
           type: string
     Accessory:
       required:
@@ -674,7 +810,9 @@ components:
           type: string
         type:
           type: string
-          enum: ['mailscript-email', 'sms']
+          enum: ['mailscript-email', 'sms', 'webhook']
+        owner:
+          type: string
         createdAt:
           type: string
           format: date-time
@@ -691,12 +829,15 @@ components:
     Key:
       required:
         - id
+        - name
         - read
         - write
         - createdBy
         - createdAt
       properties:
         id:
+          type: string
+        name:
           type: string
         read:
           type: boolean
@@ -755,7 +896,7 @@ components:
             type: object
             oneOf:
               - $ref: '#/components/schemas/Automation'
-    AddAccessoryRequest:
+    AddSmsAccessoryRequest:
       required:
         - name
         - type
@@ -768,11 +909,59 @@ components:
           enum: ['sms']
         sms:
           type: string
+    UpdateSmsAccessoryRequest:
+      required:
+        - name
+        - type
+        - sms
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: ['sms']
+        sms:
+          type: string
+    AddMailscriptEmailAccessoryRequest:
+      required:
+        - name
+        - type
+        - address
+        - key
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: ['mailscript-email']
+        address:
+          type: string
+        key:
+          type: string
+    UpdateMailscriptEmailAccessoryRequest:
+      required:
+        - name
+        - type
+        - address
+        - key
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: ['mailscript-email']
+        address:
+          type: string
+        key:
+          type: string
     AddAutomationRequest:
       required:
+        - name
         - trigger
         - actions
       properties:
+        name:
+          type: string
         trigger:
           type: object
           properties:
@@ -827,9 +1016,12 @@ components:
               - $ref: '#/components/schemas/Key'
     AddKeyRequest:
       required:
+        - 'name'
         - 'read'
         - 'write'
       properties:
+        name:
+          type: string
         read:
           type: boolean
         write:

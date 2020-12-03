@@ -58,10 +58,19 @@ xxxUUUPPP false true`,
           })
           .reply(201, { success: true, id: 'ZYUYAUYUjuop' }),
       )
-      .command(['keys', 'add', '--address', 'test@example.com', '--read'])
+      .command([
+        'keys',
+        'add',
+        '--name',
+        'owner',
+        '--address',
+        'test@example.com',
+        '--read',
+      ])
       .it('responds with success', (ctx) => {
         expect(ctx.stdout).to.contain('Key added: ZYUYAUYUjuop')
         expect(postBody).to.eql({
+          name: 'owner',
           read: true,
           write: false,
         })
@@ -70,6 +79,23 @@ xxxUUUPPP false true`,
     test
       .stdout()
       .command(['keys', 'add', '--address', 'test@example.com'])
+      .exit(1)
+      .it('errors if no name set', (ctx) => {
+        expect(ctx.stdout).to.contain(
+          'Please provide a name: mailscript keys add --address example@workspace.mailscript.com --name ci',
+        )
+      })
+
+    test
+      .stdout()
+      .command([
+        'keys',
+        'add',
+        '--name',
+        'owner',
+        '--address',
+        'test@example.com',
+      ])
       .exit(1)
       .it('errors if neither read/write set', (ctx) => {
         expect(ctx.stdout).to.contain(
@@ -84,7 +110,15 @@ xxxUUUPPP false true`,
           .post('/addresses/unknown@example.com/keys')
           .reply(404, { success: false, message: 'Address not found' }),
       )
-      .command(['keys', 'add', '--address', 'unknown@example.com', '--read'])
+      .command([
+        'keys',
+        'add',
+        '--name',
+        'owner',
+        '--address',
+        'unknown@example.com',
+        '--read',
+      ])
       .exit(1)
       .it('errors not a known address', (ctx) => {
         expect(ctx.stdout).to.contain('Unknown address: unknown@example.com')

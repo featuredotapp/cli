@@ -24,6 +24,9 @@ export default class Keys extends Command {
     key: flags.string({
       description: 'the id of the address key',
     }),
+    name: flags.string({
+      description: 'the name for the key',
+    }),
     read: flags.boolean({
       default: false,
       description: 'set the key with read permissions',
@@ -120,6 +123,13 @@ export default class Keys extends Command {
       this.exit(1)
     }
 
+    if (!flags.name) {
+      this.log(
+        'Please provide a name: mailscript keys add --address example@workspace.mailscript.com --name ci',
+      )
+      this.exit(1)
+    }
+
     if (!flags.write && !flags.read) {
       this.log(`A key must have either read or write permission`)
       this.exit(1)
@@ -127,6 +137,7 @@ export default class Keys extends Command {
 
     return handle(
       client.addKey(flags.address, {
+        name: flags.name,
         read: flags.read,
         write: flags.write,
       }),

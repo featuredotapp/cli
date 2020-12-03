@@ -1,0 +1,7 @@
+version: '0.1'
+addresses:
+  smith@mailscript.io:
+    keys:
+      - name: owner
+        read: true
+        write: true
