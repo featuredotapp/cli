@@ -20,7 +20,7 @@ $ npm install -g mailscript
 $ mailscript COMMAND
 running command...
 $ mailscript (-v|--version|version)
-mailscript/0.3.15 darwin-x64 node-v14.15.0
+mailscript/0.3.16 darwin-x64 node-v14.3.0
 $ mailscript --help [COMMAND]
 USAGE
   $ mailscript COMMAND
@@ -54,7 +54,7 @@ OPTIONS
   --sms=sms                  the telephone number to send the sms too
 ```
 
-_See code: [src/commands/accessories.ts](https://github.com/getmailscript/cli/blob/v0.3.15/src/commands/accessories.ts)_
+_See code: [src/commands/accessories.ts](https://github.com/getmailscript/cli/blob/v0.3.16/src/commands/accessories.ts)_
 
 ## `mailscript addresses SUBCOMMAND`
 
@@ -69,7 +69,7 @@ OPTIONS
   -h, --help             show CLI help
 ```
 
-_See code: [src/commands/addresses.ts](https://github.com/getmailscript/cli/blob/v0.3.15/src/commands/addresses.ts)_
+_See code: [src/commands/addresses.ts](https://github.com/getmailscript/cli/blob/v0.3.16/src/commands/addresses.ts)_
 
 ## `mailscript help [COMMAND]`
 
@@ -105,7 +105,7 @@ OPTIONS
   --write            set the key with write permissions
 ```
 
-_See code: [src/commands/keys.ts](https://github.com/getmailscript/cli/blob/v0.3.15/src/commands/keys.ts)_
+_See code: [src/commands/keys.ts](https://github.com/getmailscript/cli/blob/v0.3.16/src/commands/keys.ts)_
 
 ## `mailscript login`
 
@@ -122,7 +122,7 @@ DESCRIPTION
   Link or create your MailScript account
 ```
 
-_See code: [src/commands/login.ts](https://github.com/getmailscript/cli/blob/v0.3.15/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/getmailscript/cli/blob/v0.3.16/src/commands/login.ts)_
 
 ## `mailscript send [FILE]`
 
@@ -140,7 +140,7 @@ OPTIONS
   -t, --to=to            (required) email address to send to
 ```
 
-_See code: [src/commands/send.ts](https://github.com/getmailscript/cli/blob/v0.3.15/src/commands/send.ts)_
+_See code: [src/commands/send.ts](https://github.com/getmailscript/cli/blob/v0.3.16/src/commands/send.ts)_
 
 ## `mailscript sync SUBCOMMAND`
 
@@ -156,7 +156,7 @@ OPTIONS
   -p, --path=path  path to the file to read/write
 ```
 
-_See code: [src/commands/sync.ts](https://github.com/getmailscript/cli/blob/v0.3.15/src/commands/sync.ts)_
+_See code: [src/commands/sync.ts](https://github.com/getmailscript/cli/blob/v0.3.16/src/commands/sync.ts)_
 
 ## `mailscript usernames SUBCOMMAND`
 
@@ -171,7 +171,7 @@ OPTIONS
   -n, --username=username  the username to claim
 ```
 
-_See code: [src/commands/usernames.ts](https://github.com/getmailscript/cli/blob/v0.3.15/src/commands/usernames.ts)_
+_See code: [src/commands/usernames.ts](https://github.com/getmailscript/cli/blob/v0.3.16/src/commands/usernames.ts)_
 
 ## `mailscript workflows SUBCOMMAND`
 
@@ -209,7 +209,7 @@ OPTIONS
   --workflow=workflow                id of the workflow to be acted on
 ```
 
-_See code: [src/commands/workflows.ts](https://github.com/getmailscript/cli/blob/v0.3.15/src/commands/workflows.ts)_
+_See code: [src/commands/workflows.ts](https://github.com/getmailscript/cli/blob/v0.3.16/src/commands/workflows.ts)_
 <!-- commandsstop -->
 
 # Development
