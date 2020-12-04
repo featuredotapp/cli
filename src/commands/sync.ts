@@ -294,10 +294,9 @@ export default class Sync extends Command {
 
         // update if different
         if (existingKey.read !== key.read || existingKey.write !== key.write) {
-          this.log('Updating')
-
           await handle(
             client.updateKey(address, key.key, {
+              name: key.name,
               read: key.read,
               write: key.write,
             }),
