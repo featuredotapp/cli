@@ -137,11 +137,7 @@ describe('workflows', () => {
           .it('adds workflow on the server', (ctx) => {
             expect(ctx.stdout).to.contain('Workflow setup: auto-xxx-yyy-zzz')
             expect(postBody.trigger.config).to.eql({
-              criterias: [
-                {
-                  sentTo: 'test@mailscript.io',
-                },
-              ],
+              criterias: [],
               times: {
                 thisManySeconds: 50,
                 thisManyTimes: 5,

@@ -281,11 +281,7 @@ export default class Workflows extends Command {
         },
       ]
     } else if (triggerAccessory.type === 'mailscript-email') {
-      criterias = [
-        {
-          sentTo: triggerAccessory.address,
-        },
-      ]
+      criterias = []
     }
 
     return flags.times && flags.seconds
