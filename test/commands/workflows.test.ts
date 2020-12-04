@@ -9,7 +9,7 @@ describe('workflows', () => {
       .nock(MailscriptApiServer, (api) =>
         api.get('/workflows').reply(200, { list: [] }),
       )
-      .command(['workflows', 'list'])
+      .command(['workflows:list'])
       .exit(0)
       .it('gives message if no workflows', (ctx) => {
         expect(ctx.stdout).to.contain(
@@ -22,18 +22,8 @@ describe('workflows', () => {
       .nock(MailscriptApiServer, (api) =>
         api.get('/workflows').reply(200, { list: [{ id: 'dR862asdfgh' }] }),
       )
-      .command(['workflows', 'list'])
+      .command(['workflows:list'])
       .it('lists workflows by id', (ctx) => {
-        expect(ctx.stdout).to.contain('dR862asdfgh')
-      })
-
-    test
-      .stdout()
-      .nock(MailscriptApiServer, (api) =>
-        api.get('/workflows').reply(200, { list: [{ id: 'dR862asdfgh' }] }),
-      )
-      .command(['workflows'])
-      .it('defaults to list', (ctx) => {
         expect(ctx.stdout).to.contain('dR862asdfgh')
       })
   })
@@ -107,13 +97,9 @@ describe('workflows', () => {
 
     test
       .stdout()
-      .command(['workflows', 'add'])
-      .exit(1)
-      .it('fails if no name provided', (ctx) => {
-        expect(ctx.stdout).to.contain(
-          'Please provide a name: mailscript workflows add --name <personal-forward>',
-        )
-      })
+      .command(['workflows:add'])
+      .exit(2)
+      .it('fails if no name provided')
 
     describe('triggers', () => {
       describe('time based', () => {
@@ -121,8 +107,7 @@ describe('workflows', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'workflows',
-            'add',
+            'workflows:add',
             '--name',
             'work-01',
             '--trigger',
@@ -149,8 +134,7 @@ describe('workflows', () => {
           .stdout()
           .nock(MailscriptApiServer, nockRead)
           .command([
-            'workflows',
-            'add',
+            'workflows:add',
             '--name',
             'work-01',
             '--trigger',
@@ -171,8 +155,7 @@ describe('workflows', () => {
           .stdout()
           .nock(MailscriptApiServer, nockRead)
           .command([
-            'workflows',
-            'add',
+            'workflows:add',
             '--name',
             'work-01',
             '--trigger',
@@ -195,8 +178,7 @@ describe('workflows', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'workflows',
-            'add',
+            'workflows:add',
             '--name',
             'work-01',
             '--trigger',
@@ -223,8 +205,7 @@ describe('workflows', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'workflows',
-            'add',
+            'workflows:add',
             '--name',
             'work-01',
             '--trigger',
@@ -251,8 +232,7 @@ describe('workflows', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'workflows',
-            'add',
+            'workflows:add',
             '--name',
             'work-01',
             '--trigger',
@@ -279,8 +259,7 @@ describe('workflows', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'workflows',
-            'add',
+            'workflows:add',
             '--name',
             'work-01',
             '--trigger',
@@ -307,8 +286,7 @@ describe('workflows', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'workflows',
-            'add',
+            'workflows:add',
             '--name',
             'work-01',
             '--trigger',
@@ -335,8 +313,7 @@ describe('workflows', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'workflows',
-            'add',
+            'workflows:add',
             '--name',
             'work-01',
             '--trigger',
@@ -362,8 +339,7 @@ describe('workflows', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'workflows',
-            'add',
+            'workflows:add',
             '--name',
             'work-01',
             '--trigger',
@@ -406,8 +382,7 @@ describe('workflows', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'workflows',
-            'add',
+            'workflows:add',
             '--name',
             'work-01',
             '--trigger',
@@ -429,8 +404,7 @@ describe('workflows', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'workflows',
-            'add',
+            'workflows:add',
             '--name',
             'work-01',
             '--trigger',
@@ -448,8 +422,7 @@ describe('workflows', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'workflows',
-            'add',
+            'workflows:add',
             '--name',
             'work-01',
             '--trigger',
@@ -477,8 +450,7 @@ describe('workflows', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'workflows',
-            'add',
+            'workflows:add',
             '--name',
             'work-01',
             '--trigger',
@@ -501,8 +473,7 @@ describe('workflows', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'workflows',
-            'add',
+            'workflows:add',
             '--name',
             'work-01',
             '--trigger',
@@ -525,8 +496,7 @@ describe('workflows', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'workflows',
-            'add',
+            'workflows:add',
             '--name',
             'work-01',
             '--trigger',
@@ -550,8 +520,7 @@ describe('workflows', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'workflows',
-            'add',
+            'workflows:add',
             '--name',
             'work-01',
             '--trigger',
@@ -581,8 +550,7 @@ describe('workflows', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'workflows',
-            'add',
+            'workflows:add',
             '--name',
             'work-01',
             '--trigger',
@@ -609,8 +577,7 @@ describe('workflows', () => {
           .stdout()
           .nock(MailscriptApiServer, nockRead)
           .command([
-            'workflows',
-            'add',
+            'workflows:add',
             '--name',
             'work-01',
             '--trigger',
@@ -636,19 +603,15 @@ describe('workflows', () => {
       .nock(MailscriptApiServer, (api) => {
         return api.delete('/workflows/work-01-xxx-yyy-zzz').reply(204)
       })
-      .command(['workflows', 'delete', '--workflow', 'work-01-xxx-yyy-zzz'])
+      .command(['workflows:delete', '--workflow', 'work-01-xxx-yyy-zzz'])
       .it('deletes workflow on the server', (ctx) => {
         expect(ctx.stdout).to.contain('Workflow deleted: work-01-xxx-yyy-zzz')
       })
 
     test
       .stdout()
-      .command(['workflows', 'delete'])
-      .exit(1)
-      .it('errors if no workflow id provided', (ctx) => {
-        expect(ctx.stdout).to.contain(
-          'Please provide the workflow id: mailscript workflows delete --workflow <workflow-id>',
-        )
-      })
+      .command(['workflows:delete'])
+      .exit(2)
+      .it('errors if no workflow id provided')
   })
 })
