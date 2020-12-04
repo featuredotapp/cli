@@ -2,37 +2,37 @@
 import { expect, test } from '@oclif/test'
 import { MailscriptApiServer } from './constants'
 
-describe('Automations', () => {
+describe('workflows', () => {
   describe('list', () => {
     test
       .stdout()
       .nock(MailscriptApiServer, (api) =>
-        api.get('/automations').reply(200, { list: [] }),
+        api.get('/workflows').reply(200, { list: [] }),
       )
-      .command(['automations', 'list'])
+      .command(['workflows', 'list'])
       .exit(0)
-      .it('gives message if no automations', (ctx) => {
+      .it('gives message if no workflows', (ctx) => {
         expect(ctx.stdout).to.contain(
-          "you don't have an automation currently, create one with: mailscript automations add",
+          "you don't have an workflow currently, create one with: mailscript workflows add",
         )
       })
 
     test
       .stdout()
       .nock(MailscriptApiServer, (api) =>
-        api.get('/automations').reply(200, { list: [{ id: 'dR862asdfgh' }] }),
+        api.get('/workflows').reply(200, { list: [{ id: 'dR862asdfgh' }] }),
       )
-      .command(['automations', 'list'])
-      .it('lists automations by id', (ctx) => {
+      .command(['workflows', 'list'])
+      .it('lists workflows by id', (ctx) => {
         expect(ctx.stdout).to.contain('dR862asdfgh')
       })
 
     test
       .stdout()
       .nock(MailscriptApiServer, (api) =>
-        api.get('/automations').reply(200, { list: [{ id: 'dR862asdfgh' }] }),
+        api.get('/workflows').reply(200, { list: [{ id: 'dR862asdfgh' }] }),
       )
-      .command(['automations'])
+      .command(['workflows'])
       .it('defaults to list', (ctx) => {
         expect(ctx.stdout).to.contain('dR862asdfgh')
       })
@@ -98,7 +98,7 @@ describe('Automations', () => {
         })
 
       return api
-        .post('/automations', (body: any) => {
+        .post('/workflows', (body: any) => {
           postBody = body
           return true
         })
@@ -107,11 +107,11 @@ describe('Automations', () => {
 
     test
       .stdout()
-      .command(['automations', 'add'])
+      .command(['workflows', 'add'])
       .exit(1)
       .it('fails if no name provided', (ctx) => {
         expect(ctx.stdout).to.contain(
-          'Please provide a name: mailscript automation add --name <personal-forward>',
+          'Please provide a name: mailscript workflows add --name <personal-forward>',
         )
       })
 
@@ -121,10 +121,10 @@ describe('Automations', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'automations',
+            'workflows',
             'add',
             '--name',
-            'auto-01',
+            'work-01',
             '--trigger',
             'test@mailscript.io',
             '--forward',
@@ -134,8 +134,8 @@ describe('Automations', () => {
             '--seconds',
             '50',
           ])
-          .it('adds automation on the server', (ctx) => {
-            expect(ctx.stdout).to.contain('Automation setup: auto-xxx-yyy-zzz')
+          .it('adds workflow on the server', (ctx) => {
+            expect(ctx.stdout).to.contain('Workflow setup: auto-xxx-yyy-zzz')
             expect(postBody.trigger.config).to.eql({
               criterias: [
                 {
@@ -153,10 +153,10 @@ describe('Automations', () => {
           .stdout()
           .nock(MailscriptApiServer, nockRead)
           .command([
-            'automations',
+            'workflows',
             'add',
             '--name',
-            'auto-01',
+            'work-01',
             '--trigger',
             'test@mailscript.io',
             '--forward',
@@ -175,10 +175,10 @@ describe('Automations', () => {
           .stdout()
           .nock(MailscriptApiServer, nockRead)
           .command([
-            'automations',
+            'workflows',
             'add',
             '--name',
-            'auto-01',
+            'work-01',
             '--trigger',
             'test@mailscript.io',
             '--forward',
@@ -199,10 +199,10 @@ describe('Automations', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'automations',
+            'workflows',
             'add',
             '--name',
-            'auto-01',
+            'work-01',
             '--trigger',
             'test@mailscript.io',
             '--forward',
@@ -210,8 +210,8 @@ describe('Automations', () => {
             '--from',
             'smith@example.com',
           ])
-          .it('adds automation on the server', (ctx) => {
-            expect(ctx.stdout).to.contain('Automation setup: auto-xxx-yyy-zzz')
+          .it('adds workflow on the server', (ctx) => {
+            expect(ctx.stdout).to.contain('Workflow setup: auto-xxx-yyy-zzz')
             expect(postBody.trigger.config).to.eql({
               criterias: [
                 {
@@ -227,10 +227,10 @@ describe('Automations', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'automations',
+            'workflows',
             'add',
             '--name',
-            'auto-01',
+            'work-01',
             '--trigger',
             'test@mailscript.io',
             '--forward',
@@ -238,8 +238,8 @@ describe('Automations', () => {
             '--sentto',
             'test+spam@mailscript.io',
           ])
-          .it('adds automation on the server', (ctx) => {
-            expect(ctx.stdout).to.contain('Automation setup: auto-xxx-yyy-zzz')
+          .it('adds workflow on the server', (ctx) => {
+            expect(ctx.stdout).to.contain('Workflow setup: auto-xxx-yyy-zzz')
             expect(postBody.trigger.config).to.eql({
               criterias: [
                 {
@@ -255,10 +255,10 @@ describe('Automations', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'automations',
+            'workflows',
             'add',
             '--name',
-            'auto-01',
+            'work-01',
             '--trigger',
             'test@mailscript.io',
             '--forward',
@@ -266,8 +266,8 @@ describe('Automations', () => {
             '--subjectcontains',
             'alert',
           ])
-          .it('adds automation on the server', (ctx) => {
-            expect(ctx.stdout).to.contain('Automation setup: auto-xxx-yyy-zzz')
+          .it('adds workflow on the server', (ctx) => {
+            expect(ctx.stdout).to.contain('Workflow setup: auto-xxx-yyy-zzz')
             expect(postBody.trigger.config).to.eql({
               criterias: [
                 {
@@ -283,10 +283,10 @@ describe('Automations', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'automations',
+            'workflows',
             'add',
             '--name',
-            'auto-01',
+            'work-01',
             '--trigger',
             'test@mailscript.io',
             '--forward',
@@ -294,8 +294,8 @@ describe('Automations', () => {
             '--domain',
             'example.com',
           ])
-          .it('adds automation on the server', (ctx) => {
-            expect(ctx.stdout).to.contain('Automation setup: auto-xxx-yyy-zzz')
+          .it('adds workflow on the server', (ctx) => {
+            expect(ctx.stdout).to.contain('Workflow setup: auto-xxx-yyy-zzz')
             expect(postBody.trigger.config).to.eql({
               criterias: [
                 {
@@ -311,10 +311,10 @@ describe('Automations', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'automations',
+            'workflows',
             'add',
             '--name',
-            'auto-01',
+            'work-01',
             '--trigger',
             'test@mailscript.io',
             '--forward',
@@ -322,8 +322,8 @@ describe('Automations', () => {
             '--hasthewords',
             'alert',
           ])
-          .it('adds automation on the server', (ctx) => {
-            expect(ctx.stdout).to.contain('Automation setup: auto-xxx-yyy-zzz')
+          .it('adds workflow on the server', (ctx) => {
+            expect(ctx.stdout).to.contain('Workflow setup: auto-xxx-yyy-zzz')
             expect(postBody.trigger.config).to.eql({
               criterias: [
                 {
@@ -339,18 +339,18 @@ describe('Automations', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'automations',
+            'workflows',
             'add',
             '--name',
-            'auto-01',
+            'work-01',
             '--trigger',
             'test@mailscript.io',
             '--forward',
             'another@example.com',
             '--hasattachments',
           ])
-          .it('adds automation on the server', (ctx) => {
-            expect(ctx.stdout).to.contain('Automation setup: auto-xxx-yyy-zzz')
+          .it('adds workflow on the server', (ctx) => {
+            expect(ctx.stdout).to.contain('Workflow setup: auto-xxx-yyy-zzz')
             expect(postBody.trigger.config).to.eql({
               criterias: [
                 {
@@ -366,10 +366,10 @@ describe('Automations', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'automations',
+            'workflows',
             'add',
             '--name',
-            'auto-01',
+            'work-01',
             '--trigger',
             'test@mailscript.io',
             '--forward',
@@ -386,8 +386,8 @@ describe('Automations', () => {
             'alert',
             '--hasattachments',
           ])
-          .it('adds automation on the server', (ctx) => {
-            expect(ctx.stdout).to.contain('Automation setup: auto-xxx-yyy-zzz')
+          .it('adds workflow on the server', (ctx) => {
+            expect(ctx.stdout).to.contain('Workflow setup: auto-xxx-yyy-zzz')
             expect(postBody.trigger.config).to.eql({
               criterias: [
                 {
@@ -410,10 +410,10 @@ describe('Automations', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'automations',
+            'workflows',
             'add',
             '--name',
-            'auto-01',
+            'work-01',
             '--trigger',
             'test@mailscript.io',
             '--action',
@@ -421,7 +421,7 @@ describe('Automations', () => {
             '--forward',
             'another@example.com',
           ])
-          .it('add forward automation', (ctx) => {
+          .it('add forward workflow', (ctx) => {
             expect(ctx.stdout).to.contain('auto-xxx-yyy-zzz')
             expect(postBody.actions[0].config).to.eql({
               type: 'forward',
@@ -433,10 +433,10 @@ describe('Automations', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'automations',
+            'workflows',
             'add',
             '--name',
-            'auto-01',
+            'work-01',
             '--trigger',
             'test@mailscript.io',
             '--forward',
@@ -452,10 +452,10 @@ describe('Automations', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'automations',
+            'workflows',
             'add',
             '--name',
-            'auto-01',
+            'work-01',
             '--trigger',
             'test@mailscript.io',
             '--send',
@@ -465,7 +465,7 @@ describe('Automations', () => {
             '--text',
             'text',
           ])
-          .it('add send automation', (ctx) => {
+          .it('add send workflow', (ctx) => {
             expect(ctx.stdout).to.contain('auto-xxx-yyy-zzz')
             expect(postBody.actions[0].config).to.eql({
               subject: 'subject',
@@ -481,17 +481,17 @@ describe('Automations', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'automations',
+            'workflows',
             'add',
             '--name',
-            'auto-01',
+            'work-01',
             '--trigger',
             'test@mailscript.io',
             '--reply',
             '--text',
             'text',
           ])
-          .it('add reply automation', (ctx) => {
+          .it('add reply workflow', (ctx) => {
             expect(ctx.stdout).to.contain('auto-xxx-yyy-zzz')
             expect(postBody.actions[0].config).to.eql({
               type: 'reply',
@@ -505,17 +505,17 @@ describe('Automations', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'automations',
+            'workflows',
             'add',
             '--name',
-            'auto-01',
+            'work-01',
             '--trigger',
             'test@mailscript.io',
             '--replyall',
             '--text',
             'text',
           ])
-          .it('add reply all automation', (ctx) => {
+          .it('add reply all workflow', (ctx) => {
             expect(ctx.stdout).to.contain('auto-xxx-yyy-zzz')
             expect(postBody.actions[0].config).to.eql({
               type: 'replyAll',
@@ -529,10 +529,10 @@ describe('Automations', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'automations',
+            'workflows',
             'add',
             '--name',
-            'auto-01',
+            'work-01',
             '--trigger',
             'test@mailscript.io',
             '--alias',
@@ -540,7 +540,7 @@ describe('Automations', () => {
             '--text',
             'text',
           ])
-          .it('add reply all automation', (ctx) => {
+          .it('add reply all workflow', (ctx) => {
             expect(ctx.stdout).to.contain('auto-xxx-yyy-zzz')
             expect(postBody.actions[0].config).to.eql({
               type: 'alias',
@@ -554,16 +554,16 @@ describe('Automations', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'automations',
+            'workflows',
             'add',
             '--name',
-            'auto-01',
+            'work-01',
             '--trigger',
             'test@mailscript.io',
             '--webhook',
             'http://example.com/webhook',
           ])
-          .it('add webhook automation', (ctx) => {
+          .it('add webhook workflow', (ctx) => {
             expect(ctx.stdout).to.contain('auto-xxx-yyy-zzz')
             expect(postBody.actions[0].accessoryId.startsWith('webhook-'))
             expect(postBody.actions[0].config).to.eql({
@@ -585,10 +585,10 @@ describe('Automations', () => {
           .stdout()
           .nock(MailscriptApiServer, nockAdd)
           .command([
-            'automations',
+            'workflows',
             'add',
             '--name',
-            'auto-01',
+            'work-01',
             '--trigger',
             'test@mailscript.io',
             '--action',
@@ -596,7 +596,7 @@ describe('Automations', () => {
             '--text',
             'from mailscript - {{subject}}',
           ])
-          .it('add sms automation', (ctx) => {
+          .it('add sms workflow', (ctx) => {
             expect(ctx.stdout).to.contain('auto-xxx-yyy-zzz')
             expect(postBody.actions[0].accessoryId).to.eql(
               'access-03-xxx-yyy-zzz',
@@ -613,10 +613,10 @@ describe('Automations', () => {
           .stdout()
           .nock(MailscriptApiServer, nockRead)
           .command([
-            'automations',
+            'workflows',
             'add',
             '--name',
-            'auto-01',
+            'work-01',
             '--trigger',
             'test@mailscript.io',
             '--alias',
@@ -638,20 +638,20 @@ describe('Automations', () => {
     test
       .stdout()
       .nock(MailscriptApiServer, (api) => {
-        return api.delete('/automations/auto-01-xxx-yyy-zzz').reply(204)
+        return api.delete('/workflows/work-01-xxx-yyy-zzz').reply(204)
       })
-      .command(['automations', 'delete', '--automation', 'auto-01-xxx-yyy-zzz'])
-      .it('deletes automation on the server', (ctx) => {
-        expect(ctx.stdout).to.contain('Automation deleted: auto-01-xxx-yyy-zzz')
+      .command(['workflows', 'delete', '--workflow', 'work-01-xxx-yyy-zzz'])
+      .it('deletes workflow on the server', (ctx) => {
+        expect(ctx.stdout).to.contain('Workflow deleted: work-01-xxx-yyy-zzz')
       })
 
     test
       .stdout()
-      .command(['automations', 'delete'])
+      .command(['workflows', 'delete'])
       .exit(1)
-      .it('errors if no automation id provided', (ctx) => {
+      .it('errors if no workflow id provided', (ctx) => {
         expect(ctx.stdout).to.contain(
-          'Please provide the automation id: mailscript automation delete --automation <automation-id>',
+          'Please provide the workflow id: mailscript workflows delete --workflow <workflow-id>',
         )
       })
   })

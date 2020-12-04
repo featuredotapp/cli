@@ -11,7 +11,7 @@ accessories:
     address: smith@mailscript.io
     sms: null
     key: owner
-automations:
+workflows:
   - name: personal-forward
     trigger:
       accessory: smith@mailscript.io
