@@ -8,7 +8,7 @@ describe('Accessories', () => {
       .nock(MailscriptApiServer, (api) =>
         api.get('/accessories').reply(200, { list: [] }),
       )
-      .command(['accessories', 'list'])
+      .command(['accessories:list'])
       .exit(0)
       .it('gives message if no accessories', (ctx) => {
         expect(ctx.stdout).to.contain(
@@ -23,20 +23,8 @@ describe('Accessories', () => {
           .get('/accessories')
           .reply(200, { list: [{ name: 'test@mailscript.io' }] }),
       )
-      .command(['accessories', 'list'])
+      .command(['accessories:list'])
       .it('lists accessories by name', (ctx) => {
-        expect(ctx.stdout).to.contain('test@mailscript.io')
-      })
-
-    test
-      .stdout()
-      .nock(MailscriptApiServer, (api) =>
-        api
-          .get('/accessories')
-          .reply(200, { list: [{ name: 'test@mailscript.io' }] }),
-      )
-      .command(['accessories'])
-      .it('defaults to list', (ctx) => {
         expect(ctx.stdout).to.contain('test@mailscript.io')
       })
   })
@@ -61,8 +49,7 @@ describe('Accessories', () => {
       .stdout()
       .nock(MailscriptApiServer, nockAdd)
       .command([
-        'accessories',
-        'add',
+        'accessories:add',
         '--name',
         'test-sms',
         '--sms',
@@ -79,23 +66,15 @@ describe('Accessories', () => {
 
     test
       .stdout()
-      .command(['accessories', 'add', '--sms', '+440776653376'])
-      .exit(1)
-      .it('requires an accessory name', (ctx) => {
-        expect(ctx.stdout).to.contain(
-          'Please provide a name for the accessory: \n  --name',
-        )
-      })
+      .command(['accessories:add', '--sms', '+440776653376'])
+      .exit(2)
+      .it('requires an accessory name')
 
     test
       .stdout()
-      .command(['accessories', 'add', '--name', 'test-sms'])
-      .exit(1)
-      .it('requires an sms flag', (ctx) => {
-        expect(ctx.stdout).to.contain(
-          'Please provide one type flag either: \n  --sms',
-        )
-      })
+      .command(['accessories:add', '--name', 'test-sms'])
+      .exit(2)
+      .it('requires an sms flag')
   })
 
   describe('delete', () => {
@@ -104,19 +83,15 @@ describe('Accessories', () => {
       .nock(MailscriptApiServer, (api) => {
         return api.delete('/accessories/access-xxx-yyy-zzz').reply(204)
       })
-      .command(['accessories', 'delete', '--accessory', 'access-xxx-yyy-zzz'])
+      .command(['accessories:delete', '--accessory', 'access-xxx-yyy-zzz'])
       .it('deletes accessory on the server', (ctx) => {
         expect(ctx.stdout).to.contain('Accessory deleted: access-xxx-yyy-zzz')
       })
 
     test
       .stdout()
-      .command(['accessories', 'delete'])
-      .exit(1)
-      .it('errors if no accessory id provided', (ctx) => {
-        expect(ctx.stdout).to.contain(
-          'Please provide the accessory id: mailscript accessories delete --accessory <accessory-id>',
-        )
-      })
+      .command(['accessories:delete'])
+      .exit(2)
+      .it('errors if no accessory id provided')
   })
 })
