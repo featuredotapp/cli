@@ -6,7 +6,7 @@ import withStandardErrors from '../../utils/errorHandling'
 import { cli } from 'cli-ux'
 
 export default class AddressesList extends Command {
-  static description = 'manipulate addresses'
+  static description = 'list your email addresses'
 
   static flags = {
     help: flags.help({ char: 'h' }),

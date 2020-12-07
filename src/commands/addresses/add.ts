@@ -5,7 +5,7 @@ import setupApiClient from '../../setupApiClient'
 import withStandardErrors from '../../utils/errorHandling'
 
 export default class AddressesAdd extends Command {
-  static description = 'manipulate addresses'
+  static description = 'add an email address'
 
   static flags = {
     help: flags.help({ char: 'h' }),

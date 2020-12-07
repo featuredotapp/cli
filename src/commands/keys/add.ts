@@ -5,7 +5,7 @@ import setupApiClient from '../../setupApiClient'
 import withStandardErrors from '../../utils/errorHandling'
 
 export default class KeysAdd extends Command {
-  static description = 'Add an address key'
+  static description = 'add an address key'
 
   static flags = {
     help: flags.help({ char: 'h' }),
