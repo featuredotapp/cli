@@ -29,15 +29,19 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`mailscript accessories SUBCOMMAND`](#mailscript-accessories-subcommand)
-* [`mailscript addresses SUBCOMMAND`](#mailscript-addresses-subcommand)
-* [`mailscript help [COMMAND]`](#mailscript-help-command)
-* [`mailscript keys SUBCOMMAND`](#mailscript-keys-subcommand)
-* [`mailscript login`](#mailscript-login)
-* [`mailscript send [FILE]`](#mailscript-send-file)
-* [`mailscript sync SUBCOMMAND`](#mailscript-sync-subcommand)
-* [`mailscript usernames SUBCOMMAND`](#mailscript-usernames-subcommand)
-* [`mailscript workflows SUBCOMMAND`](#mailscript-workflows-subcommand)
+- [MailScript cli](#mailscript-cli)
+- [Usage](#usage)
+- [Commands](#commands)
+  - [`mailscript accessories SUBCOMMAND`](#mailscript-accessories-subcommand)
+  - [`mailscript addresses SUBCOMMAND`](#mailscript-addresses-subcommand)
+  - [`mailscript help [COMMAND]`](#mailscript-help-command)
+  - [`mailscript keys SUBCOMMAND`](#mailscript-keys-subcommand)
+  - [`mailscript login`](#mailscript-login)
+  - [`mailscript send [FILE]`](#mailscript-send-file)
+  - [`mailscript sync SUBCOMMAND`](#mailscript-sync-subcommand)
+  - [`mailscript usernames SUBCOMMAND`](#mailscript-usernames-subcommand)
+  - [`mailscript workflows SUBCOMMAND`](#mailscript-workflows-subcommand)
+- [Development](#development)
 
 ## `mailscript accessories SUBCOMMAND`
 
@@ -220,6 +224,7 @@ In development a `.env` file is used:
 MAILSCRIPT_CONFIG_PATH=.mailscript-test # path to use for .mailscript config file
 MAILSCRIPT_LOGIN_URL=http://localhost:3000 # login website url
 MAILSCRIPT_API_SERVER=http://localhost:7000/v1 # api server url
+MAILSCRIPT_EMAIL_DOMAIN=mailscript.io # the domain to use when assign email addresses
 ```
 
 To run a command:

@@ -1,6 +1,8 @@
+/* eslint-disable no-await-in-loop */
 import * as os from 'os'
 import * as path from 'path'
 import * as http from 'http'
+import chalk from 'chalk'
 import { writeFile as writeFileRaw } from 'fs'
 import { promisify } from 'util'
 
@@ -8,6 +10,11 @@ import { Command, flags } from '@oclif/command'
 import { cli } from 'cli-ux'
 import express from 'express'
 import * as bodyParser from 'body-parser'
+import setupApiClient from '../setupApiClient'
+import withStandardErrors from '../utils/errorHandling'
+import * as api from '../api'
+import { handle } from 'oazapfts'
+import { addAddress } from './addresses/add'
 const writeFile = promisify(writeFileRaw)
 
 const {
@@ -17,6 +24,7 @@ const {
     '.mailscript',
   ),
   MAILSCRIPT_LOGIN_PORT: port = 14578,
+  MAILSCRIPT_EMAIL_DOMAIN: emailDomain = 'mailscript.com',
 } = process.env
 
 export default class LoginCommand extends Command {
@@ -65,7 +73,8 @@ Link or create your MailScript account
       setTimeout(() => {
         server.close()
         cli.action.stop()
-        cli.info('🎉 Success - cli configured 🎉')
+
+        this._ftue()
       }, 500)
     })
 
@@ -83,13 +92,18 @@ Link or create your MailScript account
     cli.log('Logging in using offline mode')
     cli.log('')
     cli.log('Copy and open the link: ')
+
     const link = this.generateOfflineLink()
+
     cli.url(link, link)
     cli.log('')
+
     const token = await cli.prompt('Enter the code from the link')
     this.writeConfigFile(token)
     cli.log('')
-    cli.info('🎉 Success - cli configured 🎉')
+    cli.log('Account link configured')
+
+    this._ftue()
   }
 
   private generateOfflineLink() {
@@ -100,5 +114,73 @@ Link or create your MailScript account
     const config = JSON.stringify({ apiKey: token }, null, 2) + '\n'
 
     return writeFile(configFilePath, config)
+  }
+
+  private async _ftue() {
+    const client = await setupApiClient()
+
+    const { list: workspaces } = await handle(
+      client.getAllWorkspaces(),
+      withStandardErrors({}, this),
+    )
+
+    if (workspaces && workspaces.length > 0) {
+      cli.info('')
+      cli.info(`🎉 ${chalk.green('Success')} - cli configured 🎉`)
+      return
+    }
+
+    let username
+    while (!username) {
+      cli.info('')
+      username = await cli.prompt('Please choose a username')
+
+      if (!username) {
+        continue
+      }
+
+      const response = await handle(
+        client.addWorkspace({ workspace: username }),
+        withStandardErrors(
+          {
+            201: () => {
+              return { added: true }
+            },
+            400: ({ error }: api.ErrorResponse) => {
+              return { added: false, error }
+            },
+          },
+          this,
+        ),
+      )
+
+      if (response.added) {
+        continue
+      }
+
+      username = undefined
+      cli.info('')
+      cli.info(`Could not claim username:`)
+      cli.info(chalk.red(`  ${response.error}`))
+    }
+
+    cli.info('')
+    cli.action.start(`Setting up username: ${chalk.bold(username)} `)
+    cli.action.stop()
+
+    const defaultAddress = `${username}@${emailDomain}`
+    cli.action.start(
+      `Setting up default address: ${chalk.bold(defaultAddress)} `,
+    )
+
+    await addAddress(client, this, defaultAddress)
+
+    cli.action.stop()
+    cli.info('')
+    cli.info(
+      `You can add further addresses e.g. example@${username}.${emailDomain}, with the 'mailscript addresses:add' command.`,
+    )
+    cli.info('')
+    cli.info(`🎉 ${chalk.green('Success')} - cli configured 🎉`)
   }
 }
