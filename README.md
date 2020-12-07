@@ -20,7 +20,7 @@ $ npm install -g mailscript
 $ mailscript COMMAND
 running command...
 $ mailscript (-v|--version|version)
-mailscript/0.3.16 darwin-x64 node-v14.3.0
+mailscript/0.3.17 darwin-x64 node-v14.3.0
 $ mailscript --help [COMMAND]
 USAGE
   $ mailscript COMMAND
@@ -29,51 +29,114 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-- [MailScript cli](#mailscript-cli)
-- [Usage](#usage)
-- [Commands](#commands)
-  - [`mailscript accessories SUBCOMMAND`](#mailscript-accessories-subcommand)
-  - [`mailscript addresses SUBCOMMAND`](#mailscript-addresses-subcommand)
-  - [`mailscript help [COMMAND]`](#mailscript-help-command)
-  - [`mailscript keys SUBCOMMAND`](#mailscript-keys-subcommand)
-  - [`mailscript login`](#mailscript-login)
-  - [`mailscript send [FILE]`](#mailscript-send-file)
-  - [`mailscript sync SUBCOMMAND`](#mailscript-sync-subcommand)
-  - [`mailscript usernames SUBCOMMAND`](#mailscript-usernames-subcommand)
-  - [`mailscript workflows SUBCOMMAND`](#mailscript-workflows-subcommand)
-- [Development](#development)
+* [`mailscript accessories:add`](#mailscript-accessoriesadd)
+* [`mailscript accessories:delete`](#mailscript-accessoriesdelete)
+* [`mailscript accessories:list`](#mailscript-accessorieslist)
+* [`mailscript addresses:add`](#mailscript-addressesadd)
+* [`mailscript addresses:delete`](#mailscript-addressesdelete)
+* [`mailscript addresses:list`](#mailscript-addresseslist)
+* [`mailscript help [COMMAND]`](#mailscript-help-command)
+* [`mailscript keys:add`](#mailscript-keysadd)
+* [`mailscript keys:delete`](#mailscript-keysdelete)
+* [`mailscript keys:list`](#mailscript-keyslist)
+* [`mailscript keys:update`](#mailscript-keysupdate)
+* [`mailscript login`](#mailscript-login)
+* [`mailscript send [FILE]`](#mailscript-send-file)
+* [`mailscript sync:export`](#mailscript-syncexport)
+* [`mailscript sync:import`](#mailscript-syncimport)
+* [`mailscript usernames SUBCOMMAND`](#mailscript-usernames-subcommand)
+* [`mailscript workflows:add`](#mailscript-workflowsadd)
+* [`mailscript workflows:delete`](#mailscript-workflowsdelete)
+* [`mailscript workflows:list`](#mailscript-workflowslist)
 
-## `mailscript accessories SUBCOMMAND`
+## `mailscript accessories:add`
 
-manipulate accessories
+add an accessory
 
 ```
 USAGE
-  $ mailscript accessories SUBCOMMAND
+  $ mailscript accessories:add
 
 OPTIONS
-  -a, --accessory=accessory  id of the accessory to act upon
+  -h, --help       show CLI help
+  -n, --name=name  (required) the name of the accessory
+  --sms=sms        (required) the telephone number to send the sms too
+```
+
+_See code: [src/commands/accessories/add.ts](https://github.com/getmailscript/cli/blob/v0.3.17/src/commands/accessories/add.ts)_
+
+## `mailscript accessories:delete`
+
+delete an accessory
+
+```
+USAGE
+  $ mailscript accessories:delete
+
+OPTIONS
+  -a, --accessory=accessory  (required) id of the accessory to act upon
   -h, --help                 show CLI help
-  -n, --name=name            the name of the accessory
-  --sms=sms                  the telephone number to send the sms too
 ```
 
-_See code: [src/commands/accessories.ts](https://github.com/getmailscript/cli/blob/v0.3.16/src/commands/accessories.ts)_
+_See code: [src/commands/accessories/delete.ts](https://github.com/getmailscript/cli/blob/v0.3.17/src/commands/accessories/delete.ts)_
 
-## `mailscript addresses SUBCOMMAND`
+## `mailscript accessories:list`
 
-manipulate addresses
+list the accessories
 
 ```
 USAGE
-  $ mailscript addresses SUBCOMMAND
+  $ mailscript accessories:list
 
 OPTIONS
-  -a, --address=address  the address
+  -h, --help  show CLI help
+```
+
+_See code: [src/commands/accessories/list.ts](https://github.com/getmailscript/cli/blob/v0.3.17/src/commands/accessories/list.ts)_
+
+## `mailscript addresses:add`
+
+add an email address
+
+```
+USAGE
+  $ mailscript addresses:add
+
+OPTIONS
+  -a, --address=address  (required) the address
   -h, --help             show CLI help
 ```
 
-_See code: [src/commands/addresses.ts](https://github.com/getmailscript/cli/blob/v0.3.16/src/commands/addresses.ts)_
+_See code: [src/commands/addresses/add.ts](https://github.com/getmailscript/cli/blob/v0.3.17/src/commands/addresses/add.ts)_
+
+## `mailscript addresses:delete`
+
+delete an email address
+
+```
+USAGE
+  $ mailscript addresses:delete
+
+OPTIONS
+  -a, --address=address  (required) the address
+  -h, --help             show CLI help
+```
+
+_See code: [src/commands/addresses/delete.ts](https://github.com/getmailscript/cli/blob/v0.3.17/src/commands/addresses/delete.ts)_
+
+## `mailscript addresses:list`
+
+list your email addresses
+
+```
+USAGE
+  $ mailscript addresses:list
+
+OPTIONS
+  -h, --help  show CLI help
+```
+
+_See code: [src/commands/addresses/list.ts](https://github.com/getmailscript/cli/blob/v0.3.17/src/commands/addresses/list.ts)_
 
 ## `mailscript help [COMMAND]`
 
@@ -92,24 +155,73 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.0/src/commands/help.ts)_
 
-## `mailscript keys SUBCOMMAND`
+## `mailscript keys:add`
 
-Manipulate address keys
+add an address key
 
 ```
 USAGE
-  $ mailscript keys SUBCOMMAND
+  $ mailscript keys:add
 
 OPTIONS
-  -h, --help         show CLI help
-  --address=address  the email address to look for keys against
-  --key=key          the id of the address key
-  --name=name        the name for the key
-  --read             set the key with read permissions
-  --write            set the key with write permissions
+  -a, --address=address  (required) the email address to look for keys against
+  -h, --help             show CLI help
+  -n, --name=name        (required) the name for the key
+  -r, --read             set the key with read permissions
+  -w, --write            set the key with write permissions
 ```
 
-_See code: [src/commands/keys.ts](https://github.com/getmailscript/cli/blob/v0.3.16/src/commands/keys.ts)_
+_See code: [src/commands/keys/add.ts](https://github.com/getmailscript/cli/blob/v0.3.17/src/commands/keys/add.ts)_
+
+## `mailscript keys:delete`
+
+delete an address key
+
+```
+USAGE
+  $ mailscript keys:delete
+
+OPTIONS
+  -a, --address=address  (required) the email address to look for keys against
+  -h, --help             show CLI help
+  -k, --key=key          (required) the id of the address key
+```
+
+_See code: [src/commands/keys/delete.ts](https://github.com/getmailscript/cli/blob/v0.3.17/src/commands/keys/delete.ts)_
+
+## `mailscript keys:list`
+
+List the address keys for an address
+
+```
+USAGE
+  $ mailscript keys:list
+
+OPTIONS
+  -a, --address=address  (required) the email address to look for keys against
+  -h, --help             show CLI help
+```
+
+_See code: [src/commands/keys/list.ts](https://github.com/getmailscript/cli/blob/v0.3.17/src/commands/keys/list.ts)_
+
+## `mailscript keys:update`
+
+update an address key
+
+```
+USAGE
+  $ mailscript keys:update
+
+OPTIONS
+  -a, --address=address  (required) the email address to look for keys against
+  -h, --help             show CLI help
+  -k, --key=key          (required) the id of the address key
+  -n, --name=name        (required) the name for the key
+  -r, --read             set the key with read permissions
+  -w, --write            set the key with write permissions
+```
+
+_See code: [src/commands/keys/update.ts](https://github.com/getmailscript/cli/blob/v0.3.17/src/commands/keys/update.ts)_
 
 ## `mailscript login`
 
@@ -126,7 +238,7 @@ DESCRIPTION
   Link or create your MailScript account
 ```
 
-_See code: [src/commands/login.ts](https://github.com/getmailscript/cli/blob/v0.3.16/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/getmailscript/cli/blob/v0.3.17/src/commands/login.ts)_
 
 ## `mailscript send [FILE]`
 
@@ -144,23 +256,38 @@ OPTIONS
   -t, --to=to            (required) email address to send to
 ```
 
-_See code: [src/commands/send.ts](https://github.com/getmailscript/cli/blob/v0.3.16/src/commands/send.ts)_
+_See code: [src/commands/send.ts](https://github.com/getmailscript/cli/blob/v0.3.17/src/commands/send.ts)_
 
-## `mailscript sync SUBCOMMAND`
+## `mailscript sync:export`
 
-allows current setup to be exported, imported, or/and updated
+export your Mailscript config to file
 
 ```
 USAGE
-  $ mailscript sync SUBCOMMAND
+  $ mailscript sync:export
 
 OPTIONS
-  -d, --delete     force delete of entities missing from import file
   -h, --help       show CLI help
   -p, --path=path  path to the file to read/write
 ```
 
-_See code: [src/commands/sync.ts](https://github.com/getmailscript/cli/blob/v0.3.16/src/commands/sync.ts)_
+_See code: [src/commands/sync/export.ts](https://github.com/getmailscript/cli/blob/v0.3.17/src/commands/sync/export.ts)_
+
+## `mailscript sync:import`
+
+import and update config from file into Mailscript
+
+```
+USAGE
+  $ mailscript sync:import
+
+OPTIONS
+  -d, --delete     force delete of entities missing from import file
+  -h, --help       show CLI help
+  -p, --path=path  (required) path to the file to read/write
+```
+
+_See code: [src/commands/sync/import.ts](https://github.com/getmailscript/cli/blob/v0.3.17/src/commands/sync/import.ts)_
 
 ## `mailscript usernames SUBCOMMAND`
 
@@ -175,15 +302,15 @@ OPTIONS
   -n, --username=username  the username to claim
 ```
 
-_See code: [src/commands/usernames.ts](https://github.com/getmailscript/cli/blob/v0.3.16/src/commands/usernames.ts)_
+_See code: [src/commands/usernames.ts](https://github.com/getmailscript/cli/blob/v0.3.17/src/commands/usernames.ts)_
 
-## `mailscript workflows SUBCOMMAND`
+## `mailscript workflows:add`
 
-manipulate workflows
+add a workflow
 
 ```
 USAGE
-  $ mailscript workflows SUBCOMMAND
+  $ mailscript workflows:add
 
 OPTIONS
   -a, --action=action                id of the action accessory
@@ -192,9 +319,9 @@ OPTIONS
   -h, --html=html                    html of the email
   -r, --reply                        email address for reply action
   -s, --subject=subject              subject of the email
-  -t, --name=name                    name of the workflow
+  -t, --name=name                    (required) name of the workflow
   -t, --text=text                    text of the email
-  -t, --trigger=trigger              id of the trigger accessory
+  -t, --trigger=trigger              (required) id of the trigger accessory
   -w, --webhook=webhook              url of the webhook to call
   --alias=alias                      email address for alias action
   --body=body                        file to take webhook body from
@@ -213,7 +340,36 @@ OPTIONS
   --workflow=workflow                id of the workflow to be acted on
 ```
 
-_See code: [src/commands/workflows.ts](https://github.com/getmailscript/cli/blob/v0.3.16/src/commands/workflows.ts)_
+_See code: [src/commands/workflows/add.ts](https://github.com/getmailscript/cli/blob/v0.3.17/src/commands/workflows/add.ts)_
+
+## `mailscript workflows:delete`
+
+delete a workflow
+
+```
+USAGE
+  $ mailscript workflows:delete
+
+OPTIONS
+  -h, --help               show CLI help
+  -w, --workflow=workflow  (required) id of the workflow to be acted on
+```
+
+_See code: [src/commands/workflows/delete.ts](https://github.com/getmailscript/cli/blob/v0.3.17/src/commands/workflows/delete.ts)_
+
+## `mailscript workflows:list`
+
+list the workflows
+
+```
+USAGE
+  $ mailscript workflows:list
+
+OPTIONS
+  -h, --help  show CLI help
+```
+
+_See code: [src/commands/workflows/list.ts](https://github.com/getmailscript/cli/blob/v0.3.17/src/commands/workflows/list.ts)_
 <!-- commandsstop -->
 
 # Development
