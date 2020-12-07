@@ -203,8 +203,8 @@ export default class WorkflowsAdd extends Command {
       client.addWorkflow(payload),
       withStandardErrors(
         {
-          '201': (response: any) => {
-            this.log(`Workflow setup: ${response.id}`)
+          '201': () => {
+            this.log(`Workflow setup: ${flags.name}`)
           },
         },
         this,

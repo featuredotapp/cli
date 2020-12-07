@@ -120,7 +120,7 @@ describe('workflows', () => {
             '50',
           ])
           .it('adds workflow on the server', (ctx) => {
-            expect(ctx.stdout).to.contain('Workflow setup: auto-xxx-yyy-zzz')
+            expect(ctx.stdout).to.contain('Workflow setup: work-01')
             expect(postBody.trigger.config).to.eql({
               criterias: [],
               times: {
@@ -189,7 +189,7 @@ describe('workflows', () => {
             'smith@example.com',
           ])
           .it('adds workflow on the server', (ctx) => {
-            expect(ctx.stdout).to.contain('Workflow setup: auto-xxx-yyy-zzz')
+            expect(ctx.stdout).to.contain('Workflow setup: work-01')
             expect(postBody.trigger.config).to.eql({
               criterias: [
                 {
@@ -216,7 +216,7 @@ describe('workflows', () => {
             'test+spam@mailscript.io',
           ])
           .it('adds workflow on the server', (ctx) => {
-            expect(ctx.stdout).to.contain('Workflow setup: auto-xxx-yyy-zzz')
+            expect(ctx.stdout).to.contain('Workflow setup: work-01')
             expect(postBody.trigger.config).to.eql({
               criterias: [
                 {
@@ -243,7 +243,7 @@ describe('workflows', () => {
             'alert',
           ])
           .it('adds workflow on the server', (ctx) => {
-            expect(ctx.stdout).to.contain('Workflow setup: auto-xxx-yyy-zzz')
+            expect(ctx.stdout).to.contain('Workflow setup: work-01')
             expect(postBody.trigger.config).to.eql({
               criterias: [
                 {
@@ -270,7 +270,7 @@ describe('workflows', () => {
             'example.com',
           ])
           .it('adds workflow on the server', (ctx) => {
-            expect(ctx.stdout).to.contain('Workflow setup: auto-xxx-yyy-zzz')
+            expect(ctx.stdout).to.contain('Workflow setup: work-01')
             expect(postBody.trigger.config).to.eql({
               criterias: [
                 {
@@ -297,7 +297,7 @@ describe('workflows', () => {
             'alert',
           ])
           .it('adds workflow on the server', (ctx) => {
-            expect(ctx.stdout).to.contain('Workflow setup: auto-xxx-yyy-zzz')
+            expect(ctx.stdout).to.contain('Workflow setup: work-01')
             expect(postBody.trigger.config).to.eql({
               criterias: [
                 {
@@ -323,7 +323,7 @@ describe('workflows', () => {
             '--hasattachments',
           ])
           .it('adds workflow on the server', (ctx) => {
-            expect(ctx.stdout).to.contain('Workflow setup: auto-xxx-yyy-zzz')
+            expect(ctx.stdout).to.contain('Workflow setup: work-01')
             expect(postBody.trigger.config).to.eql({
               criterias: [
                 {
@@ -359,7 +359,7 @@ describe('workflows', () => {
             '--hasattachments',
           ])
           .it('adds workflow on the server', (ctx) => {
-            expect(ctx.stdout).to.contain('Workflow setup: auto-xxx-yyy-zzz')
+            expect(ctx.stdout).to.contain('Workflow setup: work-01')
             expect(postBody.trigger.config).to.eql({
               criterias: [
                 {
@@ -393,7 +393,7 @@ describe('workflows', () => {
             'another@example.com',
           ])
           .it('add forward workflow', (ctx) => {
-            expect(ctx.stdout).to.contain('auto-xxx-yyy-zzz')
+            expect(ctx.stdout).to.contain('work-01')
             expect(postBody.actions[0].config).to.eql({
               type: 'forward',
               forward: 'another@example.com',
@@ -413,7 +413,7 @@ describe('workflows', () => {
             'another@example.com',
           ])
           .it('defaults action to trigger if none provided', (ctx) => {
-            expect(ctx.stdout).to.contain('auto-xxx-yyy-zzz')
+            expect(ctx.stdout).to.contain('work-01')
           })
       })
 
@@ -435,7 +435,7 @@ describe('workflows', () => {
             'text',
           ])
           .it('add send workflow', (ctx) => {
-            expect(ctx.stdout).to.contain('auto-xxx-yyy-zzz')
+            expect(ctx.stdout).to.contain('work-01')
             expect(postBody.actions[0].config).to.eql({
               subject: 'subject',
               text: 'text',
@@ -460,7 +460,7 @@ describe('workflows', () => {
             'text',
           ])
           .it('add reply workflow', (ctx) => {
-            expect(ctx.stdout).to.contain('auto-xxx-yyy-zzz')
+            expect(ctx.stdout).to.contain('work-01')
             expect(postBody.actions[0].config).to.eql({
               type: 'reply',
               text: 'text',
@@ -483,7 +483,7 @@ describe('workflows', () => {
             'text',
           ])
           .it('add reply all workflow', (ctx) => {
-            expect(ctx.stdout).to.contain('auto-xxx-yyy-zzz')
+            expect(ctx.stdout).to.contain('work-01')
             expect(postBody.actions[0].config).to.eql({
               type: 'replyAll',
               text: 'text',
@@ -507,7 +507,7 @@ describe('workflows', () => {
             'text',
           ])
           .it('add reply all workflow', (ctx) => {
-            expect(ctx.stdout).to.contain('auto-xxx-yyy-zzz')
+            expect(ctx.stdout).to.contain('work-01')
             expect(postBody.actions[0].config).to.eql({
               type: 'alias',
               alias: 'another@mailscript.io',
@@ -529,7 +529,7 @@ describe('workflows', () => {
             'http://example.com/webhook',
           ])
           .it('add webhook workflow', (ctx) => {
-            expect(ctx.stdout).to.contain('auto-xxx-yyy-zzz')
+            expect(ctx.stdout).to.contain('work-01')
             expect(postBody.actions[0].accessoryId.startsWith('webhook-'))
             expect(postBody.actions[0].config).to.eql({
               type: 'webhook',
@@ -561,7 +561,7 @@ describe('workflows', () => {
             'from mailscript - {{subject}}',
           ])
           .it('add sms workflow', (ctx) => {
-            expect(ctx.stdout).to.contain('auto-xxx-yyy-zzz')
+            expect(ctx.stdout).to.contain('work-01')
             expect(postBody.actions[0].accessoryId).to.eql(
               'access-03-xxx-yyy-zzz',
             )
