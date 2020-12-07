@@ -24,7 +24,7 @@ describe('sync', () => {
       test
         .stdout()
         .nock(MailscriptApiServer, nockExport)
-        .command(['sync', 'export'])
+        .command(['sync:export'])
         .exit(0)
         .it('gives skeleton yaml', (ctx) => {
           expect(ctx.stdout).to.contain(empty)
@@ -120,7 +120,7 @@ describe('sync', () => {
       test
         .stdout()
         .nock(MailscriptApiServer, nockExport)
-        .command(['sync', 'export'])
+        .command(['sync:export'])
         .exit(0)
         .it('outputs yaml', (ctx) => {
           expect(ctx.stdout).to.contain(simple)
@@ -250,7 +250,7 @@ describe('sync', () => {
     test
       .stdout()
       .nock(MailscriptApiServer, nockImportEmpty)
-      .command(['sync', 'import', '--path', './test/data/empty.yaml'])
+      .command(['sync:import', '--path', './test/data/empty.yaml'])
       .it('no updates on empty yaml import', (ctx) => {
         expect(ctx.stdout).to.contain(`Syncing to Mailscript`.trim())
       })
@@ -258,7 +258,7 @@ describe('sync', () => {
     test
       .stdout()
       .nock(MailscriptApiServer, nockImportAddressOnly)
-      .command(['sync', 'import', '--path', './test/data/address-only.yaml'])
+      .command(['sync:import', '--path', './test/data/address-only.yaml'])
       .it('updates on new addresses/keys', (ctx) => {
         expect(ctx.stdout).to.contain(`Syncing to Mailscript`.trim())
       })
@@ -266,24 +266,20 @@ describe('sync', () => {
     test
       .stdout()
       .nock(MailscriptApiServer, nockImportAddressOnlyExisting)
-      .command(['sync', 'import', '--path', './test/data/address-only.yaml'])
+      .command(['sync:import', '--path', './test/data/address-only.yaml'])
       .it('no updates on import existing addresses/keys', (ctx) => {
         expect(ctx.stdout).to.contain(`Syncing to Mailscript`.trim())
       })
 
     test
       .stdout()
-      .command(['sync', 'import'])
-      .exit(1)
-      .it('errors if no path provided', (ctx) => {
-        expect(ctx.stdout).to.contain(
-          'Please provide a file to read from --path',
-        )
-      })
+      .command(['sync:import'])
+      .exit(2)
+      .it('errors if no path provided')
 
     test
       .stdout()
-      .command(['sync', 'import', '--path', 'nonexistant.yaml'])
+      .command(['sync:import', '--path', 'nonexistant.yaml'])
       .exit(1)
       .it('errors if path does not exist', (ctx) => {
         expect(ctx.stdout).to.contain('Path does not exist')
