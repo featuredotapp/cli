@@ -148,6 +148,7 @@ export type AddKeyResponse = {
   id?: string
 }
 export type UpdateKeyRequest = {
+  name: string
   read: boolean
   write: boolean
 }

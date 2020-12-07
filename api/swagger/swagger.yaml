@@ -1028,9 +1028,12 @@ components:
           type: boolean
     UpdateKeyRequest:
       required:
+        - 'name'
         - 'read'
         - 'write'
       properties:
+        name:
+          type: string
         read:
           type: boolean
         write:

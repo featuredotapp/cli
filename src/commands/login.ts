@@ -19,7 +19,7 @@ const {
   MAILSCRIPT_LOGIN_PORT: port = 14578,
 } = process.env
 
-class LoginCommand extends Command {
+export default class LoginCommand extends Command {
   static description = `
 Link or create your MailScript account
 `
@@ -102,5 +102,3 @@ Link or create your MailScript account
     return writeFile(configFilePath, config)
   }
 }
-
-module.exports = LoginCommand

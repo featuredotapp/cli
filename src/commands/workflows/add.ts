@@ -1,16 +1,9 @@
 import { Command, flags } from '@oclif/command'
 import * as fs from 'fs'
 import { handle } from 'oazapfts'
-import * as api from '../api'
-import { assertNever } from '../utils/assertNever'
-import setupApiClient from '../setupApiClient'
-import withStandardErrors from '../utils/errorHandling'
-
-enum Subcommand {
-  list = 'list',
-  add = 'add',
-  delete = 'delete',
-}
+import * as api from '../../api'
+import setupApiClient from '../../setupApiClient'
+import withStandardErrors from '../../utils/errorHandling'
 
 const workflowTypeFlags = [
   'send',
@@ -21,8 +14,39 @@ const workflowTypeFlags = [
   'webhook',
 ]
 
-export default class Workflows extends Command {
-  static description = 'manipulate workflows'
+type FlagsType = {
+  name: string
+  trigger: string
+  action?: string
+  times?: string
+  seconds?: string
+
+  from?: string
+  sentto?: string
+  hasthewords?: string
+  domain?: string
+  subjectcontains?: string
+  hasattachments?: boolean
+
+  forward?: string
+  send?: string
+  reply?: boolean
+  replyall?: boolean
+  alias?: string
+  webhook?: string
+
+  text?: string
+  subject?: string
+  html?: string
+  method?: string
+  body?: string
+  headers?: string
+
+  [key: string]: any
+}
+
+export default class WorkflowsAdd extends Command {
+  static description = 'add a workflow'
 
   static flags = {
     help: flags.help({ char: 'h' }),
@@ -32,10 +56,12 @@ export default class Workflows extends Command {
     name: flags.string({
       char: 't',
       description: 'name of the workflow',
+      required: true,
     }),
     trigger: flags.string({
       char: 't',
       description: 'id of the trigger accessory',
+      required: true,
     }),
     action: flags.string({
       char: 'a',
@@ -113,60 +139,17 @@ export default class Workflows extends Command {
     }),
   }
 
-  static args = [
-    {
-      name: 'subcommand',
-      required: true,
-      default: Subcommand.list,
-      options: Object.keys(Subcommand),
-      parse: (input: string) => Subcommand[input as keyof typeof Subcommand],
-    },
-  ]
+  static args = []
 
   async run() {
-    const { args, flags } = this.parse(Workflows)
-
-    const subcommand: Subcommand = args.subcommand
+    const { flags } = this.parse(WorkflowsAdd)
 
     const client = await setupApiClient()
 
-    switch (subcommand) {
-      case Subcommand.list:
-        return this.list(client)
-      case Subcommand.add:
-        return this.add(client, flags)
-      case Subcommand.delete:
-        return this.delete(client, flags)
-      default:
-        assertNever(subcommand)
-    }
+    return this.add(client, flags)
   }
 
-  async list(client: typeof api): Promise<void> {
-    return handle(
-      client.getAllWorkflows(),
-      withStandardErrors(
-        {
-          '200': ({ list }: api.GetAllWorkflowsResponse) => {
-            if (!list || list.length === 0) {
-              this.log(
-                `you don't have an workflow currently, create one with: mailscript workflows add`,
-              )
-              this.exit(0)
-            }
-
-            this.log('workflows')
-            for (const workflow of list || []) {
-              this.log(`  ${workflow.id}`)
-            }
-          },
-        },
-        this,
-      ),
-    )
-  }
-
-  async add(client: typeof api, flags: any): Promise<void> {
+  async add(client: typeof api, flags: FlagsType): Promise<void> {
     if (!flags.name) {
       this.log(
         'Please provide a name: mailscript workflows add --name <personal-forward>',
@@ -220,8 +203,8 @@ export default class Workflows extends Command {
       client.addWorkflow(payload),
       withStandardErrors(
         {
-          '201': (response: any) => {
-            this.log(`Workflow setup: ${response.id}`)
+          '201': () => {
+            this.log(`Workflow setup: ${flags.name}`)
           },
         },
         this,
@@ -229,28 +212,10 @@ export default class Workflows extends Command {
     )
   }
 
-  async delete(client: typeof api, flags: any): Promise<void> {
-    if (!flags.workflow) {
-      this.log(
-        'Please provide the workflow id: mailscript workflows delete --workflow <workflow-id>',
-      )
-      this.exit(1)
-    }
-
-    return handle(
-      client.deleteWorkflow(flags.workflow),
-      withStandardErrors(
-        {
-          '204': (_response: any) => {
-            this.log(`Workflow deleted: ${flags.workflow}`)
-          },
-        },
-        this,
-      ),
-    )
-  }
-
-  private _resolveTriggerConfig(flags: any, triggerAccessory: api.Accessory) {
+  private _resolveTriggerConfig(
+    flags: FlagsType,
+    triggerAccessory: api.Accessory,
+  ) {
     if (flags.times && !flags.seconds) {
       this.log('Flag --seconds required when using --times')
       this.exit(1)
@@ -297,7 +262,10 @@ export default class Workflows extends Command {
         }
   }
 
-  private _resolveActionConfig(flags: any, actionAccessory: api.Accessory) {
+  private _resolveActionConfig(
+    flags: FlagsType,
+    actionAccessory: api.Accessory,
+  ) {
     if (actionAccessory && actionAccessory.type === 'sms') {
       if (!flags.text) {
         this.log('Please provide --text')
@@ -401,7 +369,7 @@ export default class Workflows extends Command {
   }
 
   private _resolveActionAccessory(
-    flags: any,
+    flags: FlagsType,
     accessories: Array<api.Accessory>,
   ) {
     if (flags.webhook) {
