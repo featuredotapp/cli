@@ -3,6 +3,7 @@ import * as api from '../../api'
 import { handle } from 'oazapfts'
 import setupApiClient from '../../setupApiClient'
 import withStandardErrors from '../../utils/errorHandling'
+import { cli } from 'cli-ux'
 
 export default class AddressesList extends Command {
   static description = 'manipulate addresses'
@@ -32,10 +33,20 @@ export default class AddressesList extends Command {
               this.exit(0)
             }
 
+            this.log('')
             this.log('Addresses')
-            for (const address of list || []) {
-              this.log(`  ${address.id}`)
-            }
+            this.log('')
+
+            cli.table(
+              list,
+              {
+                name: {
+                  header: 'Address',
+                  get: (row) => row.id,
+                },
+              },
+              { printLine: this.log },
+            )
           },
         },
         this,

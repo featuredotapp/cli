@@ -40,13 +40,13 @@ export default class AccessoriesList extends Command {
             cli.table(
               list,
               {
-                id: {
-                  header: 'Id',
-                  get: (row) => row.id,
-                },
                 name: {
                   header: 'Name',
                   get: (row) => row.name,
+                },
+                id: {
+                  header: 'Id',
+                  get: (row) => row.id,
                 },
                 type: {
                   header: 'Type',
