@@ -4,6 +4,33 @@ import { handle } from 'oazapfts'
 import setupApiClient from '../../setupApiClient'
 import withStandardErrors from '../../utils/errorHandling'
 
+export async function addAddress(
+  client: typeof api,
+  command: Command,
+  address: string,
+) {
+  await handle(client.addAddress({ address }), withStandardErrors({}, command))
+
+  const { id: key } = await handle(
+    client.addKey(address, {
+      name: 'owner',
+      read: true,
+      write: true,
+    }),
+    withStandardErrors({}, command),
+  )
+
+  await handle(
+    client.addAccessory({
+      name: address,
+      type: 'mailscript-email',
+      address,
+      key,
+    }),
+    withStandardErrors({}, command),
+  )
+}
+
 export default class AddressesAdd extends Command {
   static description = 'add an email address'
 
@@ -34,29 +61,7 @@ export default class AddressesAdd extends Command {
       this.exit(1)
     }
 
-    await handle(
-      client.addAddress({ address: flags.address }),
-      withStandardErrors({}, this),
-    )
-
-    const { id: key } = await handle(
-      client.addKey(flags.address, {
-        name: 'owner',
-        read: true,
-        write: true,
-      }),
-      withStandardErrors({}, this),
-    )
-
-    await handle(
-      client.addAccessory({
-        name: flags.address,
-        type: 'mailscript-email',
-        address: flags.address,
-        key,
-      }),
-      withStandardErrors({}, this),
-    )
+    await addAddress(client, this, flags.address)
 
     this.log(`Address added: ${flags.address}`)
   }
