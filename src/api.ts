@@ -15,15 +15,22 @@ export const servers = {
   productionServer: 'https://mailscript-api.herokuapp.com/v1',
   localDevelopmentServer: 'http://localhost:7000/v1',
 }
+export type User = {
+  id: string
+  displayName: string
+  photoURL?: string
+  email: string
+  createdAt: string
+}
+export type ErrorResponse = {
+  error: string
+}
 export type SendRequest = {
   to: string
   from: string
   subject: string
   text?: string
   html?: string
-}
-export type ErrorResponse = {
-  error: string
 }
 export type AddWorkspaceRequest = {
   workspace: string
@@ -151,6 +158,23 @@ export type UpdateKeyRequest = {
   name: string
   read: boolean
   write: boolean
+}
+/**
+ * Get the authenticated user
+ */
+export function getAuthenticatedUser(opts?: Oazapfts.RequestOpts) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+        data: User
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+  >('/user', {
+    ...opts,
+  })
 }
 /**
  * Send an email

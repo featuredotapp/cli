@@ -10,6 +10,25 @@ servers:
   - url: http://localhost:7000/v1
     description: Local development server
 paths:
+  /user:
+    get:
+      tags:
+        - 'user'
+      summary: 'Get the authenticated user'
+      operationId: 'getAuthenticatedUser'
+      responses:
+        '200':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /send:
     post:
       tags:
@@ -56,7 +75,7 @@ paths:
         '201':
           description: 'successful operation'
         '400':
-          description: 'Internal error'
+          description: 'Bad request'
           content:
             application/json:
               schema:
@@ -692,6 +711,24 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
+    User:
+      required:
+        - id
+        - displayName
+        - email
+        - createdAt
+      properties:
+        id:
+          type: string
+        displayName:
+          type: string
+        photoURL:
+          type: string
+        email:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
     Workspace:
       required:
         - id
