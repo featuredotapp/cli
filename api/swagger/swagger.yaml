@@ -709,6 +709,79 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /verifications:
+    post:
+      tags:
+        - 'verifications'
+      summary: 'Start verification process for external email address or sms number'
+      operationId: 'addVerification'
+      requestBody:
+        description: Key body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddEmailVerificationRequest'
+      responses:
+        '201':
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddVerificationResponse'
+        '400':
+          description: 'Failure'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /verifications/{verification}/verify:
+    post:
+      tags:
+        - 'verifications'
+      summary: 'Verify an email address or sms number with a code'
+      operationId: 'verify'
+      parameters:
+        - name: verification
+          in: path
+          description: ID of the verification entry
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Verify action body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyRequest'
+      responses:
+        '200':
+          description: 'Successful operation'
+        '400':
+          description: 'Failure'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Not authorized or bad code'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 'Not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
     User:
@@ -1078,6 +1151,31 @@ components:
     AddKeyResponse:
       properties:
         id:
+          type: string
+    AddEmailVerificationRequest:
+      required:
+        - type
+        - email
+      properties:
+        type:
+          type: string
+          enum: ['email']
+        email:
+          type: string
+    AddVerificationResponse:
+      required:
+        - id
+      properties:
+        id:
+          type: string
+    VerifyRequest:
+      required:
+        - email
+        - code
+      properties:
+        email:
+          type: string
+        code:
           type: string
   securitySchemes:
     bearerAuth:

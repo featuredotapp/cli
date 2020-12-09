@@ -159,6 +159,17 @@ export type UpdateKeyRequest = {
   read: boolean
   write: boolean
 }
+export type AddEmailVerificationRequest = {
+  type: 'email'
+  email: string
+}
+export type AddVerificationResponse = {
+  id: string
+}
+export type VerifyRequest = {
+  email: string
+  code: string
+}
 /**
  * Get the authenticated user
  */
@@ -720,4 +731,66 @@ export function deleteKey(
     ...opts,
     method: 'DELETE',
   })
+}
+/**
+ * Start verification process for external email address or sms number
+ */
+export function addVerification(
+  addEmailVerificationRequest: AddEmailVerificationRequest,
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 201
+        data: AddVerificationResponse
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+  >(
+    '/verifications',
+    oazapfts.json({
+      ...opts,
+      method: 'POST',
+      body: addEmailVerificationRequest,
+    }),
+  )
+}
+/**
+ * Verify an email address or sms number with a code
+ */
+export function verify(
+  verification: string,
+  verifyRequest: VerifyRequest,
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 404
+        data: ErrorResponse
+      }
+  >(
+    `/verifications/${verification}/verify`,
+    oazapfts.json({
+      ...opts,
+      method: 'POST',
+      body: verifyRequest,
+    }),
+  )
 }
