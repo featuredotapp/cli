@@ -1,4 +1,5 @@
 import { Command, flags } from '@oclif/command'
+import chalk from 'chalk'
 import * as fs from 'fs'
 import { handle } from 'oazapfts'
 import * as api from '../../api'
@@ -205,6 +206,10 @@ export default class WorkflowsAdd extends Command {
         {
           '201': () => {
             this.log(`Workflow setup: ${flags.name}`)
+          },
+          '403': ({ error }: api.ErrorResponse) => {
+            this.log(chalk.red(`${chalk.bold('Error')}: ${error}`))
+            this.exit(1)
           },
         },
         this,

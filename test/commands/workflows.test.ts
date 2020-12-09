@@ -95,6 +95,40 @@ describe('workflows', () => {
         .reply(201, { id: 'auto-xxx-yyy-zzz' })
     }
 
+    const nockAddUnverified = (api: any) => {
+      api
+        .persist()
+        .get('/accessories')
+        .reply(200, {
+          list: [
+            {
+              id: 'access-01-xxx-yyy-zzz',
+              name: 'test@mailscript.io',
+              type: 'mailscript-email',
+              address: 'test@mailscript.io',
+            },
+            {
+              id: 'webhook-xyz',
+              name: 'webhook',
+              type: 'mailscript-email',
+            },
+            {
+              id: 'access-03-xxx-yyy-zzz',
+              name: 'test-sms',
+              type: 'sms',
+              sms: '+7766767556',
+            },
+          ],
+        })
+
+      return api
+        .post('/workflows', (body: any) => {
+          postBody = body
+          return true
+        })
+        .reply(403, { error: 'Cannot alias to an unverified email address' })
+    }
+
     test
       .stdout()
       .command(['workflows:add'])
@@ -506,12 +540,33 @@ describe('workflows', () => {
             '--text',
             'text',
           ])
-          .it('add reply all workflow', (ctx) => {
+          .it('add alias workflow if email verified', (ctx) => {
             expect(ctx.stdout).to.contain('work-01')
             expect(postBody.actions[0].config).to.eql({
               type: 'alias',
               alias: 'another@mailscript.io',
             })
+          })
+
+        test
+          .stdout()
+          .nock(MailscriptApiServer, nockAddUnverified)
+          .command([
+            'workflows:add',
+            '--name',
+            'work-01',
+            '--trigger',
+            'test@mailscript.io',
+            '--alias',
+            'unverified@mailscript.io',
+            '--text',
+            'text',
+          ])
+          .exit(1)
+          .it('errors if email unverified', (ctx) => {
+            expect(ctx.stdout).to.contain(
+              'Error: Cannot alias to an unverified email address',
+            )
           })
       })
 
