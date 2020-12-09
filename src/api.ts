@@ -1,7 +1,7 @@
 /* eslint-disable valid-jsdoc, @typescript-eslint/no-unused-vars */
 /**
  * Mailscript
- * 0.1.0
+ * 0.2.0
  * DO NOT MODIFY - This file has been generated using oazapfts.
  * See https://www.npmjs.com/package/oazapfts
  */
@@ -158,6 +158,16 @@ export type UpdateKeyRequest = {
   name: string
   read: boolean
   write: boolean
+}
+export type VerificationEmail = {
+  id?: string
+  type?: 'email'
+  email?: string
+  verifiedBy?: string
+  verifiedAt?: string
+}
+export type GetAllVerificationsResponse = {
+  list?: VerificationEmail[]
 }
 export type AddEmailVerificationRequest = {
   type: 'email'
@@ -730,6 +740,23 @@ export function deleteKey(
   >(`/addresses/${address}/keys/${key}`, {
     ...opts,
     method: 'DELETE',
+  })
+}
+/**
+ * Get all verificats for the user
+ */
+export function getAllVerifications(opts?: Oazapfts.RequestOpts) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+        data: GetAllVerificationsResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+  >('/verifications', {
+    ...opts,
   })
 }
 /**

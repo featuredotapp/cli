@@ -1,6 +1,6 @@
 openapi: '3.0.0'
 info:
-  version: 0.1.0
+  version: 0.2.0
   title: Mailscript
   license:
     name: MIT
@@ -710,6 +710,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
   /verifications:
+    get:
+      tags:
+        - 'verifications'
+      summary: 'Get all verificats for the user'
+      operationId: 'getAllVerifications'
+      responses:
+        '200':
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllVerificationsResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     post:
       tags:
         - 'verifications'
@@ -958,6 +976,20 @@ components:
         createdAt:
           type: string
           format: date-time
+    VerificationEmail:
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: ['email']
+        email:
+          type: string
+        verifiedBy:
+          type: string
+        verifiedAt:
+          type: string
+          format: date-time
     ErrorResponse:
       required:
         - error
@@ -1177,6 +1209,13 @@ components:
           type: string
         code:
           type: string
+    GetAllVerificationsResponse:
+      properties:
+        list:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/VerificationEmail'
   securitySchemes:
     bearerAuth:
       type: http

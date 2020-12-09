@@ -15,6 +15,7 @@ import withStandardErrors from '../utils/errorHandling'
 import * as api from '../api'
 import { handle } from 'oazapfts'
 import { addAddress } from './addresses/add'
+import verifyEmailFlow from '../utils/verifyEmailFlow'
 const writeFile = promisify(writeFileRaw)
 
 const {
@@ -220,59 +221,10 @@ Link or create your MailScript account
           }
         }
 
-        const verificationId = await handle(
-          client.addVerification({
-            type: 'email',
-            email: targetEmail,
-          }),
-          withStandardErrors(
-            { 201: ({ id }: api.AddVerificationResponse) => id },
-            this,
-          ),
-        )
+        const verified = await verifyEmailFlow(client, targetEmail, this)
 
-        cli.info('')
-        cli.info(`Verification email sent to ${chalk.bold(targetEmail)}.`)
-        cli.info('')
-        let code
-        while (!code) {
-          code = await cli.prompt('Please enter the code from the email')
-
-          if (!code) {
-            continue
-          }
-
-          if (!/^\d{6}$/.test(code)) {
-            code = undefined
-            cli.log('Verification failed:')
-            cli.log(`  ${chalk.red('Badly formed code')}`)
-          }
-
-          const { verified, error } = await handle(
-            client.verify(verificationId, { email: targetEmail, code }),
-            withStandardErrors(
-              {
-                200: () => ({
-                  verified: true,
-                }),
-                403: ({ error }: api.ErrorResponse) => ({
-                  verified: false,
-                  error,
-                }),
-                404: ({ error }: api.ErrorResponse) => ({
-                  verified: false,
-                  error,
-                }),
-              },
-              this,
-            ),
-          )
-
-          if (!verified) {
-            code = undefined
-            cli.log('Verification failed:')
-            cli.log(`  ${chalk.red(error)}`)
-          }
+        if (!verified) {
+          cli.exit(1)
         }
       }
 
