@@ -1,9 +1,12 @@
 import { Command, flags } from '@oclif/command'
+import chalk from 'chalk'
+import { cli } from 'cli-ux'
 import * as fs from 'fs'
 import { handle } from 'oazapfts'
 import * as api from '../../api'
 import setupApiClient from '../../setupApiClient'
 import withStandardErrors from '../../utils/errorHandling'
+import verifyEmailFlow from '../../utils/verifyEmailFlow'
 
 const workflowTypeFlags = [
   'send',
@@ -52,6 +55,10 @@ export default class WorkflowsAdd extends Command {
     help: flags.help({ char: 'h' }),
     workflow: flags.string({
       description: 'id of the workflow to be acted on',
+    }),
+    noninteractive: flags.boolean({
+      description: 'do not ask for user input',
+      default: false,
     }),
     name: flags.string({
       char: 't',
@@ -185,6 +192,8 @@ export default class WorkflowsAdd extends Command {
 
     const actionConfig = this._resolveActionConfig(flags, actionAccessory)
 
+    await this._optionallyVerifyAlias(client, flags, actionConfig)
+
     const payload: api.AddWorkflowRequest = {
       name: flags.name,
       trigger: {
@@ -205,6 +214,10 @@ export default class WorkflowsAdd extends Command {
         {
           '201': () => {
             this.log(`Workflow setup: ${flags.name}`)
+          },
+          '403': ({ error }: api.ErrorResponse) => {
+            this.log(chalk.red(`${chalk.bold('Error')}: ${error}`))
+            this.exit(1)
           },
         },
         this,
@@ -392,6 +405,91 @@ export default class WorkflowsAdd extends Command {
     }
 
     return response.data.list || []
+  }
+
+  private async _optionallyVerifyAlias(
+    client: typeof api,
+    flags: FlagsType,
+    {
+      type,
+      alias,
+    }: {
+      type?: string
+      alias?: string
+    },
+  ) {
+    if (type !== 'alias') {
+      return
+    }
+
+    if (!alias) {
+      throw new Error('Alias must be provided')
+    }
+
+    const { email: userEmail } = await handle(
+      client.getAuthenticatedUser(),
+      withStandardErrors({}, this),
+    )
+
+    // User's verified email address
+    if (userEmail === alias) {
+      return
+    }
+
+    const { list: verifications } = await handle(
+      client.getAllVerifications(),
+      withStandardErrors({}, this),
+    )
+
+    const emailVerification = verifications.find(
+      (v: api.VerificationEmail) => v.email === alias,
+    )
+
+    if (emailVerification && emailVerification.verified) {
+      return
+    }
+
+    if (flags.noninteractive) {
+      this.log(
+        chalk.red(
+          `${chalk.bold('Error')}: the email address ${chalk.bold(
+            alias,
+          )} must be verified before being included in an ${chalk.bold(
+            'alias',
+          )} workflow`,
+        ),
+      )
+      this.exit(1)
+    }
+
+    this.log('')
+    this.log(
+      `The email address ${chalk.bold(
+        alias,
+      )} must be verified before being included in an ${chalk.bold(
+        'alias',
+      )} workflow.`,
+    )
+
+    this.log('')
+    const verifyEmailAddress = await cli.confirm(
+      `Do you want to send a verification email to ${chalk.bold(
+        alias,
+      )}? ${chalk.cyan('(y/n)')}`,
+    )
+
+    if (!verifyEmailAddress) {
+      this.log(chalk.red('Workflow not added'))
+      this.exit(1)
+    }
+
+    const verified = await verifyEmailFlow(client, alias, this)
+
+    if (!verified) {
+      this.exit(1)
+    }
+
+    this.log('')
   }
 
   private _findAccessoryBy(

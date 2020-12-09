@@ -1,6 +1,7 @@
 /* eslint-disable max-nested-callbacks */
 import { expect, test } from '@oclif/test'
 import { MailscriptApiServer } from './constants'
+import { cli } from 'cli-ux'
 
 describe('workflows', () => {
   describe('list', () => {
@@ -93,6 +94,119 @@ describe('workflows', () => {
           return true
         })
         .reply(201, { id: 'auto-xxx-yyy-zzz' })
+    }
+
+    const nockAddAlias = (api: any) => {
+      api
+        .persist()
+        .get('/accessories')
+        .reply(200, {
+          list: [
+            {
+              id: 'access-01-xxx-yyy-zzz',
+              name: 'test@mailscript.io',
+              type: 'mailscript-email',
+              address: 'test@mailscript.io',
+            },
+            {
+              id: 'webhook-xyz',
+              name: 'webhook',
+              type: 'mailscript-email',
+            },
+            {
+              id: 'access-03-xxx-yyy-zzz',
+              name: 'test-sms',
+              type: 'sms',
+              sms: '+7766767556',
+            },
+          ],
+        })
+        .get('/user')
+        .reply(200, { email: 'smith@example.com' })
+
+      return api
+        .post('/workflows', (body: any) => {
+          postBody = body
+          return true
+        })
+        .reply(201, { id: 'auto-xxx-yyy-zzz' })
+    }
+
+    const nockAddFromVerificationsList = (api: any) => {
+      api
+        .persist()
+        .get('/accessories')
+        .reply(200, {
+          list: [
+            {
+              id: 'access-01-xxx-yyy-zzz',
+              name: 'test@mailscript.io',
+              type: 'mailscript-email',
+              address: 'test@mailscript.io',
+            },
+            {
+              id: 'webhook-xyz',
+              name: 'webhook',
+              type: 'mailscript-email',
+            },
+            {
+              id: 'access-03-xxx-yyy-zzz',
+              name: 'test-sms',
+              type: 'sms',
+              sms: '+7766767556',
+            },
+          ],
+        })
+        .get('/user')
+        .reply(200, { email: 'smith@example.com' })
+        .get('/verifications')
+        .reply(200, {
+          list: [
+            { type: 'email', email: 'another@example.com', verified: true },
+          ],
+        })
+
+      return api
+        .post('/workflows', (body: any) => {
+          postBody = body
+          return true
+        })
+        .reply(201, { id: 'auto-xxx-yyy-zzz' })
+    }
+
+    const nockAddUnverified = (api: any) => {
+      return api
+        .persist()
+        .get('/accessories')
+        .reply(200, {
+          list: [
+            {
+              id: 'access-01-xxx-yyy-zzz',
+              name: 'test@mailscript.io',
+              type: 'mailscript-email',
+              address: 'test@mailscript.io',
+            },
+            {
+              id: 'webhook-xyz',
+              name: 'webhook',
+              type: 'mailscript-email',
+            },
+            {
+              id: 'access-03-xxx-yyy-zzz',
+              name: 'test-sms',
+              type: 'sms',
+              sms: '+7766767556',
+            },
+          ],
+        })
+        .get('/user')
+        .reply(200, { email: 'smith@example.com' })
+        .get('/verifications')
+        .reply(200, {
+          list: [
+            { type: 'email', email: 'another@example.com', verified: true },
+          ],
+        })
     }
 
     test
@@ -494,7 +608,7 @@ describe('workflows', () => {
       describe('alias', () => {
         test
           .stdout()
-          .nock(MailscriptApiServer, nockAdd)
+          .nock(MailscriptApiServer, nockAddAlias)
           .command([
             'workflows:add',
             '--name',
@@ -502,16 +616,60 @@ describe('workflows', () => {
             '--trigger',
             'test@mailscript.io',
             '--alias',
-            'another@mailscript.io',
+            'smith@example.com',
             '--text',
             'text',
           ])
-          .it('add reply all workflow', (ctx) => {
+          .it('add alias workflow if email users email', (ctx) => {
             expect(ctx.stdout).to.contain('work-01')
             expect(postBody.actions[0].config).to.eql({
               type: 'alias',
-              alias: 'another@mailscript.io',
+              alias: 'smith@example.com',
             })
+          })
+
+        test
+          .stdout()
+          .nock(MailscriptApiServer, nockAddFromVerificationsList)
+          .command([
+            'workflows:add',
+            '--name',
+            'work-01',
+            '--trigger',
+            'test@mailscript.io',
+            '--alias',
+            'another@example.com',
+            '--text',
+            'text',
+          ])
+          .it('add alias workflow if email verified', (ctx) => {
+            expect(ctx.stdout).to.contain('work-01')
+            expect(postBody.actions[0].config).to.eql({
+              type: 'alias',
+              alias: 'another@example.com',
+            })
+          })
+
+        test
+          .stdout()
+          .nock(MailscriptApiServer, nockAddUnverified)
+          .command([
+            'workflows:add',
+            '--name',
+            'work-01',
+            '--trigger',
+            'test@mailscript.io',
+            '--alias',
+            'unknown@example.com',
+            '--text',
+            'text',
+            '--noninteractive',
+          ])
+          .exit(1)
+          .it('error if not verified', (ctx) => {
+            expect(ctx.stdout).to.contain(
+              'Error: the email address unknown@example.com must be verified before being included in an alias workflow',
+            )
           })
       })
 

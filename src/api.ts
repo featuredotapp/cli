@@ -1,7 +1,7 @@
 /* eslint-disable valid-jsdoc, @typescript-eslint/no-unused-vars */
 /**
  * Mailscript
- * 0.1.0
+ * 0.2.0
  * DO NOT MODIFY - This file has been generated using oazapfts.
  * See https://www.npmjs.com/package/oazapfts
  */
@@ -15,15 +15,22 @@ export const servers = {
   productionServer: 'https://mailscript-api.herokuapp.com/v1',
   localDevelopmentServer: 'http://localhost:7000/v1',
 }
+export type User = {
+  id: string
+  displayName: string
+  photoURL?: string
+  email: string
+  createdAt: string
+}
+export type ErrorResponse = {
+  error: string
+}
 export type SendRequest = {
   to: string
   from: string
   subject: string
   text?: string
   html?: string
-}
-export type ErrorResponse = {
-  error: string
 }
 export type AddWorkspaceRequest = {
   workspace: string
@@ -151,6 +158,44 @@ export type UpdateKeyRequest = {
   name: string
   read: boolean
   write: boolean
+}
+export type VerificationEmail = {
+  id?: string
+  type?: 'email'
+  email?: string
+  verifiedBy?: string
+  verifiedAt?: string
+}
+export type GetAllVerificationsResponse = {
+  list?: VerificationEmail[]
+}
+export type AddEmailVerificationRequest = {
+  type: 'email'
+  email: string
+}
+export type AddVerificationResponse = {
+  id: string
+}
+export type VerifyRequest = {
+  email: string
+  code: string
+}
+/**
+ * Get the authenticated user
+ */
+export function getAuthenticatedUser(opts?: Oazapfts.RequestOpts) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+        data: User
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+  >('/user', {
+    ...opts,
+  })
 }
 /**
  * Send an email
@@ -696,4 +741,83 @@ export function deleteKey(
     ...opts,
     method: 'DELETE',
   })
+}
+/**
+ * Get all verificats for the user
+ */
+export function getAllVerifications(opts?: Oazapfts.RequestOpts) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+        data: GetAllVerificationsResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+  >('/verifications', {
+    ...opts,
+  })
+}
+/**
+ * Start verification process for external email address or sms number
+ */
+export function addVerification(
+  addEmailVerificationRequest: AddEmailVerificationRequest,
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 201
+        data: AddVerificationResponse
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+  >(
+    '/verifications',
+    oazapfts.json({
+      ...opts,
+      method: 'POST',
+      body: addEmailVerificationRequest,
+    }),
+  )
+}
+/**
+ * Verify an email address or sms number with a code
+ */
+export function verify(
+  verification: string,
+  verifyRequest: VerifyRequest,
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 404
+        data: ErrorResponse
+      }
+  >(
+    `/verifications/${verification}/verify`,
+    oazapfts.json({
+      ...opts,
+      method: 'POST',
+      body: verifyRequest,
+    }),
+  )
 }

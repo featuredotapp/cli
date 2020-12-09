@@ -15,6 +15,7 @@ import withStandardErrors from '../utils/errorHandling'
 import * as api from '../api'
 import { handle } from 'oazapfts'
 import { addAddress } from './addresses/add'
+import verifyEmailFlow from '../utils/verifyEmailFlow'
 const writeFile = promisify(writeFileRaw)
 
 const {
@@ -173,9 +174,92 @@ Link or create your MailScript account
       `Setting up default address: ${chalk.bold(defaultAddress)} `,
     )
 
-    await addAddress(client, this, defaultAddress)
+    const { accessoryId } = await addAddress(client, this, defaultAddress)
 
     cli.action.stop()
+
+    const user = await handle(
+      client.getAuthenticatedUser(),
+      withStandardErrors(
+        {
+          200: (response: api.User) => response,
+        },
+        this,
+      ),
+    )
+
+    cli.log('')
+    const useAlias = await cli.confirm(
+      `Do you want to alias ${chalk.bold(
+        defaultAddress,
+      )} to another email address? ${chalk.cyan('(y/n)')}`,
+    )
+
+    if (useAlias) {
+      const useAuthEmail = await cli.confirm(
+        `Use ${chalk.bold(user.email)}? ${chalk.cyan('(y/n)')}`,
+      )
+
+      let targetEmail
+      if (useAuthEmail) {
+        targetEmail = user.email
+      } else {
+        cli.info('')
+
+        while (!targetEmail) {
+          targetEmail = await cli.prompt('Enter email')
+
+          if (!targetEmail) {
+            continue
+          }
+
+          if (!targetEmail.includes('@')) {
+            cli.info('')
+            cli.info(`  ${chalk.red(`Not a valid email address`)}`)
+            cli.info('')
+            targetEmail = undefined
+          }
+        }
+
+        const verified = await verifyEmailFlow(client, targetEmail, this)
+
+        if (!verified) {
+          cli.exit(1)
+        }
+      }
+
+      cli.info('')
+      cli.action.start(
+        `Setting up alias workflow from ${chalk.bold(
+          defaultAddress,
+        )} to ${chalk.bold(targetEmail)} `,
+      )
+
+      await handle(
+        client.addWorkflow({
+          name: 'redirect',
+          trigger: {
+            accessoryId,
+            config: {
+              criterias: [],
+            },
+          },
+          actions: [
+            {
+              accessoryId,
+              config: {
+                type: 'alias',
+                alias: targetEmail,
+              },
+            },
+          ],
+        }),
+        withStandardErrors({}, this),
+      )
+
+      cli.action.stop()
+    }
+
     cli.info('')
     cli.info(
       `You can add further addresses e.g. example@${username}.${emailDomain}, with the 'mailscript addresses:add' command.`,
