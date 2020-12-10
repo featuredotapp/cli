@@ -14,7 +14,7 @@ describe('workflows', () => {
       .exit(0)
       .it('gives message if no workflows', (ctx) => {
         expect(ctx.stdout).to.contain(
-          "you don't have an workflow currently, create one with: mailscript workflows add",
+          "you don't have an workflow currently, create one with: mailscript workflows:add",
         )
       })
 

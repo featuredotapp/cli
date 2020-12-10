@@ -11,7 +11,7 @@ describe('Addresses', () => {
     .exit(0)
     .it('gives message if no addresses', (ctx) => {
       expect(ctx.stdout).to.contain(
-        "you don't have any addresses currently, create one with: mailscript addresses add",
+        "you don't have any addresses currently, create one with: mailscript addresses:add",
       )
     })
 

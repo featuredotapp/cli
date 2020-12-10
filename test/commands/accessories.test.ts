@@ -12,7 +12,7 @@ describe('Accessories', () => {
       .exit(0)
       .it('gives message if no accessories', (ctx) => {
         expect(ctx.stdout).to.contain(
-          "you don't have a accessories currently, create an address to add one: mailscript addresses add --address example@workspace.mailscript.com",
+          "you don't have a accessories currently, create an address to add one: mailscript addresses:add --address example@workspace.mailscript.com",
         )
       })
 
