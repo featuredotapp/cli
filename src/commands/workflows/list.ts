@@ -28,7 +28,7 @@ export default class Workflows extends Command {
           '200': ({ list }: api.GetAllWorkflowsResponse) => {
             if (!list || list.length === 0) {
               this.log(
-                `you don't have an workflow currently, create one with: mailscript workflows add`,
+                `you don't have an workflow currently, create one with: mailscript workflows:add`,
               )
               this.exit(0)
             }

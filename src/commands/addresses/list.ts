@@ -28,7 +28,7 @@ export default class AddressesList extends Command {
           '200': ({ list }: api.GetAllAddressesResponse) => {
             if (!list || list.length === 0) {
               this.log(
-                `you don't have any addresses currently, create one with: mailscript addresses add`,
+                `you don't have any addresses currently, create one with: mailscript addresses:add`,
               )
               this.exit(0)
             }

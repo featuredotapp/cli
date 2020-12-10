@@ -30,7 +30,7 @@ export default class KeysList extends Command {
   async list(client: typeof api, flags: { address: string }): Promise<void> {
     if (!flags.address) {
       this.log(
-        'Please provide an address: mailscript keys list --address example@workspace.mailscript.com',
+        'Please provide an address: mailscript keys:list --address example@workspace.mailscript.com',
       )
       this.exit(1)
     }

@@ -28,7 +28,7 @@ export default class AccessoriesList extends Command {
           '200': ({ list }: api.GetAllAccessoriesResponse) => {
             if (!list || list.length === 0) {
               this.log(
-                `you don't have a accessories currently, create an address to add one: mailscript addresses add --address example@workspace.mailscript.com`,
+                `you don't have a accessories currently, create an address to add one: mailscript addresses:add --address example@workspace.mailscript.com`,
               )
               this.exit(0)
             }
