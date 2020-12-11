@@ -15,17 +15,18 @@ describe('Accessories', () => {
     //       "you don't have a accessories currently, create an address to add one: mailscript addresses:add --address example@workspace.mailscript.com",
     //     )
     //   })
-    // test
-    //   .stdout()
-    //   .nock(MailscriptApiServer, (api) =>
-    //     api
-    //       .get('/accessories')
-    //       .reply(200, { list: [{ name: 'test@mailscript.io' }] }),
-    //   )
-    //   .command(['accessories:list'])
-    //   .it('lists accessories by name', (ctx) => {
-    //     expect(ctx.stdout).to.contain('test@mailscript.io')
-    //   })
+
+    test
+      .stdout()
+      .nock(MailscriptApiServer, (api) =>
+        api
+          .get('/accessories')
+          .reply(200, { list: [{ name: 'test@mailscript.io' }] }),
+      )
+      .command(['accessories:list'])
+      .it('lists accessories by name', (ctx) => {
+        expect(ctx.stdout).to.contain('test@mailscript.io')
+      })
   })
 
   describe('add', () => {
