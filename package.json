@@ -91,7 +91,7 @@
     "postpack": "rm -f oclif.manifest.json",
     "posttest": "eslint ./src --ext .ts --config .eslintrc",
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
-    "test": "MAILSCRIPT_CONFIG_PATH=./test/test-mailscript-config.json nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
+    "test": "MAILSCRIPT_CONFIG_PATH=./test/test-mailscript-config.json nyc --extension .ts mocha --timeout 5000 --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif-dev readme && git add README.md",
     "format": "prettier --write \"./src/**/*.{ts,tsx,js,jsx}\"",
     "format:check": "prettier --check \"./src/**/*.{ts,tsx,js,jsx}\"",

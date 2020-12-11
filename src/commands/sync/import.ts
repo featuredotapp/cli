@@ -77,7 +77,7 @@ export default class Sync extends Command {
     addresses: Array<any>,
     forceDelete: boolean,
   ) {
-    cli.action.start('Syncing addresses')
+    cli.action.start('Syncing addresses ')
     const response = await client.getAllAddresses()
 
     if (response.status !== 200) {
@@ -125,7 +125,7 @@ export default class Sync extends Command {
     yamlAddresses: Array<any>,
     forceDelete: boolean,
   ) {
-    cli.action.start('Syncing keys')
+    cli.action.start('Syncing keys ')
 
     for (const [address, { keys }] of Object.entries(yamlAddresses)) {
       // eslint-disable-next-line no-await-in-loop
@@ -197,7 +197,7 @@ export default class Sync extends Command {
     yamlAccessories: Array<any>,
     forceDelete: boolean,
   ) {
-    cli.action.start('Syncing accessories')
+    cli.action.start('Syncing accessories ')
 
     const existingAccessoriesResponse = await client.getAllAccessories()
 
@@ -292,7 +292,7 @@ export default class Sync extends Command {
     yamlWorkflows: Array<any>,
     forceDelete: boolean,
   ) {
-    cli.action.start('Syncing workflows')
+    cli.action.start('Syncing workflows ')
 
     const existingWorkflowsResponse = await client.getAllWorkflows()
 
@@ -407,7 +407,12 @@ export default class Sync extends Command {
     allAccessories: Array<any>,
     { accessory: name, ...rest }: any,
   ) {
-    const accessory = allAccessories.find((a) => a.name === name)
+    let accessory
+    if (rest.config.type === 'webhook') {
+      accessory = allAccessories.find((a) => a.type === 'webhook')
+    } else {
+      accessory = allAccessories.find((a) => a.name === name)
+    }
 
     return {
       accessoryId: accessory.id,
