@@ -19,7 +19,7 @@ import verifyEmailFlow from '../utils/verifyEmailFlow'
 const writeFile = promisify(writeFileRaw)
 
 const {
-  MAILSCRIPT_LOGIN_URL: remoteLoginUrl = 'https://mailscript-firebase.web.app',
+  MAILSCRIPT_LOGIN_URL: remoteLoginUrl = 'https://login.mailscript.com',
   MAILSCRIPT_CONFIG_PATH: configFilePath = path.join(
     os.homedir(),
     '.mailscript',
