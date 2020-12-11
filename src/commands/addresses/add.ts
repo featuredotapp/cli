@@ -52,10 +52,10 @@ export default class AddressesAdd extends Command {
 
     const client = await setupApiClient()
 
-    return this.add(client, flags)
+    await this.add(client, flags)
   }
 
-  async add(client: typeof api, flags: { address: string }): Promise<void> {
+  async add(client: typeof api, flags: { address: string }): void {
     if (!flags.address) {
       this.log(
         'Please provide an address to add: mailscript address add --address example@workspace.mailscript.com',

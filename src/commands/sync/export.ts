@@ -24,10 +24,10 @@ export default class Sync extends Command {
     const { flags } = this.parse(Sync)
     const client = await setupApiClient()
 
-    return this.export(client, flags)
+    await this.export(client, flags)
   }
 
-  async export(client: typeof api, flags: { path?: string }): Promise<void> {
+  async export(client: typeof api, flags: { path?: string }): void {
     const addresses: Array<string> = (
       await handle(
         client.getAllAddresses(),

@@ -38,13 +38,13 @@ export default class KeysAdd extends Command {
 
     const client = await setupApiClient()
 
-    return this.add(client, flags)
+    await this.add(client, flags)
   }
 
   async add(
     client: typeof api,
     flags: { address: string; name: string; write: boolean; read: boolean },
-  ): Promise<void> {
+  ): void {
     if (!flags.address) {
       this.log(
         'Please provide an address: mailscript keys add --address example@workspace.mailscript.com',
@@ -64,7 +64,7 @@ export default class KeysAdd extends Command {
       this.exit(1)
     }
 
-    return handle(
+    await handle(
       client.addKey(flags.address, {
         name: flags.name,
         read: flags.read,

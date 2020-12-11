@@ -28,13 +28,13 @@ export default class KeysDelete extends Command {
 
     const client = await setupApiClient()
 
-    return this.delete(client, flags)
+    await this.delete(client, flags)
   }
 
   async delete(
     client: typeof api,
     flags: { address: string; key: string },
-  ): Promise<void> {
+  ): void {
     if (!flags.address) {
       this.log(
         'Please provide an address: mailscript keys delete --address example@workspace.mailscript.com',
@@ -49,7 +49,7 @@ export default class KeysDelete extends Command {
       this.exit(1)
     }
 
-    return handle(
+    await handle(
       client.deleteKey(flags.address, flags.key),
       withStandardErrors(
         {

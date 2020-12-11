@@ -17,11 +17,11 @@ export default class Workflows extends Command {
   async run() {
     const client = await setupApiClient()
 
-    return this.list(client)
+    await this.list(client)
   }
 
-  async list(client: typeof api): Promise<void> {
-    return handle(
+  async list(client: typeof api): void {
+    await handle(
       client.getAllWorkflows(),
       withStandardErrors(
         {

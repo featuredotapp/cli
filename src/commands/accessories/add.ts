@@ -24,18 +24,15 @@ export default class AccessoriesAdd extends Command {
 
   static args = []
 
-  async run() {
+  async run(): void {
     const { flags } = this.parse(AccessoriesAdd)
 
     const client = await setupApiClient()
 
-    return this.add(client, flags)
+    await this.add(client, flags)
   }
 
-  async add(
-    client: typeof api,
-    flags: { name: string; sms: string },
-  ): Promise<void> {
+  async add(client: typeof api, flags: { name: string; sms: string }): void {
     if (!flags.name) {
       this.log('Please provide a name for the accessory: \n  --name')
       this.exit(1)
@@ -48,7 +45,7 @@ export default class AccessoriesAdd extends Command {
         sms: flags.sms,
       }
 
-      return handle(
+      await handle(
         client.addAccessory(payload),
         withStandardErrors(
           {

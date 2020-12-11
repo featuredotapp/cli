@@ -32,7 +32,7 @@ export default class Send extends Command {
 
   static args = [{ name: 'file' }]
 
-  async run(): Promise<any> {
+  async run(): any {
     const { flags } = this.parse(Send)
 
     const to = flags.to
@@ -42,7 +42,7 @@ export default class Send extends Command {
 
     const client = await setupApiClient()
 
-    return handle(
+    const result = await handle(
       client.send({
         to,
         from,
@@ -58,5 +58,6 @@ export default class Send extends Command {
         this,
       ),
     )
+    return result
   }
 }

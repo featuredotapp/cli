@@ -153,10 +153,10 @@ export default class WorkflowsAdd extends Command {
 
     const client = await setupApiClient()
 
-    return this.add(client, flags)
+    await this.add(client, flags)
   }
 
-  async add(client: typeof api, flags: FlagsType): Promise<void> {
+  async add(client: typeof api, flags: FlagsType): void {
     if (!flags.name) {
       this.log(
         'Please provide a name: mailscript workflows add --name <personal-forward>',
@@ -208,7 +208,7 @@ export default class WorkflowsAdd extends Command {
       ],
     }
 
-    return handle(
+    await handle(
       client.addWorkflow(payload),
       withStandardErrors(
         {
@@ -396,7 +396,7 @@ export default class WorkflowsAdd extends Command {
     return this._findAccessoryBy(accessories, flags.trigger)
   }
 
-  private async _getAllAccessories(): Promise<Array<api.Accessory>> {
+  private async _getAllAccessories(): Array<api.Accessory> {
     const response = await api.getAllAccessories()
 
     if (response.status !== 200) {

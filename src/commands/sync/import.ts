@@ -34,13 +34,13 @@ export default class Sync extends Command {
     const { flags } = this.parse(Sync)
     const client = await setupApiClient()
 
-    return this.import(client, flags)
+    await this.import(client, flags)
   }
 
   async import(
     client: typeof api,
     flags: { path: string; delete: boolean },
-  ): Promise<void> {
+  ): void {
     if (!flags.path) {
       this.log('Please provide a file to read from --path')
       this.exit(1)
@@ -66,6 +66,7 @@ export default class Sync extends Command {
 
     const forceDelete = flags.delete
 
+    // TODO change to Promise.all while keeping useful cli printing
     await this._syncAddresses(client, addresses, forceDelete)
     await this._syncKeys(client, addresses, forceDelete)
     await this._syncAccessories(client, accessories, forceDelete)

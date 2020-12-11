@@ -23,13 +23,10 @@ export default class AccessoriesDelete extends Command {
 
     const client = await setupApiClient()
 
-    return this.delete(client, flags)
+    await this.delete(client, flags)
   }
 
-  async delete(
-    client: typeof api,
-    flags: { accessory: string },
-  ): Promise<void> {
+  async delete(client: typeof api, flags: { accessory: string }): void {
     if (!flags.accessory) {
       this.log(
         'Please provide the accessory id: mailscript accessories delete --accessory <accessory-id>',
@@ -37,7 +34,7 @@ export default class AccessoriesDelete extends Command {
       this.exit(1)
     }
 
-    return handle(
+    await handle(
       client.deleteAccessory(flags.accessory),
       withStandardErrors(
         {

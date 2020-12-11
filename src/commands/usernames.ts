@@ -45,8 +45,8 @@ export default class Usernames extends Command {
     }
   }
 
-  async list(client: typeof api): Promise<void> {
-    return handle(
+  async list(client: typeof api): void {
+    await handle(
       client.getAllWorkspaces(),
       withStandardErrors(
         {
@@ -70,7 +70,7 @@ export default class Usernames extends Command {
     )
   }
 
-  async add(client: typeof api, flags: any): Promise<void> {
+  async add(client: typeof api, flags: any): void {
     if (!flags.username) {
       this.log(
         'Please provide a username: mailscript usernames add --username <example>',
@@ -78,7 +78,7 @@ export default class Usernames extends Command {
       this.exit(1)
     }
 
-    return handle(
+    await handle(
       client.addWorkspace({ workspace: flags.username }),
       withStandardErrors(
         {

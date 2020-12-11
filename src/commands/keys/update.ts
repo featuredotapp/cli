@@ -43,7 +43,7 @@ export default class Keys extends Command {
 
     const client = await setupApiClient()
 
-    return this.update(client, flags)
+    await this.update(client, flags)
   }
 
   async update(
@@ -55,7 +55,7 @@ export default class Keys extends Command {
       read: boolean
       write: boolean
     },
-  ): Promise<void> {
+  ): void {
     if (!flags.address) {
       this.log(
         'Please provide an address: mailscript keys update --address example@workspace.mailscript.com',
@@ -75,7 +75,7 @@ export default class Keys extends Command {
       this.exit(1)
     }
 
-    return handle(
+    await handle(
       client.updateKey(flags.address, flags.key, {
         name: flags.name,
         read: flags.read,

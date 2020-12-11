@@ -24,10 +24,10 @@ export default class KeysList extends Command {
 
     const client = await setupApiClient()
 
-    return this.list(client, flags)
+    await this.list(client, flags)
   }
 
-  async list(client: typeof api, flags: { address: string }): Promise<void> {
+  async list(client: typeof api, flags: { address: string }): void {
     if (!flags.address) {
       this.log(
         'Please provide an address: mailscript keys list --address example@workspace.mailscript.com',
@@ -35,7 +35,7 @@ export default class KeysList extends Command {
       this.exit(1)
     }
 
-    return handle(
+    await handle(
       client.getAllKeys(flags.address),
       withStandardErrors(
         {

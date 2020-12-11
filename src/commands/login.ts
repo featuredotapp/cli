@@ -37,7 +37,7 @@ Link or create your MailScript account
     offline: flags.boolean({ char: 'o', default: false, required: false }),
   }
 
-  async run() {
+  run() {
     const { flags } = this.parse(LoginCommand)
 
     if (flags.offline) {
@@ -68,7 +68,7 @@ Link or create your MailScript account
       res.redirect('/LoginComplete.html')
     })
 
-    app.post('/complete', async (req, res) => {
+    app.post('/complete', (req, res) => {
       res.status(200).send('complete received')
 
       setTimeout(() => {
@@ -104,14 +104,14 @@ Link or create your MailScript account
     cli.log('')
     cli.log('Account link configured')
 
-    this._ftue()
+    await this._ftue()
   }
 
   private generateOfflineLink() {
     return `${remoteLoginUrl}`
   }
 
-  private async writeConfigFile(token: string) {
+  private writeConfigFile(token: string) {
     const config = JSON.stringify({ apiKey: token }, null, 2) + '\n'
 
     return writeFile(configFilePath, config)

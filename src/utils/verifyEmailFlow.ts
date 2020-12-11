@@ -10,7 +10,7 @@ export default async function verifyEmailFlow(
   client: typeof api,
   targetEmail: string,
   command: Command,
-) {
+): void {
   const verificationId = await handle(
     client.addVerification({
       type: 'email',
@@ -68,6 +68,4 @@ export default async function verifyEmailFlow(
       continue
     }
   }
-
-  return true
 }

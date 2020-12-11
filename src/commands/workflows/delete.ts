@@ -23,10 +23,10 @@ export default class WorkflowsDelete extends Command {
 
     const client = await setupApiClient()
 
-    return this.delete(client, flags)
+    await this.delete(client, flags)
   }
 
-  async delete(client: typeof api, flags: { workflow: string }): Promise<void> {
+  async delete(client: typeof api, flags: { workflow: string }): void {
     if (!flags.workflow) {
       this.log(
         'Please provide the workflow id: mailscript workflows delete --workflow <workflow-id>',
@@ -34,7 +34,7 @@ export default class WorkflowsDelete extends Command {
       this.exit(1)
     }
 
-    return handle(
+    await handle(
       client.deleteWorkflow(flags.workflow),
       withStandardErrors(
         {

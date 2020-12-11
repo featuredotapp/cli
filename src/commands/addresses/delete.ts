@@ -23,10 +23,10 @@ export default class AddressesDelete extends Command {
 
     const client = await setupApiClient()
 
-    return this.delete(client, flags)
+    await this.delete(client, flags)
   }
 
-  async delete(client: typeof api, flags: { address: string }): Promise<void> {
+  async delete(client: typeof api, flags: { address: string }): void {
     if (!flags.address) {
       this.log(
         'Please provide the address: mailscript addresses delete --address <smith@example.com>',
@@ -34,7 +34,7 @@ export default class AddressesDelete extends Command {
       this.exit(1)
     }
 
-    return handle(
+    await handle(
       client.deleteAddress(flags.address),
       withStandardErrors(
         {
