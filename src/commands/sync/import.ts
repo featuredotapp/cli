@@ -407,7 +407,12 @@ export default class Sync extends Command {
     allAccessories: Array<any>,
     { accessory: name, ...rest }: any,
   ) {
-    const accessory = allAccessories.find((a) => a.name === name)
+    let accessory
+    if (rest.config.type === 'webhook') {
+      accessory = allAccessories.find((a) => a.type === 'webhook')
+    } else {
+      accessory = allAccessories.find((a) => a.name === name)
+    }
 
     return {
       accessoryId: accessory.id,
