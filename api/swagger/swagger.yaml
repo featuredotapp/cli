@@ -5,10 +5,10 @@ info:
   license:
     name: MIT
 servers:
-  - url: https://mailscript-api.herokuapp.com/v1
+  - url: https://api.mailscript.com/v1
     description: Production server
-  - url: http://localhost:7000/v1
-    description: Local development server
+  # - url: http://localhost:7000/v1
+  #   description: Local development server
 paths:
   /user:
     get:
@@ -253,6 +253,7 @@ paths:
               oneOf:
                 - $ref: '#/components/schemas/AddSmsAccessoryRequest'
                 - $ref: '#/components/schemas/AddMailscriptEmailAccessoryRequest'
+                - $ref: '#/components/schemas/AddDaemonAccessoryRequest'
       responses:
         '201':
           description: 'successful operation'
@@ -985,6 +986,8 @@ components:
           enum: ['email']
         email:
           type: string
+        verified:
+          type: boolean
         verifiedBy:
           type: string
         verifiedAt:
@@ -1051,6 +1054,16 @@ components:
           enum: ['sms']
         sms:
           type: string
+    AddDaemonAccessoryRequest:
+      required:
+        - name
+        - type
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: ['daemon']
     UpdateSmsAccessoryRequest:
       required:
         - name

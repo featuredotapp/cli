@@ -28,12 +28,24 @@ describe('Accessories', () => {
         '--sms',
         '+440776653376',
       ])
-      .it('adds an accessory', (ctx) => {
+      .it('adds an sms accessory', (ctx) => {
         expect(ctx.stdout).to.contain('Accessory setup: test-sms')
         expect(postBody).to.eql({
-          type: 'sms',
           name: 'test-sms',
+          type: 'sms',
           sms: '+440776653376',
+        })
+      })
+
+    test
+      .stdout()
+      .nock(MailscriptApiServer, nockAdd)
+      .command(['accessories:add', '--name', 'macmini', '--daemon'])
+      .it('adds a daemon accessory', (ctx) => {
+        expect(ctx.stdout).to.contain('Accessory setup: macmini')
+        expect(postBody).to.eql({
+          name: 'macmini',
+          type: 'daemon',
         })
       })
 
@@ -45,9 +57,13 @@ describe('Accessories', () => {
 
     test
       .stdout()
-      .command(['accessories:add', '--name', 'test-sms'])
-      .exit(2)
-      .it('requires an sms flag')
+      .command(['accessories:add', '--name', 'test'])
+      .exit(1)
+      .it('requires one of sms or daemon', (ctx) => {
+        expect(ctx.stdout).to.contain(
+          'Please provide one of : --sms or --daemon',
+        )
+      })
   })
 
   describe('delete', () => {

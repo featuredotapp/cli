@@ -18,7 +18,12 @@ export default class AccessoriesAdd extends Command {
     }),
     sms: flags.string({
       description: 'the telephone number to send the sms too',
-      required: true,
+      required: false,
+    }),
+    daemon: flags.boolean({
+      char: 'd',
+      description: 'setup a daemon accessory',
+      default: false,
     }),
   }
 
@@ -34,10 +39,22 @@ export default class AccessoriesAdd extends Command {
 
   async add(
     client: typeof api,
-    flags: { name: string; sms: string },
+    flags: { name: string; sms?: string; daemon: boolean },
   ): Promise<void> {
     if (!flags.name) {
       this.log('Please provide a name for the accessory: \n  --name')
+      this.exit(1)
+    }
+
+    if (!flags.sms && !flags.daemon) {
+      this.log(`Please provide one of : --sms or --daemon`)
+      this.exit(1)
+    }
+
+    if (flags.sms && flags.daemon) {
+      this.log(
+        `An accessory can only be of one type. You cannot use the --sms flag at the same time as the --daemon flag.`,
+      )
       this.exit(1)
     }
 
@@ -46,6 +63,25 @@ export default class AccessoriesAdd extends Command {
         name: flags.name,
         type: 'sms',
         sms: flags.sms,
+      }
+
+      return handle(
+        client.addAccessory(payload),
+        withStandardErrors(
+          {
+            '201': (_response: any) => {
+              this.log(`Accessory setup: ${flags.name}`)
+            },
+          },
+          this,
+        ),
+      )
+    }
+
+    if (flags.daemon) {
+      const payload: api.AddDaemonAccessoryRequest = {
+        name: flags.name,
+        type: 'daemon',
       }
 
       return handle(

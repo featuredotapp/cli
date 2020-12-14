@@ -1,5 +1,5 @@
 import { Command, flags } from '@oclif/command'
-import * as WebSocket from 'ws'
+import WebSocket from 'ws'
 import { JWT, JWK } from 'jose'
 import { promise as exec } from 'exec-sh'
 
