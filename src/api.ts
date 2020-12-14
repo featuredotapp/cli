@@ -57,7 +57,7 @@ export type GetAllAddressesResponse = {
 }
 export type Accessory = {
   id: string
-  type: 'mailscript-email' | 'sms' | 'webhook'
+  type: 'mailscript-email' | 'sms' | 'webhook' | 'daemon'
   owner?: string
   createdAt: string
   createdBy: string
@@ -94,6 +94,9 @@ export type UpdateMailscriptEmailAccessoryRequest = {
   type: 'mailscript-email'
   address: string
   key: string
+}
+export type AccessoryTokenResponse = {
+  token: string
 }
 export type AddWorkflowRequest = {
   name: string
@@ -171,7 +174,7 @@ export type VerificationEmail = {
   verifiedAt?: string
 }
 export type GetAllVerificationsResponse = {
-  list?: VerificationEmail[]
+  list: VerificationEmail[]
 }
 export type AddEmailVerificationRequest = {
   type: 'email'
@@ -496,6 +499,27 @@ export function deleteAccessory(id: string, opts?: Oazapfts.RequestOpts) {
   >(`/accessories/${id}`, {
     ...opts,
     method: 'DELETE',
+  })
+}
+/**
+ * Get a verified token for the accessory
+ */
+export function getAccessoryToken(id: string, opts?: Oazapfts.RequestOpts) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+        data: AccessoryTokenResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 404
+        data: ErrorResponse
+      }
+  >(`/accessories/${id}/token`, {
+    ...opts,
   })
 }
 /**

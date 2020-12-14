@@ -178,6 +178,7 @@ export default class WorkflowsAdd extends Command {
 
     if (
       actionAccessory.type !== 'sms' &&
+      actionAccessory.type !== 'daemon' &&
       workflowTypeFlags.map((atf) => flags[atf]).filter((f) => Boolean(f))
         .length !== 1
     ) {
