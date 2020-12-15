@@ -120,13 +120,14 @@ export default class Daemon extends Command {
 
     ws.on('close', () => {
       ws.terminate()
+      this.log('Remote close')
       // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
       // @ts-ignore
       clearTimeout(ws.pingTimeout)
       setTimeout(() => {
         ws.removeAllListeners()
 
-        // Start connection again
+        this.log('Reconnecting ...')
         this.connectWebsocket(token, command)
       }, AUTO_RECONNECT_DELAY)
     })
@@ -137,8 +138,14 @@ export default class Daemon extends Command {
       if (err.code === 'ECONNREFUSED') {
         ws.removeAllListeners()
 
-        return
+        this.log('Connection refused')
+        return setTimeout(() => {
+          this.log('Reconnecting ...')
+          this.connectWebsocket(token, command)
+        }, AUTO_RECONNECT_DELAY)
       }
+
+      this.error(err)
 
       ws.terminate()
     })
