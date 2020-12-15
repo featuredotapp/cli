@@ -403,6 +403,7 @@ MAILSCRIPT_CONFIG_PATH=.mailscript-test # path to use for .mailscript config fil
 MAILSCRIPT_LOGIN_URL=http://localhost:3000 # login website url
 MAILSCRIPT_API_SERVER=http://localhost:7000/v1 # api server url
 MAILSCRIPT_EMAIL_DOMAIN=mailscript.io # the domain to use when assign email addresses
+MAILSCRIPT_DAEMON_BRIDGE_URL=ws://localhost:8888 # the daemon bridge service
 ```
 
 To run a command:

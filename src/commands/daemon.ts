@@ -7,6 +7,10 @@ import withStandardErrors from '../utils/errorHandling'
 import * as api from '../api'
 import chalk from 'chalk'
 
+const {
+  MAILSCRIPT_DAEMON_BRIDGE_URL = 'wss://mailscript-daemon-bridge.herokuapp.com:80',
+} = process.env
+
 export default class Daemon extends Command {
   static description = 'Run a daemon to execute scripts on email arrival'
 
@@ -65,7 +69,7 @@ export default class Daemon extends Command {
       withStandardErrors({}, this),
     )
 
-    const ws = new WebSocket('ws://localhost:8888', {
+    const ws = new WebSocket(MAILSCRIPT_DAEMON_BRIDGE_URL, {
       headers: {
         Authorization: `bearer ${token}`,
       },
