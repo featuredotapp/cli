@@ -28,25 +28,30 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`mailscript accessories:add`](#mailscript-accessoriesadd)
-* [`mailscript accessories:delete`](#mailscript-accessoriesdelete)
-* [`mailscript accessories:list`](#mailscript-accessorieslist)
-* [`mailscript addresses:add`](#mailscript-addressesadd)
-* [`mailscript addresses:delete`](#mailscript-addressesdelete)
-* [`mailscript addresses:list`](#mailscript-addresseslist)
-* [`mailscript help [COMMAND]`](#mailscript-help-command)
-* [`mailscript keys:add`](#mailscript-keysadd)
-* [`mailscript keys:delete`](#mailscript-keysdelete)
-* [`mailscript keys:list`](#mailscript-keyslist)
-* [`mailscript keys:update`](#mailscript-keysupdate)
-* [`mailscript login`](#mailscript-login)
-* [`mailscript send [FILE]`](#mailscript-send-file)
-* [`mailscript sync:export`](#mailscript-syncexport)
-* [`mailscript sync:import`](#mailscript-syncimport)
-* [`mailscript usernames SUBCOMMAND`](#mailscript-usernames-subcommand)
-* [`mailscript workflows:add`](#mailscript-workflowsadd)
-* [`mailscript workflows:delete`](#mailscript-workflowsdelete)
-* [`mailscript workflows:list`](#mailscript-workflowslist)
+- [MailScript cli](#mailscript-cli)
+- [Usage](#usage)
+- [Commands](#commands)
+  - [`mailscript accessories:add`](#mailscript-accessoriesadd)
+  - [`mailscript accessories:delete`](#mailscript-accessoriesdelete)
+  - [`mailscript accessories:list`](#mailscript-accessorieslist)
+  - [`mailscript addresses:add`](#mailscript-addressesadd)
+  - [`mailscript addresses:delete`](#mailscript-addressesdelete)
+  - [`mailscript addresses:list`](#mailscript-addresseslist)
+  - [`mailscript help [COMMAND]`](#mailscript-help-command)
+  - [`mailscript keys:add`](#mailscript-keysadd)
+  - [`mailscript keys:delete`](#mailscript-keysdelete)
+  - [`mailscript keys:list`](#mailscript-keyslist)
+  - [`mailscript keys:update`](#mailscript-keysupdate)
+  - [`mailscript login`](#mailscript-login)
+  - [`mailscript send [FILE]`](#mailscript-send-file)
+  - [`mailscript sync:export`](#mailscript-syncexport)
+  - [`mailscript sync:import`](#mailscript-syncimport)
+  - [`mailscript usernames SUBCOMMAND`](#mailscript-usernames-subcommand)
+  - [`mailscript workflows:add`](#mailscript-workflowsadd)
+  - [`mailscript workflows:delete`](#mailscript-workflowsdelete)
+  - [`mailscript workflows:list`](#mailscript-workflowslist)
+- [Development](#development)
+- [Publish](#publish)
 
 ## `mailscript accessories:add`
 
@@ -388,4 +393,24 @@ To run a command:
 ```shell
 nvm use
 node bin/run version
+```
+
+# Publish
+
+Publishing the cli is a manual process.
+
+First check that the cli passes tests and linting:
+
+```shell
+y format:check
+y test
+```
+
+To publish, ensure you are on `main`. Then you will need the `team@mailscript` login to npm to publish:
+
+```shell
+npm login
+npm version patch # or major or minor
+git push
+npm publish
 ```
