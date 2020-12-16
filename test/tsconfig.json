@@ -3,5 +3,7 @@
   "compilerOptions": {
     "noEmit": true
   },
-  "references": [{ "path": ".." }]
+
+  "references": [{ "path": ".." }],
+  "include": ["../src/libs.d.ts"]
 }

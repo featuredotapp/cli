@@ -8,12 +8,11 @@
 import * as Oazapfts from 'oazapfts/lib/runtime'
 import * as QS from 'oazapfts/lib/runtime/query'
 export const defaults: Oazapfts.RequestOpts = {
-  baseUrl: 'https://mailscript-api.herokuapp.com/v1',
+  baseUrl: 'https://api.mailscript.com/v1',
 }
 const oazapfts = Oazapfts.runtime(defaults)
 export const servers = {
-  productionServer: 'https://mailscript-api.herokuapp.com/v1',
-  localDevelopmentServer: 'http://localhost:7000/v1',
+  productionServer: 'https://api.mailscript.com/v1',
 }
 export type User = {
   id: string
@@ -58,7 +57,7 @@ export type GetAllAddressesResponse = {
 }
 export type Accessory = {
   id: string
-  type: 'mailscript-email' | 'sms' | 'webhook'
+  type: 'mailscript-email' | 'sms' | 'webhook' | 'daemon'
   owner?: string
   createdAt: string
   createdBy: string
@@ -81,6 +80,10 @@ export type AddMailscriptEmailAccessoryRequest = {
   address: string
   key: string
 }
+export type AddDaemonAccessoryRequest = {
+  name: string
+  type: 'daemon'
+}
 export type UpdateSmsAccessoryRequest = {
   name: string
   type: 'sms'
@@ -91,6 +94,9 @@ export type UpdateMailscriptEmailAccessoryRequest = {
   type: 'mailscript-email'
   address: string
   key: string
+}
+export type AccessoryTokenResponse = {
+  token: string
 }
 export type AddWorkflowRequest = {
   name: string
@@ -163,11 +169,12 @@ export type VerificationEmail = {
   id?: string
   type?: 'email'
   email?: string
+  verified?: boolean
   verifiedBy?: string
   verifiedAt?: string
 }
 export type GetAllVerificationsResponse = {
-  list?: VerificationEmail[]
+  list: VerificationEmail[]
 }
 export type AddEmailVerificationRequest = {
   type: 'email'
@@ -388,7 +395,10 @@ export function getAllAccessories(
  * Setup an accessory
  */
 export function addAccessory(
-  body: AddSmsAccessoryRequest | AddMailscriptEmailAccessoryRequest,
+  body:
+    | AddSmsAccessoryRequest
+    | AddMailscriptEmailAccessoryRequest
+    | AddDaemonAccessoryRequest,
   opts?: Oazapfts.RequestOpts,
 ) {
   return oazapfts.fetchJson<
@@ -489,6 +499,27 @@ export function deleteAccessory(id: string, opts?: Oazapfts.RequestOpts) {
   >(`/accessories/${id}`, {
     ...opts,
     method: 'DELETE',
+  })
+}
+/**
+ * Get a verified token for the accessory
+ */
+export function getAccessoryToken(id: string, opts?: Oazapfts.RequestOpts) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+        data: AccessoryTokenResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 404
+        data: ErrorResponse
+      }
+  >(`/accessories/${id}/token`, {
+    ...opts,
   })
 }
 /**

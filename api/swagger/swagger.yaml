@@ -5,10 +5,10 @@ info:
   license:
     name: MIT
 servers:
-  - url: https://mailscript-api.herokuapp.com/v1
+  - url: https://api.mailscript.com/v1
     description: Production server
-  - url: http://localhost:7000/v1
-    description: Local development server
+  #- url: http://localhost:7000/v1
+  #  description: Local development server
 paths:
   /user:
     get:
@@ -253,6 +253,7 @@ paths:
               oneOf:
                 - $ref: '#/components/schemas/AddSmsAccessoryRequest'
                 - $ref: '#/components/schemas/AddMailscriptEmailAccessoryRequest'
+                - $ref: '#/components/schemas/AddDaemonAccessoryRequest'
       responses:
         '201':
           description: 'successful operation'
@@ -374,6 +375,39 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: 'Key not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /accessories/{id}/token:
+    get:
+      tags:
+        - 'accessories'
+      summary: 'Get a verified token for the accessory'
+      description: ''
+      operationId: 'getAccessoryToken'
+      parameters:
+        - name: id
+          in: path
+          description: ID of accessory
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessoryTokenResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 'Accessory not found'
           content:
             application/json:
               schema:
@@ -938,7 +972,7 @@ components:
           type: string
         type:
           type: string
-          enum: ['mailscript-email', 'sms', 'webhook']
+          enum: ['mailscript-email', 'sms', 'webhook', 'daemon']
         owner:
           type: string
         createdAt:
@@ -985,6 +1019,8 @@ components:
           enum: ['email']
         email:
           type: string
+        verified:
+          type: boolean
         verifiedBy:
           type: string
         verifiedAt:
@@ -1051,6 +1087,16 @@ components:
           enum: ['sms']
         sms:
           type: string
+    AddDaemonAccessoryRequest:
+      required:
+        - name
+        - type
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: ['daemon']
     UpdateSmsAccessoryRequest:
       required:
         - name
@@ -1210,12 +1256,20 @@ components:
         code:
           type: string
     GetAllVerificationsResponse:
+      required:
+        - list
       properties:
         list:
           type: array
           items:
             oneOf:
               - $ref: '#/components/schemas/VerificationEmail'
+    AccessoryTokenResponse:
+      required:
+        - token
+      properties:
+        token:
+          type: string
   securitySchemes:
     bearerAuth:
       type: http

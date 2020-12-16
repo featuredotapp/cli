@@ -37,6 +37,7 @@ USAGE
   - [`mailscript addresses:add`](#mailscript-addressesadd)
   - [`mailscript addresses:delete`](#mailscript-addressesdelete)
   - [`mailscript addresses:list`](#mailscript-addresseslist)
+  - [`mailscript daemon [FILE]`](#mailscript-daemon-file)
   - [`mailscript help [COMMAND]`](#mailscript-help-command)
   - [`mailscript keys:add`](#mailscript-keysadd)
   - [`mailscript keys:delete`](#mailscript-keysdelete)
@@ -141,6 +142,22 @@ OPTIONS
 ```
 
 _See code: [src/commands/addresses/list.ts](https://github.com/getmailscript/cli/blob/v0.3.19/src/commands/addresses/list.ts)_
+
+## `mailscript daemon [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ mailscript daemon [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [src/commands/daemon.ts](https://github.com/getmailscript/cli/blob/v0.3.13/src/commands/daemon.ts)_
 
 ## `mailscript help [COMMAND]`
 
@@ -380,12 +397,13 @@ _See code: [src/commands/workflows/list.ts](https://github.com/getmailscript/cli
 # Development
 
 In development a `.env` file is used:
-
+****
 ```shell
 MAILSCRIPT_CONFIG_PATH=.mailscript-test # path to use for .mailscript config file
 MAILSCRIPT_LOGIN_URL=http://localhost:3000 # login website url
 MAILSCRIPT_API_SERVER=http://localhost:7000/v1 # api server url
 MAILSCRIPT_EMAIL_DOMAIN=mailscript.io # the domain to use when assign email addresses
+MAILSCRIPT_DAEMON_BRIDGE_URL=ws://localhost:8888 # the daemon bridge service
 ```
 
 To run a command:

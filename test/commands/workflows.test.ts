@@ -1,7 +1,6 @@
 /* eslint-disable max-nested-callbacks */
 import { expect, test } from '@oclif/test'
 import { MailscriptApiServer } from './constants'
-import { cli } from 'cli-ux'
 
 describe('workflows', () => {
   describe('list', () => {
