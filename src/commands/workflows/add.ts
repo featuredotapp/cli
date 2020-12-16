@@ -144,6 +144,10 @@ export default class WorkflowsAdd extends Command {
     hasattachments: flags.boolean({
       description: 'constrain trigger to emails with attachments',
     }),
+    firsttimesender: flags.boolean({
+      description:
+        'constrain trigger to emails that are the first seen from the sending address',
+    }),
   }
 
   static args = []
@@ -251,7 +255,8 @@ export default class WorkflowsAdd extends Command {
       flags.hasthewords ||
       flags.domain ||
       flags.subjectcontains ||
-      flags.hasattachments
+      flags.hasattachments ||
+      flags.firsttimesender
     ) {
       criterias = [
         {
@@ -261,6 +266,7 @@ export default class WorkflowsAdd extends Command {
           domain: flags.domain,
           subjectContains: flags.subjectcontains,
           hasAttachments: flags.hasattachments,
+          firstTimeSender: flags.firsttimesender,
         },
       ]
     } else if (triggerAccessory.type === 'mailscript-email') {
