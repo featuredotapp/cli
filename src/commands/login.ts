@@ -120,6 +120,10 @@ Link or create your MailScript account
   private async _ftue() {
     const client = await setupApiClient()
 
+    if (!client) {
+      this.exit(1)
+    }
+
     const { list: workspaces } = await handle(
       client.getAllWorkspaces(),
       withStandardErrors({}, this),

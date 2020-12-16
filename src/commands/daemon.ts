@@ -36,6 +36,10 @@ export default class Daemon extends Command {
 
     const client = await setupApiClient()
 
+    if (!client) {
+      this.exit(1)
+    }
+
     const { list: accessories }: { list: Array<api.Accessory> } = await handle(
       client.getAllAccessories(),
       withStandardErrors({}, this),

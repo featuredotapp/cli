@@ -17,6 +17,10 @@ export default class Workflows extends Command {
   async run() {
     const client = await setupApiClient()
 
+    if (!client) {
+      this.exit(1)
+    }
+
     return this.list(client)
   }
 
