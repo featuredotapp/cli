@@ -8,7 +8,7 @@ import * as api from '../api'
 import chalk from 'chalk'
 
 const {
-  MAILSCRIPT_DAEMON_BRIDGE_URL = 'wss://mailscript-daemon-bridge.herokuapp.com:80',
+  MAILSCRIPT_DAEMON_BRIDGE_URL = 'wss://mailscript-daemon-bridge.herokuapp.com',
 } = process.env
 
 const PING_DELAY = 15 * 60 * 1000
@@ -72,10 +72,11 @@ export default class Daemon extends Command {
       withStandardErrors({}, this),
     )
 
-    this.connectWebsocket(token, flags.command)
+    this.connectWebsocket(token, flags.command, true)
   }
 
-  connectWebsocket(token: string, command: string) {
+  connectWebsocket(token: string, command: string, first = false) {
+    this.debug('Connecting to daemon bridge: %s', MAILSCRIPT_DAEMON_BRIDGE_URL)
     const ws = new WebSocket(MAILSCRIPT_DAEMON_BRIDGE_URL, {
       headers: {
         Authorization: `bearer ${token}`,
@@ -99,7 +100,9 @@ export default class Daemon extends Command {
     }
 
     ws.on('open', () => {
-      this.log('Listenening for emails ...')
+      if (first) {
+        this.log('Listenening for emails ...')
+      }
 
       ws.send(token)
 
@@ -120,14 +123,14 @@ export default class Daemon extends Command {
 
     ws.on('close', () => {
       ws.terminate()
-      this.log('Remote close')
+      this.debug('Remote close')
       // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
       // @ts-ignore
       clearTimeout(ws.pingTimeout)
       setTimeout(() => {
         ws.removeAllListeners()
 
-        this.log('Reconnecting ...')
+        this.debug('Reconnecting ...')
         this.connectWebsocket(token, command)
       }, AUTO_RECONNECT_DELAY)
     })
