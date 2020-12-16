@@ -447,6 +447,32 @@ describe('workflows', () => {
           })
       })
 
+      describe('firstTimeSender', () => {
+        test
+          .stdout()
+          .nock(MailscriptApiServer, nockAdd)
+          .command([
+            'workflows:add',
+            '--name',
+            'work-01',
+            '--trigger',
+            'test@mailscript.io',
+            '--forward',
+            'another@example.com',
+            '--firsttimesender',
+          ])
+          .it('adds workflow on the server', (ctx) => {
+            expect(ctx.stdout).to.contain('Workflow setup: work-01')
+            expect(postBody.trigger.config).to.eql({
+              criterias: [
+                {
+                  firstTimeSender: true,
+                },
+              ],
+            })
+          })
+      })
+
       describe('all', () => {
         test
           .stdout()
@@ -470,6 +496,7 @@ describe('workflows', () => {
             '--hasthewords',
             'alert',
             '--hasattachments',
+            '--firsttimesender',
           ])
           .it('adds workflow on the server', (ctx) => {
             expect(ctx.stdout).to.contain('Workflow setup: work-01')
@@ -482,6 +509,7 @@ describe('workflows', () => {
                   hasAttachments: true,
                   hasTheWords: 'alert',
                   subjectContains: 'a subject',
+                  firstTimeSender: true,
                 },
               ],
             })
