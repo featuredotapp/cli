@@ -28,6 +28,10 @@ export default class KeysDelete extends Command {
 
     const client = await setupApiClient()
 
+    if (!client) {
+      this.exit(1)
+    }
+
     return this.delete(client, flags)
   }
 

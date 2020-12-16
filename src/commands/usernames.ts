@@ -35,6 +35,10 @@ export default class Usernames extends Command {
 
     const client = await setupApiClient()
 
+    if (!client) {
+      this.exit(1)
+    }
+
     switch (subcommand) {
       case Subcommand.list:
         return this.list(client)

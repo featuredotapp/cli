@@ -42,6 +42,10 @@ export default class Send extends Command {
 
     const client = await setupApiClient()
 
+    if (!client) {
+      this.exit(1)
+    }
+
     return handle(
       client.send({
         to,

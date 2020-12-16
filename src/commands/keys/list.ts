@@ -24,6 +24,10 @@ export default class KeysList extends Command {
 
     const client = await setupApiClient()
 
+    if (!client) {
+      this.exit(1)
+    }
+
     return this.list(client, flags)
   }
 

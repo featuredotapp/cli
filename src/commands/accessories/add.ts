@@ -34,6 +34,10 @@ export default class AccessoriesAdd extends Command {
 
     const client = await setupApiClient()
 
+    if (!client) {
+      this.exit(1)
+    }
+
     return this.add(client, flags)
   }
 

@@ -24,6 +24,10 @@ export default class Sync extends Command {
     const { flags } = this.parse(Sync)
     const client = await setupApiClient()
 
+    if (!client) {
+      this.exit(1)
+    }
+
     return this.export(client, flags)
   }
 
