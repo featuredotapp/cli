@@ -84,6 +84,11 @@ describe('workflows', () => {
               type: 'sms',
               sms: '+7766767556',
             },
+            {
+              id: 'daemon-xyz',
+              name: 'laptop',
+              type: 'daemon',
+            },
           ],
         })
 
@@ -753,6 +758,28 @@ describe('workflows', () => {
             expect(postBody.actions[0].config).to.eql({
               type: 'sms',
               text: 'from mailscript - {{subject}}',
+            })
+          })
+      })
+
+      describe('daemon', () => {
+        test
+          .stdout()
+          .nock(MailscriptApiServer, nockAdd)
+          .command([
+            'workflows:add',
+            '--name',
+            'work-01',
+            '--trigger',
+            'laptop',
+          ])
+          .it('add daemon workflow', (ctx) => {
+            expect(ctx.stdout).to.contain('work-01')
+            expect(postBody.actions[0].accessoryId.startsWith('daemon')).to.eq(
+              true,
+            )
+            expect(postBody.actions[0].config).to.eql({
+              type: 'daemon',
             })
           })
       })

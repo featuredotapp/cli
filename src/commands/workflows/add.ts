@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Command, flags } from '@oclif/command'
 import chalk from 'chalk'
 import { cli } from 'cli-ux'
@@ -299,6 +300,17 @@ export default class WorkflowsAdd extends Command {
       return {
         type: 'sms',
         text: flags.text,
+      }
+    }
+
+    if (actionAccessory && actionAccessory.type === 'daemon') {
+      const body = flags.body
+        ? fs.readFileSync(flags.body).toString()
+        : undefined
+
+      return {
+        type: 'daemon',
+        body,
       }
     }
 

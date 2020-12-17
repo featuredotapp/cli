@@ -6,6 +6,7 @@ import { handle } from 'oazapfts'
 import withStandardErrors from '../utils/errorHandling'
 import * as api from '../api'
 import chalk from 'chalk'
+import traverse from 'traverse'
 
 const {
   MAILSCRIPT_DAEMON_BRIDGE_URL = 'wss://mailscript-daemon-bridge.herokuapp.com',
@@ -25,7 +26,8 @@ export default class Daemon extends Command {
     }),
     command: flags.string({
       required: true,
-      description: 'The shell command to run on message received',
+      description:
+        'The shell command to run on message received. The parts of the email will be injected as environment variable: $subject, $text, $html and $payload',
     }),
   }
 
@@ -116,11 +118,31 @@ export default class Daemon extends Command {
     ws.on('ping', ping)
 
     ws.on('message', async (data: string) => {
-      const { subject, text }: { subject: string; text: string } = JSON.parse(
-        data,
-      )
+      const {
+        subject,
+        text,
+        html,
+        payload,
+      }: {
+        subject: string
+        text: string
+        html: string
+        payload: any
+      } = JSON.parse(data)
 
-      const out = await exec(command, { env: { subject, text } })
+      const sanitizedPayload = traverse(payload).map(function (node) {
+        if (typeof node === 'string' || node instanceof String) {
+          this.update(node.replace(/\r?\n/g, '\\n'))
+        }
+
+        return undefined
+      })
+
+      const jsonString = JSON.stringify(sanitizedPayload, null, 2)
+
+      const out = await exec(command, {
+        env: { subject, text, html, payload: jsonString },
+      })
 
       this.log(out.stdout)
     })
@@ -152,9 +174,8 @@ export default class Daemon extends Command {
         }, AUTO_RECONNECT_DELAY)
       }
 
-      this.error(err)
-
       ws.terminate()
+      this.error(err)
     })
 
     return ws
