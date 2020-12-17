@@ -26,7 +26,8 @@ export default class Daemon extends Command {
     }),
     command: flags.string({
       required: true,
-      description: 'The shell command to run on message received',
+      description:
+        'The shell command to run on message received. The parts of the email will be injected as environment variable: $subject, $text, $html and $payload',
     }),
   }
 
