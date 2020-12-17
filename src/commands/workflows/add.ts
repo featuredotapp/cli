@@ -62,7 +62,7 @@ export default class WorkflowsAdd extends Command {
       default: false,
     }),
     name: flags.string({
-      char: 't',
+      char: 'n',
       description: 'name of the workflow',
       required: true,
     }),
@@ -97,11 +97,9 @@ export default class WorkflowsAdd extends Command {
       description: 'subject of the email',
     }),
     text: flags.string({
-      char: 't',
       description: 'text of the email',
     }),
     html: flags.string({
-      char: 'h',
       description: 'html of the email',
     }),
     webhook: flags.string({

@@ -14,7 +14,7 @@ export default class Send extends Command {
       description: 'email address to send to',
     }),
     from: flags.string({
-      char: 't',
+      char: 'f',
       required: true,
       description: 'email address to use for sending',
     }),
