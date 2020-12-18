@@ -1,12 +1,12 @@
 openapi: '3.0.0'
 info:
-  version: 0.2.0
+  version: 0.3.0
   title: Mailscript
   license:
     name: MIT
 servers:
   - url: https://api.mailscript.com/v1
-    description: Production server
+    description: API server
   #- url: http://localhost:7000/v1
   #  description: Local development server
 paths:
@@ -178,6 +178,40 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
   /addresses/{address}:
+    put:
+      tags:
+        - 'addresses'
+      summary: 'Update a mailscript address'
+      operationId: 'updateAddress'
+      parameters:
+        - name: address
+          in: path
+          description: ID of address
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: request body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAddressRequest'
+      responses:
+        '200':
+          description: 'successful update operation'
+        '400':
+          description: 'Invalid input'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     delete:
       tags:
         - 'addresses'
@@ -881,6 +915,8 @@ components:
           type: string
         owner:
           type: string
+        displayName:
+          type: string
         createdAt:
           type: string
           format: date-time
@@ -1053,6 +1089,14 @@ components:
         - address
       properties:
         address:
+          type: string
+        displayName:
+          type: string
+    UpdateAddressRequest:
+      required:
+        - displayName
+      properties:
+        displayName:
           type: string
     GetAllAddressesResponse:
       required:
