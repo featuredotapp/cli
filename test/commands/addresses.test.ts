@@ -109,15 +109,54 @@ describe('Addresses', () => {
           address: 'another@test.mailscript.io',
           displayName: 'Another',
         })
+
         expect(keysBody).to.eql({
           name: 'owner',
           read: true,
           write: true,
         })
+
         expect(accessoryBody).to.eql({
           address: 'another@test.mailscript.io',
           name: 'another@test.mailscript.io',
           type: 'mailscript-email',
+        })
+      })
+  })
+
+  describe('update', () => {
+    let addressBody: {} | undefined
+    let keysBody: {} | undefined
+    let accessoryBody: {} | undefined
+
+    beforeEach(() => {
+      addressBody = undefined
+      keysBody = undefined
+      accessoryBody = undefined
+    })
+
+    test
+      .stdout()
+      .nock(MailscriptApiServer, (api) =>
+        api
+          .put('/addresses/another@test.mailscript.io', (body: any) => {
+            addressBody = body
+            return true
+          })
+          .reply(200),
+      )
+      .command([
+        'addresses:update',
+        '--address',
+        'another@test.mailscript.io',
+        '--name',
+        'Another One',
+      ])
+      .it('adds address with display name', (ctx) => {
+        expect(ctx.stdout).to.contain('another@test.mailscript.io')
+
+        expect(addressBody).to.eql({
+          displayName: 'Another One',
         })
       })
   })
