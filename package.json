@@ -1,7 +1,7 @@
 {
   "name": "mailscript",
   "description": "Configure and manipulate email pipeline in Mailscript from the cli",
-  "version": "0.3.26",
+  "version": "0.3.27",
   "author": "team <team@mailscript.com>",
   "bin": {
     "mailscript": "./bin/run"
