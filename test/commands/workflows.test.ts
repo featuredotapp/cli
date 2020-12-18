@@ -731,12 +731,37 @@ describe('workflows', () => {
             'text',
           ])
           .it(
-            'add alias workflow if email write is user owned mailscript address',
+            'add alias workflow if email is user owned mailscript address',
             (ctx) => {
               expect(ctx.stdout).to.contain('work-01')
               expect(postBody.actions[0].config).to.eql({
                 type: 'alias',
                 alias: 'xyz@mailscript.io',
+              })
+            },
+          )
+
+        test
+          .stdout()
+          .nock(MailscriptApiServer, nockAddMailscriptAddress)
+          .command([
+            'workflows:add',
+            '--name',
+            'work-01',
+            '--trigger',
+            'test@mailscript.io',
+            '--alias',
+            'xyz+123@mailscript.io',
+            '--text',
+            'text',
+          ])
+          .it(
+            'add alias workflow if variant of email is user owned mailscript address',
+            (ctx) => {
+              expect(ctx.stdout).to.contain('work-01')
+              expect(postBody.actions[0].config).to.eql({
+                type: 'alias',
+                alias: 'xyz+123@mailscript.io',
               })
             },
           )

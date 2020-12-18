@@ -7,6 +7,7 @@ import { handle } from 'oazapfts'
 import * as api from '../../api'
 import setupApiClient from '../../setupApiClient'
 import withStandardErrors from '../../utils/errorHandling'
+import resolveBaseAddress from '../../utils/resolveBaseAddress'
 import verifyEmailFlow from '../../utils/verifyEmailFlow'
 
 const workflowTypeFlags = [
@@ -464,12 +465,16 @@ export default class WorkflowsAdd extends Command {
       withStandardErrors({}, this),
     )
 
+    const baseAlias = resolveBaseAddress(alias)
+
     const existingAccessory = userAccessories.find(
-      ({ name, type }) => type === 'mailscript-email' && name === alias,
+      ({ name, type }) => type === 'mailscript-email' && name === baseAlias,
     )
 
     if (existingAccessory) {
-      this.log('Checking existing mailscript address')
+      this.debug(
+        `Checking existing mailscript address: ${existingAccessory.address}`,
+      )
 
       if (existingAccessory.address) {
         const { write } = await handle(
