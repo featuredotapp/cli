@@ -178,6 +178,40 @@ describe('workflows', () => {
         .reply(201, { id: 'auto-xxx-yyy-zzz' })
     }
 
+    const nockAddMailscriptAddress = (api: any) => {
+      api
+        .persist()
+        .get('/accessories')
+        .reply(200, {
+          list: [
+            {
+              id: 'access-01-xxx-yyy-zzz',
+              name: 'test@mailscript.io',
+              type: 'mailscript-email',
+              address: 'test@mailscript.io',
+            },
+            {
+              id: 'access-07-xxx-yyy-zzz',
+              name: 'xyz@mailscript.io',
+              type: 'mailscript-email',
+              address: 'test@mailscript.io',
+              key: 'key-01-xxx-yyy-zzz',
+            },
+          ],
+        })
+        .get('/user')
+        .reply(200, { email: 'smith@example.com' })
+        .get('/addresses/test@mailscript.io/keys/key-01-xxx-yyy-zzz')
+        .reply(200, { write: true })
+
+      return api
+        .post('/workflows', (body: any) => {
+          postBody = body
+          return true
+        })
+        .reply(201, { id: 'access-07-xxx-yyy-zzz' })
+    }
+
     const nockAddUnverified = (api: any) => {
       return api
         .persist()
@@ -681,6 +715,31 @@ describe('workflows', () => {
               alias: 'another@example.com',
             })
           })
+
+        test
+          .stdout()
+          .nock(MailscriptApiServer, nockAddMailscriptAddress)
+          .command([
+            'workflows:add',
+            '--name',
+            'work-01',
+            '--trigger',
+            'test@mailscript.io',
+            '--alias',
+            'xyz@mailscript.io',
+            '--text',
+            'text',
+          ])
+          .it(
+            'add alias workflow if email write is user owned mailscript address',
+            (ctx) => {
+              expect(ctx.stdout).to.contain('work-01')
+              expect(postBody.actions[0].config).to.eql({
+                type: 'alias',
+                alias: 'xyz@mailscript.io',
+              })
+            },
+          )
 
         test
           .stdout()

@@ -457,6 +457,32 @@ export default class WorkflowsAdd extends Command {
       return
     }
 
+    const {
+      list: userAccessories,
+    }: api.GetAllAccessoriesResponse = await handle(
+      client.getAllAccessories(),
+      withStandardErrors({}, this),
+    )
+
+    const existingAccessory = userAccessories.find(
+      ({ name, type }) => type === 'mailscript-email' && name === alias,
+    )
+
+    if (existingAccessory) {
+      this.log('Checking existing mailscript address')
+
+      if (existingAccessory.address) {
+        const { write } = await handle(
+          client.getKey(existingAccessory.address, existingAccessory.key),
+          withStandardErrors({}, this),
+        )
+
+        if (write) {
+          return
+        }
+      }
+    }
+
     const { list: verifications } = await handle(
       client.getAllVerifications(),
       withStandardErrors({}, this),
