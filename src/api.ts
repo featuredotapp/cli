@@ -1,7 +1,7 @@
 /* eslint-disable valid-jsdoc, @typescript-eslint/no-unused-vars */
 /**
  * Mailscript
- * 0.2.0
+ * 0.3.0
  * DO NOT MODIFY - This file has been generated using oazapfts.
  * See https://www.npmjs.com/package/oazapfts
  */
@@ -12,7 +12,7 @@ export const defaults: Oazapfts.RequestOpts = {
 }
 const oazapfts = Oazapfts.runtime(defaults)
 export const servers = {
-  productionServer: 'https://api.mailscript.com/v1',
+  apiServer: 'https://api.mailscript.com/v1',
 }
 export type User = {
   id: string
@@ -45,15 +45,20 @@ export type GetAllWorkspacesResponse = {
 }
 export type AddAddressRequest = {
   address: string
+  displayName?: string
 }
 export type Address = {
   id: string
   owner: string
+  displayName?: string
   createdAt: string
   createdBy: string
 }
 export type GetAllAddressesResponse = {
   list: Address[]
+}
+export type UpdateAddressRequest = {
+  displayName: string
 }
 export type Accessory = {
   id: string
@@ -334,6 +339,35 @@ export function getAllAddresses(opts?: Oazapfts.RequestOpts) {
   >('/addresses', {
     ...opts,
   })
+}
+/**
+ * Update a mailscript address
+ */
+export function updateAddress(
+  address: string,
+  updateAddressRequest: UpdateAddressRequest,
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+  >(
+    `/addresses/${address}`,
+    oazapfts.json({
+      ...opts,
+      method: 'PUT',
+      body: updateAddressRequest,
+    }),
+  )
 }
 /**
  * Delete a mailscript address
