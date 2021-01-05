@@ -1,7 +1,7 @@
 /* eslint-disable valid-jsdoc, @typescript-eslint/no-unused-vars */
 /**
  * Mailscript
- * 0.3.0
+ * 0.4.0
  * DO NOT MODIFY - This file has been generated using oazapfts.
  * See https://www.npmjs.com/package/oazapfts
  */
@@ -60,6 +60,33 @@ export type GetAllAddressesResponse = {
 export type UpdateAddressRequest = {
   displayName: string
 }
+export type Criteria = {
+  sentTo?: string
+  subjectContains?: string
+  from?: string
+  domain?: string
+  hasTheWords?: string
+  hasAttachments?: boolean
+}
+export type Trigger = {
+  id: string
+  owner: string
+  displayName?: string
+  createdAt: string
+  createdBy: string
+  name: string
+  criteria: Criteria
+}
+export type GetAllTriggersResponse = {
+  list: Trigger[]
+}
+export type AddTriggerRequest = {
+  name: string
+  criteria: Criteria
+}
+export type AddTriggerResponse = {
+  id: string
+}
 export type Accessory = {
   id: string
   type: 'mailscript-email' | 'sms' | 'webhook' | 'daemon'
@@ -113,14 +140,6 @@ export type AddWorkflowRequest = {
     accessoryId?: string
     config?: object
   }[]
-}
-export type Criteria = {
-  sentTo?: string
-  subjectContains?: string
-  from?: string
-  domain?: string
-  hasTheWords?: string
-  hasAttachments?: boolean
 }
 export type ActionForwardConfig = {
   type: 'forward'
@@ -386,6 +405,81 @@ export function deleteAddress(address: string, opts?: Oazapfts.RequestOpts) {
         data: ErrorResponse
       }
   >(`/addresses/${address}`, {
+    ...opts,
+    method: 'DELETE',
+  })
+}
+/**
+ * Get all triggers you have access to
+ */
+export function getAllTriggers(opts?: Oazapfts.RequestOpts) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+        data: GetAllTriggersResponse
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+  >('/triggers', {
+    ...opts,
+  })
+}
+/**
+ * Setup a trigger
+ */
+export function addTrigger(
+  addTriggerRequest: AddTriggerRequest,
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 201
+        data: AddTriggerResponse
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+  >(
+    '/triggers',
+    oazapfts.json({
+      ...opts,
+      method: 'POST',
+      body: addTriggerRequest,
+    }),
+  )
+}
+/**
+ * Delete a trigger
+ */
+export function deleteTrigger(trigger: string, opts?: Oazapfts.RequestOpts) {
+  return oazapfts.fetchJson<
+    | {
+        status: 204
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 404
+        data: ErrorResponse
+      }
+  >(`/triggers/${trigger}`, {
     ...opts,
     method: 'DELETE',
   })

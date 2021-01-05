@@ -1,6 +1,6 @@
 openapi: '3.0.0'
 info:
-  version: 0.3.0
+  version: 0.4.0
   title: Mailscript
   license:
     name: MIT
@@ -240,6 +240,99 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /triggers:
+    get:
+      tags:
+        - 'triggers'
+      summary: 'Get all triggers you have access to'
+      description: ''
+      operationId: 'getAllTriggers'
+      responses:
+        '200':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllTriggersResponse'
+        '400':
+          description: 'Invalid input'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+        - 'triggers'
+      summary: 'Setup a trigger'
+      description: ''
+      operationId: 'addTrigger'
+      requestBody:
+        description: Trigger body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddTriggerRequest'
+      responses:
+        '201':
+          description: 'successful add operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddTriggerResponse'
+        '400':
+          description: 'Invalid input'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /triggers/{trigger}:
+    delete:
+      tags:
+        - 'triggers'
+      summary: 'Delete a trigger'
+      operationId: 'deleteTrigger'
+      parameters:
+        - name: trigger
+          in: path
+          description: ID of the trigger
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: 'Successful delete operation'
+        '400':
+          description: 'Failure'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 'Key not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
   /accessories:
     get:
       tags:
@@ -970,6 +1063,30 @@ components:
               config:
                 oneOf:
                   - $ref: '#/components/schemas/ActionForwardConfig'
+    Trigger:
+      required:
+        - id
+        - owner
+        - createdAt
+        - createdBy
+        - name
+        - criteria
+      properties:
+        id:
+          type: string
+        owner:
+          type: string
+        displayName:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        name:
+          type: string
+        criteria:
+          $ref: '#/components/schemas/Criteria'
     Criteria:
       minProperties: 1
       properties:
@@ -1314,6 +1431,30 @@ components:
       properties:
         token:
           type: string
+    AddTriggerRequest:
+      required:
+        - name
+        - criteria
+      properties:
+        name:
+          type: string
+        criteria:
+          $ref: '#/components/schemas/Criteria'
+    AddTriggerResponse:
+      required:
+        - id
+      properties:
+        id:
+          type: string
+    GetAllTriggersResponse:
+      required:
+        - list
+      properties:
+        list:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/Trigger'
   securitySchemes:
     bearerAuth:
       type: http

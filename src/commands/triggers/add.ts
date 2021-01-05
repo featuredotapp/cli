@@ -1,8 +1,10 @@
 /* eslint-disable complexity */
 import { Command, flags } from '@oclif/command'
 import chalk from 'chalk'
+import { handle } from 'oazapfts'
 import * as api from '../../api'
 import setupApiClient from '../../setupApiClient'
+import withStandardErrors from '../../utils/errorHandling'
 
 type FlagsType = {
   name: string
@@ -88,37 +90,21 @@ export default class TriggersAdd extends Command {
 
     const triggerConfig = this._resolveTriggerConfig(flags)
 
-    this.log(JSON.stringify(triggerConfig, undefined, 2))
-    this.exit(1)
-    // const payload: api.AddWorkflowRequest = {
-    //   name: flags.name,
-    //   trigger: {
-    //     accessoryId: triggerAccessory.id,
-    //     config: triggerConfig,
-    //   },
-    //   actions: [
-    //     {
-    //       accessoryId: actionAccessory.id,
-    //       config: actionConfig,
-    //     },
-    //   ],
-    // }
-
-    // return handle(
-    //   client.addWorkflow(payload),
-    //   withStandardErrors(
-    //     {
-    //       '201': () => {
-    //         this.log(`Trigger setup: ${flags.name}`)
-    //       },
-    //       '403': ({ error }: api.ErrorResponse) => {
-    //         this.log(chalk.red(`${chalk.bold('Error')}: ${error}`))
-    //         this.exit(1)
-    //       },
-    //     },
-    //     this,
-    //   ),
-    // )
+    return handle(
+      client.addTrigger(triggerConfig),
+      withStandardErrors(
+        {
+          '201': () => {
+            this.log(`Trigger setup: ${flags.name}`)
+          },
+          '403': ({ error }: api.ErrorResponse) => {
+            this.log(chalk.red(`${chalk.bold('Error')}: ${error}`))
+            this.exit(1)
+          },
+        },
+        this,
+      ),
+    )
   }
 
   private _resolveTriggerConfig(flags: FlagsType) {
@@ -154,17 +140,15 @@ export default class TriggersAdd extends Command {
       this.exit(1)
     }
 
-    const criteria = [
-      {
-        from: flags.from,
-        sentTo: flags.sentto,
-        hasTheWords: flags.hasthewords,
-        domain: flags.domain,
-        subjectContains: flags.subjectcontains,
-        hasAttachments: flags.hasattachments,
-        firstTimeSender: flags.firsttimesender,
-      },
-    ]
+    const criteria = {
+      from: flags.from,
+      sentTo: flags.sentto,
+      hasTheWords: flags.hasthewords,
+      domain: flags.domain,
+      subjectContains: flags.subjectcontains,
+      hasAttachments: flags.hasattachments,
+      firstTimeSender: flags.firsttimesender,
+    }
 
     return flags.times && flags.seconds
       ? {
