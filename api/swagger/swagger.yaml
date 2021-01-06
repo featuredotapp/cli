@@ -7,8 +7,8 @@ info:
 servers:
   - url: https://api.mailscript.com/v1
     description: API server
-  #- url: http://localhost:7000/v1
-  #  description: Local development server
+  - url: http://localhost:7000/v1
+    description: Local development server
 paths:
   /user:
     get:
@@ -332,7 +332,70 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-
+  /inputs:
+    get:
+      tags:
+        - 'inputs'
+      summary: 'Get all inputs you have access to'
+      description: ''
+      operationId: 'getAllInputs'
+      parameters:
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllInputsResponse'
+        '400':
+          description: 'Invalid input'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /outputs:
+    get:
+      tags:
+        - 'outputs'
+      summary: 'Get all outputs you have access to'
+      description: ''
+      operationId: 'getAllOutputs'
+      parameters:
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllOutputsResponse'
+        '400':
+          description: 'Invalid input'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /accessories:
     get:
       tags:
@@ -961,6 +1024,57 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /actions:
+    get:
+      tags:
+        - actions
+      summary: 'Get all actions for the user'
+      operationId: 'getAllActions'
+      responses:
+        '200':
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllActionsResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+        - actions
+      summary: 'Add an action'
+      operationId: 'addAction'
+      requestBody:
+        description: Add action body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddActionRequest'
+      responses:
+        '201':
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: 'Failure'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Not authorized or bad code'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
 components:
   schemas:
     User:
@@ -1306,27 +1420,17 @@ components:
     AddWorkflowRequest:
       required:
         - name
-        - trigger
-        - actions
+        - input
+        - action
       properties:
         name:
           type: string
+        input:
+          type: string
         trigger:
-          type: object
-          properties:
-            accessoryId:
-              type: string
-            config:
-              type: object
-        actions:
-          type: array
-          items:
-            type: object
-            properties:
-              accessoryId:
-                type: string
-              config:
-                type: object
+          type: string
+        action:
+          type: string
     GetAllAccessoriesResponse:
       required:
         - list
@@ -1455,6 +1559,179 @@ components:
           items:
             oneOf:
               - $ref: '#/components/schemas/Trigger'
+    GetAllOutputsResponse:
+      required:
+        - list
+      properties:
+        list:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/MailscriptEmailOutput'
+    GetAllInputsResponse:
+      required:
+        - list
+      properties:
+        list:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/MailscriptEmailInput'
+    MailscriptEmailOutput:
+      required:
+        - id
+        - name
+        - type
+        - owner
+        - createdAt
+        - createdBy
+        - address
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          enum: ['mailescript-email']
+        owner:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        address:
+          type: string
+    MailscriptEmailInput:
+      required:
+        - id
+        - name
+        - type
+        - owner
+        - createdAt
+        - createdBy
+        - address
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          enum: ['mailescript-email']
+        owner:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        address:
+          type: string
+    AddActionRequest:
+      required:
+        - name
+        - output
+        - config
+      properties:
+        name:
+          type: string
+        output:
+          type: string
+        config:
+          type: object
+          oneOf:
+            - $ref: '#/components/schemas/AddActionConfigForward'
+    AddActionConfigForward:
+      required:
+        - type
+        - forward
+      properties:
+        type:
+          type: string
+          enum: ['forward']
+        forward:
+          type: string
+    GetAllActionsResponse:
+      required:
+        - list
+      properties:
+        list:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/ActionSend'
+    ActionForward:
+      required:
+        - id
+        - name
+        - owner
+        - createdAt
+        - createdBy
+        - output
+        - config
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        owner:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        output:
+          type: string
+        config:
+          type: object
+          required:
+            - type
+            - forward
+          properties:
+            type:
+              type: string
+            forward:
+              type: string
+    ActionSend:
+      required:
+        - id
+        - name
+        - owner
+        - createdAt
+        - createdBy
+        - output
+        - config
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        owner:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        output:
+          type: string
+        config:
+          type: object
+          required:
+            - type
+            - subject
+          properties:
+            type:
+              type: string
+            subject:
+              type: string
+            text:
+              type: string
+            html:
+              type: string
   securitySchemes:
     bearerAuth:
       type: http

@@ -29,12 +29,8 @@ export default class TriggersAdd extends Command {
     help: flags.help({ char: 'h' }),
     name: flags.string({
       char: 'n',
-      description: 'name of the workflow',
+      description: 'name of the trigger',
       required: true,
-    }),
-    noninteractive: flags.boolean({
-      description: 'do not ask for user input',
-      default: false,
     }),
     times: flags.string({
       description: 'number of emails in a period for trigger to activate',
@@ -85,6 +81,16 @@ export default class TriggersAdd extends Command {
   async add(client: typeof api, flags: FlagsType): Promise<void> {
     if (!flags.name) {
       this.log('Please provide a name: mailscript triggers:add --name example>')
+      this.exit(1)
+    }
+
+    if (flags.times && !flags.seconds) {
+      this.log('Flag --seconds required when using --times')
+      this.exit(1)
+    }
+
+    if (!flags.times && flags.seconds) {
+      this.log('Flag --times required when using --seconds')
       this.exit(1)
     }
 

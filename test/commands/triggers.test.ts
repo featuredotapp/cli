@@ -108,20 +108,17 @@ describe('triggers', () => {
 
         test
           .stdout()
-          .nock(MailscriptApiServer, nockRead)
           .command([
-            'workflows:add',
+            'triggers:add',
             '--name',
             'trigger-01',
-            '--trigger',
-            'test@mailscript.io',
-            '--forward',
-            'another@example.com',
+            '--domain',
+            'example.com',
             '--times',
             '5',
           ])
           .exit(1)
-          .it('errors if times proved but not seconds', (ctx) => {
+          .it('errors if times provided but not seconds', (ctx) => {
             expect(ctx.stdout).to.contain(
               'Flag --seconds required when using --times',
             )
@@ -129,15 +126,12 @@ describe('triggers', () => {
 
         test
           .stdout()
-          .nock(MailscriptApiServer, nockRead)
           .command([
-            'workflows:add',
+            'triggers:add',
             '--name',
             'trigger-01',
-            '--trigger',
-            'test@mailscript.io',
-            '--forward',
-            'another@example.com',
+            '--domain',
+            'example.com',
             '--seconds',
             '120',
           ])

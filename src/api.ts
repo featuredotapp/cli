@@ -13,6 +13,7 @@ export const defaults: Oazapfts.RequestOpts = {
 const oazapfts = Oazapfts.runtime(defaults)
 export const servers = {
   apiServer: 'https://api.mailscript.com/v1',
+  localDevelopmentServer: 'http://localhost:7000/v1',
 }
 export type User = {
   id: string
@@ -87,6 +88,30 @@ export type AddTriggerRequest = {
 export type AddTriggerResponse = {
   id: string
 }
+export type MailscriptEmailInput = {
+  id: string
+  name: string
+  type: 'mailescript-email'
+  owner: string
+  createdAt: string
+  createdBy: string
+  address: string
+}
+export type GetAllInputsResponse = {
+  list: MailscriptEmailInput[]
+}
+export type MailscriptEmailOutput = {
+  id: string
+  name: string
+  type: 'mailescript-email'
+  owner: string
+  createdAt: string
+  createdBy: string
+  address: string
+}
+export type GetAllOutputsResponse = {
+  list: MailscriptEmailOutput[]
+}
 export type Accessory = {
   id: string
   type: 'mailscript-email' | 'sms' | 'webhook' | 'daemon'
@@ -132,14 +157,9 @@ export type AccessoryTokenResponse = {
 }
 export type AddWorkflowRequest = {
   name: string
-  trigger: {
-    accessoryId?: string
-    config?: object
-  }
-  actions: {
-    accessoryId?: string
-    config?: object
-  }[]
+  input: string
+  trigger?: string
+  action: string
 }
 export type ActionForwardConfig = {
   type: 'forward'
@@ -210,6 +230,32 @@ export type AddVerificationResponse = {
 export type VerifyRequest = {
   email: string
   code: string
+}
+export type ActionSend = {
+  id: string
+  name: string
+  owner: string
+  createdAt: string
+  createdBy: string
+  output: string
+  config: {
+    type: string
+    subject: string
+    text?: string
+    html?: string
+  }
+}
+export type GetAllActionsResponse = {
+  list: ActionSend[]
+}
+export type AddActionConfigForward = {
+  type: 'forward'
+  forward: string
+}
+export type AddActionRequest = {
+  name: string
+  output: string
+  config: AddActionConfigForward
 }
 /**
  * Get the authenticated user
@@ -483,6 +529,76 @@ export function deleteTrigger(trigger: string, opts?: Oazapfts.RequestOpts) {
     ...opts,
     method: 'DELETE',
   })
+}
+/**
+ * Get all inputs you have access to
+ */
+export function getAllInputs(
+  {
+    name,
+  }: {
+    name?: string
+  } = {},
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+        data: GetAllInputsResponse
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+  >(
+    `/inputs${QS.query(
+      QS.form({
+        name,
+      }),
+    )}`,
+    {
+      ...opts,
+    },
+  )
+}
+/**
+ * Get all outputs you have access to
+ */
+export function getAllOutputs(
+  {
+    name,
+  }: {
+    name?: string
+  } = {},
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+        data: GetAllOutputsResponse
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+  >(
+    `/outputs${QS.query(
+      QS.form({
+        name,
+      }),
+    )}`,
+    {
+      ...opts,
+    },
+  )
 }
 /**
  * Get all accessories you have access to
@@ -977,6 +1093,52 @@ export function verify(
       ...opts,
       method: 'POST',
       body: verifyRequest,
+    }),
+  )
+}
+/**
+ * Get all actions for the user
+ */
+export function getAllActions(opts?: Oazapfts.RequestOpts) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+        data: GetAllActionsResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+  >('/actions', {
+    ...opts,
+  })
+}
+/**
+ * Add an action
+ */
+export function addAction(
+  addActionRequest: AddActionRequest,
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 201
+        data: ErrorResponse
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+  >(
+    '/actions',
+    oazapfts.json({
+      ...opts,
+      method: 'POST',
+      body: addActionRequest,
     }),
   )
 }
