@@ -35,32 +35,6 @@ describe('triggers', () => {
       postBody = {}
     })
 
-    const nockRead = (api: any) => {
-      return api
-        .persist()
-        .get('/accessories')
-        .reply(200, {
-          list: [
-            {
-              id: 'access-01-xxx-yyy-zzz',
-              name: 'test@mailscript.io',
-              type: 'mailscript-email',
-            },
-            {
-              id: 'webhook-xyz',
-              name: 'webhook',
-              type: 'mailscript-email',
-            },
-            {
-              id: 'access-03-xxx-yyy-zzz',
-              name: 'test-sms',
-              type: 'sms',
-              sms: '+7766767556',
-            },
-          ],
-        })
-    }
-
     const nockAdd = (api: any) => {
       return api
         .post('/triggers', (body: any) => {

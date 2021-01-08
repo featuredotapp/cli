@@ -55,10 +55,10 @@ export default class ActionsAdd extends Command {
     }),
     reply: flags.boolean({
       char: 'r',
-      description: 'email address for reply action',
+      description: 'reply to incoming email',
     }),
     replyall: flags.boolean({
-      description: 'email address for reply all action',
+      description: 'reply all to incoming email',
     }),
     send: flags.string({
       description: 'email address for send action',
@@ -172,11 +172,11 @@ export default class ActionsAdd extends Command {
 
   private _resolveActionConfig(
     flags: FlagsType,
-    actionAccessory: api.MailscriptEmailOutput,
+    actionOutput: api.MailscriptEmailOutput,
   ) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
-    if (actionAccessory.type === 'sms') {
+    if (actionOutput.type === 'sms') {
       if (!flags.text) {
         this.log('Please provide --text')
         this.exit(1)
@@ -190,7 +190,7 @@ export default class ActionsAdd extends Command {
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
-    if (actionAccessory.type === 'daemon') {
+    if (actionOutput.type === 'daemon') {
       const body = flags.body
         ? fs.readFileSync(flags.body).toString()
         : undefined
@@ -203,7 +203,7 @@ export default class ActionsAdd extends Command {
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
-    if (actionAccessory.type === 'webhook') {
+    if (actionOutput.type === 'webhook') {
       if (!flags.webhook) {
         this.log('Please provide --webhook')
         this.exit(1)
@@ -235,7 +235,7 @@ export default class ActionsAdd extends Command {
       }
     }
 
-    if (actionAccessory.type && 'mailscript-email') {
+    if (actionOutput.type && 'mailscript-email') {
       if (flags.forward) {
         return {
           type: 'forward',
