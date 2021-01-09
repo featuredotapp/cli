@@ -1074,7 +1074,56 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-
+  /sms:
+    get:
+      tags:
+        - sms
+      summary: 'Get all sms for the user'
+      operationId: 'getAllSms'
+      responses:
+        '200':
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllSmsResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+        - sms
+      summary: 'Add an sms'
+      operationId: 'addSms'
+      requestBody:
+        description: Add sms body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddSmsRequest'
+      responses:
+        '201':
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: 'Failure'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Not authorized or bad code'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
     User:
@@ -1732,6 +1781,46 @@ components:
               type: string
             html:
               type: string
+    AddSmsRequest:
+      required:
+        - name
+        - number
+      properties:
+        name:
+          type: string
+        number:
+          type: string
+    GetAllSmsResponse:
+      required:
+        - list
+      properties:
+        list:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/Sms'
+    Sms:
+      required:
+        - id
+        - name
+        - number
+        - owner
+        - createdAt
+        - createdBy
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        number:
+          type: string
+        owner:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
   securitySchemes:
     bearerAuth:
       type: http

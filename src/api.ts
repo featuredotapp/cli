@@ -257,6 +257,21 @@ export type AddActionRequest = {
   output: string
   config: AddActionConfigForward
 }
+export type Sms = {
+  id: string
+  name: string
+  number: string
+  owner: string
+  createdAt: string
+  createdBy: string
+}
+export type GetAllSmsResponse = {
+  list: Sms[]
+}
+export type AddSmsRequest = {
+  name: string
+  number: string
+}
 /**
  * Get the authenticated user
  */
@@ -1139,6 +1154,52 @@ export function addAction(
       ...opts,
       method: 'POST',
       body: addActionRequest,
+    }),
+  )
+}
+/**
+ * Get all sms for the user
+ */
+export function getAllSms(opts?: Oazapfts.RequestOpts) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+        data: GetAllSmsResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+  >('/sms', {
+    ...opts,
+  })
+}
+/**
+ * Add an sms
+ */
+export function addSms(
+  addSmsRequest: AddSmsRequest,
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 201
+        data: ErrorResponse
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+  >(
+    '/sms',
+    oazapfts.json({
+      ...opts,
+      method: 'POST',
+      body: addSmsRequest,
     }),
   )
 }
