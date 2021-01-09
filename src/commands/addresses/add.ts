@@ -15,26 +15,7 @@ export async function addAddress(
     withStandardErrors({}, command),
   )
 
-  const { id: keyId } = await handle(
-    client.addKey(address, {
-      name: 'owner',
-      read: true,
-      write: true,
-    }),
-    withStandardErrors({}, command),
-  )
-
-  const { id: accessoryId } = await handle(
-    client.addAccessory({
-      name: address,
-      type: 'mailscript-email',
-      address,
-      key: keyId,
-    }),
-    withStandardErrors({}, command),
-  )
-
-  return { address, keyId, accessoryId }
+  return { address }
 }
 
 export default class AddressesAdd extends Command {

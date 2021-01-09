@@ -16,6 +16,7 @@ import * as api from '../api'
 import { handle } from 'oazapfts'
 // import { addAddress } from './addresses/add'
 import verifyEmailFlow from '../utils/verifyEmailFlow'
+import { addAddress } from './addresses/add'
 const writeFile = promisify(writeFileRaw)
 
 const {
@@ -178,7 +179,7 @@ Link or create your MailScript account
       `Setting up default address: ${chalk.bold(defaultAddress)} `,
     )
 
-    // const { accessoryId } = await addAddress(client, this, defaultAddress)
+    await addAddress(client, this, defaultAddress)
 
     cli.action.stop()
 
