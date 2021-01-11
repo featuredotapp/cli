@@ -217,18 +217,34 @@ export type VerificationEmail = {
   verifiedBy?: string
   verifiedAt?: string
 }
+export type VerificationSms = {
+  id?: string
+  type?: 'sms'
+  sms?: string
+  verified?: boolean
+  verifiedBy?: string
+  verifiedAt?: string
+}
 export type GetAllVerificationsResponse = {
-  list: VerificationEmail[]
+  list: (VerificationEmail | VerificationSms)[]
 }
 export type AddEmailVerificationRequest = {
   type: 'email'
   email: string
 }
+export type AddSmsVerificationRequest = {
+  type: 'sms'
+  sms: string
+}
 export type AddVerificationResponse = {
   id: string
 }
-export type VerifyRequest = {
+export type VerifyEmailRequest = {
   email: string
+  code: string
+}
+export type VerifySmsRequest = {
+  sms: string
   code: string
 }
 export type ActionSend = {
@@ -1052,7 +1068,7 @@ export function getAllVerifications(opts?: Oazapfts.RequestOpts) {
  * Start verification process for external email address or sms number
  */
 export function addVerification(
-  addEmailVerificationRequest: AddEmailVerificationRequest,
+  body: AddEmailVerificationRequest | AddSmsVerificationRequest,
   opts?: Oazapfts.RequestOpts,
 ) {
   return oazapfts.fetchJson<
@@ -1073,7 +1089,7 @@ export function addVerification(
     oazapfts.json({
       ...opts,
       method: 'POST',
-      body: addEmailVerificationRequest,
+      body,
     }),
   )
 }
@@ -1082,7 +1098,7 @@ export function addVerification(
  */
 export function verify(
   verification: string,
-  verifyRequest: VerifyRequest,
+  body: VerifyEmailRequest | VerifySmsRequest,
   opts?: Oazapfts.RequestOpts,
 ) {
   return oazapfts.fetchJson<
@@ -1106,7 +1122,7 @@ export function verify(
     oazapfts.json({
       ...opts,
       method: 'POST',
-      body: verifyRequest,
+      body,
     }),
   )
 }

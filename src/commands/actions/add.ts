@@ -9,6 +9,7 @@ import setupApiClient from '../../setupApiClient'
 import withStandardErrors from '../../utils/errorHandling'
 import resolveBaseAddress from '../../utils/resolveBaseAddress'
 import verifyEmailFlow from '../../utils/verifyEmailFlow'
+import verifySmsFlow from '../../utils/verifySmsFlow'
 
 type FlagsType = {
   name: string
@@ -116,6 +117,7 @@ export default class ActionsAdd extends Command {
 
     const actionConfig: any = this._resolveActionConfig(flags)
 
+    await this._optionallyVerifySMS(client, flags, actionConfig)
     await this._optionallyVerifyAlias(client, flags, actionConfig)
 
     const payload: api.AddActionRequest = {
@@ -149,6 +151,7 @@ export default class ActionsAdd extends Command {
 
       return {
         type: 'sms',
+        sms: flags.sms,
         text: flags.text,
       }
     }
@@ -267,6 +270,69 @@ export default class ActionsAdd extends Command {
   --alias`)
 
     this.exit(1)
+  }
+
+  private async _optionallyVerifySMS(
+    client: typeof api,
+    flags: FlagsType,
+    {
+      type,
+      sms,
+    }: {
+      type?: string
+      sms?: string
+    },
+  ) {
+    if (type !== 'sms') {
+      return
+    }
+
+    if (!sms) {
+      throw new Error('SMS must be provided')
+    }
+
+    const {
+      list: verifications,
+    }: api.GetAllVerificationsResponse = await handle(
+      client.getAllVerifications(),
+      withStandardErrors({}, this),
+    )
+
+    const smsVerification = verifications.find(
+      (v) => v.type === 'sms' && v.verified && v.sms === sms,
+    )
+
+    if (smsVerification) {
+      return
+    }
+
+    this.log(
+      `The sms number ${chalk.bold(
+        sms,
+      )} must be verified before being included in an ${chalk.bold(
+        'sms',
+      )} workflow.`,
+    )
+
+    this.log('')
+    const verifySms = await cli.confirm(
+      `Do you want to send a verification code to ${chalk.bold(
+        sms,
+      )}? ${chalk.cyan('(y/n)')}`,
+    )
+
+    if (!verifySms) {
+      this.log(chalk.red('Workflow not added'))
+      this.exit(1)
+    }
+
+    const verified = await verifySmsFlow(client, sms, this)
+
+    if (!verified) {
+      this.exit(1)
+    }
+
+    this.log(`Verified: ${sms}`)
   }
 
   private async _optionallyVerifyAlias(

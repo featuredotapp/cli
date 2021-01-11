@@ -963,7 +963,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddEmailVerificationRequest'
+              oneOf:
+                - $ref: '#/components/schemas/AddEmailVerificationRequest'
+                - $ref: '#/components/schemas/AddSmsVerificationRequest'
       responses:
         '201':
           description: 'Successful operation'
@@ -1002,7 +1004,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/VerifyRequest'
+              oneOf:
+                - $ref: '#/components/schemas/VerifyEmailRequest'
+                - $ref: '#/components/schemas/VerifySmsRequest'
       responses:
         '200':
           description: 'Successful operation'
@@ -1376,6 +1380,22 @@ components:
         verifiedAt:
           type: string
           format: date-time
+    VerificationSms:
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: ['sms']
+        sms:
+          type: string
+        verified:
+          type: boolean
+        verifiedBy:
+          type: string
+        verifiedAt:
+          type: string
+          format: date-time
     ErrorResponse:
       required:
         - error
@@ -1588,18 +1608,37 @@ components:
           enum: ['email']
         email:
           type: string
+    AddSmsVerificationRequest:
+      required:
+        - type
+        - sms
+      properties:
+        type:
+          type: string
+          enum: ['sms']
+        sms:
+          type: string
     AddVerificationResponse:
       required:
         - id
       properties:
         id:
           type: string
-    VerifyRequest:
+    VerifyEmailRequest:
       required:
         - email
         - code
       properties:
         email:
+          type: string
+        code:
+          type: string
+    VerifySmsRequest:
+      required:
+        - sms
+        - code
+      properties:
+        sms:
           type: string
         code:
           type: string
@@ -1612,6 +1651,7 @@ components:
           items:
             oneOf:
               - $ref: '#/components/schemas/VerificationEmail'
+              - $ref: '#/components/schemas/VerificationSms'
     AccessoryTokenResponse:
       required:
         - token
