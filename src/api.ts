@@ -1203,3 +1203,28 @@ export function addSms(
     }),
   )
 }
+/**
+ * Delete SMS number
+ */
+export function deleteSms(sms: string, opts?: Oazapfts.RequestOpts) {
+  return oazapfts.fetchJson<
+    | {
+        status: 204
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 404
+        data: ErrorResponse
+      }
+  >(`/sms/${sms}`, {
+    ...opts,
+    method: 'DELETE',
+  })
+}

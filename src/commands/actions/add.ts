@@ -112,6 +112,7 @@ export default class ActionsAdd extends Command {
       this.log(
         'Please provide a name: mailscript actions:add --name <personal-forward>',
       )
+
       this.exit(1)
     }
 

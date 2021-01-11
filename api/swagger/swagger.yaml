@@ -1124,6 +1124,40 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /sms/{sms}:
+    delete:
+      tags:
+        - 'sms'
+      summary: 'Delete SMS number'
+      operationId: deleteSMS
+      parameters:
+        - name: sms
+          in: path
+          description: ID of SMS
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: 'Successful delete operation'
+        '400':
+          description: 'Failure'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 'Key not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
     User:
