@@ -44,10 +44,8 @@ export default class ActionsAdd extends Command {
       description: 'name of the action',
       required: true,
     }),
-    output: flags.string({
-      char: 'o',
-      description: 'name of the output to use',
-      required: true,
+    sms: flags.string({
+      description: 'the sms number to send to',
     }),
     forward: flags.string({
       char: 'f',
@@ -116,41 +114,12 @@ export default class ActionsAdd extends Command {
       this.exit(1)
     }
 
-    if (!flags.output) {
-      this.log(
-        'Please provide an output: mailscript actions:add --output <output-name>',
-      )
-
-      this.exit(1)
-    }
-
-    const output = await this._findOutput(flags)
-
-    if (!output) {
-      this.log(`${chalk.bold('Error')}: Unknown output ${flags.output}`)
-      this.exit(1)
-    }
-
-    // if (
-    //   actionAccessory.type !== 'sms' &&
-    //   actionAccessory.type !== 'daemon' &&
-    //   actionTypeFlags.map((atf) => flags[atf]).filter((f) => Boolean(f))
-    //     .length !== 1
-    // ) {
-    //   this.log(
-    //     'Please provide one type flag either: \n  --' +
-    //       actionTypeFlags.join('\n  --'),
-    //   )
-    //   this.exit(1)
-    // }
-
-    const actionConfig: any = this._resolveActionConfig(flags, output)
+    const actionConfig: any = this._resolveActionConfig(flags)
 
     await this._optionallyVerifyAlias(client, flags, actionConfig)
 
     const payload: api.AddActionRequest = {
       name: flags.name,
-      output: output.id,
       config: actionConfig,
     }
 
@@ -171,13 +140,8 @@ export default class ActionsAdd extends Command {
     )
   }
 
-  private _resolveActionConfig(
-    flags: FlagsType,
-    actionOutput: api.MailscriptEmailOutput,
-  ) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore
-    if (actionOutput.type === 'sms') {
+  private _resolveActionConfig(flags: FlagsType) {
+    if (flags.sms) {
       if (!flags.text) {
         this.log('Please provide --text')
         this.exit(1)
@@ -189,9 +153,7 @@ export default class ActionsAdd extends Command {
       }
     }
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore
-    if (actionOutput.type === 'daemon') {
+    if (flags.daemon) {
       const body = flags.body
         ? fs.readFileSync(flags.body).toString()
         : undefined
@@ -202,9 +164,7 @@ export default class ActionsAdd extends Command {
       }
     }
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore
-    if (actionOutput.type === 'webhook') {
+    if (flags.webhook) {
       if (!flags.webhook) {
         this.log('Please provide --webhook')
         this.exit(1)
@@ -236,92 +196,77 @@ export default class ActionsAdd extends Command {
       }
     }
 
-    if (actionOutput.type && 'mailscript-email') {
-      if (flags.forward) {
-        return {
-          type: 'forward',
-          forward: flags.forward,
-        } as api.AddActionConfigForward
+    if (flags.forward) {
+      return {
+        type: 'forward',
+        forward: flags.forward,
+      } as api.AddActionConfigForward
+    }
+
+    if (flags.send) {
+      if (!flags.subject) {
+        this.log('Please provide --subject')
+        this.exit(1)
       }
 
-      if (flags.send) {
-        if (!flags.subject) {
-          this.log('Please provide --subject')
-          this.exit(1)
-        }
-
-        if (!flags.text && !flags.html) {
-          this.log('Please provide either --text or --html')
-          this.exit(1)
-        }
-
-        return {
-          type: 'send',
-          send: flags.send,
-          subject: flags.subject,
-          text: flags.text,
-          html: flags.html,
-        }
+      if (!flags.text && !flags.html) {
+        this.log('Please provide either --text or --html')
+        this.exit(1)
       }
 
-      if (flags.reply) {
-        if (!flags.text && !flags.html) {
-          this.log('Please provide either --text or --html')
-          this.exit(1)
-        }
+      return {
+        type: 'send',
+        send: flags.send,
+        subject: flags.subject,
+        text: flags.text,
+        html: flags.html,
+      }
+    }
 
-        return {
-          type: 'reply',
-          text: flags.text,
-          html: flags.html,
-        }
+    if (flags.reply) {
+      if (!flags.text && !flags.html) {
+        this.log('Please provide either --text or --html')
+        this.exit(1)
       }
 
-      if (flags.replyall) {
-        if (!flags.text && !flags.html) {
-          this.log('Please provide either --text or --html')
-          this.exit(1)
-        }
+      return {
+        type: 'reply',
+        text: flags.text,
+        html: flags.html,
+      }
+    }
 
-        return {
-          type: 'replyAll',
-          text: flags.text,
-          html: flags.html,
-        }
+    if (flags.replyall) {
+      if (!flags.text && !flags.html) {
+        this.log('Please provide either --text or --html')
+        this.exit(1)
       }
 
-      if (flags.alias) {
-        return {
-          type: 'alias',
-          alias: flags.alias,
-        }
+      return {
+        type: 'replyAll',
+        text: flags.text,
+        html: flags.html,
+      }
+    }
+
+    if (flags.alias) {
+      return {
+        type: 'alias',
+        alias: flags.alias,
       }
     }
 
     this.log(`${chalk.bold('Error')}: please provide either:
+  --daemon
+  --sms
+  --webhook
   --send
   --forward
   --reply
   --replyall
   --alias`)
+
     this.exit(1)
-  }
-
-  private async _findOutput(
-    flags: FlagsType,
-  ): Promise<api.MailscriptEmailOutput | null> {
-    const response = await api.getAllOutputs({ name: flags.output })
-
-    if (response.status !== 200) {
-      this.log(`Error: unable to read outputs - ${response.data.error}`)
-      this.exit(1)
-    }
-
-    if (response.data.list.length !== 1) {
-      return null
-    }
-
-    return response.data.list[0]
   }
 
   private async _optionallyVerifyAlias(

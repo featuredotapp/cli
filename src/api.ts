@@ -254,7 +254,6 @@ export type AddActionConfigForward = {
 }
 export type AddActionRequest = {
   name: string
-  output: string
   config: AddActionConfigForward
 }
 export type Sms = {

@@ -1715,12 +1715,9 @@ components:
     AddActionRequest:
       required:
         - name
-        - output
         - config
       properties:
         name:
-          type: string
-        output:
           type: string
         config:
           type: object

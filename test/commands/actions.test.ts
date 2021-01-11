@@ -30,30 +30,8 @@ describe('Actions', () => {
   describe('add', () => {
     let postBody: any
 
-    const nockCheckOutput = (api: any) => {
-      return api.get('/outputs?name=output-email-01').reply(200, {
-        list: [
-          {
-            id: 'output-01-xxx-yyy-zzz',
-            name: 'output-email-01',
-            type: 'mailscript-email',
-          },
-        ],
-      })
-    }
-
     const nockAddEmail = (api: any) => {
       return api
-        .get('/outputs?name=output-email-01')
-        .reply(200, {
-          list: [
-            {
-              id: 'output-01-xxx-yyy-zzz',
-              name: 'output-email-01',
-              type: 'mailscript-email',
-            },
-          ],
-        })
         .post('/actions', (body: any) => {
           postBody = body
           return true
@@ -73,8 +51,6 @@ describe('Actions', () => {
           'actions:add',
           '--name',
           'forward-01',
-          '--output',
-          'output-email-01',
           '--forward',
           'example@example.com',
         ])
@@ -83,7 +59,6 @@ describe('Actions', () => {
 
           expect(postBody).to.eql({
             name: 'forward-01',
-            output: 'output-01-xxx-yyy-zzz',
             config: {
               forward: 'example@example.com',
               type: 'forward',
@@ -100,8 +75,6 @@ describe('Actions', () => {
           'actions:add',
           '--name',
           'send-01',
-          '--output',
-          'output-email-01',
           '--send',
           'example@example.com',
           '--subject',
@@ -114,7 +87,6 @@ describe('Actions', () => {
 
           expect(postBody).to.eql({
             name: 'send-01',
-            output: 'output-01-xxx-yyy-zzz',
             config: {
               type: 'send',
               send: 'example@example.com',
@@ -126,13 +98,11 @@ describe('Actions', () => {
 
       test
         .stdout()
-        .nock(MailscriptApiServer, nockCheckOutput)
+        // .nock(MailscriptApiServer, nockCheckOutput)
         .command([
           'actions:add',
           '--name',
           'send-01',
-          '--output',
-          'output-email-01',
           '--send',
           'example@example.com',
           '--text',
@@ -145,13 +115,11 @@ describe('Actions', () => {
 
       test
         .stdout()
-        .nock(MailscriptApiServer, nockCheckOutput)
+        // .nock(MailscriptApiServer, nockCheckOutput)
         .command([
           'actions:add',
           '--name',
           'send-01',
-          '--output',
-          'output-email-01',
           '--send',
           'example@example.com',
           '--subject',
@@ -173,8 +141,6 @@ describe('Actions', () => {
           'actions:add',
           '--name',
           'reply-01',
-          '--output',
-          'output-email-01',
           '--reply',
           '--text',
           'Some text',
@@ -184,7 +150,6 @@ describe('Actions', () => {
 
           expect(postBody).to.eql({
             name: 'reply-01',
-            output: 'output-01-xxx-yyy-zzz',
             config: {
               type: 'reply',
               text: 'Some text',
@@ -194,15 +159,8 @@ describe('Actions', () => {
 
       test
         .stdout()
-        .nock(MailscriptApiServer, nockCheckOutput)
-        .command([
-          'actions:add',
-          '--name',
-          'send-01',
-          '--output',
-          'output-email-01',
-          '--reply',
-        ])
+        // .nock(MailscriptApiServer, nockCheckOutput)
+        .command(['actions:add', '--name', 'send-01', '--reply'])
         .exit(1)
         .it('errors on no text or html', (ctx) => {
           expect(ctx.stdout).to.contain(
@@ -219,8 +177,6 @@ describe('Actions', () => {
           'actions:add',
           '--name',
           'replyall-01',
-          '--output',
-          'output-email-01',
           '--replyall',
           '--text',
           'Some text',
@@ -230,7 +186,6 @@ describe('Actions', () => {
 
           expect(postBody).to.eql({
             name: 'replyall-01',
-            output: 'output-01-xxx-yyy-zzz',
             config: {
               type: 'replyAll',
               text: 'Some text',
@@ -240,15 +195,8 @@ describe('Actions', () => {
 
       test
         .stdout()
-        .nock(MailscriptApiServer, nockCheckOutput)
-        .command([
-          'actions:add',
-          '--name',
-          'send-01',
-          '--output',
-          'output-email-01',
-          '--reply',
-        ])
+        // .nock(MailscriptApiServer, nockCheckOutput)
+        .command(['actions:add', '--name', 'send-01', '--reply'])
         .exit(1)
         .it('errors on no text or html', (ctx) => {
           expect(ctx.stdout).to.contain(
@@ -265,8 +213,6 @@ describe('Actions', () => {
           'actions:add',
           '--name',
           'alias-01',
-          '--output',
-          'output-email-01',
           '--alias',
           'example@example.com',
         ])
@@ -275,7 +221,6 @@ describe('Actions', () => {
 
           expect(postBody).to.eql({
             name: 'alias-01',
-            output: 'output-01-xxx-yyy-zzz',
             config: {
               type: 'alias',
               alias: 'example@example.com',
@@ -285,15 +230,8 @@ describe('Actions', () => {
 
       test
         .stdout()
-        .nock(MailscriptApiServer, nockCheckOutput)
-        .command([
-          'actions:add',
-          '--name',
-          'send-01',
-          '--output',
-          'output-email-01',
-          '--reply',
-        ])
+        // .nock(MailscriptApiServer, nockCheckOutput)
+        .command(['actions:add', '--name', 'send-01', '--reply'])
         .exit(1)
         .it('errors on no text or html', (ctx) => {
           expect(ctx.stdout).to.contain(
@@ -307,11 +245,5 @@ describe('Actions', () => {
       .command(['actions:add'])
       .exit(2)
       .it('fails if no name provided')
-
-    test
-      .stdout()
-      .command(['actions:add', '--name', 'example'])
-      .exit(2)
-      .it('fails if no output provided')
   })
 })
