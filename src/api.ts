@@ -264,6 +264,10 @@ export type ActionSend = {
 export type GetAllActionsResponse = {
   list: ActionSend[]
 }
+export type AddActionCombineRequest = {
+  name: string
+  list: string[]
+}
 export type AddActionSmsRequest = {
   name: string
   type: 'sms'
@@ -1208,6 +1212,7 @@ export function getAllActions(opts?: Oazapfts.RequestOpts) {
  */
 export function addAction(
   body:
+    | AddActionCombineRequest
     | AddActionSmsRequest
     | AddActionWebhookRequest
     | AddActionDaemonRequest

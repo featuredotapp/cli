@@ -317,4 +317,105 @@ describe('Actions', () => {
       .exit(2)
       .it('fails if no name provided')
   })
+
+  describe('combine', () => {
+    describe('combine', () => {
+      let postBody: any
+
+      const nockLookup = (api: any) => {
+        return api.get('/actions').reply(200, {
+          list: [
+            { id: 'action-01-xxx', name: 'action-01' },
+            { id: 'action-02-xxx', name: 'action-02' },
+          ],
+        })
+      }
+
+      const nockAddAction = (api: any) => {
+        return api
+          .get('/actions')
+          .reply(200, {
+            list: [
+              { id: 'action-01-xxx', name: 'action-01' },
+              { id: 'action-02-xxx', name: 'action-02' },
+            ],
+          })
+          .post('/actions', (body: any) => {
+            postBody = body
+            return true
+          })
+          .reply(201, { id: 'action-xxx-yyy-zzz' })
+      }
+
+      test
+        .stdout()
+        .nock(MailscriptApiServer, nockAddAction)
+        .command([
+          'actions:combine',
+          '--name',
+          'combine-01',
+          '--action',
+          'action-01',
+          '--action',
+          'action-02',
+        ])
+        .it('succeeds on valid combine', (ctx) => {
+          expect(ctx.stdout).to.contain('Action setup: combine-01')
+
+          expect(postBody).to.eql({
+            name: 'combine-01',
+            list: ['action-01-xxx', 'action-02-xxx'],
+          })
+        })
+
+      test
+        .stdout()
+        .command([
+          'actions:combine',
+          '--action',
+          'action-01',
+          '--action',
+          'action-02',
+        ])
+        .exit(2)
+        .it('error if no name given')
+
+      test
+        .stdout()
+        .command(['actions:combine', '--name', 'combine-01'])
+        .exit(2)
+        .it('error if no actions given')
+
+      test
+        .stdout()
+        .command([
+          'actions:combine',
+          '--name',
+          'combine-01',
+          '--action',
+          'action-01',
+        ])
+        .exit(1)
+        .it('errors on less than 2 actions for combination', (ctx) => {
+          expect(ctx.stdout).to.contain('At least two actions must be combined')
+        })
+
+      test
+        .stdout()
+        .nock(MailscriptApiServer, nockLookup)
+        .command([
+          'actions:combine',
+          '--name',
+          'combine-01',
+          '--action',
+          'action-01',
+          '--action',
+          'unknown',
+        ])
+        .exit(1)
+        .it('errors on unknown action', (ctx) => {
+          expect(ctx.stdout).to.contain('Could not find action unknown')
+        })
+    })
+  })
 })

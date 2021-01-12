@@ -1059,6 +1059,7 @@ paths:
           application/json:
             schema:
               oneOf:
+                - $ref: '#/components/schemas/AddActionCombineRequest'
                 - $ref: '#/components/schemas/AddActionSmsRequest'
                 - $ref: '#/components/schemas/AddActionWebhookRequest'
                 - $ref: '#/components/schemas/AddActionDaemonRequest'
@@ -1815,6 +1816,17 @@ components:
           properties:
             forward:
               type: string
+    AddActionCombineRequest:
+      required:
+        - name
+        - list
+      properties:
+        name:
+          type: string
+        list:
+          type: array
+          items:
+            type: string
     AddActionSmsRequest:
       required:
         - name
