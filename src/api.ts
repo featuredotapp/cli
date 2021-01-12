@@ -268,7 +268,7 @@ export type AddActionSmsRequest = {
   name: string
   type: 'sms'
   config: {
-    sms: string
+    number: string
     text: string
   }
 }

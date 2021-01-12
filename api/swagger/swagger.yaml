@@ -1793,10 +1793,10 @@ components:
         config:
           type: object
           required:
-            - sms
+            - number
             - text
           properties:
-            sms:
+            number:
               type: string
             text:
               type: string

@@ -30,23 +30,94 @@ describe('Actions', () => {
   describe('add', () => {
     let postBody: any
 
-    const nockAddEmail = (api: any) => {
+    const nockAddAction = (api: any) => {
       return api
         .post('/actions', (body: any) => {
           postBody = body
           return true
         })
-        .reply(201, { id: 'trigger-xxx-yyy-zzz' })
+        .reply(201, { id: 'action-xxx-yyy-zzz' })
+    }
+
+    const nockAddSmsAction = (api: any) => {
+      return api
+        .get('/verifications')
+        .reply(200, {
+          list: [{ verified: true, type: 'sms', sms: '+448871123' }],
+        })
+        .post('/actions', (body: any) => {
+          postBody = body
+          return true
+        })
+        .reply(201, { id: 'action-xxx-yyy-zzz' })
     }
 
     beforeEach(() => {
       postBody = {}
     })
 
+    describe('sms', () => {
+      test
+        .stdout()
+        .nock(MailscriptApiServer, nockAddSmsAction)
+        .command([
+          'actions:add',
+          '--name',
+          'sms-01',
+          '--sms',
+          '+448871123',
+          '--text',
+          '{{subject}}',
+        ])
+        .it('succeeds on valid sms', (ctx) => {
+          expect(ctx.stdout).to.contain('Action setup: sms-01')
+
+          expect(postBody).to.eql({
+            name: 'sms-01',
+            type: 'sms',
+            config: {
+              number: '+448871123',
+              text: '{{subject}}',
+            },
+          })
+        })
+    })
+
+    describe('webhook', () => {
+      test
+        .stdout()
+        .nock(MailscriptApiServer, nockAddAction)
+        .command([
+          'actions:add',
+          '--name',
+          'webhook-01',
+          '--webhook',
+          'https://example.webhook/endpoint',
+        ])
+        .it('succeeds on valid webhook', (ctx) => {
+          expect(ctx.stdout).to.contain('Action setup: webhook-01')
+
+          expect(postBody).to.eql({
+            name: 'webhook-01',
+            type: 'webhook',
+            config: {
+              url: 'https://example.webhook/endpoint',
+              body: '',
+              opts: {
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                method: 'POST',
+              },
+            },
+          })
+        })
+    })
+
     describe('forward', () => {
       test
         .stdout()
-        .nock(MailscriptApiServer, nockAddEmail)
+        .nock(MailscriptApiServer, nockAddAction)
         .command([
           'actions:add',
           '--name',
@@ -70,7 +141,7 @@ describe('Actions', () => {
     describe('send', () => {
       test
         .stdout()
-        .nock(MailscriptApiServer, nockAddEmail)
+        .nock(MailscriptApiServer, nockAddAction)
         .command([
           'actions:add',
           '--name',
@@ -136,7 +207,7 @@ describe('Actions', () => {
     describe('reply', () => {
       test
         .stdout()
-        .nock(MailscriptApiServer, nockAddEmail)
+        .nock(MailscriptApiServer, nockAddAction)
         .command([
           'actions:add',
           '--name',
@@ -172,7 +243,7 @@ describe('Actions', () => {
     describe('reply all', () => {
       test
         .stdout()
-        .nock(MailscriptApiServer, nockAddEmail)
+        .nock(MailscriptApiServer, nockAddAction)
         .command([
           'actions:add',
           '--name',
@@ -208,7 +279,7 @@ describe('Actions', () => {
     describe.skip('alias', () => {
       test
         .stdout()
-        .nock(MailscriptApiServer, nockAddEmail)
+        .nock(MailscriptApiServer, nockAddAction)
         .command([
           'actions:add',
           '--name',
