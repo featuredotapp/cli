@@ -59,9 +59,9 @@ describe('Actions', () => {
 
           expect(postBody).to.eql({
             name: 'forward-01',
+            type: 'forward',
             config: {
               forward: 'example@example.com',
-              type: 'forward',
             },
           })
         })
@@ -87,8 +87,8 @@ describe('Actions', () => {
 
           expect(postBody).to.eql({
             name: 'send-01',
+            type: 'send',
             config: {
-              type: 'send',
               send: 'example@example.com',
               subject: 'a subject',
               text: 'Some text',
@@ -150,8 +150,8 @@ describe('Actions', () => {
 
           expect(postBody).to.eql({
             name: 'reply-01',
+            type: 'reply',
             config: {
-              type: 'reply',
               text: 'Some text',
             },
           })
@@ -181,13 +181,13 @@ describe('Actions', () => {
           '--text',
           'Some text',
         ])
-        .it('succeeds on valid reply', (ctx) => {
+        .it('succeeds on valid reply all', (ctx) => {
           expect(ctx.stdout).to.contain('Action setup: replyall-01')
 
           expect(postBody).to.eql({
             name: 'replyall-01',
+            type: 'replyAll',
             config: {
-              type: 'replyAll',
               text: 'Some text',
             },
           })

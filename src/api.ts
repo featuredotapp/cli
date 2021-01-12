@@ -264,13 +264,72 @@ export type ActionSend = {
 export type GetAllActionsResponse = {
   list: ActionSend[]
 }
-export type AddActionConfigForward = {
-  type: 'forward'
-  forward: string
-}
-export type AddActionRequest = {
+export type AddActionSmsRequest = {
   name: string
-  config: AddActionConfigForward
+  type: 'sms'
+  config: {
+    sms: string
+    text: string
+  }
+}
+export type AddActionWebhookRequest = {
+  name: string
+  type: 'webhook'
+  config: {
+    url: string
+    opts: {
+      headers: object
+      method: 'POST' | 'GET' | 'DELETE'
+    }
+    body: string
+  }
+}
+export type AddActionDaemonRequest = {
+  name: string
+  type: 'daemon'
+  config: {
+    body: string
+  }
+}
+export type AddActionSendRequest = {
+  name: string
+  type: 'send'
+  config: {
+    send: string
+    subject: string
+    text?: string
+    html?: string
+  }
+}
+export type AddActionForwardRequest = {
+  name: string
+  type: 'forward'
+  config: {
+    forward: string
+  }
+}
+export type AddActionReplyRequest = {
+  name: string
+  type: 'reply'
+  config: {
+    text?: string
+    html?: string
+  }
+}
+export type AddActionReplyAllRequest = {
+  name: string
+  type: 'replyAll'
+  config: {
+    text?: string
+    html?: string
+  }
+}
+export type AddActionAliasRequest = {
+  name: string
+  type: 'alias'
+  config: {
+    alias?: string
+  }
 }
 export type Sms = {
   id: string
@@ -1147,7 +1206,16 @@ export function getAllActions(opts?: Oazapfts.RequestOpts) {
  * Add an action
  */
 export function addAction(
-  addActionRequest: AddActionRequest,
+  body:
+    | AddActionSmsRequest
+    | AddActionWebhookRequest
+    | AddActionDaemonRequest
+    | AddActionSendRequest
+    | AddActionForwardRequest
+    | AddActionForwardRequest
+    | AddActionReplyRequest
+    | AddActionReplyAllRequest
+    | AddActionAliasRequest,
   opts?: Oazapfts.RequestOpts,
 ) {
   return oazapfts.fetchJson<
@@ -1168,7 +1236,7 @@ export function addAction(
     oazapfts.json({
       ...opts,
       method: 'POST',
-      body: addActionRequest,
+      body,
     }),
   )
 }

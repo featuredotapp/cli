@@ -115,15 +115,10 @@ export default class ActionsAdd extends Command {
       this.exit(1)
     }
 
-    const actionConfig: any = this._resolveActionConfig(flags)
+    const payload: any = this._resolveActionPayload(flags)
 
-    await this._optionallyVerifySMS(client, flags, actionConfig)
-    await this._optionallyVerifyAlias(client, flags, actionConfig)
-
-    const payload: api.AddActionRequest = {
-      name: flags.name,
-      config: actionConfig,
-    }
+    await this._optionallyVerifySMS(client, flags, payload)
+    await this._optionallyVerifyAlias(client, flags, payload)
 
     return handle(
       client.addAction(payload),
@@ -142,7 +137,9 @@ export default class ActionsAdd extends Command {
     )
   }
 
-  private _resolveActionConfig(flags: FlagsType) {
+  private _resolveActionPayload(flags: FlagsType) {
+    const name = flags.name
+
     if (flags.sms) {
       if (!flags.text) {
         this.log('Please provide --text')
@@ -150,10 +147,13 @@ export default class ActionsAdd extends Command {
       }
 
       return {
+        name: name,
         type: 'sms',
-        sms: flags.sms,
-        text: flags.text,
-      }
+        config: {
+          sms: flags.sms,
+          text: flags.text,
+        },
+      } as api.AddActionSmsRequest
     }
 
     if (flags.daemon) {
@@ -162,9 +162,12 @@ export default class ActionsAdd extends Command {
         : undefined
 
       return {
+        name: name,
         type: 'daemon',
-        body,
-      }
+        config: {
+          body,
+        },
+      } as api.AddActionDaemonRequest
     }
 
     if (flags.webhook) {
@@ -189,21 +192,27 @@ export default class ActionsAdd extends Command {
           }
 
       return {
+        name: name,
         type: 'webhook',
-        url: flags.webhook,
-        opts: {
-          headers: headers,
-          method,
+        config: {
+          url: flags.webhook,
+          opts: {
+            headers: headers,
+            method,
+          },
+          body,
         },
-        body,
-      }
+      } as api.AddActionWebhookRequest
     }
 
     if (flags.forward) {
       return {
+        name: name,
         type: 'forward',
-        forward: flags.forward,
-      } as api.AddActionConfigForward
+        config: {
+          forward: flags.forward,
+        },
+      } as api.AddActionForwardRequest
     }
 
     if (flags.send) {
@@ -218,12 +227,15 @@ export default class ActionsAdd extends Command {
       }
 
       return {
+        name: name,
         type: 'send',
-        send: flags.send,
-        subject: flags.subject,
-        text: flags.text,
-        html: flags.html,
-      }
+        config: {
+          send: flags.send,
+          subject: flags.subject,
+          text: flags.text,
+          html: flags.html,
+        },
+      } as api.AddActionSendRequest
     }
 
     if (flags.reply) {
@@ -233,10 +245,13 @@ export default class ActionsAdd extends Command {
       }
 
       return {
+        name: name,
         type: 'reply',
-        text: flags.text,
-        html: flags.html,
-      }
+        config: {
+          text: flags.text,
+          html: flags.html,
+        },
+      } as api.AddActionReplyRequest
     }
 
     if (flags.replyall) {
@@ -246,17 +261,23 @@ export default class ActionsAdd extends Command {
       }
 
       return {
+        name: name,
         type: 'replyAll',
-        text: flags.text,
-        html: flags.html,
-      }
+        config: {
+          text: flags.text,
+          html: flags.html,
+        },
+      } as api.AddActionReplyAllRequest
     }
 
     if (flags.alias) {
       return {
+        name: name,
         type: 'alias',
-        alias: flags.alias,
-      }
+        config: {
+          alias: flags.alias,
+        },
+      } as api.AddActionAliasRequest
     }
 
     this.log(`${chalk.bold('Error')}: please provide either:

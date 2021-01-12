@@ -1058,7 +1058,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddActionRequest'
+              oneOf:
+                - $ref: '#/components/schemas/AddActionSmsRequest'
+                - $ref: '#/components/schemas/AddActionWebhookRequest'
+                - $ref: '#/components/schemas/AddActionDaemonRequest'
+                - $ref: '#/components/schemas/AddActionSendRequest'
+                - $ref: '#/components/schemas/AddActionForwardRequest'
+                - $ref: '#/components/schemas/AddActionForwardRequest'
+                - $ref: '#/components/schemas/AddActionReplyRequest'
+                - $ref: '#/components/schemas/AddActionReplyAllRequest'
+                - $ref: '#/components/schemas/AddActionAliasRequest'
       responses:
         '201':
           description: 'Successful operation'
@@ -1752,27 +1761,173 @@ components:
           type: string
         address:
           type: string
-    AddActionRequest:
+    AddActionForwardRequest:
       required:
         - name
+        - type
         - config
       properties:
         name:
           type: string
-        config:
-          type: object
-          oneOf:
-            - $ref: '#/components/schemas/AddActionConfigForward'
-    AddActionConfigForward:
-      required:
-        - type
-        - forward
-      properties:
         type:
           type: string
           enum: ['forward']
-        forward:
+        config:
+          type: object
+          required:
+            - forward
+          properties:
+            forward:
+              type: string
+    AddActionSmsRequest:
+      required:
+        - name
+        - type
+        - config
+      properties:
+        name:
           type: string
+        type:
+          type: string
+          enum: ['sms']
+        config:
+          type: object
+          required:
+            - sms
+            - text
+          properties:
+            sms:
+              type: string
+            text:
+              type: string
+    AddActionDaemonRequest:
+      required:
+        - name
+        - type
+        - config
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: ['daemon']
+        config:
+          type: object
+          required:
+            - body
+          properties:
+            body:
+              type: string
+    AddActionWebhookRequest:
+      required:
+        - name
+        - type
+        - config
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: ['webhook']
+        config:
+          type: object
+          required:
+            - url
+            - opts
+            - body
+          properties:
+            url:
+              type: string
+            opts:
+              type: object
+              required:
+                - headers
+                - method
+              properties:
+                headers:
+                  type: object
+                method:
+                  type: string
+                  enum: ['POST', 'GET', 'DELETE']
+            body:
+              type: string
+    AddActionSendRequest:
+      required:
+        - name
+        - type
+        - config
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: ['send']
+        config:
+          type: object
+          required:
+            - send
+            - subject
+          properties:
+            send:
+              type: string
+            subject:
+              type: string
+            text:
+              type: string
+            html:
+              type: string
+    AddActionReplyRequest:
+      required:
+        - name
+        - type
+        - config
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: ['reply']
+        config:
+          type: object
+          properties:
+            text:
+              type: string
+            html:
+              type: string
+    AddActionReplyAllRequest:
+      required:
+        - name
+        - type
+        - config
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: ['replyAll']
+        config:
+          type: object
+          properties:
+            text:
+              type: string
+            html:
+              type: string
+    AddActionAliasRequest:
+      required:
+        - name
+        - type
+        - config
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: ['alias']
+        config:
+          type: object
+          properties:
+            alias:
+              type: string
     GetAllActionsResponse:
       required:
         - list
@@ -1782,39 +1937,6 @@ components:
           items:
             oneOf:
               - $ref: '#/components/schemas/ActionSend'
-    ActionForward:
-      required:
-        - id
-        - name
-        - owner
-        - createdAt
-        - createdBy
-        - output
-        - config
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        owner:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        createdBy:
-          type: string
-        output:
-          type: string
-        config:
-          type: object
-          required:
-            - type
-            - forward
-          properties:
-            type:
-              type: string
-            forward:
-              type: string
     ActionSend:
       required:
         - id
