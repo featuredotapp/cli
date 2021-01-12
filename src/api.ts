@@ -288,6 +288,7 @@ export type AddActionDaemonRequest = {
   name: string
   type: 'daemon'
   config: {
+    daemon?: string
     body: string
   }
 }
@@ -1309,5 +1310,28 @@ export function deleteSms(sms: string, opts?: Oazapfts.RequestOpts) {
   >(`/sms/${sms}`, {
     ...opts,
     method: 'DELETE',
+  })
+}
+/**
+ * Get a token for opening a daemon connection
+ */
+export function getDaemonToken(daemon: string, opts?: Oazapfts.RequestOpts) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+        data: {
+          token: string
+        }
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+  >(`/daemons/${daemon}/token`, {
+    ...opts,
   })
 }

@@ -48,6 +48,9 @@ export default class ActionsAdd extends Command {
     sms: flags.string({
       description: 'the sms number to send to',
     }),
+    daemon: flags.string({
+      description: 'the name of the daemon to send to',
+    }),
     forward: flags.string({
       char: 'f',
       description: 'email address for forward action',
@@ -165,6 +168,7 @@ export default class ActionsAdd extends Command {
         name: name,
         type: 'daemon',
         config: {
+          daemon: flags.daemon,
           body,
         },
       } as api.AddActionDaemonRequest

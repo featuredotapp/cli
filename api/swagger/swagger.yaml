@@ -1171,6 +1171,42 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /daemons/{daemon}/token:
+    get:
+      tags:
+        - daemon
+      summary: 'Get a token for opening a daemon connection'
+      operationId: getDaemonToken
+      parameters:
+        - name: daemon
+          in: path
+          description: name of Daemon
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Successful get operation'
+          content:
+            application/json:
+              schema:
+                required:
+                  - token
+                properties:
+                  token:
+                    type: string
+        '400':
+          description: 'Failure'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
     User:
@@ -1816,6 +1852,8 @@ components:
           required:
             - body
           properties:
+            daemon:
+              type: string
             body:
               type: string
     AddActionWebhookRequest:
