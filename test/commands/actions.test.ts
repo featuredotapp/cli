@@ -130,8 +130,9 @@ describe('Actions', () => {
 
           expect(postBody).to.eql({
             name: 'forward-01',
-            type: 'forward',
+            type: 'mailscript-email',
             config: {
+              type: 'forward',
               forward: 'example@example.com',
             },
           })
@@ -158,8 +159,9 @@ describe('Actions', () => {
 
           expect(postBody).to.eql({
             name: 'send-01',
-            type: 'send',
+            type: 'mailscript-email',
             config: {
+              type: 'send',
               send: 'example@example.com',
               subject: 'a subject',
               text: 'Some text',
@@ -221,8 +223,9 @@ describe('Actions', () => {
 
           expect(postBody).to.eql({
             name: 'reply-01',
-            type: 'reply',
+            type: 'mailscript-email',
             config: {
+              type: 'reply',
               text: 'Some text',
             },
           })
@@ -257,8 +260,9 @@ describe('Actions', () => {
 
           expect(postBody).to.eql({
             name: 'replyall-01',
-            type: 'replyAll',
+            type: 'mailscript-email',
             config: {
+              type: 'replyAll',
               text: 'Some text',
             },
           })

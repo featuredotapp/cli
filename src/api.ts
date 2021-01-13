@@ -298,8 +298,9 @@ export type AddActionDaemonRequest = {
 }
 export type AddActionSendRequest = {
   name: string
-  type: 'send'
+  type: 'mailscript-email'
   config: {
+    type?: 'send'
     send: string
     subject: string
     text?: string
@@ -308,31 +309,35 @@ export type AddActionSendRequest = {
 }
 export type AddActionForwardRequest = {
   name: string
-  type: 'forward'
+  type: 'mailscript-email'
   config: {
+    type?: 'forward'
     forward: string
   }
 }
 export type AddActionReplyRequest = {
   name: string
-  type: 'reply'
+  type: 'mailscript-email'
   config: {
+    type?: 'reply'
     text?: string
     html?: string
   }
 }
 export type AddActionReplyAllRequest = {
   name: string
-  type: 'replyAll'
+  type: 'mailscript-email'
   config: {
+    type?: 'replyAll'
     text?: string
     html?: string
   }
 }
 export type AddActionAliasRequest = {
   name: string
-  type: 'alias'
+  type: 'mailscript-email'
   config: {
+    type?: 'alias'
     alias?: string
   }
 }

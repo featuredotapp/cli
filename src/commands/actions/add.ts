@@ -212,8 +212,9 @@ export default class ActionsAdd extends Command {
     if (flags.forward) {
       return {
         name: name,
-        type: 'forward',
+        type: 'mailscript-email',
         config: {
+          type: 'forward',
           forward: flags.forward,
         },
       } as api.AddActionForwardRequest
@@ -232,8 +233,9 @@ export default class ActionsAdd extends Command {
 
       return {
         name: name,
-        type: 'send',
+        type: 'mailscript-email',
         config: {
+          type: 'send',
           send: flags.send,
           subject: flags.subject,
           text: flags.text,
@@ -250,8 +252,9 @@ export default class ActionsAdd extends Command {
 
       return {
         name: name,
-        type: 'reply',
+        type: 'mailscript-email',
         config: {
+          type: 'reply',
           text: flags.text,
           html: flags.html,
         },
@@ -266,8 +269,9 @@ export default class ActionsAdd extends Command {
 
       return {
         name: name,
-        type: 'replyAll',
+        type: 'mailscript-email',
         config: {
+          type: 'replyAll',
           text: flags.text,
           html: flags.html,
         },
@@ -277,8 +281,9 @@ export default class ActionsAdd extends Command {
     if (flags.alias) {
       return {
         name: name,
-        type: 'alias',
+        type: 'mailscript-email',
         config: {
+          type: 'alias',
           alias: flags.alias,
         },
       } as api.AddActionAliasRequest

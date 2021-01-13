@@ -1808,12 +1808,15 @@ components:
           type: string
         type:
           type: string
-          enum: ['forward']
+          enum: ['mailscript-email']
         config:
           type: object
           required:
             - forward
           properties:
+            type:
+              type: string
+              enum: ['forward']
             forward:
               type: string
     AddActionCombineRequest:
@@ -1911,13 +1914,16 @@ components:
           type: string
         type:
           type: string
-          enum: ['send']
+          enum: ['mailscript-email']
         config:
           type: object
           required:
             - send
             - subject
           properties:
+            type:
+              type: string
+              enum: ['send']
             send:
               type: string
             subject:
@@ -1936,10 +1942,13 @@ components:
           type: string
         type:
           type: string
-          enum: ['reply']
+          enum: ['mailscript-email']
         config:
           type: object
           properties:
+            type:
+              type: string
+              enum: ['reply']
             text:
               type: string
             html:
@@ -1954,10 +1963,13 @@ components:
           type: string
         type:
           type: string
-          enum: ['replyAll']
+          enum: ['mailscript-email']
         config:
           type: object
           properties:
+            type:
+              type: string
+              enum: ['replyAll']
             text:
               type: string
             html:
@@ -1972,10 +1984,13 @@ components:
           type: string
         type:
           type: string
-          enum: ['alias']
+          enum: ['mailscript-email']
         config:
           type: object
           properties:
+            type:
+              type: string
+              enum: ['alias']
             alias:
               type: string
     GetAllActionsResponse:
