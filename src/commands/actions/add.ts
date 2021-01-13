@@ -68,6 +68,9 @@ export default class ActionsAdd extends Command {
     alias: flags.string({
       description: 'email address for alias action',
     }),
+    from: flags.string({
+      description: 'email address to use as sending from',
+    }),
     subject: flags.string({
       char: 's',
       description: 'subject of the email',
@@ -120,11 +123,17 @@ export default class ActionsAdd extends Command {
 
     const payload = this._resolveActionPayload(flags)
 
+    await this._optionallyValidateMailscriptEmail(client, payload)
     await this._optionallyVerifySMS(client, payload)
     await this._optionallyVerifyAlias(client, flags, payload)
 
+    const updatedPayload = await this._enhancePayloadWithFromKeys(
+      client,
+      payload,
+    )
+
     return handle(
-      client.addAction(payload),
+      client.addAction(updatedPayload),
       withStandardErrors(
         {
           '201': () => {
@@ -210,11 +219,17 @@ export default class ActionsAdd extends Command {
     }
 
     if (flags.forward) {
+      if (!flags.from) {
+        this.log('Please provide --from')
+        this.exit(1)
+      }
+
       return {
         name: name,
         type: 'mailscript-email',
         config: {
           type: 'forward',
+          from: flags.from,
           forward: flags.forward,
         },
       } as api.AddActionForwardRequest
@@ -300,6 +315,62 @@ export default class ActionsAdd extends Command {
   --alias`)
 
     this.exit(1)
+  }
+
+  private async _enhancePayloadWithFromKeys(client: typeof api, payload: any) {
+    const {
+      type,
+      config: { type: mailtype, from },
+    } = payload
+
+    if (type !== 'mailscript-email') {
+      return payload
+    }
+
+    if (mailtype === 'forward') {
+      const { list }: api.GetAllKeysResponse = await handle(
+        client.getAllKeys(from),
+        withStandardErrors({}, this),
+      )
+
+      const key = list.filter((k) => k.write)[0]
+
+      if (!key) {
+        this.log('You do not have write permission to that from address')
+        this.exit(1)
+      }
+
+      return {
+        ...payload,
+        config: {
+          ...payload.config,
+          key: key.id,
+        },
+      }
+    }
+
+    return payload
+  }
+
+  private async _optionallyValidateMailscriptEmail(
+    client: typeof api,
+    { type, config: { type: mailtype, from } }: any,
+  ) {
+    if (type !== 'mailscript-email') {
+      return
+    }
+
+    if (mailtype === 'forward') {
+      const { list }: api.GetAllAddressesResponse = await handle(
+        client.getAllAddresses(),
+        withStandardErrors({}, this),
+      )
+
+      if (list.find((address) => address.id !== from)) {
+        this.log(`Unknown from address ${from}`)
+        this.exit(1)
+      }
+    }
   }
 
   private async _optionallyVerifySMS(

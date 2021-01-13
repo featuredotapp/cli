@@ -39,6 +39,19 @@ describe('Actions', () => {
         .reply(201, { id: 'action-xxx-yyy-zzz' })
     }
 
+    const nockAddMailscriptEmailAction = (api: any) => {
+      return api
+        .get('/addresses')
+        .reply(200, { list: [{ id: 'smith@mailscript.com' }] })
+        .get('/addresses/smith@mailscript.com/keys')
+        .reply(200, { list: [{ id: 'key-01-xxx', write: true, read: true }] })
+        .post('/actions', (body: any) => {
+          postBody = body
+          return true
+        })
+        .reply(201, { id: 'action-xxx-yyy-zzz' })
+    }
+
     const nockAddSmsAction = (api: any) => {
       return api
         .get('/verifications')
@@ -117,13 +130,15 @@ describe('Actions', () => {
     describe('forward', () => {
       test
         .stdout()
-        .nock(MailscriptApiServer, nockAddAction)
+        .nock(MailscriptApiServer, nockAddMailscriptEmailAction)
         .command([
           'actions:add',
           '--name',
           'forward-01',
           '--forward',
           'example@example.com',
+          '--from',
+          'smith@mailscript.com',
         ])
         .it('succeeds on valid forward', (ctx) => {
           expect(ctx.stdout).to.contain('Action setup: forward-01')
@@ -134,6 +149,8 @@ describe('Actions', () => {
             config: {
               type: 'forward',
               forward: 'example@example.com',
+              from: 'smith@mailscript.com',
+              key: 'key-01-xxx',
             },
           })
         })
