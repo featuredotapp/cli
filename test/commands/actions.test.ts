@@ -39,6 +39,17 @@ describe('Actions', () => {
         .reply(201, { id: 'action-xxx-yyy-zzz' })
     }
 
+    const nockAddAliasAction = (api: any) => {
+      return api
+        .get('/user')
+        .reply(200, { id: 'xyz', email: 'example@example.com' })
+        .post('/actions', (body: any) => {
+          postBody = body
+          return true
+        })
+        .reply(201, { id: 'action-xxx-yyy-zzz' })
+    }
+
     const nockAddMailscriptEmailAction = (api: any) => {
       return api
         .get('/addresses')
@@ -256,7 +267,6 @@ describe('Actions', () => {
 
       test
         .stdout()
-        // .nock(MailscriptApiServer, nockCheckOutput)
         .command(['actions:add', '--name', 'send-01', '--reply'])
         .exit(1)
         .it('errors on no text or html', (ctx) => {
@@ -297,7 +307,6 @@ describe('Actions', () => {
 
       test
         .stdout()
-        // .nock(MailscriptApiServer, nockCheckOutput)
         .command(['actions:add', '--name', 'send-01', '--reply'])
         .exit(1)
         .it('errors on no text or html', (ctx) => {
@@ -307,10 +316,10 @@ describe('Actions', () => {
         })
     })
 
-    describe.skip('alias', () => {
+    describe('alias', () => {
       test
         .stdout()
-        .nock(MailscriptApiServer, nockAddAction)
+        .nock(MailscriptApiServer, nockAddAliasAction)
         .command([
           'actions:add',
           '--name',
@@ -323,22 +332,12 @@ describe('Actions', () => {
 
           expect(postBody).to.eql({
             name: 'alias-01',
+            type: 'mailscript-email',
             config: {
               type: 'alias',
               alias: 'example@example.com',
             },
           })
-        })
-
-      test
-        .stdout()
-        // .nock(MailscriptApiServer, nockCheckOutput)
-        .command(['actions:add', '--name', 'send-01', '--reply'])
-        .exit(1)
-        .it('errors on no text or html', (ctx) => {
-          expect(ctx.stdout).to.contain(
-            'Please provide either --text or --html',
-          )
         })
     })
 

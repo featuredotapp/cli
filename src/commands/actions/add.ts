@@ -460,15 +460,9 @@ export default class ActionsAdd extends Command {
   private async _optionallyVerifyAlias(
     client: typeof api,
     flags: FlagsType,
-    {
-      type,
-      alias,
-    }: {
-      type?: string
-      alias?: string
-    },
+    { type, config: { type: mailtype, alias } }: any,
   ) {
-    if (type !== 'alias') {
+    if (type !== 'mailscript-email' || mailtype !== 'alias') {
       return
     }
 
