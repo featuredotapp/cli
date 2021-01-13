@@ -305,8 +305,8 @@ export type AddActionSendRequest = {
     subject: string
     text?: string
     html?: string
-    from?: string
-    key?: string
+    from: string
+    key: string
   }
 }
 export type AddActionForwardRequest = {
@@ -323,18 +323,22 @@ export type AddActionReplyRequest = {
   name: string
   type: 'mailscript-email'
   config: {
-    type?: 'reply'
+    type: 'reply'
     text?: string
     html?: string
+    from: string
+    key: string
   }
 }
 export type AddActionReplyAllRequest = {
   name: string
   type: 'mailscript-email'
   config: {
-    type?: 'replyAll'
+    type: 'replyAll'
     text?: string
     html?: string
+    from: string
+    key: string
   }
 }
 export type AddActionAliasRequest = {

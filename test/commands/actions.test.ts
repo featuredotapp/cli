@@ -228,7 +228,7 @@ describe('Actions', () => {
     describe('reply', () => {
       test
         .stdout()
-        .nock(MailscriptApiServer, nockAddAction)
+        .nock(MailscriptApiServer, nockAddMailscriptEmailAction)
         .command([
           'actions:add',
           '--name',
@@ -236,6 +236,8 @@ describe('Actions', () => {
           '--reply',
           '--text',
           'Some text',
+          '--from',
+          'smith@mailscript.com',
         ])
         .it('succeeds on valid reply', (ctx) => {
           expect(ctx.stdout).to.contain('Action setup: reply-01')
@@ -246,6 +248,8 @@ describe('Actions', () => {
             config: {
               type: 'reply',
               text: 'Some text',
+              from: 'smith@mailscript.com',
+              key: 'key-01-xxx',
             },
           })
         })
@@ -265,7 +269,7 @@ describe('Actions', () => {
     describe('reply all', () => {
       test
         .stdout()
-        .nock(MailscriptApiServer, nockAddAction)
+        .nock(MailscriptApiServer, nockAddMailscriptEmailAction)
         .command([
           'actions:add',
           '--name',
@@ -273,6 +277,8 @@ describe('Actions', () => {
           '--replyall',
           '--text',
           'Some text',
+          '--from',
+          'smith@mailscript.com',
         ])
         .it('succeeds on valid reply all', (ctx) => {
           expect(ctx.stdout).to.contain('Action setup: replyall-01')
@@ -281,6 +287,8 @@ describe('Actions', () => {
             name: 'replyall-01',
             type: 'mailscript-email',
             config: {
+              from: 'smith@mailscript.com',
+              key: 'key-01-xxx',
               type: 'replyAll',
               text: 'Some text',
             },

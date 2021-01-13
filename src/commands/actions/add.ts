@@ -271,6 +271,11 @@ export default class ActionsAdd extends Command {
         this.exit(1)
       }
 
+      if (!flags.from) {
+        this.log('Please provide --from')
+        this.exit(1)
+      }
+
       return {
         name: name,
         type: 'mailscript-email',
@@ -278,6 +283,7 @@ export default class ActionsAdd extends Command {
           type: 'reply',
           text: flags.text,
           html: flags.html,
+          from: flags.from,
         },
       } as api.AddActionReplyRequest
     }
@@ -288,6 +294,11 @@ export default class ActionsAdd extends Command {
         this.exit(1)
       }
 
+      if (!flags.from) {
+        this.log('Please provide --from')
+        this.exit(1)
+      }
+
       return {
         name: name,
         type: 'mailscript-email',
@@ -295,6 +306,7 @@ export default class ActionsAdd extends Command {
           type: 'replyAll',
           text: flags.text,
           html: flags.html,
+          from: flags.from,
         },
       } as api.AddActionReplyAllRequest
     }
@@ -333,7 +345,12 @@ export default class ActionsAdd extends Command {
       return payload
     }
 
-    if (mailtype === 'forward' || mailtype === 'send') {
+    if (
+      mailtype === 'forward' ||
+      mailtype === 'send' ||
+      mailtype === 'reply' ||
+      mailtype === 'replyAll'
+    ) {
       const { list }: api.GetAllKeysResponse = await handle(
         client.getAllKeys(from),
         withStandardErrors({}, this),
@@ -366,7 +383,12 @@ export default class ActionsAdd extends Command {
       return
     }
 
-    if (mailtype === 'forward' || mailtype === 'send') {
+    if (
+      mailtype === 'forward' ||
+      mailtype === 'send' ||
+      mailtype === 'reply' ||
+      mailtype === 'replyAll'
+    ) {
       const { list }: api.GetAllAddressesResponse = await handle(
         client.getAllAddresses(),
         withStandardErrors({}, this),

@@ -1927,6 +1927,8 @@ components:
           required:
             - send
             - subject
+            - from
+            - key
           properties:
             type:
               type: string
@@ -1956,6 +1958,10 @@ components:
           enum: ['mailscript-email']
         config:
           type: object
+          required:
+            - type
+            - from
+            - key
           properties:
             type:
               type: string
@@ -1963,6 +1969,10 @@ components:
             text:
               type: string
             html:
+              type: string
+            from:
+              type: string
+            key:
               type: string
     AddActionReplyAllRequest:
       required:
@@ -1977,6 +1987,10 @@ components:
           enum: ['mailscript-email']
         config:
           type: object
+          required:
+            - type
+            - from
+            - key
           properties:
             type:
               type: string
@@ -1984,6 +1998,10 @@ components:
             text:
               type: string
             html:
+              type: string
+            from:
+              type: string
+            key:
               type: string
     AddActionAliasRequest:
       required:
