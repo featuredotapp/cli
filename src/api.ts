@@ -301,18 +301,22 @@ export type AddActionSendRequest = {
   type: 'mailscript-email'
   config: {
     type?: 'send'
-    send: string
+    to?: string
     subject: string
     text?: string
     html?: string
+    from?: string
+    key?: string
   }
 }
 export type AddActionForwardRequest = {
   name: string
   type: 'mailscript-email'
   config: {
-    type?: 'forward'
+    type: 'forward'
     forward: string
+    from: string
+    key: string
   }
 }
 export type AddActionReplyRequest = {

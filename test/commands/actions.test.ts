@@ -159,7 +159,7 @@ describe('Actions', () => {
     describe('send', () => {
       test
         .stdout()
-        .nock(MailscriptApiServer, nockAddAction)
+        .nock(MailscriptApiServer, nockAddMailscriptEmailAction)
         .command([
           'actions:add',
           '--name',
@@ -170,6 +170,8 @@ describe('Actions', () => {
           'a subject',
           '--text',
           'Some text',
+          '--from',
+          'smith@mailscript.com',
         ])
         .it('succeeds on valid send', (ctx) => {
           expect(ctx.stdout).to.contain('Action setup: send-01')
@@ -179,16 +181,17 @@ describe('Actions', () => {
             type: 'mailscript-email',
             config: {
               type: 'send',
-              send: 'example@example.com',
+              to: 'example@example.com',
               subject: 'a subject',
               text: 'Some text',
+              from: 'smith@mailscript.com',
+              key: 'key-01-xxx',
             },
           })
         })
 
       test
         .stdout()
-        // .nock(MailscriptApiServer, nockCheckOutput)
         .command([
           'actions:add',
           '--name',
@@ -205,7 +208,6 @@ describe('Actions', () => {
 
       test
         .stdout()
-        // .nock(MailscriptApiServer, nockCheckOutput)
         .command([
           'actions:add',
           '--name',

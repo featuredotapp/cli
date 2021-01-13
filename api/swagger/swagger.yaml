@@ -1812,12 +1812,19 @@ components:
         config:
           type: object
           required:
+            - type
             - forward
+            - from
+            - key
           properties:
             type:
               type: string
               enum: ['forward']
             forward:
+              type: string
+            from:
+              type: string
+            key:
               type: string
     AddActionCombineRequest:
       required:
@@ -1924,13 +1931,17 @@ components:
             type:
               type: string
               enum: ['send']
-            send:
+            to:
               type: string
             subject:
               type: string
             text:
               type: string
             html:
+              type: string
+            from:
+              type: string
+            key:
               type: string
     AddActionReplyRequest:
       required:
