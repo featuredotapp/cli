@@ -1,19 +1,19 @@
 /* eslint-disable valid-jsdoc, @typescript-eslint/no-unused-vars */
 /**
  * Mailscript
- * 2.0.0
+ * 0.4.0
  * DO NOT MODIFY - This file has been generated using oazapfts.
  * See https://www.npmjs.com/package/oazapfts
  */
 import * as Oazapfts from 'oazapfts/lib/runtime'
 import * as QS from 'oazapfts/lib/runtime/query'
 export const defaults: Oazapfts.RequestOpts = {
-  baseUrl: 'https://api.mailscript.com/v2',
+  baseUrl: 'https://api.mailscript.com/v1',
 }
 const oazapfts = Oazapfts.runtime(defaults)
 export const servers = {
-  apiServer: 'https://api.mailscript.com/v2',
-  localDevelopmentServer: 'http://localhost:7000/v2',
+  apiServer: 'https://api.mailscript.com/v1',
+  localDevelopmentServer: 'http://localhost:7000/v1',
 }
 export type User = {
   id: string
@@ -99,61 +99,6 @@ export type MailscriptEmailInput = {
 }
 export type GetAllInputsResponse = {
   list: MailscriptEmailInput[]
-}
-export type MailscriptEmailOutput = {
-  id: string
-  name: string
-  type: 'mailescript-email'
-  owner: string
-  createdAt: string
-  createdBy: string
-  address: string
-}
-export type GetAllOutputsResponse = {
-  list: MailscriptEmailOutput[]
-}
-export type Accessory = {
-  id: string
-  type: 'mailscript-email' | 'sms' | 'webhook' | 'daemon'
-  owner?: string
-  createdAt: string
-  createdBy: string
-  name: string
-  address?: string
-  sms?: string
-  key: string
-}
-export type GetAllAccessoriesResponse = {
-  list: Accessory[]
-}
-export type AddSmsAccessoryRequest = {
-  name: string
-  type: 'sms'
-  sms: string
-}
-export type AddMailscriptEmailAccessoryRequest = {
-  name: string
-  type: 'mailscript-email'
-  address: string
-  key: string
-}
-export type AddDaemonAccessoryRequest = {
-  name: string
-  type: 'daemon'
-}
-export type UpdateSmsAccessoryRequest = {
-  name: string
-  type: 'sms'
-  sms: string
-}
-export type UpdateMailscriptEmailAccessoryRequest = {
-  name: string
-  type: 'mailscript-email'
-  address: string
-  key: string
-}
-export type AccessoryTokenResponse = {
-  token: string
 }
 export type AddWorkflowRequest = {
   name: string
@@ -348,21 +293,6 @@ export type AddActionAliasRequest = {
     type?: 'alias'
     alias?: string
   }
-}
-export type Sms = {
-  id: string
-  name: string
-  number: string
-  owner: string
-  createdAt: string
-  createdBy: string
-}
-export type GetAllSmsResponse = {
-  list: Sms[]
-}
-export type AddSmsRequest = {
-  name: string
-  number: string
 }
 /**
  * Get the authenticated user
@@ -671,207 +601,6 @@ export function getAllInputs(
       ...opts,
     },
   )
-}
-/**
- * Get all outputs you have access to
- */
-export function getAllOutputs(
-  {
-    name,
-  }: {
-    name?: string
-  } = {},
-  opts?: Oazapfts.RequestOpts,
-) {
-  return oazapfts.fetchJson<
-    | {
-        status: 200
-        data: GetAllOutputsResponse
-      }
-    | {
-        status: 400
-        data: ErrorResponse
-      }
-    | {
-        status: 403
-        data: ErrorResponse
-      }
-  >(
-    `/outputs${QS.query(
-      QS.form({
-        name,
-      }),
-    )}`,
-    {
-      ...opts,
-    },
-  )
-}
-/**
- * Get all accessories you have access to
- */
-export function getAllAccessories(
-  {
-    name,
-  }: {
-    name?: string
-  } = {},
-  opts?: Oazapfts.RequestOpts,
-) {
-  return oazapfts.fetchJson<
-    | {
-        status: 200
-        data: GetAllAccessoriesResponse
-      }
-    | {
-        status: 403
-        data: ErrorResponse
-      }
-    | {
-        status: 405
-        data: ErrorResponse
-      }
-  >(
-    `/accessories${QS.query(
-      QS.form({
-        name,
-      }),
-    )}`,
-    {
-      ...opts,
-    },
-  )
-}
-/**
- * Setup an accessory
- */
-export function addAccessory(
-  body:
-    | AddSmsAccessoryRequest
-    | AddMailscriptEmailAccessoryRequest
-    | AddDaemonAccessoryRequest,
-  opts?: Oazapfts.RequestOpts,
-) {
-  return oazapfts.fetchJson<
-    | {
-        status: 201
-      }
-    | {
-        status: 400
-        data: ErrorResponse
-      }
-    | {
-        status: 403
-        data: ErrorResponse
-      }
-    | {
-        status: 405
-        data: ErrorResponse
-      }
-  >(
-    '/accessories',
-    oazapfts.json({
-      ...opts,
-      method: 'POST',
-      body,
-    }),
-  )
-}
-/**
- * Get an accessory
- */
-export function getAccessory(id: string, opts?: Oazapfts.RequestOpts) {
-  return oazapfts.fetchJson<
-    | {
-        status: 200
-        data: Accessory
-      }
-    | {
-        status: 403
-        data: ErrorResponse
-      }
-    | {
-        status: 405
-        data: ErrorResponse
-      }
-  >(`/accessories/${id}`, {
-    ...opts,
-  })
-}
-/**
- * Update an accessory
- */
-export function updateAccessory(
-  id: string,
-  body: UpdateSmsAccessoryRequest | UpdateMailscriptEmailAccessoryRequest,
-  opts?: Oazapfts.RequestOpts,
-) {
-  return oazapfts.fetchJson<
-    | {
-        status: 200
-      }
-    | {
-        status: 403
-        data: ErrorResponse
-      }
-    | {
-        status: 405
-        data: ErrorResponse
-      }
-  >(
-    `/accessories/${id}`,
-    oazapfts.json({
-      ...opts,
-      method: 'PUT',
-      body,
-    }),
-  )
-}
-/**
- * Delete an accessory
- */
-export function deleteAccessory(id: string, opts?: Oazapfts.RequestOpts) {
-  return oazapfts.fetchJson<
-    | {
-        status: 204
-      }
-    | {
-        status: 400
-        data: ErrorResponse
-      }
-    | {
-        status: 403
-        data: ErrorResponse
-      }
-    | {
-        status: 404
-        data: ErrorResponse
-      }
-  >(`/accessories/${id}`, {
-    ...opts,
-    method: 'DELETE',
-  })
-}
-/**
- * Get a verified token for the accessory
- */
-export function getAccessoryToken(id: string, opts?: Oazapfts.RequestOpts) {
-  return oazapfts.fetchJson<
-    | {
-        status: 200
-        data: AccessoryTokenResponse
-      }
-    | {
-        status: 403
-        data: ErrorResponse
-      }
-    | {
-        status: 404
-        data: ErrorResponse
-      }
-  >(`/accessories/${id}/token`, {
-    ...opts,
-  })
 }
 /**
  * Setup workflow
@@ -1258,77 +987,6 @@ export function addAction(
       body,
     }),
   )
-}
-/**
- * Get all sms for the user
- */
-export function getAllSms(opts?: Oazapfts.RequestOpts) {
-  return oazapfts.fetchJson<
-    | {
-        status: 200
-        data: GetAllSmsResponse
-      }
-    | {
-        status: 403
-        data: ErrorResponse
-      }
-  >('/sms', {
-    ...opts,
-  })
-}
-/**
- * Add an sms
- */
-export function addSms(
-  addSmsRequest: AddSmsRequest,
-  opts?: Oazapfts.RequestOpts,
-) {
-  return oazapfts.fetchJson<
-    | {
-        status: 201
-        data: ErrorResponse
-      }
-    | {
-        status: 400
-        data: ErrorResponse
-      }
-    | {
-        status: 403
-        data: ErrorResponse
-      }
-  >(
-    '/sms',
-    oazapfts.json({
-      ...opts,
-      method: 'POST',
-      body: addSmsRequest,
-    }),
-  )
-}
-/**
- * Delete SMS number
- */
-export function deleteSms(sms: string, opts?: Oazapfts.RequestOpts) {
-  return oazapfts.fetchJson<
-    | {
-        status: 204
-      }
-    | {
-        status: 400
-        data: ErrorResponse
-      }
-    | {
-        status: 403
-        data: ErrorResponse
-      }
-    | {
-        status: 404
-        data: ErrorResponse
-      }
-  >(`/sms/${sms}`, {
-    ...opts,
-    method: 'DELETE',
-  })
 }
 /**
  * Get a token for opening a daemon connection

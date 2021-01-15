@@ -7,7 +7,6 @@ import { handle } from 'oazapfts'
 import * as api from '../../api'
 import setupApiClient from '../../setupApiClient'
 import withStandardErrors from '../../utils/errorHandling'
-import resolveBaseAddress from '../../utils/resolveBaseAddress'
 import verifyEmailFlow from '../../utils/verifyEmailFlow'
 import verifySmsFlow from '../../utils/verifySmsFlow'
 
@@ -478,36 +477,6 @@ export default class ActionsAdd extends Command {
     // User's verified email address
     if (userEmail === alias) {
       return
-    }
-
-    const {
-      list: userAccessories,
-    }: api.GetAllAccessoriesResponse = await handle(
-      client.getAllAccessories(),
-      withStandardErrors({}, this),
-    )
-
-    const baseAlias = resolveBaseAddress(alias)
-
-    const existingAccessory = userAccessories.find(
-      ({ name, type }) => type === 'mailscript-email' && name === baseAlias,
-    )
-
-    if (existingAccessory) {
-      this.debug(
-        `Checking existing mailscript address: ${existingAccessory.address}`,
-      )
-
-      if (existingAccessory.address) {
-        const { write } = await handle(
-          client.getKey(existingAccessory.address, existingAccessory.key),
-          withStandardErrors({}, this),
-        )
-
-        if (write) {
-          return
-        }
-      }
     }
 
     const { list: verifications } = await handle(

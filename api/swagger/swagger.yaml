@@ -1,13 +1,13 @@
 openapi: '3.0.0'
 info:
-  version: 2.0.0
+  version: 0.4.0
   title: Mailscript
   license:
     name: MIT
 servers:
-  - url: https://api.mailscript.com/v2
+  - url: https://api.mailscript.com/v1
     description: API server
-  - url: http://localhost:7000/v2
+  - url: http://localhost:7000/v1
     description: Local development server
 paths:
   /user:
@@ -360,244 +360,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: 'Bad credentials'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-  /outputs:
-    get:
-      tags:
-        - 'outputs'
-      summary: 'Get all outputs you have access to'
-      description: ''
-      operationId: 'getAllOutputs'
-      parameters:
-        - name: name
-          in: query
-          required: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: 'successful operation'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetAllOutputsResponse'
-        '400':
-          description: 'Invalid input'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: 'Bad credentials'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-  /accessories:
-    get:
-      tags:
-        - 'accessories'
-      summary: 'Get all accessories you have access to'
-      description: ''
-      operationId: 'getAllAccessories'
-      parameters:
-        - name: name
-          in: query
-          required: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: 'successful operation'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetAllAccessoriesResponse'
-        '403':
-          description: 'Bad credentials'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '405':
-          description: 'Invalid input'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-    post:
-      tags:
-        - 'accessories'
-      summary: 'Setup an accessory'
-      description: ''
-      operationId: 'addAccessory'
-      requestBody:
-        description: Accessory body
-        required: true
-        content:
-          application/json:
-            schema:
-              oneOf:
-                - $ref: '#/components/schemas/AddSmsAccessoryRequest'
-                - $ref: '#/components/schemas/AddMailscriptEmailAccessoryRequest'
-                - $ref: '#/components/schemas/AddDaemonAccessoryRequest'
-      responses:
-        '201':
-          description: 'successful operation'
-        '400':
-          description: 'Internal error'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: 'Bad credentials'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '405':
-          description: 'Invalid input'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-  /accessories/{id}:
-    get:
-      tags:
-        - 'accessories'
-      summary: 'Get an accessory'
-      description: ''
-      operationId: 'getAccessory'
-      parameters:
-        - name: id
-          in: path
-          description: ID of accessory
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: 'successful operation'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Accessory'
-        '403':
-          description: 'Bad credentials'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '405':
-          description: 'Invalid input'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-    put:
-      tags:
-        - 'accessories'
-      summary: 'Update an accessory'
-      description: ''
-      operationId: 'updateAccessory'
-      parameters:
-        - name: id
-          in: path
-          description: ID of accessory
-          required: true
-          schema:
-            type: string
-      requestBody:
-        description: Key body
-        required: true
-        content:
-          application/json:
-            schema:
-              oneOf:
-                - $ref: '#/components/schemas/UpdateSmsAccessoryRequest'
-                - $ref: '#/components/schemas/UpdateMailscriptEmailAccessoryRequest'
-      responses:
-        '200':
-          description: 'successful update operation'
-        '403':
-          description: 'Bad credentials'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '405':
-          description: 'Invalid input'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-    delete:
-      tags:
-        - 'accessories'
-      summary: 'Delete an accessory'
-      description: ''
-      operationId: 'deleteAccessory'
-      parameters:
-        - name: id
-          in: path
-          description: ID of accessory
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: 'Successful delete operation'
-        '400':
-          description: 'Failure'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: 'Bad credentials'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
-          description: 'Key not found'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-  /accessories/{id}/token:
-    get:
-      tags:
-        - 'accessories'
-      summary: 'Get a verified token for the accessory'
-      description: ''
-      operationId: 'getAccessoryToken'
-      parameters:
-        - name: id
-          in: path
-          description: ID of accessory
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: 'successful operation'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AccessoryTokenResponse'
-        '403':
-          description: 'Bad credentials'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
-          description: 'Accessory not found'
           content:
             application/json:
               schema:
@@ -1088,90 +850,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /sms:
-    get:
-      tags:
-        - sms
-      summary: 'Get all sms for the user'
-      operationId: 'getAllSms'
-      responses:
-        '200':
-          description: 'Successful operation'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetAllSmsResponse'
-        '403':
-          description: 'Bad credentials'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-    post:
-      tags:
-        - sms
-      summary: 'Add an sms'
-      operationId: 'addSms'
-      requestBody:
-        description: Add sms body
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AddSmsRequest'
-      responses:
-        '201':
-          description: 'Successful operation'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '400':
-          description: 'Failure'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: 'Not authorized or bad code'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-  /sms/{sms}:
-    delete:
-      tags:
-        - 'sms'
-      summary: 'Delete SMS number'
-      operationId: deleteSMS
-      parameters:
-        - name: sms
-          in: path
-          description: ID of SMS
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: 'Successful delete operation'
-        '400':
-          description: 'Failure'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: 'Bad credentials'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
-          description: 'Key not found'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
   /daemons/{daemon}/token:
     get:
       tags:
@@ -1359,35 +1037,6 @@ components:
           enum: ['forward']
         forward:
           type: string
-    Accessory:
-      required:
-        - id
-        - type
-        - name
-        - key
-        - createdAt
-        - createdBy
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-          enum: ['mailscript-email', 'sms', 'webhook', 'daemon']
-        owner:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        createdBy:
-          type: string
-        name:
-          type: string
-        address:
-          type: string
-        sms:
-          type: string
-        key:
-          type: string
     Key:
       required:
         - id
@@ -1498,74 +1147,6 @@ components:
             type: object
             oneOf:
               - $ref: '#/components/schemas/Workflow'
-    AddSmsAccessoryRequest:
-      required:
-        - name
-        - type
-        - sms
-      properties:
-        name:
-          type: string
-        type:
-          type: string
-          enum: ['sms']
-        sms:
-          type: string
-    AddDaemonAccessoryRequest:
-      required:
-        - name
-        - type
-      properties:
-        name:
-          type: string
-        type:
-          type: string
-          enum: ['daemon']
-    UpdateSmsAccessoryRequest:
-      required:
-        - name
-        - type
-        - sms
-      properties:
-        name:
-          type: string
-        type:
-          type: string
-          enum: ['sms']
-        sms:
-          type: string
-    AddMailscriptEmailAccessoryRequest:
-      required:
-        - name
-        - type
-        - address
-        - key
-      properties:
-        name:
-          type: string
-        type:
-          type: string
-          enum: ['mailscript-email']
-        address:
-          type: string
-        key:
-          type: string
-    UpdateMailscriptEmailAccessoryRequest:
-      required:
-        - name
-        - type
-        - address
-        - key
-      properties:
-        name:
-          type: string
-        type:
-          type: string
-          enum: ['mailscript-email']
-        address:
-          type: string
-        key:
-          type: string
     AddWorkflowRequest:
       required:
         - name
@@ -1580,16 +1161,6 @@ components:
           type: string
         action:
           type: string
-    GetAllAccessoriesResponse:
-      required:
-        - list
-      properties:
-        list:
-          type: array
-          items:
-            type: object
-            oneOf:
-              - $ref: '#/components/schemas/Accessory'
     SendRequest:
       required:
         - 'to'
@@ -1698,12 +1269,6 @@ components:
             oneOf:
               - $ref: '#/components/schemas/VerificationEmail'
               - $ref: '#/components/schemas/VerificationSms'
-    AccessoryTokenResponse:
-      required:
-        - token
-      properties:
-        token:
-          type: string
     AddTriggerRequest:
       required:
         - name
@@ -1728,15 +1293,6 @@ components:
           items:
             oneOf:
               - $ref: '#/components/schemas/Trigger'
-    GetAllOutputsResponse:
-      required:
-        - list
-      properties:
-        list:
-          type: array
-          items:
-            oneOf:
-              - $ref: '#/components/schemas/MailscriptEmailOutput'
     GetAllInputsResponse:
       required:
         - list
@@ -1746,32 +1302,6 @@ components:
           items:
             oneOf:
               - $ref: '#/components/schemas/MailscriptEmailInput'
-    MailscriptEmailOutput:
-      required:
-        - id
-        - name
-        - type
-        - owner
-        - createdAt
-        - createdBy
-        - address
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        type:
-          type: string
-          enum: ['mailescript-email']
-        owner:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        createdBy:
-          type: string
-        address:
-          type: string
     MailscriptEmailInput:
       required:
         - id
@@ -2068,46 +1598,6 @@ components:
               type: string
             html:
               type: string
-    AddSmsRequest:
-      required:
-        - name
-        - number
-      properties:
-        name:
-          type: string
-        number:
-          type: string
-    GetAllSmsResponse:
-      required:
-        - list
-      properties:
-        list:
-          type: array
-          items:
-            oneOf:
-              - $ref: '#/components/schemas/Sms'
-    Sms:
-      required:
-        - id
-        - name
-        - number
-        - owner
-        - createdAt
-        - createdBy
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        number:
-          type: string
-        owner:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        createdBy:
-          type: string
   securitySchemes:
     bearerAuth:
       type: http
