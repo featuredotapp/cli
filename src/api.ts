@@ -1,19 +1,19 @@
 /* eslint-disable valid-jsdoc, @typescript-eslint/no-unused-vars */
 /**
  * Mailscript
- * 0.4.0
+ * 2.0.0
  * DO NOT MODIFY - This file has been generated using oazapfts.
  * See https://www.npmjs.com/package/oazapfts
  */
 import * as Oazapfts from 'oazapfts/lib/runtime'
 import * as QS from 'oazapfts/lib/runtime/query'
 export const defaults: Oazapfts.RequestOpts = {
-  baseUrl: 'https://api.mailscript.com/v1',
+  baseUrl: 'https://api.mailscript.com/v2',
 }
 const oazapfts = Oazapfts.runtime(defaults)
 export const servers = {
-  apiServer: 'https://api.mailscript.com/v1',
-  localDevelopmentServer: 'http://localhost:7000/v1',
+  apiServer: 'https://api.mailscript.com/v2',
+  localDevelopmentServer: 'http://localhost:7000/v2',
 }
 export type User = {
   id: string

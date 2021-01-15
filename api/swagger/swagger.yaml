@@ -1,13 +1,13 @@
 openapi: '3.0.0'
 info:
-  version: 0.4.0
+  version: 2.0.0
   title: Mailscript
   license:
     name: MIT
 servers:
-  - url: https://api.mailscript.com/v1
+  - url: https://api.mailscript.com/v2
     description: API server
-  - url: http://localhost:7000/v1
+  - url: http://localhost:7000/v2
     description: Local development server
 paths:
   /user:
