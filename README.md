@@ -29,27 +29,32 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`mailscript accessories:add`](#mailscript-accessoriesadd)
-* [`mailscript accessories:delete`](#mailscript-accessoriesdelete)
-* [`mailscript accessories:list`](#mailscript-accessorieslist)
-* [`mailscript addresses:add`](#mailscript-addressesadd)
-* [`mailscript addresses:delete`](#mailscript-addressesdelete)
-* [`mailscript addresses:list`](#mailscript-addresseslist)
-* [`mailscript addresses:update`](#mailscript-addressesupdate)
-* [`mailscript daemon`](#mailscript-daemon)
-* [`mailscript help [COMMAND]`](#mailscript-help-command)
-* [`mailscript keys:add`](#mailscript-keysadd)
-* [`mailscript keys:delete`](#mailscript-keysdelete)
-* [`mailscript keys:list`](#mailscript-keyslist)
-* [`mailscript keys:update`](#mailscript-keysupdate)
-* [`mailscript login`](#mailscript-login)
-* [`mailscript send [FILE]`](#mailscript-send-file)
-* [`mailscript sync:export`](#mailscript-syncexport)
-* [`mailscript sync:import`](#mailscript-syncimport)
-* [`mailscript usernames SUBCOMMAND`](#mailscript-usernames-subcommand)
-* [`mailscript workflows:add`](#mailscript-workflowsadd)
-* [`mailscript workflows:delete`](#mailscript-workflowsdelete)
-* [`mailscript workflows:list`](#mailscript-workflowslist)
+- [MailScript cli](#mailscript-cli)
+- [Usage](#usage)
+- [Commands](#commands)
+  - [`mailscript accessories:add`](#mailscript-accessoriesadd)
+  - [`mailscript accessories:delete`](#mailscript-accessoriesdelete)
+  - [`mailscript accessories:list`](#mailscript-accessorieslist)
+  - [`mailscript addresses:add`](#mailscript-addressesadd)
+  - [`mailscript addresses:delete`](#mailscript-addressesdelete)
+  - [`mailscript addresses:list`](#mailscript-addresseslist)
+  - [`mailscript addresses:update`](#mailscript-addressesupdate)
+  - [`mailscript daemon`](#mailscript-daemon)
+  - [`mailscript help [COMMAND]`](#mailscript-help-command)
+  - [`mailscript keys:add`](#mailscript-keysadd)
+  - [`mailscript keys:delete`](#mailscript-keysdelete)
+  - [`mailscript keys:list`](#mailscript-keyslist)
+  - [`mailscript keys:update`](#mailscript-keysupdate)
+  - [`mailscript login`](#mailscript-login)
+  - [`mailscript send [FILE]`](#mailscript-send-file)
+  - [`mailscript sync:export`](#mailscript-syncexport)
+  - [`mailscript sync:import`](#mailscript-syncimport)
+  - [`mailscript usernames SUBCOMMAND`](#mailscript-usernames-subcommand)
+  - [`mailscript workflows:add`](#mailscript-workflowsadd)
+  - [`mailscript workflows:delete`](#mailscript-workflowsdelete)
+  - [`mailscript workflows:list`](#mailscript-workflowslist)
+- [Development](#development)
+- [Publish](#publish)
 
 ## `mailscript accessories:add`
 
@@ -419,7 +424,7 @@ In development a `.env` file is used:
 ```shell
 MAILSCRIPT_CONFIG_PATH=.mailscript-test # path to use for .mailscript config file
 MAILSCRIPT_LOGIN_URL=http://localhost:3000 # login website url
-MAILSCRIPT_API_SERVER=http://localhost:7000/v1 # api server url
+MAILSCRIPT_API_SERVER=http://localhost:7000/v2 # api server url
 MAILSCRIPT_EMAIL_DOMAIN=mailscript.io # the domain to use when assign email addresses
 MAILSCRIPT_DAEMON_BRIDGE_URL=ws://localhost:8888 # the daemon bridge service
 ```
