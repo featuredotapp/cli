@@ -110,26 +110,15 @@ export type AddWorkflowRequest = {
   trigger?: string
   action: string
 }
-export type ActionForwardConfig = {
-  type: 'forward'
-  forward: string
-}
 export type Workflow = {
   id: string
   name: string
   owner: string
   createdAt: string
   createdBy: string
-  trigger: {
-    accessoryId: string
-    config: {
-      criterias: Criteria[]
-    }
-  }
-  actions: {
-    accessoryId?: string
-    config?: ActionForwardConfig
-  }[]
+  input: string
+  trigger: string
+  action: string
 }
 export type GetAllWorkflowsResponse = {
   list: Workflow[]

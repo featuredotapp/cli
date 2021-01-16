@@ -71,7 +71,8 @@ export default class Sync extends Command {
         ),
       )
     )
-      .map(({ name, composition }: any) => ({
+      .map(({ id, name, composition }: any) => ({
+        id,
         name,
         composition: composition.map((comp: any) => {
           if (comp.type === 'inner') {
@@ -99,6 +100,29 @@ export default class Sync extends Command {
         return comparison
       })
 
+    const actions = (
+      await handle(
+        client.getAllActions(),
+        withStandardErrors(
+          { '200': ({ list }: api.GetAllActionsResponse) => list },
+          this,
+        ),
+      )
+    ).map(({ id, type, name, config }: any) => ({
+      id,
+      name,
+      type,
+      config: this._keyNameSubstitute(keys, config),
+    }))
+
+    const inputs = await handle(
+      client.getAllInputs(),
+      withStandardErrors(
+        { '200': ({ list }: api.GetAllInputsResponse) => list },
+        this,
+      ),
+    )
+
     const workflows = (
       await handle(
         client.getAllWorkflows(),
@@ -107,12 +131,11 @@ export default class Sync extends Command {
           this,
         ),
       )
-    ).map(({ name }: api.Workflow) => ({
+    ).map(({ name, input, trigger, action }: api.Workflow) => ({
       name,
-      // trigger: this._mapAccessory(accessories, trigger),
-      // actions: actions.map((action: any) =>
-      //   this._mapAccessory(accessories, action),
-      // ),
+      input: inputs.find(({ id }: any) => id === input).name,
+      trigger: triggers.find(({ id }: any) => id === trigger).name,
+      action: actions.find(({ id }: any) => id === action).name,
     }))
 
     const mergedAddressesAndKeys = Object.fromEntries(
@@ -137,9 +160,8 @@ export default class Sync extends Command {
     const data = yaml.dump({
       version: '0.2',
       addresses: mergedAddressesAndKeys,
-      triggers: triggers,
-      actions: [],
-      // accessories: accessories.map(({ id: _id, ...rest }: any) => rest),
+      triggers: triggers.map(({ id: _id, ...rest }: any) => rest),
+      actions: actions.map(({ id: _id, ...rest }: any) => rest),
       workflows: workflows,
     })
 
@@ -152,15 +174,32 @@ export default class Sync extends Command {
     this.exit(0)
   }
 
+  private _keyNameSubstitute(
+    keys: {
+      address: string
+      keys: any
+    }[],
+    config: any,
+  ) {
+    if (!config.key) {
+      return config
+    }
+
+    return {
+      ...config,
+      key: this._lookupKeyName(keys, config.key),
+    }
+  }
+
   private _lookupKeyName(
     keys: {
       address: string
       keys: any
     }[],
     keyId: string,
-  ): {} {
+  ): string | null {
     if (!keyId) {
-      return {}
+      return null
     }
 
     const key = keys
@@ -169,27 +208,9 @@ export default class Sync extends Command {
       .find((k: { id: string }) => k.id === keyId)
 
     if (!key) {
-      return {}
+      return null
     }
 
-    return { key: key.name }
-  }
-
-  private _mapAccessory(
-    accessories: Array<any>,
-    { accessoryId, ...rest }: { accessoryId: string },
-  ) {
-    const accessory = accessories.find((acc) => acc.id === accessoryId)
-
-    if (!accessory) {
-      return {
-        ...rest,
-      }
-    }
-
-    return {
-      accessory: accessory.name,
-      ...rest,
-    }
+    return key.name
   }
 }

@@ -947,8 +947,9 @@ components:
         - owner
         - createdAt
         - createdBy
+        - input
         - trigger
-        - actions
+        - action
       properties:
         id:
           type: string
@@ -961,33 +962,12 @@ components:
           format: date-time
         createdBy:
           type: string
+        input:
+          type: string
         trigger:
-          type: object
-          required:
-            - accessoryId
-            - config
-          properties:
-            accessoryId:
-              type: string
-            config:
-              type: object
-              required:
-                - criterias
-              properties:
-                criterias:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Criteria'
-        actions:
-          type: array
-          items:
-            type: object
-            properties:
-              accessoryId:
-                type: string
-              config:
-                oneOf:
-                  - $ref: '#/components/schemas/ActionForwardConfig'
+          type: string
+        action:
+          type: string
     Trigger:
       required:
         - id
