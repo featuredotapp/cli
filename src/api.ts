@@ -81,9 +81,13 @@ export type Trigger = {
 export type GetAllTriggersResponse = {
   list: Trigger[]
 }
+export type CriteriaOperand = {
+  and?: string[]
+  or?: string[]
+}
 export type AddTriggerRequest = {
   name: string
-  criteria: Criteria
+  criteria: Criteria | CriteriaOperand
 }
 export type AddTriggerResponse = {
   id: string

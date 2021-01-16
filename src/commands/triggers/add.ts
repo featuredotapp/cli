@@ -19,6 +19,9 @@ type FlagsType = {
   times?: string
   seconds?: string
 
+  and: Array<string>
+  or: Array<string>
+
   [key: string]: any
 }
 
@@ -62,6 +65,14 @@ export default class TriggersAdd extends Command {
       description:
         'constrain trigger to emails that are the first seen from the sending address',
     }),
+    and: flags.string({
+      multiple: true,
+      description: 'combine sub-triggers into a new trigger with "and" logic',
+    }),
+    or: flags.string({
+      multiple: true,
+      description: 'combine sub-triggers into a new trigger with "or" logic',
+    }),
   }
 
   static args = []
@@ -94,7 +105,34 @@ export default class TriggersAdd extends Command {
       this.exit(1)
     }
 
-    const triggerConfig = this._resolveTriggerConfig(flags)
+    if (
+      flags.and &&
+      (flags.from ||
+        flags.sentto ||
+        flags.hasthewords ||
+        flags.domain ||
+        flags.subjectcontains ||
+        flags.hasattachments ||
+        flags.or)
+    ) {
+      this.log('Flag --and cannot be used with other criteria')
+      this.exit(1)
+    }
+
+    if (
+      flags.or &&
+      (flags.from ||
+        flags.sentto ||
+        flags.hasthewords ||
+        flags.domain ||
+        flags.subjectcontains ||
+        flags.hasattachments)
+    ) {
+      this.log('Flag --or cannot be used with other criteria')
+      this.exit(1)
+    }
+
+    const triggerConfig = await this._resolveTriggerConfig(client, flags)
 
     return handle(
       client.addTrigger(triggerConfig),
@@ -113,7 +151,7 @@ export default class TriggersAdd extends Command {
     )
   }
 
-  private _resolveTriggerConfig(flags: FlagsType) {
+  private async _resolveTriggerConfig(client: typeof api, flags: FlagsType) {
     if (flags.times && !flags.seconds) {
       this.log('Flag --seconds required when using --times')
       this.exit(1)
@@ -122,6 +160,66 @@ export default class TriggersAdd extends Command {
     if (!flags.times && flags.seconds) {
       this.log('Flag --times required when using --seconds')
       this.exit(1)
+    }
+
+    if (flags.and) {
+      if (flags.and.length < 2) {
+        this.log('Flag --and requires two or more trigger names')
+        this.exit(1)
+      }
+
+      const { list: triggers }: api.GetAllTriggersResponse = await handle(
+        client.getAllTriggers(),
+        withStandardErrors({}, this),
+      )
+
+      const triggerIds = flags.and.map((triggerName) => {
+        const trigger = triggers.find((t) => t.name === triggerName)
+
+        if (!trigger) {
+          this.log(`Trigger not found ${triggerName}`)
+          this.exit(1)
+        }
+
+        return trigger.id
+      })
+
+      return {
+        name: flags.name,
+        criteria: {
+          and: triggerIds,
+        },
+      }
+    }
+
+    if (flags.or) {
+      if (flags.or.length < 2) {
+        this.log('Flag --or requires two or more trigger names')
+        this.exit(1)
+      }
+
+      const { list: triggers }: api.GetAllTriggersResponse = await handle(
+        client.getAllTriggers(),
+        withStandardErrors({}, this),
+      )
+
+      const triggerIds = flags.or.map((triggerName) => {
+        const trigger = triggers.find((t) => t.name === triggerName)
+
+        if (!trigger) {
+          this.log(`Trigger not found ${triggerName}`)
+          this.exit(1)
+        }
+
+        return trigger.id
+      })
+
+      return {
+        name: flags.name,
+        criteria: {
+          or: triggerIds,
+        },
+      }
     }
 
     if (

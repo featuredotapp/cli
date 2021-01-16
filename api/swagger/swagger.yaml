@@ -1027,6 +1027,17 @@ components:
           type: string
         hasAttachments:
           type: boolean
+    CriteriaOperand:
+      minProperties: 1
+      properties:
+        and:
+          type: array
+          items:
+            type: string
+        or:
+          type: array
+          items:
+            type: string
     ActionForwardConfig:
       required:
         - type
@@ -1277,7 +1288,9 @@ components:
         name:
           type: string
         criteria:
-          $ref: '#/components/schemas/Criteria'
+          oneOf:
+            - $ref: '#/components/schemas/Criteria'
+            - $ref: '#/components/schemas/CriteriaOperand'
     AddTriggerResponse:
       required:
         - id
