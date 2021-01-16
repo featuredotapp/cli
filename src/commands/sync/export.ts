@@ -62,33 +62,40 @@ export default class Sync extends Command {
       }),
     )
 
-    const accessories = (
+    const triggers = (
       await handle(
-        client.getAllAccessories(),
+        client.getAllTriggers(),
         withStandardErrors(
-          { '200': ({ list }: api.GetAllAccessoriesResponse) => list },
+          { '200': ({ list }: api.GetAllTriggersResponse) => list },
           this,
         ),
       )
     )
-      .filter(({ type }: api.Accessory) => type !== 'webhook')
-      .map(
-        ({
-          id,
-          owner: _owner,
-          createdAt: _createdAt,
-          createdBy: _createdBy,
-          name,
-          type,
-          ...rest
-        }: api.Accessory) => ({
-          id,
-          name,
-          type,
-          ...rest,
-          ...this._lookupKeyName(keys, rest.key),
+      .map(({ name, composition }: any) => ({
+        name,
+        composition: composition.map((comp: any) => {
+          if (comp.type === 'inner') {
+            return {
+              [comp.operand]: comp.nodes.map((n: { name: string }) => n.name),
+            }
+          }
+
+          if (comp.type === 'leaf') {
+            return { criteria: comp.criteria }
+          }
         }),
-      )
+      }))
+      .sort(({ name: left }: any, { name: right }: any) => {
+        let comparison = 0
+
+        if (left > right) {
+          comparison = 1
+        } else if (left < right) {
+          comparison = -1
+        }
+
+        return comparison
+      })
 
     const workflows = (
       await handle(
@@ -100,10 +107,10 @@ export default class Sync extends Command {
       )
     ).map(({ name, trigger, actions }: api.Workflow) => ({
       name,
-      trigger: this._mapAccessory(accessories, trigger),
-      actions: actions.map((action: any) =>
-        this._mapAccessory(accessories, action),
-      ),
+      // trigger: this._mapAccessory(accessories, trigger),
+      // actions: actions.map((action: any) =>
+      //   this._mapAccessory(accessories, action),
+      // ),
     }))
 
     const mergedAddressesAndKeys = Object.fromEntries(
@@ -126,9 +133,11 @@ export default class Sync extends Command {
     )
 
     const data = yaml.dump({
-      version: '0.1',
+      version: '0.2',
       addresses: mergedAddressesAndKeys,
-      accessories: accessories.map(({ id: _id, ...rest }: any) => rest),
+      triggers: triggers,
+      actions: [],
+      // accessories: accessories.map(({ id: _id, ...rest }: any) => rest),
       workflows: workflows,
     })
 
