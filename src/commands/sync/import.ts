@@ -186,6 +186,23 @@ export default class Sync extends Command {
       await handle(client.addTrigger(payload), withStandardErrors({}, this))
     }
 
+    if (forceDelete) {
+      const namesToRetain = triggers.map((t) => t.name)
+
+      const triggersToDelete = existingTriggers.filter(
+        ({ name }) => !namesToRetain.includes(name),
+      )
+
+      for (const { id: triggerId } of triggersToDelete) {
+        this.log(`Deleteing ${triggerId}`)
+
+        await handle(
+          client.deleteTrigger(triggerId),
+          withStandardErrors({}, this),
+        )
+      }
+    }
+
     cli.action.stop()
   }
 
