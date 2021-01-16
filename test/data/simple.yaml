@@ -1,25 +1,25 @@
-version: '0.1'
+version: '0.2'
 addresses:
   smith@mailscript.io:
     keys:
       - name: owner
         read: true
         write: true
-accessories:
-  - name: smith@mailscript.io
+triggers:
+  - name: from-github
+    composition:
+      - criteria:
+          domain: github.com
+actions:
+  - name: forward-01
     type: mailscript-email
-    address: smith@mailscript.io
-    sms: null
-    key: owner
+    config:
+      forward: john.kane84@gmail.com
+      type: forward
+      from: smith@mailscript.io
+      key: owner
 workflows:
   - name: personal-forward
-    trigger:
-      accessory: smith@mailscript.io
-      config:
-        criterias:
-          - sentTo: smith@mailscript.io
-    actions:
-      - accessory: smith@mailscript.io
-        config:
-          forward: john@smith.me
-          type: forward
+    input: smith@mailscript.io
+    trigger: from-github
+    action: forward-01
