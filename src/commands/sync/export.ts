@@ -83,6 +83,8 @@ export default class Sync extends Command {
           if (comp.type === 'leaf') {
             return { criteria: comp.criteria }
           }
+
+          throw new Error(`Unknown composition type ${comp.type}`)
         }),
       }))
       .sort(({ name: left }: any, { name: right }: any) => {
@@ -105,7 +107,7 @@ export default class Sync extends Command {
           this,
         ),
       )
-    ).map(({ name, trigger, actions }: api.Workflow) => ({
+    ).map(({ name }: api.Workflow) => ({
       name,
       // trigger: this._mapAccessory(accessories, trigger),
       // actions: actions.map((action: any) =>
