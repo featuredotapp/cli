@@ -393,7 +393,8 @@ export default class ActionsAdd extends Command {
         withStandardErrors({}, this),
       )
 
-      if (list.find((address) => address.id !== from)) {
+      const match = list.find((address) => address.id === from)
+      if (!match) {
         this.log(`Unknown from address ${from}`)
         this.exit(1)
       }
