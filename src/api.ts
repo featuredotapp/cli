@@ -982,6 +982,31 @@ export function addAction(
   )
 }
 /**
+ * Delete an action
+ */
+export function deleteAction(action: string, opts?: Oazapfts.RequestOpts) {
+  return oazapfts.fetchJson<
+    | {
+        status: 204
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 404
+        data: ErrorResponse
+      }
+  >(`/actions/${action}`, {
+    ...opts,
+    method: 'DELETE',
+  })
+}
+/**
  * Get a token for opening a daemon connection
  */
 export function getDaemonToken(daemon: string, opts?: Oazapfts.RequestOpts) {

@@ -60,7 +60,7 @@ export default class Sync extends Command {
       this.exit(1)
     }
 
-    const { addresses = [], triggers = [], actions = [] } = data
+    const { addresses = [], triggers = [], actions = [], workflows = [] } = data
 
     this.log('')
     this.log('Syncing to Mailscript')
@@ -68,12 +68,131 @@ export default class Sync extends Command {
 
     const forceDelete = flags.delete
 
-    // await this._syncAddresses(client, addresses, forceDelete)
-    // await this._syncKeys(client, addresses, forceDelete)
+    await this._syncAddresses(client, addresses, forceDelete)
+    await this._syncKeys(client, addresses, forceDelete)
     await this._syncTriggers(client, triggers, forceDelete)
     await this._syncActions(client, actions, forceDelete)
-    // await this._syncActions(client, actions, forceDelete)
-    // await this._syncWorkflows(client, workflows, forceDelete)
+    await this._syncWorkflows(client, workflows, forceDelete)
+  }
+
+  private async _syncAddresses(
+    client: typeof api,
+    addresses: Array<any>,
+    forceDelete: boolean,
+  ) {
+    cli.action.start('Syncing addresses ')
+    const response = await client.getAllAddresses()
+
+    if (response.status !== 200) {
+      this.log('Error syncing addresses')
+      this.exit(1)
+    }
+
+    const {
+      data: { list: existingAddresses },
+    } = response
+
+    // addresses
+    for (const address of Object.keys(addresses)) {
+      const existingAddress = existingAddresses.find((a) => a.id === address)
+
+      if (existingAddress) {
+        continue
+      }
+
+      // add address
+      await handle(client.addAddress({ address }), withStandardErrors({}, this))
+    }
+
+    if (forceDelete) {
+      const namesToRetain = Object.keys(addresses)
+
+      const addressesToDelete = existingAddresses.filter(
+        ({ id }) => !namesToRetain.includes(id),
+      )
+
+      for (const { id: address } of addressesToDelete) {
+        this.log(`Deleteing ${address}`)
+        await handle(
+          client.deleteAddress(address),
+          withStandardErrors({}, this),
+        )
+      }
+    }
+
+    cli.action.stop()
+  }
+
+  private async _syncKeys(
+    client: typeof api,
+    yamlAddresses: Array<any>,
+    forceDelete: boolean,
+  ) {
+    cli.action.start('Syncing keys ')
+
+    for (const [address, { keys }] of Object.entries(yamlAddresses)) {
+      // eslint-disable-next-line no-await-in-loop
+      const existingKeysResponse = await client.getAllKeys(address)
+
+      if (existingKeysResponse.status !== 200) {
+        this.log('Error syncing keys')
+        this.exit(1)
+      }
+
+      const {
+        data: { list: existingKeys },
+      } = existingKeysResponse
+
+      for (const key of keys) {
+        const existingKey = existingKeys.find((ek) => ek.name === key.name)
+
+        // add if missing
+        if (!existingKey) {
+          await handle(
+            client.addKey(address, {
+              name: key.name,
+              read: key.read,
+              write: key.write,
+            }),
+            withStandardErrors({}, this),
+          )
+
+          continue
+        }
+
+        // update if different
+        if (existingKey.read !== key.read || existingKey.write !== key.write) {
+          await handle(
+            client.updateKey(address, key.key, {
+              name: key.name,
+              read: key.read,
+              write: key.write,
+            }),
+            withStandardErrors({}, this),
+          )
+
+          continue
+        }
+      }
+
+      if (forceDelete) {
+        const namesToRetain = keys.map((k: { name: string }) => k.name)
+
+        const keysToDelete = existingKeys.filter(
+          ({ name }) => !namesToRetain.includes(name),
+        )
+
+        for (const { id: key } of keysToDelete) {
+          this.log(`Deleteing ${key}`)
+          await handle(
+            client.deleteKey(address, key),
+            withStandardErrors({}, this),
+          )
+        }
+      }
+    }
+
+    cli.action.stop()
   }
 
   private async _syncTriggers(
@@ -223,13 +342,6 @@ export default class Sync extends Command {
       data: { list: existingActions },
     } = response
 
-    // const nameToIdMappings: { [key: string]: string } = existingActions.reduce(
-    //   (acc, item) => ({ ...acc, [item.name]: item.id }),
-    //   {},
-    // )
-
-    // const actionBodies = []
-
     for (const action of actions) {
       const existingAction = existingActions.find((a) => a.name === action.name)
 
@@ -237,11 +349,8 @@ export default class Sync extends Command {
         continue
       }
 
-      console.log(action)
-
       const payload = await this._resolvePayload(client, action)
 
-      // actionBodies.push(body)
       await handle(client.addAction(payload), withStandardErrors({}, this))
     }
 
@@ -256,7 +365,44 @@ export default class Sync extends Command {
         this.log(`Deleteing action ${actionId}`)
 
         await handle(
-          client.deleteTrigger(actionId),
+          client.deleteAction(actionId),
+          withStandardErrors({}, this),
+        )
+      }
+    }
+
+    cli.action.stop()
+  }
+
+  private async _syncWorkflows(
+    client: typeof api,
+    workflows: Array<any>,
+    forceDelete: boolean,
+  ) {
+    cli.action.start('Syncing workflows ')
+    const response = await client.getAllWorkflows()
+
+    if (response.status !== 200) {
+      this.log('Error syncing workflows')
+      this.exit(1)
+    }
+
+    const {
+      data: { list: existingWorkflows },
+    } = response
+
+    if (forceDelete) {
+      const namesToRetain = workflows.map((t) => t.name)
+
+      const actionsToDelete = existingWorkflows.filter(
+        ({ name }) => !namesToRetain.includes(name),
+      )
+
+      for (const { id: workflowId } of actionsToDelete) {
+        this.log(`Deleteing workflow ${workflowId}`)
+
+        await handle(
+          client.deleteWorkflow(workflowId),
           withStandardErrors({}, this),
         )
       }
@@ -298,126 +444,6 @@ export default class Sync extends Command {
         key: foundKey.id,
       },
     }
-  }
-
-  private async _syncAddresses(
-    client: typeof api,
-    addresses: Array<any>,
-    forceDelete: boolean,
-  ) {
-    cli.action.start('Syncing addresses ')
-    const response = await client.getAllAddresses()
-
-    if (response.status !== 200) {
-      this.log('Error syncing addresses')
-      this.exit(1)
-    }
-
-    const {
-      data: { list: existingAddresses },
-    } = response
-
-    // addresses
-    for (const address of Object.keys(addresses)) {
-      const existingAddress = existingAddresses.find((a) => a.id === address)
-
-      if (existingAddress) {
-        continue
-      }
-
-      // add address
-      await handle(client.addAddress({ address }), withStandardErrors({}, this))
-    }
-
-    if (forceDelete) {
-      const namesToRetain = Object.keys(addresses)
-
-      const addressesToDelete = existingAddresses.filter(
-        ({ id }) => !namesToRetain.includes(id),
-      )
-
-      for (const { id: address } of addressesToDelete) {
-        this.log(`Deleteing ${address}`)
-        await handle(
-          client.deleteAddress(address),
-          withStandardErrors({}, this),
-        )
-      }
-    }
-
-    cli.action.stop()
-  }
-
-  private async _syncKeys(
-    client: typeof api,
-    yamlAddresses: Array<any>,
-    forceDelete: boolean,
-  ) {
-    cli.action.start('Syncing keys ')
-
-    for (const [address, { keys }] of Object.entries(yamlAddresses)) {
-      // eslint-disable-next-line no-await-in-loop
-      const existingKeysResponse = await client.getAllKeys(address)
-
-      if (existingKeysResponse.status !== 200) {
-        this.log('Error syncing keys')
-        this.exit(1)
-      }
-
-      const {
-        data: { list: existingKeys },
-      } = existingKeysResponse
-
-      for (const key of keys) {
-        const existingKey = existingKeys.find((ek) => ek.name === key.name)
-
-        // add if missing
-        if (!existingKey) {
-          await handle(
-            client.addKey(address, {
-              name: key.name,
-              read: key.read,
-              write: key.write,
-            }),
-            withStandardErrors({}, this),
-          )
-
-          continue
-        }
-
-        // update if different
-        if (existingKey.read !== key.read || existingKey.write !== key.write) {
-          await handle(
-            client.updateKey(address, key.key, {
-              name: key.name,
-              read: key.read,
-              write: key.write,
-            }),
-            withStandardErrors({}, this),
-          )
-
-          continue
-        }
-      }
-
-      if (forceDelete) {
-        const namesToRetain = keys.map((k: { name: string }) => k.name)
-
-        const keysToDelete = existingKeys.filter(
-          ({ name }) => !namesToRetain.includes(name),
-        )
-
-        for (const { id: key } of keysToDelete) {
-          this.log(`Deleteing ${key}`)
-          await handle(
-            client.deleteKey(address, key),
-            withStandardErrors({}, this),
-          )
-        }
-      }
-    }
-
-    cli.action.stop()
   }
 
   // private async _syncAccessories(
@@ -585,66 +611,4 @@ export default class Sync extends Command {
 
   //   cli.action.stop()
   // }
-
-  private async _accessoryKeySubstitution(
-    client: typeof api,
-    yamlAccessory: any,
-  ) {
-    if (yamlAccessory.type !== 'mailscript-email') {
-      return yamlAccessory
-    }
-
-    // eslint-disable-next-line no-await-in-loop
-    const { list: addressKeys } = await handle(
-      client.getAllKeys(yamlAccessory.address!),
-      withStandardErrors({}, this),
-    )
-
-    const addressKey = addressKeys.find(
-      (ak: any) => ak.name === yamlAccessory.key,
-    )
-
-    if (!addressKey) {
-      cli.action.stop(`Error reading address key: ${yamlAccessory.key}`)
-      this.exit(1)
-    }
-
-    return {
-      ...yamlAccessory,
-      key: addressKey.id,
-    }
-  }
-
-  private _substituteAccessoryIdWorkflow(
-    allAccessories: Array<any>,
-    yamlWorkflow: any,
-  ) {
-    return {
-      ...yamlWorkflow,
-      trigger: this._substituteAccessoryIdFor(
-        allAccessories,
-        yamlWorkflow.trigger,
-      ),
-      actions: yamlWorkflow.actions.map((action: any) =>
-        this._substituteAccessoryIdFor(allAccessories, action),
-      ),
-    }
-  }
-
-  private _substituteAccessoryIdFor(
-    allAccessories: Array<any>,
-    { accessory: name, ...rest }: any,
-  ) {
-    let accessory
-    if (rest.config.type === 'webhook') {
-      accessory = allAccessories.find((a) => a.type === 'webhook')
-    } else {
-      accessory = allAccessories.find((a) => a.name === name)
-    }
-
-    return {
-      accessoryId: accessory.id,
-      ...rest,
-    }
-  }
 }
