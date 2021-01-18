@@ -7,6 +7,7 @@ import cli from 'cli-ux'
 import * as api from '../../api'
 import setupApiClient from '../../setupApiClient'
 import withStandardErrors from '../../utils/errorHandling'
+import deepEqual from 'deep-equal'
 
 export default class Sync extends Command {
   static description = 'import and update config from file into Mailscript'
@@ -230,15 +231,24 @@ export default class Sync extends Command {
       {},
     )
 
-    const triggerBodies = []
+    const toBeAddedTriggerBodies = []
+    const toBeUpdatedTriggers = []
 
-    const resolveBody = (name: string, comp: any) => {
+    const resolveBody = (trigger: any, id?: string | undefined) => {
+      const name = trigger.name
+      const comp = trigger.composition[0]
+
       if (comp.criteria) {
-        return { type: 'leaf', payload: { name, criteria: comp.criteria } }
+        return {
+          id,
+          type: 'leaf',
+          payload: { name, criteria: comp.criteria },
+        }
       }
 
       if (comp.or) {
         return {
+          id,
           type: 'inner',
           payload: {
             name,
@@ -251,6 +261,7 @@ export default class Sync extends Command {
 
       if (comp.and) {
         return {
+          id,
           type: 'inner',
           payload: {
             name,
@@ -270,19 +281,24 @@ export default class Sync extends Command {
       )
 
       if (existingTrigger) {
+        // if change, queue update
+        if (this._diffTriggers(existingTrigger, trigger)) {
+          const body = resolveBody(trigger, existingTrigger.id)
+
+          toBeUpdatedTriggers.push(body)
+        }
+
         continue
       }
 
-      // add trigger
-      const firstComposition = trigger.composition[0]
+      // queue add trigger
+      const body = resolveBody(trigger)
 
-      const body = resolveBody(trigger.name, firstComposition)
-
-      triggerBodies.push(body)
+      toBeAddedTriggerBodies.push(body)
     }
 
     // leaves first
-    for (const { payload } of triggerBodies.filter(
+    for (const { payload } of toBeAddedTriggerBodies.filter(
       ({ type }) => type === 'leaf',
     )) {
       const response = await client.addTrigger(payload)
@@ -300,7 +316,7 @@ export default class Sync extends Command {
     }
 
     // inner second
-    for (const { payload } of triggerBodies.filter(
+    for (const { payload } of toBeAddedTriggerBodies.filter(
       ({ type }) => type === 'inner',
     )) {
       if (payload.criteria.or) {
@@ -327,6 +343,14 @@ export default class Sync extends Command {
       } = response
 
       nameToIdMappings[payload.name as string] = id
+    }
+
+    // Update
+    for (const { id, payload } of toBeUpdatedTriggers) {
+      await handle(
+        client.updateTrigger(id!, payload),
+        withStandardErrors({}, this),
+      )
     }
 
     if (forceDelete) {
@@ -555,6 +579,47 @@ export default class Sync extends Command {
       trigger: triggerIdsMappings[workflow.trigger],
       action: actionIdMappings[workflow.action],
     }
+  }
+
+  private _diffTriggers(existingTrigger: any, yamlTrigger: any) {
+    if (existingTrigger.composition[0].type === 'leaf') {
+      return !deepEqual(
+        existingTrigger.composition[0].criteria,
+        yamlTrigger.composition[0].criteria,
+      )
+    }
+
+    if (
+      existingTrigger.composition[0].type === 'inner' &&
+      existingTrigger.composition[0].operand === 'or'
+    ) {
+      if (!yamlTrigger.composition[0].or) {
+        return false
+      }
+
+      const existingTriggerNames = existingTrigger.composition[0].nodes.map(
+        ({ name }: { name: string }) => name,
+      )
+
+      return !deepEqual(existingTriggerNames, yamlTrigger.composition[0].or)
+    }
+
+    if (
+      existingTrigger.composition[0].type === 'inner' &&
+      existingTrigger.composition[0].operand === 'and'
+    ) {
+      if (!yamlTrigger.composition[0].and) {
+        return false
+      }
+
+      const existingTriggerNames = existingTrigger.composition[0].nodes.map(
+        ({ name }: { name: string }) => name,
+      )
+
+      return !deepEqual(existingTriggerNames, yamlTrigger.composition[0].and)
+    }
+
+    return false
   }
 
   // private async _syncAccessories(

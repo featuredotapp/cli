@@ -539,6 +539,39 @@ export function addTrigger(
   )
 }
 /**
+ * Update a trigger
+ */
+export function updateTrigger(
+  trigger: string,
+  addTriggerRequest: AddTriggerRequest,
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 404
+        data: ErrorResponse
+      }
+  >(
+    `/triggers/${trigger}`,
+    oazapfts.json({
+      ...opts,
+      method: 'PUT',
+      body: addTriggerRequest,
+    }),
+  )
+}
+/**
  * Delete a trigger
  */
 export function deleteTrigger(trigger: string, opts?: Oazapfts.RequestOpts) {
