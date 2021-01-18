@@ -68,10 +68,11 @@ export default class Sync extends Command {
 
     const forceDelete = flags.delete
 
-    //await this._syncAddresses(client, addresses, forceDelete)
-    //await this._syncKeys(client, addresses, forceDelete)
+    // await this._syncAddresses(client, addresses, forceDelete)
+    // await this._syncKeys(client, addresses, forceDelete)
     await this._syncTriggers(client, triggers, forceDelete)
-    //await this._syncActions(client, actions, forceDelete)
+    await this._syncActions(client, actions, forceDelete)
+    // await this._syncActions(client, actions, forceDelete)
     // await this._syncWorkflows(client, workflows, forceDelete)
   }
 
@@ -182,7 +183,6 @@ export default class Sync extends Command {
         )
       }
 
-      // console.log(payload)
       await handle(client.addTrigger(payload), withStandardErrors({}, this))
     }
 
@@ -204,6 +204,100 @@ export default class Sync extends Command {
     }
 
     cli.action.stop()
+  }
+
+  private async _syncActions(
+    client: typeof api,
+    actions: Array<any>,
+    forceDelete: boolean,
+  ) {
+    cli.action.start('Syncing actions ')
+    const response = await client.getAllActions()
+
+    if (response.status !== 200) {
+      this.log('Error syncing actions')
+      this.exit(1)
+    }
+
+    const {
+      data: { list: existingActions },
+    } = response
+
+    // const nameToIdMappings: { [key: string]: string } = existingActions.reduce(
+    //   (acc, item) => ({ ...acc, [item.name]: item.id }),
+    //   {},
+    // )
+
+    // const actionBodies = []
+
+    for (const action of actions) {
+      const existingAction = existingActions.find((a) => a.name === action.name)
+
+      if (existingAction) {
+        continue
+      }
+
+      console.log(action)
+
+      const payload = await this._resolvePayload(client, action)
+
+      // actionBodies.push(body)
+      await handle(client.addAction(payload), withStandardErrors({}, this))
+    }
+
+    if (forceDelete) {
+      const namesToRetain = actions.map((t) => t.name)
+
+      const actionsToDelete = existingActions.filter(
+        ({ name }) => !namesToRetain.includes(name),
+      )
+
+      for (const { id: actionId } of actionsToDelete) {
+        this.log(`Deleteing action ${actionId}`)
+
+        await handle(
+          client.deleteTrigger(actionId),
+          withStandardErrors({}, this),
+        )
+      }
+    }
+
+    cli.action.stop()
+  }
+
+  private async _resolvePayload(client: typeof api, action: any) {
+    if (action.type !== 'mailscript-email') {
+      return action
+    }
+
+    const from = action.config.from
+    const keyName = action.config.key
+
+    const keysResponse = await client.getAllKeys(from)
+
+    if (keysResponse.status !== 200) {
+      this.log('Error getting address keys')
+      this.exit(1)
+    }
+
+    const {
+      data: { list: keys },
+    } = keysResponse
+
+    const foundKey = keys.find(({ name }) => name === keyName)
+
+    if (!foundKey) {
+      this.log(`Could not find key ${keyName} for action ${action.name}`)
+      this.exit(1)
+    }
+
+    return {
+      ...action,
+      config: {
+        ...action.config,
+        key: foundKey.id,
+      },
+    }
   }
 
   private async _syncAddresses(
