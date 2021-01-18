@@ -7,7 +7,6 @@ import cli from 'cli-ux'
 import * as api from '../../api'
 import setupApiClient from '../../setupApiClient'
 import withStandardErrors from '../../utils/errorHandling'
-import deepEqual from 'deep-equal'
 
 export default class Sync extends Command {
   static description = 'import and update config from file into Mailscript'
