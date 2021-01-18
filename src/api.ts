@@ -287,6 +287,9 @@ export type AddActionAliasRequest = {
     alias?: string
   }
 }
+export type AddActionResponse = {
+  id: string
+}
 /**
  * Get the authenticated user
  */
@@ -962,7 +965,7 @@ export function addAction(
   return oazapfts.fetchJson<
     | {
         status: 201
-        data: ErrorResponse
+        data: AddActionResponse
       }
     | {
         status: 400

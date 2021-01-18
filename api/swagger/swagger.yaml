@@ -837,7 +837,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/AddActionResponse'
         '400':
           description: 'Failure'
           content:
@@ -1052,16 +1052,6 @@ components:
           type: array
           items:
             type: string
-    ActionForwardConfig:
-      required:
-        - type
-        - forward
-      properties:
-        type:
-          type: string
-          enum: ['forward']
-        forward:
-          type: string
     Key:
       required:
         - id
@@ -1306,6 +1296,12 @@ components:
             - $ref: '#/components/schemas/Criteria'
             - $ref: '#/components/schemas/CriteriaOperand'
     AddTriggerResponse:
+      required:
+        - id
+      properties:
+        id:
+          type: string
+    AddActionResponse:
       required:
         - id
       properties:

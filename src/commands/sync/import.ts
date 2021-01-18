@@ -7,6 +7,7 @@ import cli from 'cli-ux'
 import * as api from '../../api'
 import setupApiClient from '../../setupApiClient'
 import withStandardErrors from '../../utils/errorHandling'
+import deepEqual from 'deep-equal'
 
 export default class Sync extends Command {
   static description = 'import and update config from file into Mailscript'
@@ -69,9 +70,23 @@ export default class Sync extends Command {
 
     await this._syncAddresses(client, addresses, forceDelete)
     await this._syncKeys(client, addresses, forceDelete)
-    await this._syncTriggers(client, triggers, forceDelete)
-    await this._syncActions(client, actions, forceDelete)
-    await this._syncWorkflows(client, workflows, forceDelete)
+    const triggerIdMappings = await this._syncTriggers(
+      client,
+      triggers,
+      forceDelete,
+    )
+    const actionIdMappings = await this._syncActions(
+      client,
+      actions,
+      forceDelete,
+    )
+    await this._syncWorkflows(
+      client,
+      workflows,
+      triggerIdMappings,
+      actionIdMappings,
+      forceDelete,
+    )
   }
 
   private async _syncAddresses(
@@ -301,7 +316,18 @@ export default class Sync extends Command {
         )
       }
 
-      await handle(client.addTrigger(payload), withStandardErrors({}, this))
+      const response = await client.addTrigger(payload)
+
+      if (response.status !== 201) {
+        this.log('Error: could not add trigger')
+        this.exit(1)
+      }
+
+      const {
+        data: { id },
+      } = response
+
+      nameToIdMappings[payload.name as string] = id
     }
 
     if (forceDelete) {
@@ -322,6 +348,8 @@ export default class Sync extends Command {
     }
 
     cli.action.stop()
+
+    return nameToIdMappings
   }
 
   private async _syncActions(
@@ -341,6 +369,11 @@ export default class Sync extends Command {
       data: { list: existingActions },
     } = response
 
+    const nameToIdMappings: { [key: string]: string } = existingActions.reduce(
+      (acc, item) => ({ ...acc, [item.name]: item.id }),
+      {},
+    )
+
     for (const action of actions) {
       const existingAction = existingActions.find((a) => a.name === action.name)
 
@@ -350,7 +383,18 @@ export default class Sync extends Command {
 
       const payload = await this._resolvePayload(client, action)
 
-      await handle(client.addAction(payload), withStandardErrors({}, this))
+      const response = await client.addAction(payload)
+
+      if (response.status !== 201) {
+        this.log('Error: could not add trigger')
+        this.exit(1)
+      }
+
+      const {
+        data: { id },
+      } = response
+
+      nameToIdMappings[payload.name as string] = id
     }
 
     if (forceDelete) {
@@ -371,27 +415,82 @@ export default class Sync extends Command {
     }
 
     cli.action.stop()
+
+    return nameToIdMappings
   }
 
+  // eslint-disable-next-line max-params
   private async _syncWorkflows(
     client: typeof api,
-    workflows: Array<any>,
+    yamlWorkflows: Array<any>,
+    triggerIdsMappings: { [key: string]: string },
+    actionIdMappings: { [key: string]: string },
     forceDelete: boolean,
   ) {
     cli.action.start('Syncing workflows ')
-    const response = await client.getAllWorkflows()
+    const workflowsResponse = await client.getAllWorkflows()
 
-    if (response.status !== 200) {
+    if (workflowsResponse.status !== 200) {
       this.log('Error syncing workflows')
       this.exit(1)
     }
 
     const {
       data: { list: existingWorkflows },
-    } = response
+    } = workflowsResponse
+
+    const inputsResponse = await client.getAllInputs()
+
+    if (inputsResponse.status !== 200) {
+      this.log('Error reading inputs')
+      this.exit(1)
+    }
+
+    const {
+      data: { list: inputs },
+    } = inputsResponse
+
+    const inputIdsMappings = inputs.reduce(
+      (acc, item) => ({ ...acc, [item.name]: item.id }),
+      {},
+    )
+
+    for (const workflow of yamlWorkflows) {
+      const existingWorkflow = existingWorkflows.find(
+        (ea) => ea.name === workflow.name,
+      )
+
+      const resolvedWorkflow = await this._resolveWorkflow(
+        workflow,
+        inputIdsMappings,
+        triggerIdsMappings,
+        actionIdMappings,
+      )
+
+      if (!existingWorkflow) {
+        await handle(
+          client.addWorkflow(resolvedWorkflow),
+          withStandardErrors({}, this),
+        )
+
+        continue
+      }
+
+      this.log('TBD - Update workflow')
+
+      // if (
+      //   !deepEqual(existingWorkflow.trigger, resolvedWorkflow.trigger) ||
+      //   !deepEqual(existingWorkflow.actions, resolvedWorkflow.actions)
+      // ) {
+      //   await handle(
+      //     client.updateWorkflow(existingWorkflow.id, resolvedWorkflow),
+      //     withStandardErrors({}, this),
+      //   )
+      // }
+    }
 
     if (forceDelete) {
-      const namesToRetain = workflows.map((t) => t.name)
+      const namesToRetain = yamlWorkflows.map((t) => t.name)
 
       const actionsToDelete = existingWorkflows.filter(
         ({ name }) => !namesToRetain.includes(name),
@@ -442,6 +541,20 @@ export default class Sync extends Command {
         ...action.config,
         key: foundKey.id,
       },
+    }
+  }
+
+  private async _resolveWorkflow(
+    workflow: any,
+    inputIdsMappings: { [key: string]: string },
+    triggerIdsMappings: { [key: string]: string },
+    actionIdMappings: { [key: string]: string },
+  ) {
+    return {
+      ...workflow,
+      input: inputIdsMappings[workflow.input],
+      trigger: triggerIdsMappings[workflow.trigger],
+      action: actionIdMappings[workflow.action],
     }
   }
 
