@@ -412,15 +412,28 @@ export default class Sync extends Command {
     for (const action of sortedActions) {
       const existingAction = existingActions.find((a) => a.name === action.name)
 
-      if (existingAction) {
-        continue
-      }
-
       const payload = await this._resolvePayload(
         client,
         action,
         nameToIdMappings,
       )
+
+      if (existingAction) {
+        if (action.list) {
+          continue
+        }
+
+        if (deepEqual(existingAction.config, payload.config)) {
+          continue
+        }
+
+        await handle(
+          client.updateAction(existingAction.id, payload),
+          withStandardErrors({}, this),
+        )
+
+        continue
+      }
 
       const response = await client.addAction(payload)
 

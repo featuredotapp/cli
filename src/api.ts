@@ -1018,6 +1018,50 @@ export function addAction(
   )
 }
 /**
+ * Update an action key
+ */
+export function updateAction(
+  action: string,
+  body:
+    | AddActionCombineRequest
+    | AddActionSmsRequest
+    | AddActionWebhookRequest
+    | AddActionDaemonRequest
+    | AddActionSendRequest
+    | AddActionForwardRequest
+    | AddActionForwardRequest
+    | AddActionReplyRequest
+    | AddActionReplyAllRequest
+    | AddActionAliasRequest,
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+        data: Key
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 404
+        data: ErrorResponse
+      }
+  >(
+    `/actions/${action}`,
+    oazapfts.json({
+      ...opts,
+      method: 'PUT',
+      body,
+    }),
+  )
+}
+/**
  * Delete an action
  */
 export function deleteAction(action: string, opts?: Oazapfts.RequestOpts) {

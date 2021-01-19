@@ -891,6 +891,60 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
   /actions/{action}:
+    put:
+      tags:
+        - 'actions'
+      summary: 'Update an action key'
+      operationId: 'updateAction'
+      parameters:
+        - name: action
+          in: path
+          description: ID of action
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Action body
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/AddActionCombineRequest'
+                - $ref: '#/components/schemas/AddActionSmsRequest'
+                - $ref: '#/components/schemas/AddActionWebhookRequest'
+                - $ref: '#/components/schemas/AddActionDaemonRequest'
+                - $ref: '#/components/schemas/AddActionSendRequest'
+                - $ref: '#/components/schemas/AddActionForwardRequest'
+                - $ref: '#/components/schemas/AddActionForwardRequest'
+                - $ref: '#/components/schemas/AddActionReplyRequest'
+                - $ref: '#/components/schemas/AddActionReplyAllRequest'
+                - $ref: '#/components/schemas/AddActionAliasRequest'
+      responses:
+        '200':
+          description: 'Successful update operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Key'
+        '400':
+          description: 'Failure'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 'Key not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     delete:
       tags:
         - 'actions'
