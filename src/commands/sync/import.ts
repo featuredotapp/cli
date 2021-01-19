@@ -70,16 +70,19 @@ export default class Sync extends Command {
 
     await this._syncAddresses(client, addresses, forceDelete)
     await this._syncKeys(client, addresses, forceDelete)
+
     const triggerIdMappings = await this._syncTriggers(
       client,
       triggers,
       forceDelete,
     )
+
     const actionIdMappings = await this._syncActions(
       client,
       actions,
       forceDelete,
     )
+
     await this._syncWorkflows(
       client,
       workflows,
@@ -397,19 +400,32 @@ export default class Sync extends Command {
       {},
     )
 
-    for (const action of actions) {
+    const idToNameMappings: { [key: string]: string } = existingActions.reduce(
+      (acc, item) => ({ ...acc, [item.id]: item.name }),
+      {},
+    )
+
+    const sortedActions = actions
+      .filter((a) => !a.list)
+      .concat(actions.filter((a) => Boolean(a.list)))
+
+    for (const action of sortedActions) {
       const existingAction = existingActions.find((a) => a.name === action.name)
 
       if (existingAction) {
         continue
       }
 
-      const payload = await this._resolvePayload(client, action)
+      const payload = await this._resolvePayload(
+        client,
+        action,
+        nameToIdMappings,
+      )
 
       const response = await client.addAction(payload)
 
       if (response.status !== 201) {
-        this.log('Error: could not add trigger')
+        this.log('Error: could not add action')
         this.exit(1)
       }
 
@@ -418,6 +434,7 @@ export default class Sync extends Command {
       } = response
 
       nameToIdMappings[payload.name as string] = id
+      idToNameMappings[id] = payload.name
     }
 
     if (forceDelete) {
@@ -532,39 +549,52 @@ export default class Sync extends Command {
     cli.action.stop()
   }
 
-  private async _resolvePayload(client: typeof api, action: any) {
-    if (action.type !== 'mailscript-email') {
-      return action
+  private async _resolvePayload(
+    client: typeof api,
+    action: any,
+    nameToIdMappings: { [key: string]: string },
+  ) {
+    if (!action.type && action.list) {
+      console.log(nameToIdMappings)
+      console.log(action.list)
+      return {
+        ...action,
+        list: action.list.map((name: string) => nameToIdMappings[name]),
+      }
     }
 
-    const from = action.config.from
-    const keyName = action.config.key
+    if (action.type === 'mailscript-email') {
+      const from = action.config.from
+      const keyName = action.config.key
 
-    const keysResponse = await client.getAllKeys(from)
+      const keysResponse = await client.getAllKeys(from)
 
-    if (keysResponse.status !== 200) {
-      this.log('Error getting address keys')
-      this.exit(1)
+      if (keysResponse.status !== 200) {
+        this.log('Error getting address keys')
+        this.exit(1)
+      }
+
+      const {
+        data: { list: keys },
+      } = keysResponse
+
+      const foundKey = keys.find(({ name }) => name === keyName)
+
+      if (!foundKey) {
+        this.log(`Could not find key ${keyName} for action ${action.name}`)
+        this.exit(1)
+      }
+
+      return {
+        ...action,
+        config: {
+          ...action.config,
+          key: foundKey.id,
+        },
+      }
     }
 
-    const {
-      data: { list: keys },
-    } = keysResponse
-
-    const foundKey = keys.find(({ name }) => name === keyName)
-
-    if (!foundKey) {
-      this.log(`Could not find key ${keyName} for action ${action.name}`)
-      this.exit(1)
-    }
-
-    return {
-      ...action,
-      config: {
-        ...action.config,
-        key: foundKey.id,
-      },
-    }
+    throw new Error(`Unknown action type ${action.type}`)
   }
 
   private async _resolveWorkflow(
