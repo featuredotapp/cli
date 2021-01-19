@@ -235,50 +235,6 @@ export default class Sync extends Command {
       {},
     )
 
-    const toBeAddedTriggerBodies = []
-    const toBeUpdatedTriggers = []
-
-    const resolveBody = (trigger: any, id?: string | undefined) => {
-      const name = trigger.name
-      const comp = trigger.composition[0]
-
-      if (comp.criteria) {
-        return {
-          id,
-          type: 'leaf',
-          payload: { name, criteria: comp.criteria },
-        }
-      }
-
-      if (comp.or) {
-        return {
-          id,
-          type: 'inner',
-          payload: {
-            name,
-            criteria: {
-              or: comp.or,
-            },
-          },
-        }
-      }
-
-      if (comp.and) {
-        return {
-          id,
-          type: 'inner',
-          payload: {
-            name,
-            criteria: {
-              and: comp.and,
-            },
-          },
-        }
-      }
-
-      throw new Error('Unknown trigger composition shape')
-    }
-
     for (const trigger of this._sortTriggersByDependency(triggers)) {
       const existingTrigger = existingTriggers.find(
         (a) => a.name === trigger.name,
@@ -287,53 +243,19 @@ export default class Sync extends Command {
       if (existingTrigger) {
         // if change, queue update
         if (this._diffTriggers(existingTrigger, trigger)) {
-          const body = resolveBody(trigger, existingTrigger.id)
+          const payload = this._resolveTriggerPayload(trigger, nameToIdMappings)
 
-          toBeUpdatedTriggers.push(body)
+          await handle(
+            client.updateTrigger(existingTrigger.id, payload),
+            withStandardErrors({}, this),
+          )
         }
 
         continue
       }
 
       // queue add trigger
-      const body = resolveBody(trigger)
-
-      toBeAddedTriggerBodies.push(body)
-    }
-
-    // leaves first
-    for (const { payload } of toBeAddedTriggerBodies.filter(
-      ({ type }) => type === 'leaf',
-    )) {
-      const response = await client.addTrigger(payload)
-
-      if (response.status !== 201) {
-        this.log('Error: could not add trigger')
-        this.exit(1)
-      }
-
-      const {
-        data: { id },
-      } = response
-
-      nameToIdMappings[payload.name as string] = id
-    }
-
-    // inner second
-    for (const { payload } of toBeAddedTriggerBodies.filter(
-      ({ type }) => type === 'inner',
-    )) {
-      if (payload.criteria.or) {
-        payload.criteria.or = payload.criteria.or.map(
-          (name: string) => nameToIdMappings[name],
-        )
-      }
-
-      if (payload.criteria.and) {
-        payload.criteria.and = payload.criteria.and.map(
-          (name: string) => nameToIdMappings[name],
-        )
-      }
+      const payload = this._resolveTriggerPayload(trigger, nameToIdMappings)
 
       const response = await client.addTrigger(payload)
 
@@ -347,14 +269,6 @@ export default class Sync extends Command {
       } = response
 
       nameToIdMappings[payload.name as string] = id
-    }
-
-    // Update
-    for (const { id, payload } of toBeUpdatedTriggers) {
-      await handle(
-        client.updateTrigger(id!, payload),
-        withStandardErrors({}, this),
-      )
     }
 
     if (forceDelete) {
@@ -690,5 +604,37 @@ export default class Sync extends Command {
     )
 
     return sortedTriggers
+  }
+
+  private _resolveTriggerPayload(
+    trigger: any,
+    nameToIdMappings: { [key: string]: string },
+  ) {
+    const name = trigger.name
+    const comp = trigger.composition[0]
+
+    if (comp.criteria) {
+      return { name, criteria: comp.criteria }
+    }
+
+    if (comp.or) {
+      return {
+        name,
+        criteria: {
+          or: comp.or.map((name: string) => nameToIdMappings[name]),
+        },
+      }
+    }
+
+    if (comp.and) {
+      return {
+        name,
+        criteria: {
+          and: comp.and.map((name: string) => nameToIdMappings[name]),
+        },
+      }
+    }
+
+    throw new Error('Unknown trigger composition shape')
   }
 }
