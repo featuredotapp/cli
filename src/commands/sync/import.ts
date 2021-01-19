@@ -8,6 +8,7 @@ import * as api from '../../api'
 import setupApiClient from '../../setupApiClient'
 import withStandardErrors from '../../utils/errorHandling'
 import deepEqual from 'deep-equal'
+import toposort from 'toposort'
 
 export default class Sync extends Command {
   static description = 'import and update config from file into Mailscript'
@@ -278,7 +279,7 @@ export default class Sync extends Command {
       throw new Error('Unknown trigger composition shape')
     }
 
-    for (const trigger of triggers) {
+    for (const trigger of this._sortTriggersByDependency(triggers)) {
       const existingTrigger = existingTriggers.find(
         (a) => a.name === trigger.name,
       )
@@ -665,5 +666,29 @@ export default class Sync extends Command {
     }
 
     return false
+  }
+
+  private _sortTriggersByDependency(triggers: any) {
+    let nodes: Array<Array<string>> = []
+
+    for (const trigger of triggers) {
+      const firstComposition = trigger.composition[0]
+
+      const links = firstComposition.criteria
+        ? []
+        : firstComposition.or || firstComposition.and
+
+      const entries = links.map((l: string) => [trigger.name, l])
+
+      nodes = [...nodes, ...entries]
+    }
+
+    const sortedNodes = toposort(nodes as any).reverse()
+
+    const sortedTriggers = sortedNodes.map((name) =>
+      triggers.find((t: any) => t.name === name),
+    )
+
+    return sortedTriggers
   }
 }
