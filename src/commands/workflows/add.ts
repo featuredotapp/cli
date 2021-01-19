@@ -96,7 +96,7 @@ export default class WorkflowsAdd extends Command {
 
     if (response.status !== 200) {
       this.debug(response.data.error)
-      this.log(`${chalk.bold('Error')}: could not access api for output lookup`)
+      this.log(`${chalk.bold('Error')}: could not access api for input lookup`)
       this.exit(1)
     }
 
@@ -105,7 +105,7 @@ export default class WorkflowsAdd extends Command {
     } = response
 
     if (list.length !== 1) {
-      this.log(`${chalk.bold('Error')}: could find input ${name}`)
+      this.log(`${chalk.bold('Error')}: could not find input ${name}`)
     }
 
     const { id: inputId } = list[0]
