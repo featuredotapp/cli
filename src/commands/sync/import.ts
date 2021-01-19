@@ -419,11 +419,17 @@ export default class Sync extends Command {
       )
 
       if (existingAction) {
-        if (action.list) {
+        if (
+          payload.list &&
+          deepEqual((existingAction as api.ActionCombine).list, payload.list)
+        ) {
           continue
         }
 
-        if (deepEqual(existingAction.config, payload.config)) {
+        if (
+          !payload.list &&
+          deepEqual((existingAction as api.ActionSend).config, payload.config)
+        ) {
           continue
         }
 

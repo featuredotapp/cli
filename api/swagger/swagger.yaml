@@ -1678,6 +1678,7 @@ components:
           items:
             oneOf:
               - $ref: '#/components/schemas/ActionSend'
+              - $ref: '#/components/schemas/ActionCombine'
     ActionSend:
       required:
         - id
@@ -1715,6 +1716,31 @@ components:
               type: string
             html:
               type: string
+    ActionCombine:
+      required:
+        - id
+        - name
+        - owner
+        - createdAt
+        - createdBy
+        - output
+        - config
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        owner:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        list:
+          type: array
+          items:
+            type: string
   securitySchemes:
     bearerAuth:
       type: http

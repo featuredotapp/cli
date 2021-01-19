@@ -199,8 +199,16 @@ export type ActionSend = {
     html?: string
   }
 }
+export type ActionCombine = {
+  id: string
+  name: string
+  owner: string
+  createdAt: string
+  createdBy: string
+  list?: string[]
+}
 export type GetAllActionsResponse = {
-  list: ActionSend[]
+  list: (ActionSend | ActionCombine)[]
 }
 export type AddActionCombineRequest = {
   name: string
