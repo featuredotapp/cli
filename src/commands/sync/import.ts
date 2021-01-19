@@ -9,6 +9,7 @@ import setupApiClient from '../../setupApiClient'
 import withStandardErrors from '../../utils/errorHandling'
 import deepEqual from 'deep-equal'
 import toposort from 'toposort'
+import chalk from 'chalk'
 
 export default class Sync extends Command {
   static description = 'import and update config from file into Mailscript'
@@ -68,6 +69,8 @@ export default class Sync extends Command {
     this.log('')
 
     const forceDelete = flags.delete
+
+    await this._checkVerificationsForActions(client, actions)
 
     await this._syncAddresses(client, addresses, forceDelete)
     await this._syncKeys(client, addresses, forceDelete)
@@ -355,7 +358,13 @@ export default class Sync extends Command {
       const response = await client.addAction(payload)
 
       if (response.status !== 201) {
-        this.log('Error: could not add action')
+        this.log(
+          chalk.red(
+            `${chalk.bold('Error')}: could not add action - ${
+              response.data.error
+            }`,
+          ),
+        )
         this.exit(1)
       }
 
@@ -520,6 +529,14 @@ export default class Sync extends Command {
       }
     }
 
+    if (action.type === 'sms') {
+      return action
+    }
+
+    if (action.type === 'webhook') {
+      return action
+    }
+
     throw new Error(`Unknown action type ${action.type}`)
   }
 
@@ -659,5 +676,50 @@ export default class Sync extends Command {
     }
 
     throw new Error('Unknown trigger composition shape')
+  }
+
+  private async _checkVerificationsForActions(
+    client: typeof api,
+    actions: any,
+  ) {
+    const leafActions = actions.filter(({ type }: any) => Boolean(type))
+
+    const aliasAddresses = leafActions
+      .filter(
+        ({ type, config: { type: mailtype } }: any) =>
+          type === 'mailscript-email' && mailtype === 'alias',
+      )
+      .map(({ config: { to } }: any) => to)
+
+    const smsNumbers = leafActions
+      .filter(({ type }: any) => type === 'sms')
+      .map(({ config: { number } }: any) => number)
+
+    const {
+      list: verifications,
+    }: api.GetAllVerificationsResponse = await handle(
+      client.getAllVerifications(),
+      withStandardErrors({}, this),
+    )
+
+    for (const smsNumber of smsNumbers) {
+      const verification = verifications.find(
+        (v) => v.type === 'sms' && v.sms === smsNumber,
+      )
+
+      if (!verification) {
+        this.log(`Cannot import, unverified number ${smsNumber}`)
+      }
+    }
+
+    for (const aliasAddress of aliasAddresses) {
+      const verification = verifications.find(
+        (v) => v.type === 'email' && v.email === aliasAddress,
+      )
+
+      if (!verification) {
+        this.log(`Cannot import, unverified alias address ${aliasAddress}`)
+      }
+    }
   }
 }
