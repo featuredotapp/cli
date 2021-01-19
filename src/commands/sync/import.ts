@@ -320,11 +320,7 @@ export default class Sync extends Command {
       {},
     )
 
-    const sortedActions = actions
-      .filter((a) => !a.list)
-      .concat(actions.filter((a) => Boolean(a.list)))
-
-    for (const action of sortedActions) {
+    for (const action of this._sortActionsByDependency(actions)) {
       const existingAction = existingActions.find((a) => a.name === action.name)
 
       const payload = await this._resolvePayload(
@@ -604,6 +600,33 @@ export default class Sync extends Command {
     )
 
     return sortedTriggers
+  }
+
+  private _sortActionsByDependency(actions: any) {
+    let nodes: Array<Array<string>> = []
+
+    for (const action of actions) {
+      const { name, list } = action
+
+      if (!list) {
+        nodes.push([name])
+        continue
+      }
+
+      const entries = list.map((l: string) => [name, l])
+
+      nodes = [...nodes, ...entries]
+    }
+
+    const sortedNodes = toposort(nodes as any)
+      .filter(Boolean)
+      .reverse()
+
+    const sortedActions = sortedNodes.map((name) =>
+      actions.find((t: any) => t.name === name),
+    )
+
+    return sortedActions
   }
 
   private _resolveTriggerPayload(
