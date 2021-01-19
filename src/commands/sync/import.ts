@@ -555,8 +555,6 @@ export default class Sync extends Command {
     nameToIdMappings: { [key: string]: string },
   ) {
     if (!action.type && action.list) {
-      console.log(nameToIdMappings)
-      console.log(action.list)
       return {
         ...action,
         list: action.list.map((name: string) => nameToIdMappings[name]),
