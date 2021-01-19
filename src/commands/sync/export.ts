@@ -100,20 +100,34 @@ export default class Sync extends Command {
         return comparison
       })
 
-    const actions = (
-      await handle(
-        client.getAllActions(),
-        withStandardErrors(
-          { '200': ({ list }: api.GetAllActionsResponse) => list },
-          this,
-        ),
-      )
-    ).map(({ id, type, name, config }: any) => ({
-      id,
-      name,
-      type,
-      config: this._keyNameSubstitute(keys, config),
-    }))
+    const actionEntries = await handle(
+      client.getAllActions(),
+      withStandardErrors(
+        { '200': ({ list }: api.GetAllActionsResponse) => list },
+        this,
+      ),
+    )
+
+    const actions = actionEntries.map(
+      ({ id, type, name, config, list }: any) => {
+        if (list) {
+          return {
+            id,
+            name,
+            list: list.map(
+              (l: any) => actionEntries.find((ae: any) => ae.id === l).name,
+            ),
+          }
+        }
+
+        return {
+          id,
+          name,
+          type,
+          config: this._keyNameSubstitute(keys, config),
+        }
+      },
+    )
 
     const inputs = await handle(
       client.getAllInputs(),
@@ -181,7 +195,7 @@ export default class Sync extends Command {
     }[],
     config: any,
   ) {
-    if (!config.key) {
+    if (!config || !config.key) {
       return config
     }
 
