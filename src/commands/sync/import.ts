@@ -519,33 +519,31 @@ export default class Sync extends Command {
         (ea) => ea.name === workflow.name,
       )
 
-      const resolvedWorkflow = await this._resolveWorkflow(
+      const payload = await this._resolveWorkflow(
         workflow,
         inputIdsMappings,
         triggerIdsMappings,
         actionIdMappings,
       )
 
-      if (!existingWorkflow) {
+      if (existingWorkflow) {
+        if (
+          existingWorkflow.input === payload.input &&
+          existingWorkflow.trigger === payload.trigger &&
+          existingWorkflow.action === payload.action
+        ) {
+          continue
+        }
+
         await handle(
-          client.addWorkflow(resolvedWorkflow),
+          client.updateWorkflow(existingWorkflow.id, payload),
           withStandardErrors({}, this),
         )
 
         continue
       }
 
-      this.log('TBD - Update workflow')
-
-      // if (
-      //   !deepEqual(existingWorkflow.trigger, resolvedWorkflow.trigger) ||
-      //   !deepEqual(existingWorkflow.actions, resolvedWorkflow.actions)
-      // ) {
-      //   await handle(
-      //     client.updateWorkflow(existingWorkflow.id, resolvedWorkflow),
-      //     withStandardErrors({}, this),
-      //   )
-      // }
+      await handle(client.addWorkflow(payload), withStandardErrors({}, this))
     }
 
     if (forceDelete) {
