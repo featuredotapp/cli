@@ -1,17 +1,17 @@
 /* eslint-disable complexity */
 import { Command, flags } from '@oclif/command'
 import chalk from 'chalk'
-import { cli } from 'cli-ux'
 import * as fs from 'fs'
 import { handle } from 'oazapfts'
 import * as api from '../../api'
 import setupApiClient from '../../setupApiClient'
+import { askVerifyEmailFlow } from '../../utils/askVerifyEmailFlow'
+import { askVerifySmsFlow } from '../../utils/askVerifySmsFlow'
 import withStandardErrors from '../../utils/errorHandling'
-import verifyEmailFlow from '../../utils/verifyEmailFlow'
-import verifySmsFlow from '../../utils/verifySmsFlow'
 
 type FlagsType = {
   name: string
+  noninteractive: boolean
 
   forward?: string
   send?: string
@@ -123,8 +123,17 @@ export default class ActionsAdd extends Command {
     const payload = this._resolveActionPayload(flags)
 
     await this._optionallyValidateMailscriptEmail(client, payload)
-    await this._optionallyVerifySMS(client, payload)
-    await this._optionallyVerifyAlias(client, flags, payload)
+
+    if (payload.type === 'sms') {
+      await this._optionallyVerifySMS(client, flags, payload.config.number)
+    }
+
+    if (
+      payload.type === 'mailscript-email' &&
+      payload.config.type === 'alias'
+    ) {
+      await this._optionallyVerifyAlias(client, flags, payload)
+    }
 
     const updatedPayload = await this._enhancePayloadWithFromKeys(
       client,
@@ -403,12 +412,9 @@ export default class ActionsAdd extends Command {
 
   private async _optionallyVerifySMS(
     client: typeof api,
-    { type, config: { number } }: any,
+    flags: FlagsType,
+    number: string,
   ) {
-    if (type !== 'sms') {
-      return
-    }
-
     if (!number) {
       throw new Error('SMS must be provided')
     }
@@ -424,37 +430,17 @@ export default class ActionsAdd extends Command {
       (v) => v.type === 'sms' && v.verified && v.sms === number,
     )
 
-    if (smsVerification) {
+    if (smsVerification && smsVerification.verified) {
       return
     }
 
-    this.log(
-      `The sms number ${chalk.bold(
-        number,
-      )} must be verified before being included in an ${chalk.bold(
-        'sms',
-      )} workflow.`,
+    await askVerifySmsFlow(
+      client,
+      number,
+      'Action not added',
+      flags.noninteractive,
+      this,
     )
-
-    this.log('')
-    const verifySms = await cli.confirm(
-      `Do you want to send a verification code to ${chalk.bold(
-        number,
-      )}? ${chalk.cyan('(y/n)')}`,
-    )
-
-    if (!verifySms) {
-      this.log(chalk.red('Workflow not added'))
-      this.exit(1)
-    }
-
-    const verified = await verifySmsFlow(client, number, this)
-
-    if (!verified) {
-      this.exit(1)
-    }
-
-    this.log(`Verified: ${number}`)
   }
 
   private async _optionallyVerifyAlias(
@@ -493,46 +479,12 @@ export default class ActionsAdd extends Command {
       return
     }
 
-    if (flags.noninteractive) {
-      this.log(
-        chalk.red(
-          `${chalk.bold('Error')}: the email address ${chalk.bold(
-            alias,
-          )} must be verified before being included in an ${chalk.bold(
-            'alias',
-          )} workflow`,
-        ),
-      )
-      this.exit(1)
-    }
-
-    this.log('')
-    this.log(
-      `The email address ${chalk.bold(
-        alias,
-      )} must be verified before being included in an ${chalk.bold(
-        'alias',
-      )} workflow.`,
+    await askVerifyEmailFlow(
+      client,
+      alias,
+      'Action not added',
+      flags.noninteractive,
+      this,
     )
-
-    this.log('')
-    const verifyEmailAddress = await cli.confirm(
-      `Do you want to send a verification email to ${chalk.bold(
-        alias,
-      )}? ${chalk.cyan('(y/n)')}`,
-    )
-
-    if (!verifyEmailAddress) {
-      this.log(chalk.red('Workflow not added'))
-      this.exit(1)
-    }
-
-    const verified = await verifyEmailFlow(client, alias, this)
-
-    if (!verified) {
-      this.exit(1)
-    }
-
-    this.log('')
   }
 }

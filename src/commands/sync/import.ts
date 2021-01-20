@@ -10,12 +10,24 @@ import withStandardErrors from '../../utils/errorHandling'
 import deepEqual from 'deep-equal'
 import toposort from 'toposort'
 import chalk from 'chalk'
+import { askVerifySmsFlow } from '../../utils/askVerifySmsFlow'
+import { askVerifyEmailFlow } from '../../utils/askVerifyEmailFlow'
+
+type FlagsType = {
+  noninteractive: boolean
+  path: string
+  delete: boolean
+}
 
 export default class Sync extends Command {
   static description = 'import and update config from file into Mailscript'
 
   static flags = {
     help: flags.help({ char: 'h' }),
+    noninteractive: flags.boolean({
+      description: 'do not ask for user input',
+      default: false,
+    }),
     path: flags.string({
       char: 'p',
       description: 'path to the file to read/write',
@@ -41,10 +53,7 @@ export default class Sync extends Command {
     return this.import(client, flags)
   }
 
-  async import(
-    client: typeof api,
-    flags: { path: string; delete: boolean },
-  ): Promise<void> {
+  async import(client: typeof api, flags: FlagsType): Promise<void> {
     if (!flags.path) {
       this.log('Please provide a file to read from --path')
       this.exit(1)
@@ -70,7 +79,7 @@ export default class Sync extends Command {
 
     const forceDelete = flags.delete
 
-    await this._checkVerificationsForActions(client, actions)
+    await this._checkVerificationsForActions(client, flags, actions)
 
     await this._syncAddresses(client, addresses, forceDelete)
     await this._syncKeys(client, addresses, forceDelete)
@@ -680,6 +689,7 @@ export default class Sync extends Command {
 
   private async _checkVerificationsForActions(
     client: typeof api,
+    flags: FlagsType,
     actions: any,
   ) {
     const leafActions = actions.filter(({ type }: any) => Boolean(type))
@@ -689,7 +699,7 @@ export default class Sync extends Command {
         ({ type, config: { type: mailtype } }: any) =>
           type === 'mailscript-email' && mailtype === 'alias',
       )
-      .map(({ config: { to } }: any) => to)
+      .map(({ config: { alias } }: any) => alias)
 
     const smsNumbers = leafActions
       .filter(({ type }: any) => type === 'sms')
@@ -707,8 +717,14 @@ export default class Sync extends Command {
         (v) => v.type === 'sms' && v.sms === smsNumber,
       )
 
-      if (!verification) {
-        this.log(`Cannot import, unverified number ${smsNumber}`)
+      if (!verification || !verification.verified) {
+        await askVerifySmsFlow(
+          client,
+          smsNumber,
+          `Cannot import, unverified number ${smsNumber}`,
+          flags.noninteractive,
+          this,
+        )
       }
     }
 
@@ -717,8 +733,14 @@ export default class Sync extends Command {
         (v) => v.type === 'email' && v.email === aliasAddress,
       )
 
-      if (!verification) {
-        this.log(`Cannot import, unverified alias address ${aliasAddress}`)
+      if (!verification || !verification.verified) {
+        await askVerifyEmailFlow(
+          client,
+          aliasAddress,
+          `Cannot import, unverified alias address ${aliasAddress}`,
+          flags.noninteractive,
+          this,
+        )
       }
     }
   }
