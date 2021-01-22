@@ -1,14 +1,14 @@
 openapi: '3.0.0'
 info:
-  version: 0.3.0
+  version: 0.4.0
   title: Mailscript
   license:
     name: MIT
 servers:
-  - url: https://api.mailscript.com/v1
+  - url: https://api.mailscript.com/v2
     description: API server
-  #- url: http://localhost:7000/v1
-  #  description: Local development server
+  # - url: http://localhost:7000/v1
+  #   description: Local development server
 paths:
   /user:
     get:
@@ -178,40 +178,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
   /addresses/{address}:
-    put:
-      tags:
-        - 'addresses'
-      summary: 'Update a mailscript address'
-      operationId: 'updateAddress'
-      parameters:
-        - name: address
-          in: path
-          description: ID of address
-          required: true
-          schema:
-            type: string
-      requestBody:
-        description: request body
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateAddressRequest'
-      responses:
-        '200':
-          description: 'successful update operation'
-        '400':
-          description: 'Invalid input'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: 'Bad credentials'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
     delete:
       tags:
         - 'addresses'
@@ -240,59 +206,54 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /accessories:
+  /triggers:
     get:
       tags:
-        - 'accessories'
-      summary: 'Get all accessories you have access to'
+        - 'triggers'
+      summary: 'Get all triggers you have access to'
       description: ''
-      operationId: 'getAllAccessories'
-      parameters:
-        - name: name
-          in: query
-          required: false
-          schema:
-            type: string
+      operationId: 'getAllTriggers'
       responses:
         '200':
           description: 'successful operation'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetAllAccessoriesResponse'
-        '403':
-          description: 'Bad credentials'
+                $ref: '#/components/schemas/GetAllTriggersResponse'
+        '400':
+          description: 'Invalid input'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-        '405':
-          description: 'Invalid input'
+        '403':
+          description: 'Bad credentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     post:
       tags:
-        - 'accessories'
-      summary: 'Setup an accessory'
+        - 'triggers'
+      summary: 'Setup a trigger'
       description: ''
-      operationId: 'addAccessory'
+      operationId: 'addTrigger'
       requestBody:
-        description: Accessory body
+        description: Trigger body
         required: true
         content:
           application/json:
             schema:
-              oneOf:
-                - $ref: '#/components/schemas/AddSmsAccessoryRequest'
-                - $ref: '#/components/schemas/AddMailscriptEmailAccessoryRequest'
-                - $ref: '#/components/schemas/AddDaemonAccessoryRequest'
+              $ref: '#/components/schemas/AddTriggerRequest'
       responses:
         '201':
-          description: 'successful operation'
+          description: 'successful add operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddTriggerResponse'
         '400':
-          description: 'Internal error'
+          description: 'Invalid input'
           content:
             application/json:
               schema:
@@ -303,92 +264,56 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-        '405':
-          description: 'Invalid input'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-  /accessories/{id}:
-    get:
-      tags:
-        - 'accessories'
-      summary: 'Get an accessory'
-      description: ''
-      operationId: 'getAccessory'
-      parameters:
-        - name: id
-          in: path
-          description: ID of accessory
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: 'successful operation'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Accessory'
-        '403':
-          description: 'Bad credentials'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '405':
-          description: 'Invalid input'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+  /triggers/{trigger}:
     put:
       tags:
-        - 'accessories'
-      summary: 'Update an accessory'
-      description: ''
-      operationId: 'updateAccessory'
+        - 'triggers'
+      summary: 'Update a trigger'
+      operationId: 'updateTrigger'
       parameters:
-        - name: id
+        - name: trigger
           in: path
-          description: ID of accessory
+          description: ID of the trigger
           required: true
           schema:
             type: string
       requestBody:
-        description: Key body
+        description: Trigger body
         required: true
         content:
           application/json:
             schema:
-              oneOf:
-                - $ref: '#/components/schemas/UpdateSmsAccessoryRequest'
-                - $ref: '#/components/schemas/UpdateMailscriptEmailAccessoryRequest'
+              $ref: '#/components/schemas/AddTriggerRequest'
       responses:
         '200':
-          description: 'successful update operation'
+          description: 'Successful update operation'
+        '400':
+          description: 'Failure'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: 'Bad credentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-        '405':
-          description: 'Invalid input'
+        '404':
+          description: 'Key not found'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     delete:
       tags:
-        - 'accessories'
-      summary: 'Delete an accessory'
-      description: ''
-      operationId: 'deleteAccessory'
+        - 'triggers'
+      summary: 'Delete a trigger'
+      operationId: 'deleteTrigger'
       parameters:
-        - name: id
+        - name: trigger
           in: path
-          description: ID of accessory
+          description: ID of the trigger
           required: true
           schema:
             type: string
@@ -413,18 +338,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /accessories/{id}/token:
+  /inputs:
     get:
       tags:
-        - 'accessories'
-      summary: 'Get a verified token for the accessory'
+        - 'inputs'
+      summary: 'Get all inputs you have access to'
       description: ''
-      operationId: 'getAccessoryToken'
+      operationId: 'getAllInputs'
       parameters:
-        - name: id
-          in: path
-          description: ID of accessory
-          required: true
+        - name: name
+          in: query
+          required: false
           schema:
             type: string
       responses:
@@ -433,15 +357,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AccessoryTokenResponse'
-        '403':
-          description: 'Bad credentials'
+                $ref: '#/components/schemas/GetAllInputsResponse'
+        '400':
+          description: 'Invalid input'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-        '404':
-          description: 'Accessory not found'
+        '403':
+          description: 'Bad credentials'
           content:
             application/json:
               schema:
@@ -807,7 +731,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddEmailVerificationRequest'
+              oneOf:
+                - $ref: '#/components/schemas/AddEmailVerificationRequest'
+                - $ref: '#/components/schemas/AddSmsVerificationRequest'
       responses:
         '201':
           description: 'Successful operation'
@@ -846,7 +772,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/VerifyRequest'
+              oneOf:
+                - $ref: '#/components/schemas/VerifyEmailRequest'
+                - $ref: '#/components/schemas/VerifySmsRequest'
       responses:
         '200':
           description: 'Successful operation'
@@ -864,6 +792,190 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: 'Not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /actions:
+    get:
+      tags:
+        - actions
+      summary: 'Get all actions for the user'
+      operationId: 'getAllActions'
+      responses:
+        '200':
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllActionsResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+        - actions
+      summary: 'Add an action'
+      operationId: 'addAction'
+      requestBody:
+        description: Add action body
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/AddActionCombineRequest'
+                - $ref: '#/components/schemas/AddActionSmsRequest'
+                - $ref: '#/components/schemas/AddActionWebhookRequest'
+                - $ref: '#/components/schemas/AddActionDaemonRequest'
+                - $ref: '#/components/schemas/AddActionSendRequest'
+                - $ref: '#/components/schemas/AddActionForwardRequest'
+                - $ref: '#/components/schemas/AddActionForwardRequest'
+                - $ref: '#/components/schemas/AddActionReplyRequest'
+                - $ref: '#/components/schemas/AddActionReplyAllRequest'
+                - $ref: '#/components/schemas/AddActionAliasRequest'
+      responses:
+        '201':
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddActionResponse'
+        '400':
+          description: 'Failure'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Not authorized or bad code'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /actions/{action}:
+    put:
+      tags:
+        - 'actions'
+      summary: 'Update an action key'
+      operationId: 'updateAction'
+      parameters:
+        - name: action
+          in: path
+          description: ID of action
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Action body
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/AddActionCombineRequest'
+                - $ref: '#/components/schemas/AddActionSmsRequest'
+                - $ref: '#/components/schemas/AddActionWebhookRequest'
+                - $ref: '#/components/schemas/AddActionDaemonRequest'
+                - $ref: '#/components/schemas/AddActionSendRequest'
+                - $ref: '#/components/schemas/AddActionForwardRequest'
+                - $ref: '#/components/schemas/AddActionForwardRequest'
+                - $ref: '#/components/schemas/AddActionReplyRequest'
+                - $ref: '#/components/schemas/AddActionReplyAllRequest'
+                - $ref: '#/components/schemas/AddActionAliasRequest'
+      responses:
+        '200':
+          description: 'Successful update operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Key'
+        '400':
+          description: 'Failure'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 'Key not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - 'actions'
+      summary: 'Delete an action'
+      operationId: 'deleteAction'
+      parameters:
+        - name: action
+          in: path
+          description: ID of the action
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: 'Successful delete operation'
+        '400':
+          description: 'Failure'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 'Key not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /daemons/{daemon}/token:
+    get:
+      tags:
+        - daemon
+      summary: 'Get a token for opening a daemon connection'
+      operationId: getDaemonToken
+      parameters:
+        - name: daemon
+          in: path
+          description: name of Daemon
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Successful get operation'
+          content:
+            application/json:
+              schema:
+                required:
+                  - token
+                properties:
+                  token:
+                    type: string
+        '400':
+          description: 'Failure'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Bad credentials'
           content:
             application/json:
               schema:
@@ -929,8 +1041,9 @@ components:
         - owner
         - createdAt
         - createdBy
+        - input
         - trigger
-        - actions
+        - action
       properties:
         id:
           type: string
@@ -943,33 +1056,36 @@ components:
           format: date-time
         createdBy:
           type: string
+        input:
+          type: string
         trigger:
-          type: object
-          required:
-            - accessoryId
-            - config
-          properties:
-            accessoryId:
-              type: string
-            config:
-              type: object
-              required:
-                - criterias
-              properties:
-                criterias:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Criteria'
-        actions:
-          type: array
-          items:
-            type: object
-            properties:
-              accessoryId:
-                type: string
-              config:
-                oneOf:
-                  - $ref: '#/components/schemas/ActionForwardConfig'
+          type: string
+        action:
+          type: string
+    Trigger:
+      required:
+        - id
+        - owner
+        - createdAt
+        - createdBy
+        - name
+        - criteria
+      properties:
+        id:
+          type: string
+        owner:
+          type: string
+        displayName:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        name:
+          type: string
+        criteria:
+          $ref: '#/components/schemas/Criteria'
     Criteria:
       minProperties: 1
       properties:
@@ -985,45 +1101,17 @@ components:
           type: string
         hasAttachments:
           type: boolean
-    ActionForwardConfig:
-      required:
-        - type
-        - forward
+    CriteriaOperand:
+      minProperties: 1
       properties:
-        type:
-          type: string
-          enum: ['forward']
-        forward:
-          type: string
-    Accessory:
-      required:
-        - id
-        - type
-        - name
-        - key
-        - createdAt
-        - createdBy
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-          enum: ['mailscript-email', 'sms', 'webhook', 'daemon']
-        owner:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        createdBy:
-          type: string
-        name:
-          type: string
-        address:
-          type: string
-        sms:
-          type: string
-        key:
-          type: string
+        and:
+          type: array
+          items:
+            type: string
+        or:
+          type: array
+          items:
+            type: string
     Key:
       required:
         - id
@@ -1062,6 +1150,22 @@ components:
         verifiedAt:
           type: string
           format: date-time
+    VerificationSms:
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: ['sms']
+        sms:
+          type: string
+        verified:
+          type: boolean
+        verifiedBy:
+          type: string
+        verifiedAt:
+          type: string
+          format: date-time
     ErrorResponse:
       required:
         - error
@@ -1090,14 +1194,6 @@ components:
       properties:
         address:
           type: string
-        displayName:
-          type: string
-    UpdateAddressRequest:
-      required:
-        - displayName
-      properties:
-        displayName:
-          type: string
     GetAllAddressesResponse:
       required:
         - list
@@ -1118,108 +1214,20 @@ components:
             type: object
             oneOf:
               - $ref: '#/components/schemas/Workflow'
-    AddSmsAccessoryRequest:
-      required:
-        - name
-        - type
-        - sms
-      properties:
-        name:
-          type: string
-        type:
-          type: string
-          enum: ['sms']
-        sms:
-          type: string
-    AddDaemonAccessoryRequest:
-      required:
-        - name
-        - type
-      properties:
-        name:
-          type: string
-        type:
-          type: string
-          enum: ['daemon']
-    UpdateSmsAccessoryRequest:
-      required:
-        - name
-        - type
-        - sms
-      properties:
-        name:
-          type: string
-        type:
-          type: string
-          enum: ['sms']
-        sms:
-          type: string
-    AddMailscriptEmailAccessoryRequest:
-      required:
-        - name
-        - type
-        - address
-        - key
-      properties:
-        name:
-          type: string
-        type:
-          type: string
-          enum: ['mailscript-email']
-        address:
-          type: string
-        key:
-          type: string
-    UpdateMailscriptEmailAccessoryRequest:
-      required:
-        - name
-        - type
-        - address
-        - key
-      properties:
-        name:
-          type: string
-        type:
-          type: string
-          enum: ['mailscript-email']
-        address:
-          type: string
-        key:
-          type: string
     AddWorkflowRequest:
       required:
         - name
-        - trigger
-        - actions
+        - input
+        - action
       properties:
         name:
           type: string
+        input:
+          type: string
         trigger:
-          type: object
-          properties:
-            accessoryId:
-              type: string
-            config:
-              type: object
-        actions:
-          type: array
-          items:
-            type: object
-            properties:
-              accessoryId:
-                type: string
-              config:
-                type: object
-    GetAllAccessoriesResponse:
-      required:
-        - list
-      properties:
-        list:
-          type: array
-          items:
-            type: object
-            oneOf:
-              - $ref: '#/components/schemas/Accessory'
+          type: string
+        action:
+          type: string
     SendRequest:
       required:
         - 'to'
@@ -1284,18 +1292,37 @@ components:
           enum: ['email']
         email:
           type: string
+    AddSmsVerificationRequest:
+      required:
+        - type
+        - sms
+      properties:
+        type:
+          type: string
+          enum: ['sms']
+        sms:
+          type: string
     AddVerificationResponse:
       required:
         - id
       properties:
         id:
           type: string
-    VerifyRequest:
+    VerifyEmailRequest:
       required:
         - email
         - code
       properties:
         email:
+          type: string
+        code:
+          type: string
+    VerifySmsRequest:
+      required:
+        - sms
+        - code
+      properties:
+        sms:
           type: string
         code:
           type: string
@@ -1308,12 +1335,370 @@ components:
           items:
             oneOf:
               - $ref: '#/components/schemas/VerificationEmail'
-    AccessoryTokenResponse:
+              - $ref: '#/components/schemas/VerificationSms'
+    AddTriggerRequest:
       required:
-        - token
+        - name
+        - criteria
       properties:
-        token:
+        name:
           type: string
+        criteria:
+          oneOf:
+            - $ref: '#/components/schemas/Criteria'
+            - $ref: '#/components/schemas/CriteriaOperand'
+    AddTriggerResponse:
+      required:
+        - id
+      properties:
+        id:
+          type: string
+    AddActionResponse:
+      required:
+        - id
+      properties:
+        id:
+          type: string
+    GetAllTriggersResponse:
+      required:
+        - list
+      properties:
+        list:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/Trigger'
+    GetAllInputsResponse:
+      required:
+        - list
+      properties:
+        list:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/MailscriptEmailInput'
+    MailscriptEmailInput:
+      required:
+        - id
+        - name
+        - type
+        - owner
+        - createdAt
+        - createdBy
+        - address
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          enum: ['mailescript-email']
+        owner:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        address:
+          type: string
+    AddActionForwardRequest:
+      required:
+        - name
+        - type
+        - config
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: ['mailscript-email']
+        config:
+          type: object
+          required:
+            - type
+            - forward
+            - from
+            - key
+          properties:
+            type:
+              type: string
+              enum: ['forward']
+            forward:
+              type: string
+            from:
+              type: string
+            key:
+              type: string
+    AddActionCombineRequest:
+      required:
+        - name
+        - list
+      properties:
+        name:
+          type: string
+        list:
+          type: array
+          items:
+            type: string
+    AddActionSmsRequest:
+      required:
+        - name
+        - type
+        - config
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: ['sms']
+        config:
+          type: object
+          required:
+            - number
+            - text
+          properties:
+            number:
+              type: string
+            text:
+              type: string
+    AddActionDaemonRequest:
+      required:
+        - name
+        - type
+        - config
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: ['daemon']
+        config:
+          type: object
+          required:
+            - body
+          properties:
+            daemon:
+              type: string
+            body:
+              type: string
+    AddActionWebhookRequest:
+      required:
+        - name
+        - type
+        - config
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: ['webhook']
+        config:
+          type: object
+          required:
+            - url
+            - opts
+            - body
+          properties:
+            url:
+              type: string
+            opts:
+              type: object
+              required:
+                - headers
+                - method
+              properties:
+                headers:
+                  type: object
+                method:
+                  type: string
+                  enum: ['POST', 'GET', 'DELETE']
+            body:
+              type: string
+    AddActionSendRequest:
+      required:
+        - name
+        - type
+        - config
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: ['mailscript-email']
+        config:
+          type: object
+          required:
+            - send
+            - subject
+            - from
+            - key
+          properties:
+            type:
+              type: string
+              enum: ['send']
+            to:
+              type: string
+            subject:
+              type: string
+            text:
+              type: string
+            html:
+              type: string
+            from:
+              type: string
+            key:
+              type: string
+    AddActionReplyRequest:
+      required:
+        - name
+        - type
+        - config
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: ['mailscript-email']
+        config:
+          type: object
+          required:
+            - type
+            - from
+            - key
+          properties:
+            type:
+              type: string
+              enum: ['reply']
+            text:
+              type: string
+            html:
+              type: string
+            from:
+              type: string
+            key:
+              type: string
+    AddActionReplyAllRequest:
+      required:
+        - name
+        - type
+        - config
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: ['mailscript-email']
+        config:
+          type: object
+          required:
+            - type
+            - from
+            - key
+          properties:
+            type:
+              type: string
+              enum: ['replyAll']
+            text:
+              type: string
+            html:
+              type: string
+            from:
+              type: string
+            key:
+              type: string
+    AddActionAliasRequest:
+      required:
+        - name
+        - type
+        - config
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: ['mailscript-email']
+        config:
+          type: object
+          properties:
+            type:
+              type: string
+              enum: ['alias']
+            alias:
+              type: string
+    GetAllActionsResponse:
+      required:
+        - list
+      properties:
+        list:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/ActionSend'
+              - $ref: '#/components/schemas/ActionCombine'
+    ActionSend:
+      required:
+        - id
+        - name
+        - owner
+        - createdAt
+        - createdBy
+        - output
+        - config
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        owner:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        output:
+          type: string
+        config:
+          type: object
+          required:
+            - type
+            - subject
+          properties:
+            type:
+              type: string
+            subject:
+              type: string
+            text:
+              type: string
+            html:
+              type: string
+    ActionCombine:
+      required:
+        - id
+        - name
+        - owner
+        - createdAt
+        - createdBy
+        - output
+        - config
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        owner:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        list:
+          type: array
+          items:
+            type: string
   securitySchemes:
     bearerAuth:
       type: http

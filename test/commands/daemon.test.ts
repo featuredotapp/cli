@@ -56,50 +56,5 @@ describe('daemon', () => {
     })
     .command(['daemon', '--command', 'echo $subject'])
     .exit(2)
-    .it('errors if no accessory provided')
-
-  test
-    .stdout()
-    .nock(MailscriptApiServer, (api: any) => {
-      return api.get('/accessories').reply(200, { list: [] })
-    })
-    .command([
-      'daemon',
-      '--accessory',
-      'nonexistant',
-      '--command',
-      'echo $subject',
-    ])
-    .exit(1)
-    .it('errors if accessory does not exist', (ctx) => {
-      expect(ctx.stdout).to.contain(
-        'Error: the accessory nonexistant does not exist',
-      )
-    })
-
-  test
-    .stdout()
-    .nock(MailscriptApiServer, (api: any) => {
-      return api.get('/accessories').reply(200, {
-        list: [
-          {
-            name: 'test@mailscript.io',
-            type: 'mailscript-email',
-          },
-        ],
-      })
-    })
-    .command([
-      'daemon',
-      '--accessory',
-      'test@mailscript.io',
-      '--command',
-      'echo $subject',
-    ])
-    .exit(1)
-    .it('errors if accessory is not a daemon', (ctx) => {
-      expect(ctx.stdout).to.contain(
-        'Error: the accessory test@mailscript.io is not a daemon',
-      )
-    })
+    .it('errors if no daemon provided')
 })

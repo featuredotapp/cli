@@ -4,18 +4,30 @@ import { handle } from 'oazapfts'
 import * as yaml from 'js-yaml'
 import * as fs from 'fs'
 import cli from 'cli-ux'
-import deepEqual from 'deep-equal'
 import * as api from '../../api'
 import setupApiClient from '../../setupApiClient'
 import withStandardErrors from '../../utils/errorHandling'
-import resolveAddAccessoryRequestFrom from '../../utils/resolveAddAccessoryRequestFrom'
-import resolveUpdateAccessoryRequestFrom from '../../utils/resolveUpdateAccessoryRequestFrom'
+import deepEqual from 'deep-equal'
+import toposort from 'toposort'
+import chalk from 'chalk'
+import { askVerifySmsFlow } from '../../utils/askVerifySmsFlow'
+import { askVerifyEmailFlow } from '../../utils/askVerifyEmailFlow'
+
+type FlagsType = {
+  noninteractive: boolean
+  path: string
+  delete: boolean
+}
 
 export default class Sync extends Command {
   static description = 'import and update config from file into Mailscript'
 
   static flags = {
     help: flags.help({ char: 'h' }),
+    noninteractive: flags.boolean({
+      description: 'do not ask for user input',
+      default: false,
+    }),
     path: flags.string({
       char: 'p',
       description: 'path to the file to read/write',
@@ -41,10 +53,7 @@ export default class Sync extends Command {
     return this.import(client, flags)
   }
 
-  async import(
-    client: typeof api,
-    flags: { path: string; delete: boolean },
-  ): Promise<void> {
+  async import(client: typeof api, flags: FlagsType): Promise<void> {
     if (!flags.path) {
       this.log('Please provide a file to read from --path')
       this.exit(1)
@@ -62,7 +71,7 @@ export default class Sync extends Command {
       this.exit(1)
     }
 
-    const { addresses = [], accessories = [], workflows = [] } = data
+    const { addresses = [], triggers = [], actions = [], workflows = [] } = data
 
     this.log('')
     this.log('Syncing to Mailscript')
@@ -70,10 +79,30 @@ export default class Sync extends Command {
 
     const forceDelete = flags.delete
 
+    await this._checkVerificationsForActions(client, flags, actions)
+
     await this._syncAddresses(client, addresses, forceDelete)
     await this._syncKeys(client, addresses, forceDelete)
-    await this._syncAccessories(client, accessories, forceDelete)
-    await this._syncWorkflows(client, workflows, forceDelete)
+
+    const triggerIdMappings = await this._syncTriggers(
+      client,
+      triggers,
+      forceDelete,
+    )
+
+    const actionIdMappings = await this._syncActions(
+      client,
+      actions,
+      forceDelete,
+    )
+
+    await this._syncWorkflows(
+      client,
+      workflows,
+      triggerIdMappings,
+      actionIdMappings,
+      forceDelete,
+    )
   }
 
   private async _syncAddresses(
@@ -196,122 +225,222 @@ export default class Sync extends Command {
     cli.action.stop()
   }
 
-  private async _syncAccessories(
+  private async _syncTriggers(
     client: typeof api,
-    yamlAccessories: Array<any>,
+    triggers: Array<any>,
     forceDelete: boolean,
   ) {
-    cli.action.start('Syncing accessories ')
+    cli.action.start('Syncing triggers ')
+    const response = await client.getAllTriggers()
 
-    const existingAccessoriesResponse = await client.getAllAccessories()
-
-    if (existingAccessoriesResponse.status !== 200) {
-      cli.action.stop('Error reading accessories')
+    if (response.status !== 200) {
+      this.log('Error syncing triggers')
       this.exit(1)
     }
 
     const {
-      data: { list: existingAccessories },
-    } = existingAccessoriesResponse
+      data: { list: existingTriggers },
+    } = response
 
-    for (const yamlAccessory of yamlAccessories) {
-      if (yamlAccessory.type === 'webhook') {
-        continue
-      }
+    const nameToIdMappings: { [key: string]: string } = existingTriggers.reduce(
+      (acc, item) => ({ ...acc, [item.name]: item.id }),
+      {},
+    )
 
-      const existingAccessory = existingAccessories.find(
-        (ea) => ea.name === yamlAccessory.name,
+    for (const trigger of this._sortTriggersByDependency(triggers)) {
+      const existingTrigger = existingTriggers.find(
+        (a) => a.name === trigger.name,
       )
 
-      // eslint-disable-next-line no-await-in-loop
-      const accessory = await this._accessoryKeySubstitution(
-        client,
-        yamlAccessory,
-      )
-
-      if (!existingAccessory) {
-        const addAccessoryRequest = resolveAddAccessoryRequestFrom(accessory)
-
-        await handle(
-          client.addAccessory(addAccessoryRequest),
-          withStandardErrors({}, this),
-        )
-
-        continue
-      }
-
-      if (yamlAccessory.type === 'mailscript-email') {
-        if (
-          existingAccessory.type !== accessory.type ||
-          existingAccessory.address !== accessory.address ||
-          existingAccessory.key !== accessory.key
-        ) {
-          const updateAccessoryRequest = resolveUpdateAccessoryRequestFrom(
-            accessory,
-          )
+      if (existingTrigger) {
+        // if change, queue update
+        if (this._diffTriggers(existingTrigger, trigger)) {
+          const payload = this._resolveTriggerPayload(trigger, nameToIdMappings)
 
           await handle(
-            client.updateAccessory(accessory.id, updateAccessoryRequest),
+            client.updateTrigger(existingTrigger.id, payload),
             withStandardErrors({}, this),
           )
         }
-      } else if (
-        accessory.type === 'sms' &&
-        (existingAccessory.type !== accessory.type ||
-          existingAccessory.sms !== accessory.sms)
-      ) {
-        const updateAccessoryRequest = resolveUpdateAccessoryRequestFrom(
-          accessory,
-        )
 
-        await handle(
-          client.updateAccessory(accessory.id, updateAccessoryRequest),
-          withStandardErrors({}, this),
-        )
+        continue
       }
+
+      // queue add trigger
+      const payload = this._resolveTriggerPayload(trigger, nameToIdMappings)
+
+      const response = await client.addTrigger(payload)
+
+      if (response.status !== 201) {
+        this.log('Error: could not add trigger')
+        this.exit(1)
+      }
+
+      const {
+        data: { id },
+      } = response
+
+      nameToIdMappings[payload.name as string] = id
     }
 
     if (forceDelete) {
-      const namesToRetain = yamlAccessories.map(
-        (ya: { name: string }) => ya.name,
+      const namesToRetain = triggers.map((t) => t.name)
+
+      const triggersToDelete = existingTriggers.filter(
+        ({ name }) => !namesToRetain.includes(name),
       )
 
-      const accessoriesToDelete = existingAccessories
-        .filter(({ name }) => !namesToRetain.includes(name))
-        .filter(({ type }) => type !== 'webhook')
+      for (const { id: triggerId } of triggersToDelete) {
+        this.log(`Deleteing ${triggerId}`)
 
-      for (const { id: accessory } of accessoriesToDelete) {
         await handle(
-          client.deleteAccessory(accessory),
+          client.deleteTrigger(triggerId),
           withStandardErrors({}, this),
         )
       }
     }
 
     cli.action.stop()
+
+    return nameToIdMappings
   }
 
+  private async _syncActions(
+    client: typeof api,
+    actions: Array<any>,
+    forceDelete: boolean,
+  ) {
+    cli.action.start('Syncing actions ')
+    const response = await client.getAllActions()
+
+    if (response.status !== 200) {
+      this.log('Error syncing actions')
+      this.exit(1)
+    }
+
+    const {
+      data: { list: existingActions },
+    } = response
+
+    const nameToIdMappings: { [key: string]: string } = existingActions.reduce(
+      (acc, item) => ({ ...acc, [item.name]: item.id }),
+      {},
+    )
+
+    const idToNameMappings: { [key: string]: string } = existingActions.reduce(
+      (acc, item) => ({ ...acc, [item.id]: item.name }),
+      {},
+    )
+
+    for (const action of this._sortActionsByDependency(actions)) {
+      const existingAction = existingActions.find((a) => a.name === action.name)
+
+      const payload = await this._resolvePayload(
+        client,
+        action,
+        nameToIdMappings,
+      )
+
+      if (existingAction) {
+        if (
+          payload.list &&
+          deepEqual((existingAction as api.ActionCombine).list, payload.list)
+        ) {
+          continue
+        }
+
+        if (
+          !payload.list &&
+          deepEqual((existingAction as api.ActionSend).config, payload.config)
+        ) {
+          continue
+        }
+
+        await handle(
+          client.updateAction(existingAction.id, payload),
+          withStandardErrors({}, this),
+        )
+
+        continue
+      }
+
+      const response = await client.addAction(payload)
+
+      if (response.status !== 201) {
+        this.log(
+          chalk.red(
+            `${chalk.bold('Error')}: could not add action - ${
+              response.data.error
+            }`,
+          ),
+        )
+        this.exit(1)
+      }
+
+      const {
+        data: { id },
+      } = response
+
+      nameToIdMappings[payload.name as string] = id
+      idToNameMappings[id] = payload.name
+    }
+
+    if (forceDelete) {
+      const namesToRetain = actions.map((t) => t.name)
+
+      const actionsToDelete = existingActions.filter(
+        ({ name }) => !namesToRetain.includes(name),
+      )
+
+      for (const { id: actionId } of actionsToDelete) {
+        this.log(`Deleteing action ${actionId}`)
+
+        await handle(
+          client.deleteAction(actionId),
+          withStandardErrors({}, this),
+        )
+      }
+    }
+
+    cli.action.stop()
+
+    return nameToIdMappings
+  }
+
+  // eslint-disable-next-line max-params
   private async _syncWorkflows(
     client: typeof api,
     yamlWorkflows: Array<any>,
+    triggerIdsMappings: { [key: string]: string },
+    actionIdMappings: { [key: string]: string },
     forceDelete: boolean,
   ) {
     cli.action.start('Syncing workflows ')
+    const workflowsResponse = await client.getAllWorkflows()
 
-    const existingWorkflowsResponse = await client.getAllWorkflows()
-
-    if (existingWorkflowsResponse.status !== 200) {
-      this.log('Error reading workflows')
+    if (workflowsResponse.status !== 200) {
+      this.log('Error syncing workflows')
       this.exit(1)
     }
 
     const {
       data: { list: existingWorkflows },
-    } = existingWorkflowsResponse
+    } = workflowsResponse
 
-    const { list: allAccessories } = await handle(
-      client.getAllAccessories(),
-      withStandardErrors({}, this),
+    const inputsResponse = await client.getAllInputs()
+
+    if (inputsResponse.status !== 200) {
+      this.log('Error reading inputs')
+      this.exit(1)
+    }
+
+    const {
+      data: { list: inputs },
+    } = inputsResponse
+
+    const inputIdsMappings = inputs.reduce(
+      (acc, item) => ({ ...acc, [item.name]: item.id }),
+      {},
     )
 
     for (const workflow of yamlWorkflows) {
@@ -319,41 +448,45 @@ export default class Sync extends Command {
         (ea) => ea.name === workflow.name,
       )
 
-      const resolvedWorkflow = this._substituteAccessoryIdWorkflow(
-        allAccessories,
+      const payload = await this._resolveWorkflow(
         workflow,
+        inputIdsMappings,
+        triggerIdsMappings,
+        actionIdMappings,
       )
 
-      if (!existingWorkflow) {
+      if (existingWorkflow) {
+        if (
+          existingWorkflow.input === payload.input &&
+          existingWorkflow.trigger === payload.trigger &&
+          existingWorkflow.action === payload.action
+        ) {
+          continue
+        }
+
         await handle(
-          client.addWorkflow(resolvedWorkflow),
+          client.updateWorkflow(existingWorkflow.id, payload),
           withStandardErrors({}, this),
         )
 
         continue
       }
 
-      if (
-        !deepEqual(existingWorkflow.trigger, resolvedWorkflow.trigger) ||
-        !deepEqual(existingWorkflow.actions, resolvedWorkflow.actions)
-      ) {
-        await handle(
-          client.updateWorkflow(existingWorkflow.id, resolvedWorkflow),
-          withStandardErrors({}, this),
-        )
-      }
+      await handle(client.addWorkflow(payload), withStandardErrors({}, this))
     }
 
     if (forceDelete) {
-      const namesToRetain = yamlWorkflows.map((ya: { name: string }) => ya.name)
+      const namesToRetain = yamlWorkflows.map((t) => t.name)
 
-      const workflowsToDelete = existingWorkflows.filter(
+      const actionsToDelete = existingWorkflows.filter(
         ({ name }) => !namesToRetain.includes(name),
       )
 
-      for (const { id: workflow } of workflowsToDelete) {
+      for (const { id: workflowId } of actionsToDelete) {
+        this.log(`Deleteing workflow ${workflowId}`)
+
         await handle(
-          client.deleteWorkflow(workflow),
+          client.deleteWorkflow(workflowId),
           withStandardErrors({}, this),
         )
       }
@@ -362,65 +495,253 @@ export default class Sync extends Command {
     cli.action.stop()
   }
 
-  private async _accessoryKeySubstitution(
+  private async _resolvePayload(
     client: typeof api,
-    yamlAccessory: any,
+    action: any,
+    nameToIdMappings: { [key: string]: string },
   ) {
-    if (yamlAccessory.type !== 'mailscript-email') {
-      return yamlAccessory
+    if (!action.type && action.list) {
+      return {
+        ...action,
+        list: action.list.map((name: string) => nameToIdMappings[name]),
+      }
     }
 
-    // eslint-disable-next-line no-await-in-loop
-    const { list: addressKeys } = await handle(
-      client.getAllKeys(yamlAccessory.address!),
+    if (action.type === 'mailscript-email') {
+      const from = action.config.from
+      const keyName = action.config.key
+
+      const keysResponse = await client.getAllKeys(from)
+
+      if (keysResponse.status !== 200) {
+        this.log('Error getting address keys')
+        this.exit(1)
+      }
+
+      const {
+        data: { list: keys },
+      } = keysResponse
+
+      const foundKey = keys.find(({ name }) => name === keyName)
+
+      if (!foundKey) {
+        this.log(`Could not find key ${keyName} for action ${action.name}`)
+        this.exit(1)
+      }
+
+      return {
+        ...action,
+        config: {
+          ...action.config,
+          key: foundKey.id,
+        },
+      }
+    }
+
+    if (action.type === 'sms') {
+      return action
+    }
+
+    if (action.type === 'webhook') {
+      return action
+    }
+
+    throw new Error(`Unknown action type ${action.type}`)
+  }
+
+  private async _resolveWorkflow(
+    workflow: any,
+    inputIdsMappings: { [key: string]: string },
+    triggerIdsMappings: { [key: string]: string },
+    actionIdMappings: { [key: string]: string },
+  ) {
+    return {
+      ...workflow,
+      input: inputIdsMappings[workflow.input],
+      trigger: triggerIdsMappings[workflow.trigger],
+      action: actionIdMappings[workflow.action],
+    }
+  }
+
+  private _diffTriggers(existingTrigger: any, yamlTrigger: any) {
+    if (existingTrigger.composition[0].type === 'leaf') {
+      return !deepEqual(
+        existingTrigger.composition[0].criteria,
+        yamlTrigger.composition[0].criteria,
+      )
+    }
+
+    if (
+      existingTrigger.composition[0].type === 'inner' &&
+      existingTrigger.composition[0].operand === 'or'
+    ) {
+      if (!yamlTrigger.composition[0].or) {
+        return false
+      }
+
+      const existingTriggerNames = existingTrigger.composition[0].nodes.map(
+        ({ name }: { name: string }) => name,
+      )
+
+      return !deepEqual(existingTriggerNames, yamlTrigger.composition[0].or)
+    }
+
+    if (
+      existingTrigger.composition[0].type === 'inner' &&
+      existingTrigger.composition[0].operand === 'and'
+    ) {
+      if (!yamlTrigger.composition[0].and) {
+        return false
+      }
+
+      const existingTriggerNames = existingTrigger.composition[0].nodes.map(
+        ({ name }: { name: string }) => name,
+      )
+
+      return !deepEqual(existingTriggerNames, yamlTrigger.composition[0].and)
+    }
+
+    return false
+  }
+
+  private _sortTriggersByDependency(triggers: any) {
+    let nodes: Array<Array<string>> = []
+
+    for (const trigger of triggers) {
+      const firstComposition = trigger.composition[0]
+
+      const links = firstComposition.criteria
+        ? []
+        : firstComposition.or || firstComposition.and
+
+      const entries = links.map((l: string) => [trigger.name, l])
+
+      nodes = [...nodes, ...entries]
+    }
+
+    const sortedNodes = toposort(nodes as any).reverse()
+
+    const sortedTriggers = sortedNodes.map((name) =>
+      triggers.find((t: any) => t.name === name),
+    )
+
+    return sortedTriggers
+  }
+
+  private _sortActionsByDependency(actions: any) {
+    let nodes: Array<Array<string>> = []
+
+    for (const action of actions) {
+      const { name, list } = action
+
+      if (!list) {
+        nodes.push([name])
+        continue
+      }
+
+      const entries = list.map((l: string) => [name, l])
+
+      nodes = [...nodes, ...entries]
+    }
+
+    const sortedNodes = toposort(nodes as any)
+      .filter(Boolean)
+      .reverse()
+
+    const sortedActions = sortedNodes.map((name) =>
+      actions.find((t: any) => t.name === name),
+    )
+
+    return sortedActions
+  }
+
+  private _resolveTriggerPayload(
+    trigger: any,
+    nameToIdMappings: { [key: string]: string },
+  ) {
+    const name = trigger.name
+    const comp = trigger.composition[0]
+
+    if (comp.criteria) {
+      return { name, criteria: comp.criteria }
+    }
+
+    if (comp.or) {
+      return {
+        name,
+        criteria: {
+          or: comp.or.map((name: string) => nameToIdMappings[name]),
+        },
+      }
+    }
+
+    if (comp.and) {
+      return {
+        name,
+        criteria: {
+          and: comp.and.map((name: string) => nameToIdMappings[name]),
+        },
+      }
+    }
+
+    throw new Error('Unknown trigger composition shape')
+  }
+
+  private async _checkVerificationsForActions(
+    client: typeof api,
+    flags: FlagsType,
+    actions: any,
+  ) {
+    const leafActions = actions.filter(({ type }: any) => Boolean(type))
+
+    const aliasAddresses = leafActions
+      .filter(
+        ({ type, config: { type: mailtype } }: any) =>
+          type === 'mailscript-email' && mailtype === 'alias',
+      )
+      .map(({ config: { alias } }: any) => alias)
+
+    const smsNumbers = leafActions
+      .filter(({ type }: any) => type === 'sms')
+      .map(({ config: { number } }: any) => number)
+
+    const {
+      list: verifications,
+    }: api.GetAllVerificationsResponse = await handle(
+      client.getAllVerifications(),
       withStandardErrors({}, this),
     )
 
-    const addressKey = addressKeys.find(
-      (ak: any) => ak.name === yamlAccessory.key,
-    )
+    for (const smsNumber of smsNumbers) {
+      const verification = verifications.find(
+        (v) => v.type === 'sms' && v.sms === smsNumber,
+      )
 
-    if (!addressKey) {
-      cli.action.stop(`Error reading address key: ${yamlAccessory.key}`)
-      this.exit(1)
+      if (!verification || !verification.verified) {
+        await askVerifySmsFlow(
+          client,
+          smsNumber,
+          `Cannot import, unverified number ${smsNumber}`,
+          flags.noninteractive,
+          this,
+        )
+      }
     }
 
-    return {
-      ...yamlAccessory,
-      key: addressKey.id,
-    }
-  }
+    for (const aliasAddress of aliasAddresses) {
+      const verification = verifications.find(
+        (v) => v.type === 'email' && v.email === aliasAddress,
+      )
 
-  private _substituteAccessoryIdWorkflow(
-    allAccessories: Array<any>,
-    yamlWorkflow: any,
-  ) {
-    return {
-      ...yamlWorkflow,
-      trigger: this._substituteAccessoryIdFor(
-        allAccessories,
-        yamlWorkflow.trigger,
-      ),
-      actions: yamlWorkflow.actions.map((action: any) =>
-        this._substituteAccessoryIdFor(allAccessories, action),
-      ),
-    }
-  }
-
-  private _substituteAccessoryIdFor(
-    allAccessories: Array<any>,
-    { accessory: name, ...rest }: any,
-  ) {
-    let accessory
-    if (rest.config.type === 'webhook') {
-      accessory = allAccessories.find((a) => a.type === 'webhook')
-    } else {
-      accessory = allAccessories.find((a) => a.name === name)
-    }
-
-    return {
-      accessoryId: accessory.id,
-      ...rest,
+      if (!verification || !verification.verified) {
+        await askVerifyEmailFlow(
+          client,
+          aliasAddress,
+          `Cannot import, unverified alias address ${aliasAddress}`,
+          flags.noninteractive,
+          this,
+        )
+      }
     }
   }
 }

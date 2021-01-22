@@ -1,17 +1,17 @@
 import { Command, flags } from '@oclif/command'
-import * as api from '../../api'
 import { handle } from 'oazapfts'
+import * as api from '../../api'
 import setupApiClient from '../../setupApiClient'
 import withStandardErrors from '../../utils/errorHandling'
 
-export default class AccessoriesDelete extends Command {
-  static description = 'delete an accessory'
+export default class TriggersDelete extends Command {
+  static description = 'delete a trigger'
 
   static flags = {
     help: flags.help({ char: 'h' }),
-    accessory: flags.string({
-      char: 'a',
-      description: 'id of the accessory to act upon',
+    trigger: flags.string({
+      char: 't',
+      description: 'id of the trigger to be acted on',
       required: true,
     }),
   }
@@ -19,7 +19,7 @@ export default class AccessoriesDelete extends Command {
   static args = []
 
   async run() {
-    const { flags } = this.parse(AccessoriesDelete)
+    const { flags } = this.parse(TriggersDelete)
 
     const client = await setupApiClient()
 
@@ -30,23 +30,21 @@ export default class AccessoriesDelete extends Command {
     return this.delete(client, flags)
   }
 
-  async delete(
-    client: typeof api,
-    flags: { accessory: string },
-  ): Promise<void> {
-    if (!flags.accessory) {
+  async delete(client: typeof api, flags: { trigger: string }): Promise<void> {
+    if (!flags.trigger) {
       this.log(
-        'Please provide the accessory id: mailscript accessories delete --accessory <accessory-id>',
+        'Please provide the workflow id: mailscript triggers:delete --trigger <trigger-id>',
       )
+
       this.exit(1)
     }
 
     return handle(
-      client.deleteAccessory(flags.accessory),
+      client.deleteTrigger(flags.trigger),
       withStandardErrors(
         {
           '204': (_response: any) => {
-            this.log(`Accessory deleted: ${flags.accessory}`)
+            this.log(`Trigger deleted: ${flags.trigger}`)
           },
         },
         this,

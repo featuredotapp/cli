@@ -14,8 +14,9 @@ import setupApiClient from '../setupApiClient'
 import withStandardErrors from '../utils/errorHandling'
 import * as api from '../api'
 import { handle } from 'oazapfts'
-import { addAddress } from './addresses/add'
+// import { addAddress } from './addresses/add'
 import verifyEmailFlow from '../utils/verifyEmailFlow'
+import { addAddress } from './addresses/add'
 const writeFile = promisify(writeFileRaw)
 
 const {
@@ -178,7 +179,7 @@ Link or create your MailScript account
       `Setting up default address: ${chalk.bold(defaultAddress)} `,
     )
 
-    const { accessoryId } = await addAddress(client, this, defaultAddress)
+    await addAddress(client, this, defaultAddress)
 
     cli.action.stop()
 
@@ -239,27 +240,28 @@ Link or create your MailScript account
         )} to ${chalk.bold(targetEmail)} `,
       )
 
-      await handle(
-        client.addWorkflow({
-          name: 'redirect',
-          trigger: {
-            accessoryId,
-            config: {
-              criterias: [],
-            },
-          },
-          actions: [
-            {
-              accessoryId,
-              config: {
-                type: 'alias',
-                alias: targetEmail,
-              },
-            },
-          ],
-        }),
-        withStandardErrors({}, this),
-      )
+      this.log('Create redirect - TBD')
+      // await handle(
+      //   client.addWorkflow({
+      //     name: 'redirect',
+      //     // trigger: {
+      //     //   accessoryId,
+      //     //   config: {
+      //     //     criterias: [],
+      //     //   },
+      //     // },
+      //     // actions: [
+      //     //   {
+      //     //     accessoryId,
+      //     //     config: {
+      //     //       type: 'alias',
+      //     //       alias: targetEmail,
+      //     //     },
+      //     //   },
+      //     // ],
+      //   }),
+      //   withStandardErrors({}, this),
+      // )
 
       cli.action.stop()
     }

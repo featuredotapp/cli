@@ -4,8 +4,6 @@ import { promise as exec } from 'exec-sh'
 import setupApiClient from '../setupApiClient'
 import { handle } from 'oazapfts'
 import withStandardErrors from '../utils/errorHandling'
-import * as api from '../api'
-import chalk from 'chalk'
 import traverse from 'traverse'
 
 const {
@@ -20,9 +18,9 @@ export default class Daemon extends Command {
 
   static flags = {
     help: flags.help({ char: 'h' }),
-    accessory: flags.string({
+    daemon: flags.string({
       required: true,
-      description: 'the accessory to listen in on',
+      description: 'the name of the daemon to register as',
     }),
     command: flags.string({
       required: true,
@@ -42,39 +40,8 @@ export default class Daemon extends Command {
       this.exit(1)
     }
 
-    const { list: accessories }: { list: Array<api.Accessory> } = await handle(
-      client.getAllAccessories(),
-      withStandardErrors({}, this),
-    )
-
-    const daemonAccessory = accessories.find(
-      (acc) => acc.name === flags.accessory || acc.id === flags.accessory,
-    )
-
-    if (!daemonAccessory) {
-      this.log(
-        chalk.red(
-          `${chalk.bold('Error')}: the accessory ${chalk.bold(
-            flags.accessory,
-          )} does not exist`,
-        ),
-      )
-      this.exit(1)
-    }
-
-    if (daemonAccessory.type !== 'daemon') {
-      this.log(
-        chalk.red(
-          `${chalk.bold('Error')}: the accessory ${chalk.bold(
-            flags.accessory,
-          )} is not a daemon`,
-        ),
-      )
-      this.exit(1)
-    }
-
     const { token } = await handle(
-      client.getAccessoryToken(daemonAccessory.id),
+      client.getDaemonToken(flags.daemon),
       withStandardErrors({}, this),
     )
 
@@ -107,7 +74,7 @@ export default class Daemon extends Command {
 
     ws.on('open', () => {
       if (first) {
-        this.log('Listenening for emails ...')
+        this.log('Listening for emails ...')
       }
 
       ws.send(token)
