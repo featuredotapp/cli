@@ -8,12 +8,11 @@
 import * as Oazapfts from 'oazapfts/lib/runtime'
 import * as QS from 'oazapfts/lib/runtime/query'
 export const defaults: Oazapfts.RequestOpts = {
-  baseUrl: 'https://api.mailscript.com/v1',
+  baseUrl: 'https://api.mailscript.com/v2',
 }
 const oazapfts = Oazapfts.runtime(defaults)
 export const servers = {
-  apiServer: 'https://api.mailscript.com/v1',
-  localDevelopmentServer: 'http://localhost:7000/v1',
+  apiServer: 'https://api.mailscript.com/v2',
 }
 export type User = {
   id: string

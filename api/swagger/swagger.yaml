@@ -5,10 +5,10 @@ info:
   license:
     name: MIT
 servers:
-  - url: https://api.mailscript.com/v1
+  - url: https://api.mailscript.com/v2
     description: API server
-  - url: http://localhost:7000/v1
-    description: Local development server
+  # - url: http://localhost:7000/v1
+  #   description: Local development server
 paths:
   /user:
     get:
