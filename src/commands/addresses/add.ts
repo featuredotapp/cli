@@ -8,12 +8,8 @@ export async function addAddress(
   client: typeof api,
   command: Command,
   address: string,
-  displayName?: string,
 ) {
-  await handle(
-    client.addAddress({ address, displayName }),
-    withStandardErrors({}, command),
-  )
+  await handle(client.addAddress({ address }), withStandardErrors({}, command))
 
   return { address }
 }
@@ -27,11 +23,6 @@ export default class AddressesAdd extends Command {
       char: 'a',
       description: 'the address',
       required: true,
-    }),
-    name: flags.string({
-      char: 'n',
-      description: 'the display name that email recipients will see',
-      required: false,
     }),
   }
 
@@ -49,10 +40,7 @@ export default class AddressesAdd extends Command {
     return this.add(client, flags)
   }
 
-  async add(
-    client: typeof api,
-    flags: { address: string; name?: string },
-  ): Promise<void> {
+  async add(client: typeof api, flags: { address: string }): Promise<void> {
     if (!flags.address) {
       this.log(
         'Please provide an address to add: mailscript address add --address example@workspace.mailscript.com',
@@ -60,7 +48,7 @@ export default class AddressesAdd extends Command {
       this.exit(1)
     }
 
-    await addAddress(client, this, flags.address, flags.name)
+    await addAddress(client, this, flags.address)
 
     this.log(`Address added: ${flags.address}`)
   }

@@ -50,32 +50,6 @@ describe('Addresses', () => {
 
         expect(addressBody).to.eql({ address: 'another@test.mailscript.io' })
       })
-
-    test
-      .stdout()
-      .nock(MailscriptApiServer, (api) =>
-        api
-          .post('/addresses', (body: any) => {
-            addressBody = body
-            return true
-          })
-          .reply(204, { id: 'xxx-yyy-zzz' }),
-      )
-      .command([
-        'addresses:add',
-        '--address',
-        'another@test.mailscript.io',
-        '--name',
-        'Another',
-      ])
-      .it('adds address with display name', (ctx) => {
-        expect(ctx.stdout).to.contain('another@test.mailscript.io')
-
-        expect(addressBody).to.eql({
-          address: 'another@test.mailscript.io',
-          displayName: 'Another',
-        })
-      })
   })
 
   describe('update', () => {
