@@ -52,39 +52,6 @@ describe('Addresses', () => {
       })
   })
 
-  describe('update', () => {
-    let addressBody: {} | undefined
-
-    beforeEach(() => {
-      addressBody = undefined
-    })
-
-    test
-      .stdout()
-      .nock(MailscriptApiServer, (api) =>
-        api
-          .put('/addresses/another@test.mailscript.io', (body: any) => {
-            addressBody = body
-            return true
-          })
-          .reply(200),
-      )
-      .command([
-        'addresses:update',
-        '--address',
-        'another@test.mailscript.io',
-        '--name',
-        'Another One',
-      ])
-      .it('adds address with display name', (ctx) => {
-        expect(ctx.stdout).to.contain('another@test.mailscript.io')
-
-        expect(addressBody).to.eql({
-          displayName: 'Another One',
-        })
-      })
-  })
-
   describe('delete', () => {
     test
       .stdout()

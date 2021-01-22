@@ -46,7 +46,6 @@ export type GetAllWorkspacesResponse = {
 }
 export type AddAddressRequest = {
   address: string
-  displayName?: string
 }
 export type Address = {
   id: string
@@ -57,9 +56,6 @@ export type Address = {
 }
 export type GetAllAddressesResponse = {
   list: Address[]
-}
-export type UpdateAddressRequest = {
-  displayName: string
 }
 export type Criteria = {
   sentTo?: string
@@ -445,35 +441,6 @@ export function getAllAddresses(opts?: Oazapfts.RequestOpts) {
   >('/addresses', {
     ...opts,
   })
-}
-/**
- * Update a mailscript address
- */
-export function updateAddress(
-  address: string,
-  updateAddressRequest: UpdateAddressRequest,
-  opts?: Oazapfts.RequestOpts,
-) {
-  return oazapfts.fetchJson<
-    | {
-        status: 200
-      }
-    | {
-        status: 400
-        data: ErrorResponse
-      }
-    | {
-        status: 403
-        data: ErrorResponse
-      }
-  >(
-    `/addresses/${address}`,
-    oazapfts.json({
-      ...opts,
-      method: 'PUT',
-      body: updateAddressRequest,
-    }),
-  )
 }
 /**
  * Delete a mailscript address

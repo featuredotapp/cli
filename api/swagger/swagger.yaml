@@ -178,40 +178,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
   /addresses/{address}:
-    put:
-      tags:
-        - 'addresses'
-      summary: 'Update a mailscript address'
-      operationId: 'updateAddress'
-      parameters:
-        - name: address
-          in: path
-          description: ID of address
-          required: true
-          schema:
-            type: string
-      requestBody:
-        description: request body
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateAddressRequest'
-      responses:
-        '200':
-          description: 'successful update operation'
-        '400':
-          description: 'Invalid input'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: 'Bad credentials'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
     delete:
       tags:
         - 'addresses'
@@ -1227,14 +1193,6 @@ components:
         - address
       properties:
         address:
-          type: string
-        displayName:
-          type: string
-    UpdateAddressRequest:
-      required:
-        - displayName
-      properties:
-        displayName:
           type: string
     GetAllAddressesResponse:
       required:
