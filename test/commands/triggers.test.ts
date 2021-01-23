@@ -243,6 +243,60 @@ describe('triggers', () => {
           })
       })
 
+      describe('property', () => {
+        test
+          .stdout()
+          .nock(MailscriptApiServer, nockAdd)
+          .command([
+            'triggers:add',
+            '--name',
+            'trigger-01',
+            '--property',
+            'metadata.github.org',
+            '--equals',
+            'mailscript',
+          ])
+          .it('adds trigger on the server', (ctx) => {
+            expect(ctx.stdout).to.contain('Trigger setup: trigger-01')
+            expect(postBody).to.eql({
+              name: 'trigger-01',
+              criteria: {
+                'metadata.github.org': 'mailscript',
+              },
+            })
+          })
+
+        test
+          .stdout()
+          .command([
+            'triggers:add',
+            '--name',
+            'trigger-01',
+            '--property',
+            'metadata.github.org',
+          ])
+          .exit(1)
+          .it('errors on missing equals', (ctx) => {
+            expect(ctx.stdout).to.contain('Flag --property requires --equals')
+          })
+
+        test
+          .stdout()
+          .command([
+            'triggers:add',
+            '--name',
+            'trigger-01',
+            '--equals',
+            'mailscript',
+          ])
+          .exit(1)
+          .it('errors on missing property', (ctx) => {
+            expect(ctx.stdout).to.contain(
+              'Flag --equals requires to be used with --property',
+            )
+          })
+      })
+
       describe('firstTimeSender', () => {
         test
           .stdout()
