@@ -448,4 +448,22 @@ describe('Actions', () => {
         })
     })
   })
+
+  describe('delete', () => {
+    test
+      .stdout()
+      .nock(MailscriptApiServer, (api) => {
+        return api.delete('/actions/action-01-xxx-yyy-zzz').reply(204)
+      })
+      .command(['actions:delete', '--action', 'action-01-xxx-yyy-zzz'])
+      .it('deletes workflow on the server', (ctx) => {
+        expect(ctx.stdout).to.contain('Action deleted: action-01-xxx-yyy-zzz')
+      })
+
+    test
+      .stdout()
+      .command(['actions:delete'])
+      .exit(2)
+      .it('errors if no workflow id provided')
+  })
 })

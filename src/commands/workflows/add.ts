@@ -67,7 +67,7 @@ export default class WorkflowsAdd extends Command {
     const payload: api.AddWorkflowRequest = {
       name: flags.name,
       input: inputId,
-      trigger: triggerId,
+      trigger: triggerId || undefined,
       action: actionId,
     }
 
@@ -116,10 +116,9 @@ export default class WorkflowsAdd extends Command {
   private async _resolveTriggerIdFrom(
     client: typeof api,
     name: string | undefined,
-  ): Promise<string> {
+  ): Promise<string | null> {
     if (!name) {
-      this.log(`No trigger given - tbd`)
-      this.exit(1)
+      return null
     }
 
     const response = await client.getAllTriggers()

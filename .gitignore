@@ -122,4 +122,6 @@ dist
 /lib
 /tmp
 
+example.yaml
+
 .mailscript-test

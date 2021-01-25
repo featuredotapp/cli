@@ -145,14 +145,26 @@ export default class Sync extends Command {
           this,
         ),
       )
-    )
-      .filter(({ trigger }: api.Workflow) => Boolean(trigger))
-      .map(({ name, input, trigger, action }: api.Workflow) => ({
+    ).map(({ name, input, trigger, action }: api.Workflow) => {
+      const foundTrigger = triggers.find(({ id }: any) => id === trigger)
+      const inputName = inputs.find(({ id }: any) => id === input).name
+      const actionName = actions.find(({ id }: any) => id === action).name
+
+      if (!foundTrigger) {
+        return {
+          name,
+          input: inputName,
+          action: actionName,
+        }
+      }
+
+      return {
         name,
-        input: inputs.find(({ id }: any) => id === input).name,
-        trigger: triggers.find(({ id }: any) => id === trigger).name,
-        action: actions.find(({ id }: any) => id === action).name,
-      }))
+        input: inputName,
+        trigger: foundTrigger ? foundTrigger.name : undefined,
+        action: actionName,
+      }
+    })
 
     const mergedAddressesAndKeys = Object.fromEntries(
       addresses.map((address) => {

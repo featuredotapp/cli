@@ -16,6 +16,9 @@ type FlagsType = {
   subjectcontains?: string
   hasattachments?: boolean
 
+  property?: string
+  equals?: string
+
   times?: string
   seconds?: string
 
@@ -64,6 +67,13 @@ export default class TriggersAdd extends Command {
     firsttimesender: flags.boolean({
       description:
         'constrain trigger to emails that are the first seen from the sending address',
+    }),
+    property: flags.string({
+      description:
+        'constrain trigger to emails where the property matches, use with --equals',
+    }),
+    equals: flags.string({
+      description: 'the value used against the property param',
     }),
     and: flags.string({
       multiple: true,
@@ -218,6 +228,25 @@ export default class TriggersAdd extends Command {
         name: flags.name,
         criteria: {
           or: triggerIds,
+        },
+      }
+    }
+
+    if (flags.equals && !flags.property) {
+      this.log('Flag --equals requires to be used with --property')
+      this.exit(1)
+    }
+
+    if (flags.property) {
+      if (!flags.equals) {
+        this.log('Flag --property requires --equals')
+        this.exit(1)
+      }
+
+      return {
+        name: flags.name,
+        criteria: {
+          [flags.property]: flags.equals,
         },
       }
     }

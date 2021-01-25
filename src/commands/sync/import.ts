@@ -616,10 +616,12 @@ export default class Sync extends Command {
 
       const entries = links.map((l: string) => [trigger.name, l])
 
-      nodes = [...nodes, ...entries]
+      nodes = [...nodes, [trigger.name], ...entries]
     }
 
-    const sortedNodes = toposort(nodes as any).reverse()
+    const sortedNodes = toposort(nodes as any)
+      .reverse()
+      .filter(Boolean)
 
     const sortedTriggers = sortedNodes.map((name) =>
       triggers.find((t: any) => t.name === name),
