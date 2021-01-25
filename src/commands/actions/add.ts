@@ -27,6 +27,10 @@ type FlagsType = {
   body?: string
   headers?: string
 
+  delay?: boolean
+  holdfrom?: string
+  until?: string
+
   [key: string]: any
 }
 
@@ -95,6 +99,16 @@ export default class ActionsAdd extends Command {
     body: flags.string({
       description: 'file to take webhook body from',
     }),
+    delay: flags.boolean({
+      description:
+        'perform action with delay, use in conjunction with --until etc',
+    }),
+    holdfrom: flags.string({
+      description: 'the time to start delay from',
+    }),
+    until: flags.string({
+      description: 'the time to delay until',
+    }),
   }
 
   static args = []
@@ -120,6 +134,11 @@ export default class ActionsAdd extends Command {
       this.exit(1)
     }
 
+    if ((flags.sms || flags.webhook || flags.daemon) && flags.delay) {
+      this.log('Delays cannot currently be used with SMS messages')
+      this.exit(1)
+    }
+
     const payload = this._resolveActionPayload(flags)
 
     await this._optionallyValidateMailscriptEmail(client, payload)
@@ -140,8 +159,13 @@ export default class ActionsAdd extends Command {
       payload,
     )
 
+    const withDelayPayload = this._optionallyEnhanceWithDelay(
+      flags,
+      updatedPayload,
+    )
+
     return handle(
-      client.addAction(updatedPayload),
+      client.addAction(withDelayPayload),
       withStandardErrors(
         {
           '201': () => {
@@ -486,5 +510,37 @@ export default class ActionsAdd extends Command {
       flags.noninteractive,
       this,
     )
+  }
+
+  private _optionallyEnhanceWithDelay(flags: FlagsType, payload: any) {
+    if (!flags.delay && flags.until) {
+      this.log(`The flag --until must be used with --delay`)
+      this.exit(1)
+    }
+
+    if (flags.delay && !flags.until) {
+      this.log(
+        `The flag --delay must be used with specification flags like --until`,
+      )
+      this.exit(1)
+    }
+
+    if (!flags.delay) {
+      return payload
+    }
+
+    if (flags.until) {
+      const delay = {
+        from: flags.holdfrom,
+        until: flags.until,
+      }
+
+      return {
+        ...payload,
+        delay: [delay],
+      }
+    }
+
+    return payload
   }
 }

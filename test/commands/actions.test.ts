@@ -346,6 +346,72 @@ describe('Actions', () => {
       .command(['actions:add'])
       .exit(2)
       .it('fails if no name provided')
+
+    describe('with delay', () => {
+      test
+        .stdout()
+        .nock(MailscriptApiServer, nockAddMailscriptEmailAction)
+        .command([
+          'actions:add',
+          '--name',
+          'delayed-forward-01',
+          '--forward',
+          'example@example.com',
+          '--from',
+          'smith@mailscript.com',
+          '--delay',
+          '--until',
+          '5pm',
+        ])
+        .it('succeeds on valid delay until specific time', (ctx) => {
+          expect(ctx.stdout).to.contain('Action setup: delayed-forward-01')
+
+          expect(postBody).to.eql({
+            name: 'delayed-forward-01',
+            type: 'mailscript-email',
+            delay: [{ until: '5pm' }],
+            config: {
+              type: 'forward',
+              from: 'smith@mailscript.com',
+              forward: 'example@example.com',
+              key: 'key-01-xxx',
+            },
+          })
+        })
+
+      test
+        .stdout()
+        .nock(MailscriptApiServer, nockAddMailscriptEmailAction)
+        .command([
+          'actions:add',
+          '--name',
+          'delayed-forward-01',
+          '--forward',
+          'example@example.com',
+          '--from',
+          'smith@mailscript.com',
+          '--delay',
+          '--holdfrom',
+          '9am',
+          '--until',
+          '5pm',
+        ])
+        .it('succeeds on valid delay during specific period', (ctx) => {
+          expect(ctx.stdout).to.contain('Action setup: delayed-forward-01')
+
+          expect(postBody).to.eql({
+            name: 'delayed-forward-01',
+            type: 'mailscript-email',
+            delay: [{ from: '9am', until: '5pm' }],
+            config: {
+              type: 'forward',
+              from: 'smith@mailscript.com',
+              forward: 'example@example.com',
+              key: 'key-01-xxx',
+            },
+          })
+        })
+    })
   })
 
   describe('combine', () => {
