@@ -546,6 +546,10 @@ export default class Sync extends Command {
       return action
     }
 
+    if (action.type === 'daemon') {
+      return action
+    }
+
     throw new Error(`Unknown action type ${action.type}`)
   }
 
