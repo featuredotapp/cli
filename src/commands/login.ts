@@ -109,7 +109,7 @@ Link or create your MailScript account
   }
 
   private generateOfflineLink() {
-    return `${remoteLoginUrl}`
+    return `${remoteLoginUrl}?offline=true`
   }
 
   private async writeConfigFile(token: string) {
