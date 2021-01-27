@@ -142,7 +142,7 @@ export default class Sync extends Command {
       )
 
       for (const { id: address } of addressesToDelete) {
-        this.log(`Deleteing ${address}`)
+        this.log(`Deleting ${address}`)
         await handle(
           client.deleteAddress(address),
           withStandardErrors({}, this),
@@ -213,7 +213,7 @@ export default class Sync extends Command {
         )
 
         for (const { id: key } of keysToDelete) {
-          this.log(`Deleteing ${key}`)
+          this.log(`Deleting ${key}`)
           await handle(
             client.deleteKey(address, key),
             withStandardErrors({}, this),
@@ -291,7 +291,7 @@ export default class Sync extends Command {
       )
 
       for (const { id: triggerId } of triggersToDelete) {
-        this.log(`Deleteing ${triggerId}`)
+        this.log(`Deleting ${triggerId}`)
 
         await handle(
           client.deleteTrigger(triggerId),
@@ -393,7 +393,7 @@ export default class Sync extends Command {
       )
 
       for (const { id: actionId } of actionsToDelete) {
-        this.log(`Deleteing action ${actionId}`)
+        this.log(`Deleting action ${actionId}`)
 
         await handle(
           client.deleteAction(actionId),
@@ -483,7 +483,7 @@ export default class Sync extends Command {
       )
 
       for (const { id: workflowId } of actionsToDelete) {
-        this.log(`Deleteing workflow ${workflowId}`)
+        this.log(`Deleting workflow ${workflowId}`)
 
         await handle(
           client.deleteWorkflow(workflowId),
