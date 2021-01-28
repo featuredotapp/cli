@@ -240,28 +240,50 @@ Link or create your MailScript account
         )} to ${chalk.bold(targetEmail)} `,
       )
 
-      this.log('Create redirect - TBD')
-      // await handle(
-      //   client.addWorkflow({
-      //     name: 'redirect',
-      //     // trigger: {
-      //     //   accessoryId,
-      //     //   config: {
-      //     //     criterias: [],
-      //     //   },
-      //     // },
-      //     // actions: [
-      //     //   {
-      //     //     accessoryId,
-      //     //     config: {
-      //     //       type: 'alias',
-      //     //       alias: targetEmail,
-      //     //     },
-      //     //   },
-      //     // ],
-      //   }),
-      //   withStandardErrors({}, this),
-      // )
+      const aliasActionId = await handle(
+        client.addAction({
+          name: 'email-personal-address',
+          type: 'mailscript-email',
+          config: {
+            type: 'alias',
+            alias: targetEmail,
+          },
+        }),
+        withStandardErrors(
+          {
+            201: ({ id }: api.AddActionResponse) => id,
+          },
+          this,
+        ),
+      )
+
+      const inputs: api.MailscriptEmailInput[] = await handle(
+        client.getAllInputs(),
+        withStandardErrors(
+          {
+            200: ({ list }: api.GetAllInputsResponse) => list,
+          },
+          this,
+        ),
+      )
+
+      const input = inputs.find(({ name }) => name === defaultAddress)
+
+      if (!input) {
+        this.log(
+          chalk.red(`${chalk.bold('Error')}: default address input not setup`),
+        )
+        this.exit(1)
+      }
+
+      await handle(
+        client.addWorkflow({
+          name: 'redirect',
+          input: input.id,
+          action: aliasActionId,
+        }),
+        withStandardErrors({}, this),
+      )
 
       cli.action.stop()
     }
