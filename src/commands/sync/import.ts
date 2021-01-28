@@ -64,7 +64,26 @@ export default class Sync extends Command {
       this.exit(1)
     }
 
-    const data: any = yaml.safeLoad(fs.readFileSync(flags.path, 'utf8'))
+    const user: api.User = await handle(
+      client.getAuthenticatedUser(),
+      withStandardErrors({}, this),
+    )
+
+    const { list }: api.GetAllWorkspacesResponse = await handle(
+      client.getAllWorkspaces(),
+      withStandardErrors({}, this),
+    )
+
+    const username = list[0].id
+    const accountEmailAddress = user.email
+
+    const importFileContent = fs.readFileSync(flags.path, 'utf8')
+    const interpolatedImportFileContent = importFileContent
+      .toString()
+      .replace(/\$account-email-address/g, accountEmailAddress)
+      .replace(/\$username/g, username)
+
+    const data: any = yaml.safeLoad(interpolatedImportFileContent)
 
     if (!data) {
       this.log('Problem parsing yaml file')
@@ -79,7 +98,13 @@ export default class Sync extends Command {
 
     const forceDelete = flags.delete
 
-    await this._checkVerificationsForActions(client, flags, actions)
+    this.debug('Checking verifications')
+    await this._checkVerificationsForActions(
+      client,
+      flags,
+      accountEmailAddress,
+      actions,
+    )
 
     await this._syncAddresses(client, addresses, forceDelete)
     await this._syncKeys(client, addresses, forceDelete)
@@ -509,6 +534,23 @@ export default class Sync extends Command {
 
     if (action.type === 'mailscript-email') {
       const from = action.config.from
+      const mailtype = action.config.type
+
+      if (mailtype === 'alias') {
+        return action
+      }
+
+      if (!from) {
+        this.log(
+          chalk.red(
+            `${chalk.bold('Error')}: No \`from\` address specified in action ${
+              action.name
+            }`,
+          ),
+        )
+        this.exit(1)
+      }
+
       const keyName = action.config.key
 
       const keysResponse = await client.getAllKeys(from)
@@ -696,6 +738,7 @@ export default class Sync extends Command {
   private async _checkVerificationsForActions(
     client: typeof api,
     flags: FlagsType,
+    accountEmailAddress: string,
     actions: any,
   ) {
     const leafActions = actions.filter(({ type }: any) => Boolean(type))
@@ -735,6 +778,10 @@ export default class Sync extends Command {
     }
 
     for (const aliasAddress of aliasAddresses) {
+      if (aliasAddress === accountEmailAddress) {
+        continue
+      }
+
       const verification = verifications.find(
         (v) => v.type === 'email' && v.email === aliasAddress,
       )
