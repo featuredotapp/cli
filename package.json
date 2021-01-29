@@ -55,7 +55,7 @@
     "typescript": "^3.3"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=10.19.0"
   },
   "files": [
     "/bin",
