@@ -1,11 +1,13 @@
 /* eslint-disable no-await-in-loop */
 import { Command, flags } from '@oclif/command'
 import { handle } from 'oazapfts'
+import fromEntries from 'fromentries'
 import * as yaml from 'js-yaml'
 import * as fs from 'fs'
 import * as api from '../../api'
 import setupApiClient from '../../setupApiClient'
 import withStandardErrors from '../../utils/errorHandling'
+import { flat } from '../../utils/flat'
 
 export default class Sync extends Command {
   static description = 'export your Mailscript config to file'
@@ -166,7 +168,7 @@ export default class Sync extends Command {
       }
     })
 
-    const mergedAddressesAndKeys = Object.fromEntries(
+    const mergedAddressesAndKeys = fromEntries(
       addresses.map((address) => {
         const keyEntry = keys.find((ke) => ke.address === address)
 
@@ -230,10 +232,9 @@ export default class Sync extends Command {
       return null
     }
 
-    const key = keys
-      .map((ke) => ke.keys)
-      .flat()
-      .find((k: { id: string }) => k.id === keyId)
+    const key = flat(keys.map((ke) => ke.keys)).find(
+      (k: { id: string }) => k.id === keyId,
+    )
 
     if (!key) {
       return null

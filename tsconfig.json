@@ -9,8 +9,8 @@
     "outDir": "lib",
     "rootDir": "src",
     "strict": true,
-    "target": "es6",
-    "lib": ["es2019"],
+    "target": "es2018",
+    "lib": ["es2018"],
     "esModuleInterop": true,
     "skipLibCheck": true
   },
