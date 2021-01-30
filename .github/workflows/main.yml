@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@master
       - uses: actions/setup-node@v1
         with:
-          node-version: '14.3.x'
+          node-version: '10'
       - name: Install
         run: yarn
       - name: Lint
