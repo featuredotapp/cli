@@ -32,11 +32,14 @@ MailScript cli
 * [Usage](#usage)
 * [Commands](#commands)
 * [Development](#development)
-* [Publish](#publish)
 * [License](#license)
 
 # Features
-* TBD
+* Low code automations for filtering/directing your emails
+* Create an infinte number of email addresses for your use case.
+* Integrate your own custom coded email filters with mailscript
+* Filter based on key words, or email header contents. Mailscript does the heavy lifting of email parsing for you. Providing a clean JSON object with all the metadata you will need.
+* No need to transfer over to another email provider: Use your current email provider with mailscript. Mailscript will redirect high priority emails to your primary inbox. Keeping your email clean of spam and other unncessary information.
 
 ## Getting Started
 * Read the [docs](https://docs.mailscript.com/)
