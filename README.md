@@ -2,7 +2,7 @@
   <img src="docs/media/Mailscript_Black.png">
 </p>
 <p align="center">
-  <center><H1>Low-code automation for inbound emails.</H1><center>
+  <H1>Low-code automation for inbound emails.</H1>
  <H4> Get a programmable email address. Automate what happens when you receive emails. It's like Zapier for devs who hate emails.</H4>
 </p>
 
@@ -29,7 +29,7 @@
   </a>
 <p>
 
-# Table of Contents
+# Table of Contents 📚
 <!-- toc -->
 * [Features](#features)
 * [Getting started](#getting-started)
@@ -38,19 +38,19 @@
 * [Development](#development)
 * [License](#license)
 
-# Features
+# Features ⚙
 * Low code automations for filtering/directing your emails
 * Create an infinte number of email addresses for your use case.
 * Integrate your own custom coded email filters with mailscript
 * Filter based on key words, or email header contents. Mailscript does the heavy lifting of email parsing for you. Providing a clean JSON object with all the metadata you will need.
 * No need to transfer over to another email provider: Use your current email provider with mailscript. Mailscript will redirect high priority emails to your primary inbox. Keeping your inbox clean of clutter.
 
-## Getting Started
+## Getting Started 🚀
 * Read the [docs](https://docs.mailscript.com/)
 * Take a look at the [HTTP API docs](https://api.mailscript.com/)
 
 <!-- tocstop -->
-## Usage
+## Usage 👩‍💻
 <!-- usage -->
 ### Install through npm
 In order to use the mailscript CLI must first install it wth the global flag. Run the following...
@@ -61,7 +61,7 @@ Or you could install dev version (Not recommended)
 ```sh-session
 $ npm install -g https://github.com/mailscript/cli.git
 ```
-**Basic usage**
+**Basic usage** 
 ```
 $ mailscript COMMAND
 running command...
@@ -72,7 +72,7 @@ USAGE
   $ mailscript COMMAND
 ...
 ```
-**Login local daemon**
+**Login via local daemon**
 ```sh-session
 $ mailscript login
 ... 
@@ -89,5 +89,5 @@ Ready to dive into mailscript? [Read the command line documentation](https://git
 
 Development information available [here](docs/develop.md) 
 
-# License
+# License ⚖
 CLI license: [MIT](https://github.com/mailscript/cli/blob/main/LICENSE)
