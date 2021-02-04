@@ -3,12 +3,9 @@
 </p>
 <p align="center">
   <H1>Low-code automation for inbound emails.</H1>
-  <H3>Get a programmable email address. Automate what happens when you receive emails. It's like Zapier for devs who hate emails.</H3>
+  ### Get a programmable email address. Automate what happens when you receive emails. It's like Zapier for devs who hate emails.
 </p>
 <div align="center">
-
-
-### Configure and use mailscript from the command-line
 
 <hr/>
 
