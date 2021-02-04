@@ -80,12 +80,12 @@ You should see a browser window open prompting you to login to your mailscript a
 The daemon will handle the rest upon completion
 ```
 <!-- usagestop -->
-# Commands
+# Commands ⌨
 Ready to dive into mailscript? [Read the command line documentation](https://github.com/mailscript/cli/tree/main/docs)
 <!-- commands -->
 <!-- commandsstop -->
 
-# Development
+# Development 💬
 
 Development information available [here](docs/develop.md) 
 
