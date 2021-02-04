@@ -83,7 +83,7 @@ The daemon will handle the rest upon completion
 ```
 <!-- usagestop -->
 # Commands
-Ready to dive into mailscript? [Read the commandline documentation](https://github.com/mailscript/cli/tree/main/docs)
+Ready to dive into mailscript? [Read the command line documentation](https://github.com/mailscript/cli/tree/main/docs)
 <!-- commands -->
 <!-- commandsstop -->
 
