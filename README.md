@@ -56,14 +56,13 @@ Mailscript cli
 In order to use the mailscript CLI must first install it wth the global flag. Run the following...
 ```sh-session
 $ npm install -g mailscript
-
 ```
 Or you could install dev version (Not recommended)
 ```sh-session
 $ npm install -g https://github.com/mailscript/cli.git
 ```
 **Basic usage**
-
+```
 $ mailscript COMMAND
 running command...
 $ mailscript (-v|--version|version)
@@ -72,18 +71,17 @@ $ mailscript --help [COMMAND]
 USAGE
   $ mailscript COMMAND
 ...
-
+```
 **Login local daemon**
 ```sh-session
 $ mailscript login
-... You should see a browser window open prompting you to login to your mailscript account. The daemon will handle the rest upon completion
+... 
+You should see a browser window open prompting you to login to your mailscript account. The daemon will handle the rest upon completion
 ```
 <!-- usagestop -->
 # Commands
 Ready to dive into mailscript? [Read the commandline documentation](https://github.com/mailscript/cli/tree/main/docs)
 <!-- commands -->
-
-_See code: [src/commands/workflows/list.ts](https://github.com/getmailscript/cli/blob/v0.4.8/src/commands/workflows/list.ts)_
 <!-- commandsstop -->
 
 # Development
