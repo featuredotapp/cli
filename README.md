@@ -16,6 +16,9 @@ MailScript cli
 [![License](https://img.shields.io/npm/l/mailscript.svg)](https://github.com/mailscript/mailscript/blob/master/package.json)
 [![Discord](https://img.shields.io/discord/475789330380488707?color=blueviolet&label=discord&style=flat-square)](https://discord.gg/US24HAVYq2)
 ![Main](https://github.com/mailscript/cli/workflows/Main/badge.svg)
+<a href="https://twitter.com/intent/follow?screen_name=getmailscript">
+  <img src="https://img.shields.io/twitter/follow/getmailscript.svg?label=Follow%20@getmailscript" alt="Follow @getmailscript" />
+</a>
 
 </div>
 
