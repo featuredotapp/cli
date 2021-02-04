@@ -1,4 +1,4 @@
-MailScript cli
+Mailscript CLI
 ==============
 
 Configure and use mailscript from the command-line
