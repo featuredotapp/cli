@@ -2,9 +2,10 @@
   <img src="docs/media/Mailscript_Black.png">
 </p>
 <p align="center">
-  <H1>Low-code automation for inbound emails.</H1>
- <H3> Get a programmable email address. Automate what happens when you receive emails. It's like Zapier for devs who hate emails.</H3>
+  <center><H1>Low-code automation for inbound emails.</H1><center>
+ <H4> Get a programmable email address. Automate what happens when you receive emails. It's like Zapier for devs who hate emails.</H4>
 </p>
+
 <div align="center">
 
 <hr/>
