@@ -78,12 +78,12 @@ USAGE
 ```sh-session
 $ mailscript login
 ... 
-You should see a browser window open prompting you to login to your mailscript account. 
+You should see a browser window open prompting you to login to your Mailscript account. 
 The daemon will handle the rest upon completion
 ```
 <!-- usagestop -->
 # Commands ⌨
-Ready to dive into mailscript? [Read the command line documentation](https://github.com/mailscript/cli/tree/main/docs)
+Ready to dive into Mailscript? [Read the command line documentation](https://github.com/mailscript/cli/tree/main/docs)
 <!-- commands -->
 <!-- commandsstop -->
 
