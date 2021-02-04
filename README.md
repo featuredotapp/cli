@@ -39,25 +39,27 @@
 * [License](#license)
 
 # Features ⚙
-* Low code automations for filtering/directing your emails
-* Create an infinte number of email addresses for your use case.
-* Integrate your own custom coded email filters with mailscript
-* Filter based on key words, or email header contents. Mailscript does the heavy lifting of email parsing for you. Providing a clean JSON object with all the metadata you will need.
-* No need to transfer over to another email provider: Use your current email provider with mailscript. Mailscript will redirect high priority emails to your primary inbox. Keeping your inbox clean of clutter.
+* Low code automations for your emails
+* Create automations to filter and route emails as they hit your inbox.
+* Create an infinte number of email addresses, and automate them individually.
+* Parses *every element* of the email for you and provides a clean JSON object with all the metadata you will need.
+* No need to transfer over to another email provider: Use your current email provider with Mailscript.
+* Integrate your own custom coded email filters. Filter based on key words, or email header contents.
+* Redirect high priority emails to your primary inbox, keeping it clean of clutter.
 
 ## Getting Started 🚀
-* Read the [docs](https://docs.mailscript.com/)
-* Take a look at the [HTTP API docs](https://api.mailscript.com/)
+* Read our [documentation](https://docs.mailscript.com/)
+* Take a look at the [HTTP API documentation](https://api.mailscript.com/)
 
 <!-- tocstop -->
 ## Usage 👩‍💻
 <!-- usage -->
 ### Install through npm
-In order to use the mailscript CLI must first install it wth the global flag. Run the following...
+In order to use the Mailscript CLI, you must first install it with the global flag. Run the following:
 ```sh-session
 $ npm install -g mailscript
 ```
-Or you could install dev version (Not recommended)
+Alternatively, you could install the dev version *(not recommended!)*
 ```sh-session
 $ npm install -g https://github.com/mailscript/cli.git
 ```
