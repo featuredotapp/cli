@@ -2,10 +2,11 @@
   <img src="docs/media/Mailscript_Black.png">
 </p>
 <p align="center">
-MailScript cli
+Mailscript cli
 <hr/>
 </p>
 <div align="center">
+
 
 ### Configure and use mailscript from the command-line
 
