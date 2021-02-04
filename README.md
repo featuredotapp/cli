@@ -17,6 +17,8 @@ Mailscript cli
 [![License](https://img.shields.io/npm/l/mailscript.svg)](https://github.com/mailscript/mailscript/blob/master/package.json)
 [![Discord](https://img.shields.io/discord/475789330380488707?color=blueviolet&label=discord&style=flat-square)](https://discord.gg/US24HAVYq2)
 ![Main](https://github.com/mailscript/cli/workflows/Main/badge.svg)
+[![GitHub Issues](https://img.shields.io/github/issues/mailscript/cli.svg)](https://github.com/mailscript/cli/issues)
+![Contributions welcome](https://img.shields.io/badge/contributions-welcome-orange.svg)
 <a href="https://twitter.com/intent/follow?screen_name=getmailscript">
   <img src="https://img.shields.io/twitter/follow/getmailscript.svg?label=Follow%20@getmailscript" alt="Follow @getmailscript" />
 </a>
@@ -76,7 +78,8 @@ USAGE
 ```sh-session
 $ mailscript login
 ... 
-You should see a browser window open prompting you to login to your mailscript account. The daemon will handle the rest upon completion
+You should see a browser window open prompting you to login to your mailscript account. 
+The daemon will handle the rest upon completion
 ```
 <!-- usagestop -->
 # Commands
