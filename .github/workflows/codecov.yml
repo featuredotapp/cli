@@ -32,10 +32,7 @@ jobs:
           key: ubuntu-18.04-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ubuntu-18.04-yarn-
-      - name: yarn install in ./app/client
-        run: |
-          cd ./app/client
-          yarn install
+
       - name: yarn install in ./
         run: yarn install
 
