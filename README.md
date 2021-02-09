@@ -32,7 +32,7 @@
 # Table of Contents 📚
 <!-- toc -->
 * [Tables of Contents](#tables-of-contents-📚)
-* [Features](#features-⚙)
+* [Features](#features)
 * [Getting started](#getting-started-🚀)
 * [Use Cases](#use-cases)
 * [Usage](#usage-👩‍💻)
@@ -40,7 +40,7 @@
 * [Development](#development-💬)
 * [License](#license-⚖)
 
-# Features ⚙
+# Features
 * Low code automations for your emails
 * Create automations to filter and route emails as they hit your inbox.
 * Create an infinte number of email addresses, and automate them individually.
