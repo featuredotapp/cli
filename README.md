@@ -47,6 +47,11 @@
 * Integrate your own custom coded email filters. Filter based on key words, or email header contents.
 * Redirect high priority emails to your primary inbox, keeping it clean of clutter.
 
+## Use Cases
+* Send a text message to your phone upon receiving an important email
+* Auto reply to first time senders.
+* Save important attachments to a file server, or location of choice.
+
 ## Getting Started 🚀
 * Read our [documentation](https://docs.mailscript.com/)
 * Take a look at the [HTTP API documentation](https://api.mailscript.com/)
