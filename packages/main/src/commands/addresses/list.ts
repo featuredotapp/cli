@@ -43,7 +43,7 @@ export default class AddressesList extends Command {
             this.log('')
 
             cli.table(
-              list,
+              list.sort((a, b) => a.id.localeCompare(b.id)),
               {
                 address: {
                   header: 'Address',

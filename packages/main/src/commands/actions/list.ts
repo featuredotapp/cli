@@ -5,6 +5,7 @@ import chalk from 'chalk'
 import * as api from '../../api'
 import setupApiClient from '../../setupApiClient'
 import withStandardErrors from '../../utils/errorHandling'
+import sortByNameAsc from '../../utils/sortByNameAsc'
 
 export default class ActionsList extends Command {
   static description = 'list the actions'
@@ -44,7 +45,7 @@ export default class ActionsList extends Command {
             this.log('')
 
             cli.table(
-              list,
+              list.sort(sortByNameAsc),
               {
                 name: {
                   header: 'Name',
