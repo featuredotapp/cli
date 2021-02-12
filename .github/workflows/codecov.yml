@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
   run:
@@ -32,10 +29,10 @@ jobs:
           key: ubuntu-18.04-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ubuntu-18.04-yarn-
-      - name: Change Directory
-        run: cd packages/main
-      - name: npm install
-        run: npm install
+      #- name: Change Directory
+      #  run: cd packages/main
+      - name: Install
+        run: yarn
         
       - name: npm install -g codecov
         run:  npm install -g codecov
@@ -46,11 +43,11 @@ jobs:
       - name: npm run coverage
         run: npm run coverage
 
-      - name: Upload app coverage to Codecov
-        uses: codecov/codecov-action@v1.0.12
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage/clover.xml
-          flags: unittests
-          name: codecov-umbrella
-          fail_ci_if_error: true
+      #- name: Upload app coverage to Codecov
+      #  uses: codecov/codecov-action@v1.0.12
+      #  with:
+      #    token: ${{ secrets.CODECOV_TOKEN }}
+      #    file: ./coverage/clover.xml
+      #    flags: unittests
+      #    name: codecov-umbrella
+      #    fail_ci_if_error: true

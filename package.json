@@ -1,0 +1,65 @@
+{
+  "private": true,
+  "name": "root",
+  "version": "1.0.0",
+  "description": "Root",
+  "homepage": "https://github.com/mailscript/cli/",
+  "bugs": {
+    "url": "https://github.com/mailscript/cli/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mailscript/cli.git"
+  },
+  "license": "MIT",
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "scripts": {
+    "versionup": "lerna version --conventional-commits --no-git-tag-version",
+    "versionup:patch": "lerna version patch --conventional-commits --no-git-tag-version",
+    "versionup:minor": "lerna version minor --conventional-commits --no-git-tag-version",
+    "versionup:major": "lerna version major --conventional-commits --no-git-tag-version",
+    "postversionup": "npm run commit-version",
+    "postversionup:patch": "npm run commit-version",
+    "postversionup:minor": "npm run commit-version",
+    "postversionup:major": "npm run commit-version",
+    "commit-version": "git add . && git commit -m \"chore(release): publish `node -p 'require(\"./lerna.json\").version'`\"",
+    "release": "lerna publish from-package",
+    "test": "lerna run test",
+    "coverage": "lerna run coverage",
+    "format:check": "lerna run format:check"
+  },
+  "devDependencies": {
+    "@monorepo-utils/collect-changelog": "^2.2.0",
+    "lerna": "^3.20.2",
+    "@oclif/dev-cli": "^1",
+    "@oclif/test": "^1",
+    "@types/chai": "^4",
+    "@types/deep-equal": "1.0.1",
+    "@types/express": "^4.17.9",
+    "@types/js-yaml": "3.12.5",
+    "@types/mocha": "^5",
+    "@types/node": "^10",
+    "@types/node-fetch": "^2.5.7",
+    "@types/toposort": "2.0.3",
+    "@types/traverse": "0.6.32",
+    "@types/ws": "7.4.0",
+    "chai": "^4",
+    "codecov": "^3.8.1",
+    "cross-env": "^7.0.3",
+    "eslint": "^5.13",
+    "eslint-config-oclif": "^3.1",
+    "eslint-config-oclif-typescript": "^0.1",
+    "eslint-config-prettier": "^6.15.0",
+    "globby": "^10",
+    "mocha": "^5",
+    "nock": "13.0.5",
+    "nyc": "^14.1.1",
+    "prettier": "^2.1.2",
+    "ts-node": "^8",
+    "typescript": "^3.3"
+  }
+}
