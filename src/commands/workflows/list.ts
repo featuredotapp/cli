@@ -4,6 +4,7 @@ import * as api from '../../api'
 import setupApiClient from '../../setupApiClient'
 import withStandardErrors from '../../utils/errorHandling'
 import { cli } from 'cli-ux'
+import sortByNameAsc from '../../utils/sortByNameAsc'
 
 export default class Workflows extends Command {
   static description = 'list the workflows'
@@ -42,7 +43,7 @@ export default class Workflows extends Command {
             this.log('')
 
             cli.table(
-              list,
+              list.sort(sortByNameAsc),
               {
                 name: {
                   header: 'Name',
