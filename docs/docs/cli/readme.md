@@ -3,6 +3,7 @@
 * [Overview](#overview)
 * [Commands](#commands)
 * [Configuration](#configuration)
+* [API](API.md)
 
 
 ## Overview
