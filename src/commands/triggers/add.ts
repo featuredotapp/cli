@@ -28,6 +28,22 @@ type FlagsType = {
   [key: string]: any
 }
 
+function resolveValue(value: string) {
+  if (value.trim() === 'true') {
+    return true
+  }
+
+  if (value.trim() === 'false') {
+    return false
+  }
+
+  if (/^\d+$/g.test(value)) {
+    return parseInt(value, 10)
+  }
+
+  return value
+}
+
 export default class TriggersAdd extends Command {
   static description = 'add a trigger'
 
@@ -243,10 +259,12 @@ export default class TriggersAdd extends Command {
         this.exit(1)
       }
 
+      const resolvedValue = resolveValue(flags.equals)
+
       return {
         name: flags.name,
         criteria: {
-          [flags.property]: flags.equals,
+          [flags.property]: resolvedValue,
         },
       }
     }
