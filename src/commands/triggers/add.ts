@@ -91,6 +91,9 @@ export default class TriggersAdd extends Command {
     equals: flags.string({
       description: 'the value used against the property param',
     }),
+    exists: flags.boolean({
+      description: 'whether the property param exists',
+    }),
     and: flags.string({
       multiple: true,
       description: 'combine sub-triggers into a new trigger with "and" logic',
@@ -254,12 +257,21 @@ export default class TriggersAdd extends Command {
     }
 
     if (flags.property) {
-      if (!flags.equals) {
-        this.log('Flag --property requires --equals')
+      if (!flags.equals && !flags.exists) {
+        this.log('Flag --property requires --equals or --exists')
         this.exit(1)
       }
 
-      const resolvedValue = resolveValue(flags.equals)
+      if (flags.exists) {
+        return {
+          name: flags.name,
+          criteria: {
+            [flags.property]: true,
+          },
+        }
+      }
+
+      const resolvedValue = resolveValue(flags.equals!)
 
       return {
         name: flags.name,

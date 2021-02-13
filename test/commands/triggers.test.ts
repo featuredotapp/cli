@@ -290,6 +290,27 @@ describe('triggers', () => {
 
         test
           .stdout()
+          .nock(MailscriptApiServer, nockAdd)
+          .command([
+            'triggers:add',
+            '--name',
+            'trigger-01',
+            '--property',
+            'github.pr',
+            '--exists',
+          ])
+          .it('adds exists property comparisons', (ctx) => {
+            expect(ctx.stdout).to.contain('Trigger setup: trigger-01')
+            expect(postBody).to.eql({
+              name: 'trigger-01',
+              criteria: {
+                'github.pr': true,
+              },
+            })
+          })
+
+        test
+          .stdout()
           .command([
             'triggers:add',
             '--name',
