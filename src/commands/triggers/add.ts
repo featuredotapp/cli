@@ -94,6 +94,9 @@ export default class TriggersAdd extends Command {
     exists: flags.boolean({
       description: 'whether the property param exists',
     }),
+    not: flags.boolean({
+      description: 'invert the property param match',
+    }),
     and: flags.string({
       multiple: true,
       description: 'combine sub-triggers into a new trigger with "and" logic',
@@ -263,6 +266,15 @@ export default class TriggersAdd extends Command {
       }
 
       if (flags.exists) {
+        if (flags.not) {
+          return {
+            name: flags.name,
+            criteria: {
+              [flags.property]: false,
+            },
+          }
+        }
+
         return {
           name: flags.name,
           criteria: {
@@ -276,7 +288,7 @@ export default class TriggersAdd extends Command {
       return {
         name: flags.name,
         criteria: {
-          [flags.property]: resolvedValue,
+          [`${flags.not ? '!' : ''}${flags.property}`]: resolvedValue,
         },
       }
     }
