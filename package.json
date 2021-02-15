@@ -42,6 +42,8 @@
     "@types/traverse": "0.6.32",
     "@types/ws": "7.4.0",
     "chai": "^4",
+    "codecov": "3.8.1",
+    "cross-env": "7.0.3",
     "eslint": "^5.13",
     "eslint-config-oclif": "^3.1",
     "eslint-config-oclif-typescript": "^0.1",
@@ -96,6 +98,7 @@
   },
   "repository": "getmailscript/cli",
   "scripts": {
+    "coverage": "cross-env MAILSCRIPT_CONFIG_PATH=./test/test-mailscript-config.json nyc --extension .ts --reporter=lcov mocha --forbid-only \"test/**/*.test.ts\" && codecov",
     "postpack": "rm -f oclif.manifest.json",
     "posttest": "eslint ./src --ext .ts --config .eslintrc",
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
