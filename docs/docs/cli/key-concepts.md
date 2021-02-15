@@ -11,7 +11,9 @@ Workflows allow you to setup automations for any of the adddresses you control o
 
 Workflows are defined in YML and ideally should feel similar to writing github actions or Circle CI workflows. Not to say they are identical.
 
-Visual example of what this would look like: 
+See [annotated-workflow](annotated-workflow.yml) for more description about the yml structure and definition.
+
+Visual example of what a workflow would look like: 
 
 <img src="media/workflow.svg"/>
 
