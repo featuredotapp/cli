@@ -268,6 +268,117 @@ describe('triggers', () => {
 
         test
           .stdout()
+          .nock(MailscriptApiServer, nockAdd)
+          .command([
+            'triggers:add',
+            '--name',
+            'trigger-01',
+            '--property',
+            'metadata.github.org',
+            '--not',
+            '--equals',
+            'mailscript',
+          ])
+          .it('adds not trigger on the server', (ctx) => {
+            expect(ctx.stdout).to.contain('Trigger setup: trigger-01')
+            expect(postBody).to.eql({
+              name: 'trigger-01',
+              criteria: {
+                '!metadata.github.org': 'mailscript',
+              },
+            })
+          })
+
+        test
+          .stdout()
+          .nock(MailscriptApiServer, nockAdd)
+          .command([
+            'triggers:add',
+            '--name',
+            'trigger-01',
+            '--property',
+            'github.pr.number',
+            '--equals',
+            '5',
+          ])
+          .it('adds number properties', (ctx) => {
+            expect(ctx.stdout).to.contain('Trigger setup: trigger-01')
+            expect(postBody).to.eql({
+              name: 'trigger-01',
+              criteria: {
+                'github.pr.number': 5,
+              },
+            })
+          })
+
+        test
+          .stdout()
+          .nock(MailscriptApiServer, nockAdd)
+          .command([
+            'triggers:add',
+            '--name',
+            'trigger-01',
+            '--property',
+            'github.pr.number',
+            '--not',
+            '--equals',
+            '5',
+          ])
+          .it('adds not this number properties', (ctx) => {
+            expect(ctx.stdout).to.contain('Trigger setup: trigger-01')
+            expect(postBody).to.eql({
+              name: 'trigger-01',
+              criteria: {
+                '!github.pr.number': 5,
+              },
+            })
+          })
+
+        test
+          .stdout()
+          .nock(MailscriptApiServer, nockAdd)
+          .command([
+            'triggers:add',
+            '--name',
+            'trigger-01',
+            '--property',
+            'github.pr',
+            '--exists',
+          ])
+          .it('adds exists property comparisons', (ctx) => {
+            expect(ctx.stdout).to.contain('Trigger setup: trigger-01')
+            expect(postBody).to.eql({
+              name: 'trigger-01',
+              criteria: {
+                'github.pr': true,
+              },
+            })
+          })
+
+        test
+          .stdout()
+          .nock(MailscriptApiServer, nockAdd)
+          .command([
+            'triggers:add',
+            '--name',
+            'trigger-01',
+            '--property',
+            'github.pr',
+            '--not',
+            '--exists',
+          ])
+          .it('adds not exists property comparisons', (ctx) => {
+            expect(ctx.stdout).to.contain('Trigger setup: trigger-01')
+            expect(postBody).to.eql({
+              name: 'trigger-01',
+              criteria: {
+                'github.pr': false,
+              },
+            })
+          })
+
+        test
+          .stdout()
           .command([
             'triggers:add',
             '--name',

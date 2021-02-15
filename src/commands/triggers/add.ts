@@ -28,6 +28,22 @@ type FlagsType = {
   [key: string]: any
 }
 
+function resolveValue(value: string) {
+  if (value.trim() === 'true') {
+    return true
+  }
+
+  if (value.trim() === 'false') {
+    return false
+  }
+
+  if (/^\d+$/g.test(value)) {
+    return parseInt(value, 10)
+  }
+
+  return value
+}
+
 export default class TriggersAdd extends Command {
   static description = 'add a trigger'
 
@@ -74,6 +90,12 @@ export default class TriggersAdd extends Command {
     }),
     equals: flags.string({
       description: 'the value used against the property param',
+    }),
+    exists: flags.boolean({
+      description: 'whether the property param exists',
+    }),
+    not: flags.boolean({
+      description: 'invert the property param match',
     }),
     and: flags.string({
       multiple: true,
@@ -238,15 +260,35 @@ export default class TriggersAdd extends Command {
     }
 
     if (flags.property) {
-      if (!flags.equals) {
-        this.log('Flag --property requires --equals')
+      if (!flags.equals && !flags.exists) {
+        this.log('Flag --property requires --equals or --exists')
         this.exit(1)
       }
+
+      if (flags.exists) {
+        if (flags.not) {
+          return {
+            name: flags.name,
+            criteria: {
+              [flags.property]: false,
+            },
+          }
+        }
+
+        return {
+          name: flags.name,
+          criteria: {
+            [flags.property]: true,
+          },
+        }
+      }
+
+      const resolvedValue = resolveValue(flags.equals!)
 
       return {
         name: flags.name,
         criteria: {
-          [flags.property]: flags.equals,
+          [`${flags.not ? '!' : ''}${flags.property}`]: resolvedValue,
         },
       }
     }
