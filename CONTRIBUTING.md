@@ -22,7 +22,6 @@ helping us improve our community.
 - [A small note on licensing year](#a-small-note-on-licensing-year)
 - [Translations](#translations)
 - [Creating custom templates](#creating-custom-templates)
-  - [Linting](#linting)
 - [Submitting a PR](#submitting-a-pr)
 - [Helping in other ways](#helping-in-other-ways)
 - [Becoming a maintainer](#becoming-a-maintainer)
@@ -151,7 +150,8 @@ $ jq '.scripts.lint="standard --env=mocha"' package.json | sponge package.json
 ```
 ### Creating Custom Templates
 
-
+We accept community contributions such as workflow templates. 
+See [templates folder readme](packages/templates/templates.md) for proper guide on submitting your template. Community templates should align with our [CODE OF CODUCT](CODE_OF_CONDUCT.md) and guidelines layed out in this document.
 
 ### Submitting a PR
 
@@ -161,11 +161,3 @@ When submitting a PR, keep these things in mind:
 * **Add tests!** The more, the better. We aim for 110% code coverage for testing. Turn your tests up to 11.
 * **Lint first, ask questions later.** When submitting a PR (or creating a new repository), please adhere to the [`standard`](https://standardjs.com/) style. This helps us cut down on bike shedding immensely.
 * **Open an issue to discuss big PRs _before_ making them.** We don't want your work to be undercut by a simple workaround we could have implemented before! Discussion is the best way to ensure you're on the right track.
-
-### Becoming a maintainer
-
-If you want to help us with triaging issues, merging PRs, writing code, and maintaining repositories, we would be overjoyed. Maintenance is hard work, and all of the help that we can get from contributors is appreciated. Becoming a maintainer is currently an informal process - stick around for a while, help out where you can, and show the core team that you're interested in more than just having the mailscript logo on your GitHub profile. Then, reach out to one of the devs to ask to be included as a maintainer.
-
-Occasionally, we'll give people access rights straight out of the gate because they have proved themselves before, or because they're the most logical choice for maintainership for certain repositories. For instance, if you wrote a Groovy implementation of the mailscript cli, and you want to move it into the mailscript organization, you'll retain your maintainer rights for that repository.
-
-If you ever feel that someone should not have maintainer rights, send an email to the community team. Let's talk about it together.
