@@ -13,6 +13,7 @@ export const defaults: Oazapfts.RequestOpts = {
 const oazapfts = Oazapfts.runtime(defaults)
 export const servers = {
   apiServer: 'https://api.mailscript.com/v2',
+  localDevelopmentServer: 'http://localhost:7000/v2',
 }
 export type User = {
   id: string
@@ -292,6 +293,14 @@ export type AddActionAliasRequest = {
 }
 export type AddActionResponse = {
   id: string
+}
+export type Integration = {
+  id: string
+  type: 'google'
+  createdAt: string
+}
+export type GetAllIntegrationsResponse = {
+  list: Integration[]
 }
 /**
  * Get the authenticated user
@@ -1080,6 +1089,23 @@ export function getDaemonToken(daemon: string, opts?: Oazapfts.RequestOpts) {
         data: ErrorResponse
       }
   >(`/daemons/${daemon}/token`, {
+    ...opts,
+  })
+}
+/**
+ * Get all integrations for the user
+ */
+export function getAllIntegrations(opts?: Oazapfts.RequestOpts) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+        data: GetAllIntegrationsResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+  >('/integrations', {
     ...opts,
   })
 }
