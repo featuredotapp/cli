@@ -32,14 +32,14 @@
 
 # Table of Contents 📚
 <!-- toc -->
-* [Tables of Contents](#tables-of-contents-📚)
+* [Tables of Contents 📚](#tables-of-contents-📚)
 * [Features](#features)
-* [Getting started](#getting-started-🚀)
+* [Getting started 🚀](#getting-started-🚀)
 * [Use Cases](#use-cases)
-* [Usage](#usage-👩‍💻)
-* [Commands](#commands-⌨)
-* [Development](#development-💬)
-* [License](#license-⚖)
+* [Usage 👩‍💻](#usage-👩‍💻)
+* [Commands ⌨](#commands-⌨)
+* [Development 💬](#development-💬)
+* [License ⚖](#license-⚖)
 
 # Features
 * Low code automations for your emails
