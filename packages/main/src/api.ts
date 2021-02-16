@@ -13,7 +13,6 @@ export const defaults: Oazapfts.RequestOpts = {
 const oazapfts = Oazapfts.runtime(defaults)
 export const servers = {
   apiServer: 'https://api.mailscript.com/v2',
-  localDevelopmentServer: 'http://localhost:7000/v2',
 }
 export type User = {
   id: string
