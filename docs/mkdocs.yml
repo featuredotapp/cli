@@ -1,0 +1,57 @@
+# Project configuration
+site_name: "Documentation"
+site_description: "Mailscript brings the best features of bots and smart contracts for email."
+site_author: mailscript.com
+site_url: https://docs.mailscript.com/
+edit_uri: "edit/main/docs/"
+
+# Repository
+repo_name: mailscript/docs
+repo_url: https://github.com/mailscript/docs
+
+# Copyright
+copyright: "&copy; Mailscript"
+
+# Configuration
+theme:
+  name: material
+  logo: images/logo-white.png
+  favicon: images/favicon.png
+
+extra_css:
+  - css/styles.css
+
+nav:
+  - Home: index.md
+  - CLI:
+      - Get started: cli/get-started.md
+      - Usage & commands:
+          - Overview: cli/commands.md
+          - Addresses: cli/addresses.md
+          - Keys: cli/keys.md
+          - Triggers: cli/triggers.md
+          - Actions: cli/actions.md
+          - Workflows: cli/workflows.md
+          - Daemon: cli/daemon.md
+          - Sync: cli/sync.md
+          - Login: cli/login.md
+          - Send: cli/send.md
+  #- API: api.md
+  #- SDK Clients: sdk-clients.md
+
+extra:
+  social:
+    - icon: fontawesome/solid/globe
+      link: https://mailscript.com
+    - icon: fontawesome/brands/github
+      link: https://github.com/mailscript
+    - icon: fontawesome/brands/discord
+      link: https://discord.gg/US24HAVYq2
+    - icon: fontawesome/brands/facebook
+      link: https://facebook.com/mailscript
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/getmailscript 
+
+google_analytics:
+  - UA-188844195-1
+  - auto

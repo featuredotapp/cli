@@ -17,6 +17,7 @@ jobs:
       - name: Install
         run: yarn
       - name: Lint
+        working-directory: ./packages/main
         run: yarn format:check && npx eslint src/**/*.ts && npx tsc --noEmit
       - name: Test
         run: yarn test
