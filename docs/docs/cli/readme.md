@@ -1,9 +1,21 @@
 # Mailscript CLI
 ## Table of Contents
+* [Notes](#notes)
+* [Examples](#examples)
 * [Overview](#overview)
 * [Commands](#commands)
 * [Configuration](#configuration)
 * [API](API.md)
+
+
+## Notes
+See getting [key concepts](key-concepts.md) for more info about how mailscript works. When ready take a look at the [get started page](get-started.md)
+
+## Examples
+- [Example YML workflow](annotated-workflow.yml)
+- [Combined triggers and actions](combined.md)
+- [Email to google spreadsheet](https://github.com/mailscript/template-email-to-google-spreadsheet)
+- [Github action failure email to notification](https://github.com/mailscript/template-github-action-failure-to-notification)
 
 
 ## Overview
@@ -20,7 +32,7 @@ $ mailscript login
 Configure and manipulate email pipeline in Mailscript from the cli
 
 VERSION
-  mailscript/0.3.27 darwin-x64 node-v14.3.0
+  mailscript/0.4.9 win32-x64 node-v12.18.0
 
 USAGE
   $ mailscript [COMMAND]
@@ -34,11 +46,10 @@ TOPICS
   workflows  configure your workflows
 
 COMMANDS
-  daemon     Run a daemon to execute scripts on email arrival
-  help       display help for mailscript
+  daemon  Run a daemon to execute scripts on email arrival
+  help    display help for mailscript
   login
-  send       send an email from a mailscript address
-  usernames  manipulate usernames
+  send    send an email from a mailscript address
 ```
 
 ## Commands
