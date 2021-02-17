@@ -1,0 +1,208 @@
+{
+  "derived": "smith@mailscript.io",
+  "address": "smith@mailscript.io",
+  "msg": {
+    "attachments": [],
+    "headers": {},
+    "headerLines": [
+      {
+        "key": "return-path",
+        "line": {
+          "name": "",
+          "email": { "username": "<noreply", "provider": "github.com>" }
+        }
+      },
+      { "key": "x-original-to", "line": "X-Original-To: test@mailscript.io" },
+      { "key": "delivered-to", "line": "Delivered-To: test@mailscript.io" },
+      { "key": "received", "line": "smtp.github.com" },
+      { "key": "received", "line": "github.com" },
+      {
+        "key": "authentication-results",
+        "line": "Authentication-Results: mailin013.protonmail.ch; dmarc=pass (p=quarantine dis=none)\n header.from=github.com"
+      },
+      {
+        "key": "authentication-results",
+        "line": "Authentication-Results: mailin013.protonmail.ch; spf=pass smtp.mailfrom=noreply@github.com"
+      },
+      {
+        "key": "authentication-results",
+        "line": "Authentication-Results: mailin013.protonmail.ch; dkim=pass (1024-bit key)\n header.d=github.com header.i=@github.com header.b=\"MV65CTfQ\""
+      },
+      {
+        "key": "dkim-signature",
+        "line": "Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=github.com; s=pf2014;\n t=1610979250; bh=F6LsAc1j1P4h+bSUlHcac28U0VvnjB2BZtUnCbmkBXY=;\n h=Date:From:Reply-To:To:Cc:Subject:List-ID:List-Archive:List-Post:\n From; b=MV65CTfQPXsQMHLduDCExfTimg0j040cV8fnJAO2RlxnFvazInJVZPyFwuds7PtFr\n fO05fbRbkGtLrL1wO65P/v1CZV/UGRlKWvLNM2F1/ZYOa0Iao2aap87Rb29mK0vLVI\n Nq/Sau2B/UytAqWznspreH1vLyat9P2US+nBBv+k="
+      },
+      { "key": "date", "line": "Date: Mon, 18 Jan 2021 06:14:10 -0800" },
+      { "key": "from", "line": "From: Alice Smith <notifications@github.com>" },
+      {
+        "key": "reply-to",
+        "line": "Reply-To: mailscript/cli <noreply@github.com>"
+      },
+      { "key": "to", "line": "To: Alice Smith <smith@mailscript.io>" },
+      {
+        "key": "cc",
+        "line": "Cc: Ci activity <ci_activity@noreply.github.com>"
+      },
+      {
+        "key": "message-id",
+        "line": "Message-Id: <mailscript/cli/check-suites/MDEwOkNoZWNrU3VpdGUxODUwNTQ2Mzk1/1610979232/zzzz33876@github.com>"
+      },
+      {
+        "key": "subject",
+        "line": "Subject: [mailscript/cli] PR run failed: Pull requests - Feat/names triggers and actions\n (2269d56)"
+      },
+      { "key": "mime-version", "line": "Mime-Version: 1.0" },
+      {
+        "key": "content-type",
+        "line": "Content-Type: multipart/mixed;boundary=---------------------3fa59e56dd8192d6562764067a48f900"
+      },
+      {
+        "key": "content-transfer-encoding",
+        "line": "Content-Transfer-Encoding: 7bit"
+      },
+      { "key": "precedence", "line": "Precedence: list" },
+      { "key": "x-github-sender", "line": "X-Github-Sender: smith" },
+      { "key": "x-github-recipient", "line": "X-Github-Recipient: smith" },
+      { "key": "x-github-reason", "line": "X-Github-Reason: ci_activity" },
+      {
+        "key": "list-id",
+        "line": "List-Id: mailscript/cli <cli.mailscript.github.com>"
+      },
+      {
+        "key": "list-archive",
+        "line": "List-Archive: https://github.com/mailscript/cli"
+      },
+      { "key": "list-post", "line": "List-Post: <mailto:noreply@github.com>" },
+      {
+        "key": "x-auto-response-suppress",
+        "line": "X-Auto-Response-Suppress: All"
+      },
+      {
+        "key": "x-github-recipient-address",
+        "line": "X-Github-Recipient-Address: test@mailscript.io"
+      },
+      {
+        "key": "x-pm-spam",
+        "line": "X-Pm-Spam: 0yeiAIic37iBOIJChpR3Y2bi4AiOiiW5abg3iiACL3cpJI6ZC2CIIMAD1idTO2M4I\n RhNjhGJNMdjm3YzNGMiIAiLCsnVcZIS61ICIWZjJMzMjljZZZFGklV2YWNxYNjNGiWEYI0HszJCI\n SY6IsgIHzmlIXN3wi0WYiOwAAiLCv2NccUmitAiOSMgwJlInyG9cdIC6wICIjLgANWUkJF9RT9lN\n JB1U0SfVIgSDMkJUOBiByVmdWYldJlIH0HVcYRXpg42bCKysxuKVxFsIOITuuAzMjMyUIwLjsSBM\n aNX0gQWZWag4wud2pWFbbNHwltWamLl51cdFwi0bLAjgGB1U1XBBMgU1G1BUOBizk5WZXZgIF0bW\n l2hYcByTgYEUmcjVJkb3gG4XM4CwQNFIlRI9xPRUP05XTUkgGB1UiOIBxPRUvGRIZMXg09mbHI1B\n xpYmg2gcY4WgGB1UFIlJ9yY2uFxZIADuIBCMEVM11FX0B1NURU0gE9kQTWgoRNSFpCBTbNmslRWd\n CZpBBtbizXNZYdWlg4GXCMw4hUIEfUxTR9kOM9FV1Tfd9OQ0BFJVUQ1gE9kQTWgoRNSFmCBTb520\n vNGIGby9NpIHsWlbYIXgcJ3bibpBVuZGjGldYwWgg8GdmYjFdya2u3VbZxFuuATLSMEBlNS0B1ZX\n TlEEVF0XEIl1Nhc3g2UZaFGzgEGImdsFQgaWJEtRTBSvEBicySzBduaW1XRYcUmgvJnZVbuxF1IG\n vGhdcdizvRGIWbpFxubluDAIMBSENl0S1XJN5FR0NCBRZNXzldWYGIhhBhcyLERIS0UggI3bERgs\n lnc20mFbdJXluBCL3bgQVjbmzXNZYJXpclHbib2BxpYWuFxZLATuEBSM0SNlZBX1EElTI1ElhN3c\n 2ZgUFzaG0GFIIxGl0NXYGIu9B2ZSpWxYZBCENl0SGIy9RLIEpHNIZ52hyVHdVZuxAuLTESBMSl0N\n BZ1XETElVGX0lE1IcN3hgU2ZGazFEgIGsmFdaQWgJtERSTvBBEcizyBSadWu1RXYmcgUJvZnuVxb\n IVGusVmd3blBZyLWg20bZ9GtulWYGXt44wMSBE1ISxUJfdkTETTl9NVFUUxVSBSN0xWdXasBBpZS\n pmRbYF20zJ3bGItlx5cGgGEIdl2k5xWZXLlN4gZWzGlbdxFuh1GImbnFJcZXwiAbLAjgL9FVUQf1\n RNSFGF9TT50UOl0XkVMFQgSUzGVVdBCmgI3bWS25xpYW5GxZI5EhkVWbGIy9ZvIEhm1cdRHluxFZ\n EIvN9ybGpyBcbBiIM1EVGXi40gIHfQ=="
+      },
+      { "key": "x-pm-origin", "line": "X-Pm-Origin: external" },
+      {
+        "key": "x-pm-transfer-encryption",
+        "line": "X-Pm-Transfer-Encryption: TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits)"
+      },
+      {
+        "key": "x-pm-content-encryption",
+        "line": "X-Pm-Content-Encryption: on-delivery"
+      },
+      { "key": "x-pm-spamscore", "line": "X-Pm-Spamscore: 0" },
+      { "key": "x-pm-spam-action", "line": "X-Pm-Spam-Action: inbox" }
+    ],
+    "html": "\n <table style=\"box-sizing: border-box; border-spacing: 0; border-collapse: collapse; max-width: 544px; margin-right: auto; margin-left: auto; width: 100% !important; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\" width=\"100%\" align=\"center\">\n <tbody><tr style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <td style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; padding: 16px;\" valign=\"top\" align=\"center\">\n <center style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <table style=\"box-sizing: border-box; border-spacing: 0; border-collapse: collapse; margin-right: auto; margin-left: auto; max-width: 768px; width: 100% !important; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\n <tbody><tr style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <td style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; padding: 0;\" align=\"center\">\n <table style=\"box-sizing: border-box; border-spacing: 0; border-collapse: collapse; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <tbody style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <tr style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <td style=\"font-size: 16px; line-height: 16px; box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; padding: 0;\" height=\"16\">&nbsp;</td>\n </tr>\n </tbody>\n</table>\n\n <table style=\"box-sizing: border-box; border-spacing: 0; border-collapse: collapse; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"left\">\n <tbody><tr style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <td style=\"box-sizing: border-box; text-align: left !important; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; padding: 0;\" align=\"left\">\n <img style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; border: none;\" alt=\"GitHub\" src=\"https://github.githubassets.com/images/email/global/octocat-logo.png\" width=\"32\">\n <h2 style=\"box-sizing: border-box; margin-top: 8px !important; margin-bottom: 0; font-weight: 400 !important; font-size: 24px; line-height: 1.25 !important; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n [mailscript/cli] Pull requests workflow run\n\n </h2>\n </td>\n </tr>\n </tbody></table>\n <table style=\"box-sizing: border-box; border-spacing: 0; border-collapse: collapse; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <tbody style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <tr style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <td style=\"font-size: 16px; line-height: 16px; box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; padding: 0;\" height=\"16\">&nbsp;</td>\n </tr>\n </tbody>\n</table>\n\n</td>\n </tr>\n</tbody></table>\n <table style=\"box-sizing: border-box; border-spacing: 0; border-collapse: collapse; width: 100% !important; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\" width=\"100%\">\n <tbody><tr style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <td style=\"box-sizing: border-box; border-radius: 6px !important; display: block !important; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; padding: 0; border: 1px solid #e1e4e8;\">\n <table style=\"box-sizing: border-box; border-spacing: 0; border-collapse: collapse; width: 100% !important; text-align: center !important; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\" align=\"center\">\n <tbody><tr style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <td style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; padding: 0;\">\n <table style=\"box-sizing: border-box; border-spacing: 0; border-collapse: collapse; width: 100% !important; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\n <tbody><tr style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <td style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; padding: 0;\" align=\"center\">\n\n<table style=\"box-sizing: border-box; border-spacing: 0; border-collapse: collapse; border-bottom-width: 1px !important; border-bottom-color: #e1e4e8 !important; border-bottom-style: solid !important; width: 100% !important; text-align: center !important; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\" align=\"center\">\n <tbody><tr style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <td style=\"box-sizing: border-box; display: block !important; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; padding: 16px 16px 0;\">\n <table style=\"box-sizing: border-box; border-spacing: 0; border-collapse: collapse; width: 100% !important; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\n <tbody><tr style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <td style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; padding: 0;\" align=\"center\">\n\n <img style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; border: none;\" src=\"https://github.githubassets.com/images/email/icons/actions.png\" width=\"56\" height=\"56\">\n <table style=\"box-sizing: border-box; border-spacing: 0; border-collapse: collapse; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <tbody style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <tr style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <td style=\"font-size: 12px; line-height: 12px; box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; padding: 0;\" height=\"12\">&nbsp;</td>\n </tr>\n </tbody>\n</table>\n\n<h3 style=\"box-sizing: border-box; margin-top: 0; margin-bottom: 0; font-size: 20px; font-weight: 600; line-height: 1.25 !important; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">Pull requests: All jobs have failed</h3>\n<table style=\"box-sizing: border-box; border-spacing: 0; border-collapse: collapse; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <tbody style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <tr style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <td style=\"font-size: 16px; line-height: 16px; box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; padding: 0;\" height=\"16\">&nbsp;</td>\n </tr>\n </tbody>\n</table>\n\n\n\n <table style=\"box-sizing: border-box; border-spacing: 0; border-collapse: collapse; width: 100% !important; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\n <tbody><tr style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <td style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; padding: 0;\" align=\"center\">\n <table style=\"box-sizing: border-box; border-spacing: 0; border-collapse: collapse; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n <tbody><tr style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <td style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; padding: 0;\">\n <table style=\"box-sizing: border-box; border-spacing: 0; border-collapse: collapse; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n <tbody><tr style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <td style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; padding: 0;\" align=\"center\"><a style=\"background-color: #28a745 !important; box-sizing: border-box; color: #fff; text-decoration: none; position: relative; display: inline-block; font-size: inherit; font-weight: 500; line-height: 1.5; white-space: nowrap; vertical-align: middle; cursor: pointer; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; border-radius: .5em; -webkit-appearance: none; -moz-appearance: none; appearance: none; box-shadow: 0 1px 0 rgba(27,31,35,.1),inset 0 1px 0 hsla(0,0%,100%,.03); transition: background-color .2s cubic-bezier(.3,0,.5,1); font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; padding: .75em 1.5em; border: 1px solid #28a745;\" target=\"_blank\" href=\"https://github.com/mailscript/cli/actions/runs/493796329\">View workflow run</a></td>\n </tr>\n </tbody></table>\n </td>\n </tr>\n</tbody></table>\n\n</td>\n </tr>\n</tbody></table>\n <table style=\"box-sizing: border-box; border-spacing: 0; border-collapse: collapse; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <tbody style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <tr style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <td style=\"font-size: 32px; line-height: 32px; box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; padding: 0;\" height=\"32\">&nbsp;</td>\n </tr>\n </tbody>\n</table>\n\n\n</td>\n </tr>\n</tbody></table>\n </td>\n </tr>\n</tbody></table>\n\n <table style=\"box-sizing: border-box; border-spacing: 0; border-collapse: collapse; width: 100% !important; text-align: center !important; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\" align=\"center\">\n <tbody><tr style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <td style=\"box-sizing: border-box; text-align: left !important; display: block !important; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; padding: 0;\" align=\"left\">\n <table style=\"box-sizing: border-box; border-spacing: 0; border-collapse: collapse; width: 100% !important; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\n <tbody><tr style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <td style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; padding: 0;\" align=\"center\">\n\n </td><td style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; padding: 16px 0 16px 16px;\">\n <img style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; border: none;\" alt=\"lint-test\" src=\"https://github.githubassets.com/images/email/icons/x-circle-fill-red.png\" width=\"24\" height=\"24\">\n </td>\n <td style=\"width: 100%; box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; padding: 16px;\">\n <p style=\"box-sizing: border-box; margin-top: 0; margin-bottom: 0 !important; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <b style=\"font-weight: 600; box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">Pull requests</b> / lint-test\n <br style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n Failed in 36 seconds\n </p>\n </td>\n <td style=\"white-space: nowrap; box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; padding: 16px 16px 16px 0;\">\n <a style=\"background-color: initial; box-sizing: border-box; color: #0366d6; text-decoration: none; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\" href=\"https://github.com/mailscript/cli/actions/runs/493796329\">\n <img style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; border: none;\" alt=\"annotations for Pull requests / lint-test\" src=\"https://github.githubassets.com/images/email/icons/report-gray.png\" width=\"16\" height=\"16\">\n <span style=\"box-sizing: border-box; color: #6a737d !important; vertical-align: middle !important; display: table-cell !important; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\"> 2 </span>\n </a>\n </td>\n\n\n </tr>\n</tbody></table>\n </td>\n </tr>\n</tbody></table>\n\n\n\n</td>\n </tr>\n</tbody></table>\n </td>\n </tr>\n </tbody></table>\n </td>\n </tr>\n </tbody></table>\n <table style=\"box-sizing: border-box; border-spacing: 0; border-collapse: collapse; width: 100% !important; text-align: center !important; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\n <tbody><tr style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <td style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; padding: 0;\" align=\"center\">\n <table style=\"box-sizing: border-box; border-spacing: 0; border-collapse: collapse; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <tbody style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <tr style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <td style=\"font-size: 16px; line-height: 16px; box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; padding: 0;\" height=\"16\">&nbsp;</td>\n </tr>\n </tbody>\n</table>\n\n <table style=\"box-sizing: border-box; border-spacing: 0; border-collapse: collapse; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <tbody style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <tr style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <td style=\"font-size: 16px; line-height: 16px; box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; padding: 0;\" height=\"16\">&nbsp;</td>\n </tr>\n </tbody>\n</table>\n\n <p style=\"box-sizing: border-box; margin-top: 0; margin-bottom: 10px; color: #6a737d !important; font-size: 14px !important; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\"> </p><p style=\"font-size: small; -webkit-text-size-adjust: none; color: #666; box-sizing: border-box; margin-top: 0; margin-bottom: 10px; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">—<br style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">You are receiving this because this workflow ran on your branch.<br style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\"><a style=\"background-color: initial; box-sizing: border-box; color: #0366d6; text-decoration: none; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\" href=\"https://github.com/settings/notifications\">Manage your GitHub Actions notifications</a><img style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; border: none;\" alt src=\"https://github.com/notifications/beacon/AAAF3XW46624K7YA5FCXHHDS2Q63DA5CNFSM4WHLU632YY3PNVWWK3TUL52HS4DFXNBWQZLDNNJXK2LUMVCXMZLOORHG65DJMZUWGYLUNFXW5KTDN5WW2ZLOORPWSZFVGE4DKMBVGQ3DGOJVHMYTMMJQHE3TSMRTGI.gif\" width=\"1\" height=\"1\"></p>\n\n</td>\n </tr>\n</tbody></table>\n <table style=\"box-sizing: border-box; border-spacing: 0; border-collapse: collapse; width: 100% !important; text-align: center !important; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\n <tbody><tr style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <td style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; padding: 0;\" align=\"center\">\n <table style=\"box-sizing: border-box; border-spacing: 0; border-collapse: collapse; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <tbody style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <tr style=\"box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">\n <td style=\"font-size: 16px; line-height: 16px; box-sizing: border-box; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important; padding: 0;\" height=\"16\">&nbsp;</td>\n </tr>\n </tbody>\n</table>\n\n <p style=\"box-sizing: border-box; margin-top: 0; margin-bottom: 10px; color: #6a737d !important; font-size: 12px !important; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji !important;\">GitHub, Inc. ・88 Colin P Kelly Jr Street ・San Francisco, CA 94107</p>\n</td>\n </tr>\n</tbody></table>\n\n </center>\n </td>\n </tr>\n </tbody></table>\n \n <div style=\"display: none; white-space: nowrap; box-sizing: border-box; font: 15px apple-system, BlinkMacSystemFont, Segoe, UI, Helvetica, Arial, sans-serif, Apple, Color, Emoji, Segoe, UI, Emoji;\"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </div>\n \n\n",
+    "subject": "[mailscript/cli] PR run failed: Pull requests - Feat/names triggers and actions (2269d56)",
+    "date": "2021-01-18T14:14:10.000Z",
+    "to": {
+      "value": [{ "address": "smith@mailscript.io", "name": "Alice Smith" }],
+      "html": "<span class=\"mp_address_group\"><span class=\"mp_address_name\">Alice Smith</span> &lt;<a href=\"mailto:smith@mailscript.io\" class=\"mp_address_email\">smith@mailscript.io</a>&gt;</span>",
+      "text": "Alice Smith <smith@mailscript.io>"
+    },
+    "from": {
+      "value": [
+        { "address": "notifications@github.com", "name": "Alice Smith" }
+      ],
+      "html": "<span class=\"mp_address_group\"><span class=\"mp_address_name\">Alice Smith</span> &lt;<a href=\"mailto:notifications@github.com\" class=\"mp_address_email\">notifications@github.com</a>&gt;</span>",
+      "text": "Alice Smith <notifications@github.com>"
+    },
+    "cc": {
+      "value": [
+        { "address": "ci_activity@noreply.github.com", "name": "Ci activity" }
+      ],
+      "html": "<span class=\"mp_address_group\"><span class=\"mp_address_name\">Ci activity</span> &lt;<a href=\"mailto:ci_activity@noreply.github.com\" class=\"mp_address_email\">ci_activity@noreply.github.com</a>&gt;</span>",
+      "text": "Ci activity <ci_activity@noreply.github.com>"
+    },
+    "messageId": "<mailscript/cli/check-suites/MDEwOkNoZWNrU3VpdGUxODUwNTQ2Mzk1/1610979232/zzzz33876@github.com>",
+    "replyTo": {
+      "value": [{ "address": "noreply@github.com", "name": "mailscript/cli" }],
+      "html": "<span class=\"mp_address_group\"><span class=\"mp_address_name\">mailscript/cli</span> &lt;<a href=\"mailto:noreply@github.com\" class=\"mp_address_email\">noreply@github.com</a>&gt;</span>",
+      "text": "mailscript/cli <noreply@github.com>"
+    }
+  },
+  "type": "email",
+  "messageId": "mailscript/cli/check-suites/MDEwOkNoZWNrU3VpdGUxODUwNTQ2Mzk1/1610979232/zzzz33876@github.com",
+  "cc": [
+    { "address": "ci_activity@noreply.github.com", "name": "Ci activity" }
+  ],
+  "bcc": [],
+  "to": [{ "address": "smith@mailscript.io", "name": "Alice Smith" }],
+  "from": [{ "address": "notifications@github.com", "name": "Alice Smith" }],
+  "person": "notifications",
+  "domain": "github.com",
+  "isReply": false,
+  "links": {
+    "html": [
+      {
+        "type": "url",
+        "value": "https://github.githubassets.com/images/email/global/octocat-logo.png",
+        "href": "https://github.githubassets.com/images/email/global/octocat-logo.png"
+      },
+      {
+        "type": "url",
+        "value": "https://github.githubassets.com/images/email/icons/actions.png",
+        "href": "https://github.githubassets.com/images/email/icons/actions.png"
+      },
+      {
+        "type": "url",
+        "value": "https://github.com/mailscript/cli/actions/runs/493796329\">View",
+        "href": "https://github.com/mailscript/cli/actions/runs/493796329\">View"
+      },
+      {
+        "type": "url",
+        "value": "https://github.githubassets.com/images/email/icons/x-circle-fill-red.png",
+        "href": "https://github.githubassets.com/images/email/icons/x-circle-fill-red.png"
+      },
+      {
+        "type": "url",
+        "value": "https://github.com/mailscript/cli/actions/runs/493796329",
+        "href": "https://github.com/mailscript/cli/actions/runs/493796329"
+      },
+      {
+        "type": "url",
+        "value": "https://github.githubassets.com/images/email/icons/report-gray.png",
+        "href": "https://github.githubassets.com/images/email/icons/report-gray.png"
+      },
+      {
+        "type": "url",
+        "value": "https://github.com/settings/notifications\">Manage",
+        "href": "https://github.com/settings/notifications\">Manage"
+      },
+      {
+        "type": "url",
+        "value": "https://github.com/notifications/beacon/AAAF3XW46624K7YA5FCXHHDS2Q63DA5CNFSM4WHLU632YY3PNVWWK3TUL52HS4DFXNBWQZLDNNJXK2LUMVCXMZLOORHG65DJMZUWGYLUNFXW5KTDN5WW2ZLOORPWSZFVGE4DKMBVGQ3DGOJVHMYTMMJQHE3TSMRTGI.gif",
+        "href": "https://github.com/notifications/beacon/AAAF3XW46624K7YA5FCXHHDS2Q63DA5CNFSM4WHLU632YY3PNVWWK3TUL52HS4DFXNBWQZLDNNJXK2LUMVCXMZLOORHG65DJMZUWGYLUNFXW5KTDN5WW2ZLOORPWSZFVGE4DKMBVGQ3DGOJVHMYTMMJQHE3TSMRTGI.gif"
+      }
+    ],
+    "text": []
+  },
+  "emailAddresses": { "html": [], "text": [] },
+  "sentByMachine": true,
+  "charCount": { "html": 1760, "text": 0 },
+  "attachmentsSize": 0,
+  "timeOfDay": "afternoon",
+  "format": "html",
+  "hasUnsubscribeLink": false,
+  "unsubscribeLinks": [],
+  "threadId": "mailscript/cli/check-suites/MDEwOkNoZWNrU3VpdGUxODUwNTQ2Mzk1/1610979232/zzzz33876@github.com",
+  "metadata": {
+    "github": {
+      "pr": {
+        "organization": "mailscript",
+        "repository": "cli",
+        "buildFailed": true,
+        "commit": "2269d56",
+        "name": "Feat/names triggers and actions"
+      }
+    }
+  },
+  "firstTimeSender": true,
+  "threadCount": 1,
+  "timeSinceLastMessage": null
+}

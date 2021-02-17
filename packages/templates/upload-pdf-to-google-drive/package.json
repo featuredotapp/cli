@@ -1,0 +1,25 @@
+{
+  "name": "template-upload-pdf-to-google-drive",
+  "version": "1.0.0",
+  "description": "You can use this template to setup a workflow that listens in to incoming email messages and when it gets a hit it will add all PDF attachments to a Google Drive folder",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mailscript/template-upload-pdf-to-google-drive.git"
+  },
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/mailscript/template-upload-pdf-to-google-drive/issues"
+  },
+  "homepage": "https://github.com/mailscript/template-upload-pdf-to-google-drive#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "flat": "^5.0.2",
+    "google-spreadsheet": "^3.1.15",
+    "googleapis": "^67.0.0"
+  }
+}

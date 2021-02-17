@@ -1,0 +1,31 @@
+version: "0.2"
+addresses:
+  local@mailscript.com:
+    keys:
+      - name: owner
+        read: true
+        write: true
+accessories:
+  - name: local@mailscript.com
+    type: mailscript-email
+    address: local@mailscript.com
+    key: owner
+workflows:
+  - name: save-pdf-to-google-drive
+    action: save-pdf-to-google-drive
+actions:
+  - name: save-pdf-to-google-drive
+    type: webhook
+    config:
+      body: |
+        {
+          "row": "{{all}}",
+          "pdfPath": "path-to-save-pdfs-in-for-google-drive",
+          "credsClientEmail": "service-account-email-address-in-base64",
+          "credsPrivateKey": "service-account-private-key-in-base64"
+        }
+      url: "https://write-to-csv-endpoint.url"
+      opts:
+        headers:
+          Content-Type: application/json
+        method: POST

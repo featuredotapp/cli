@@ -1,0 +1,1 @@
+{ "content": "A new email: {{msg.subject}}" }

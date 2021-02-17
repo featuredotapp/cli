@@ -1,0 +1,32 @@
+version: '0.2'
+addresses:
+  github@$username.mailscript.com:
+    keys:
+      - name: owner
+        read: true
+        write: true
+triggers:
+  - name: github-action-failed
+    composition:
+      - criteria:
+          github.pr.buildFailed: true
+actions:
+  - name: mylaptop
+    type: daemon
+    config:
+      daemon: mylaptop
+  - name: forward-to-personal-email
+    type: mailscript-email
+    config:
+      key: owner
+      from: github@$username.mailscript.com
+      forward: $account-email-address
+      type: forward
+workflows:
+  - name: forward-github-to-personal
+    input: github@$username.mailscript.com
+    action: forward-to-personal-email
+  - name: github-action-failures-to-daemon
+    input: github@$username.mailscript.com
+    trigger: github-action-failed-trigger
+    action: mylaptop

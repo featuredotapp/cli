@@ -1,0 +1,49 @@
+version: "0.2"
+addresses:
+  combined-example@$username.mailscript.com:
+    keys:
+      - name: owner
+        read: true
+        write: true
+triggers:
+  - name: alert
+    composition:
+      - criteria:
+          subjectContains: alert
+  - name: error
+    composition:
+      - criteria:
+          subjectContains: error
+  - name: alert-or-error
+    composition:
+      - or:
+          - alert
+          - error
+actions:
+  - name: discord-team
+    type: webhook
+    config:
+      body: '{"content": "A new email for the team: {{msg.subject}}"}'
+      url: "https://discord.com/api/webhooks/..."
+      opts:
+        headers:
+          Content-Type: application/json
+        method: POST
+  - name: discord-engineering
+    type: webhook
+    config:
+      body: '{"content": "A new email for engineering: {{msg.subject}}"}'
+      url: "https://discord.com/api/webhooks/..."
+      opts:
+        headers:
+          Content-Type: application/json
+        method: POST
+  - name: discord-team-and-engineering
+    list:
+      - discord-team
+      - discord-engineering
+workflows:
+  - name: alerts-and-errors-to-team-and-engineering
+    input: combined-example@$username.mailscript.com
+    trigger: alert-or-error
+    action: discord-team-and-engineering

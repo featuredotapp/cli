@@ -8,7 +8,15 @@ This sections provides a list of public templates anyone can import and utilize 
 
 
 ## Available Templates
-- Empty! Add templates here!
+- [Attachments to webhook](attachments-to-webhook/README.md)
+- [Auto reply to first time sender](auto-reply-first-time-sender/README.md)
+- [Email to google spreadsheet](email-to-google-spreadsheet/README.md)
+- [Github action failure to notification](github-action-failure-to-notification/README.md)
+- [Run failed to discord](run-failed-to-discord/README.md)
+- [Shared address for team](shared-address-for-team/README.md)
+- [Trigger and action combination](trigger-and-action-combination/README.md)
+- [two alerts to SMS](two-alerts-to-sms/README.md)
+- [Upload pdf to google drive](upload-pdf-to-google-drive/README.md)
 
 ## Create Your Own
 

@@ -1,0 +1,35 @@
+version: "0.2"
+addresses:
+  address@mailscript.com:
+    keys:
+      - name: owner
+        read: true
+        write: true
+accessories:
+  - name: address@mailscript.com
+    type: mailscript-email
+    address: address@mailscript.com
+    key: owner
+workflows:
+  - name: attachments
+    trigger: attachments-trigger
+    action: attachments-webhook-action
+triggers:
+  - name: attachments-trigger
+    accessory: address@mailscript.com
+    config:
+      criterias:
+        - hasAttachments: true
+actions:
+  - name: attachments-webhook-action
+    config:
+      type: webhook
+      body: |
+        {
+          "attachments": "{{msg.attachments}}"
+        }
+      url: "https://endpoint.url"
+      opts:
+        headers:
+          Content-Type: application/json
+        method: POST
