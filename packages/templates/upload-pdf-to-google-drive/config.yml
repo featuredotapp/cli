@@ -1,17 +1,13 @@
 version: "0.2"
 addresses:
-  local@mailscript.com:
+  $username@mailscript.com:
     keys:
       - name: owner
         read: true
         write: true
-accessories:
-  - name: local@mailscript.com
-    type: mailscript-email
-    address: local@mailscript.com
-    key: owner
 workflows:
   - name: save-pdf-to-google-drive
+    input: $username@mailscript.com
     action: save-pdf-to-google-drive
 actions:
   - name: save-pdf-to-google-drive
@@ -19,10 +15,10 @@ actions:
     config:
       body: |
         {
-          "row": "{{all}}",
-          "pdfPath": "path-to-save-pdfs-in-for-google-drive",
-          "credsClientEmail": "service-account-email-address-in-base64",
-          "credsPrivateKey": "service-account-private-key-in-base64"
+          "attachments": "{{msg.attachments}}",
+          "driveStoragePath": "path-to-save-pdfs-in-for-google-drive",
+          "credsClientId": "service-account-id",
+          "credsPrivateKey": "service-account-private-key"
         }
       url: "https://write-to-csv-endpoint.url"
       opts:
