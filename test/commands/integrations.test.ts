@@ -50,4 +50,25 @@ describe('Integrations', () => {
         expect(ctx.stdout).to.contain('google')
       })
   })
+
+  describe('delete', () => {
+    test
+      .stdout()
+      .nock(MailscriptApiServer, (api) => {
+        return api.delete('/integrations/inter-01-xxx-yyy-zzz').reply(204)
+      })
+      .command(['integrations:delete', '--integration', 'inter-01-xxx-yyy-zzz'])
+      .it('deletes address on the server', (ctx) => {
+        expect(ctx.stdout).to.contain(
+          'Integration deleted: inter-01-xxx-yyy-zzz',
+        )
+      })
+
+    test
+      .stderr()
+      .stdout()
+      .command(['integrations:delete'])
+      .exit(2)
+      .it('errors if no integration provided')
+  })
 })

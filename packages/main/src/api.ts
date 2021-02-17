@@ -1108,3 +1108,31 @@ export function getAllIntegrations(opts?: Oazapfts.RequestOpts) {
     ...opts,
   })
 }
+/**
+ * Delete an integration
+ */
+export function deleteIntegration(
+  integration: string,
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 204
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 404
+        data: ErrorResponse
+      }
+  >(`/integrations/${integration}`, {
+    ...opts,
+    method: 'DELETE',
+  })
+}
