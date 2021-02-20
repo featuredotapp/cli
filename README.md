@@ -25,7 +25,7 @@
 </div>
 
 <p align="center">
-  <a href="https://vimeo.com/489472356">
+  <a href="https://vimeo.com/514763976">
     <img src="docs/media/ms_1.png">
   </a>
 <p>
