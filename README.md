@@ -26,20 +26,21 @@
 
 <p align="center">
   <a href="https://vimeo.com/514763976">
-    <img src="docs/media/ms_1.png">
+    <img src="docs/media/vimeo_video_min.png">
   </a>
 <p>
 
 # Table of Contents 📚
 <!-- toc -->
-* [Table of Contents 📚](#tables-of-contents-)
-* [Features](#features)
-* [Getting started 🚀](#getting-started-)
-* [Use Cases](#use-cases)
-* [Usage 👩‍💻](#usage-)
-* [Commands ⌨](#commands-)
-* [Development 💬](#development-)
-* [License ⚖](#license-)
+- [Table of Contents 📚](#table-of-contents-)
+- [Features](#features)
+  - [Use Cases](#use-cases)
+  - [Getting Started 🚀](#getting-started-)
+  - [Usage 👩‍💻](#usage-)
+    - [Install through npm](#install-through-npm)
+- [Commands ⌨](#commands-)
+- [Development 💬](#development-)
+- [License ⚖](#license-)
 
 # Features
 * Low code automations for your emails
