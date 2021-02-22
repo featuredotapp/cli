@@ -1,0 +1,41 @@
+version: "0.2"
+addresses:
+  team@$username.mailscript.com:
+    keys:
+      - name: Shared write key
+        read: false
+        write: true
+      - name: owner
+        read: true
+        write: true
+actions:
+  - name: forward-to-alice
+    type: mailscript-email
+    config:
+      type: forward
+      forward: alice@example.com
+      from: team@$username.mailscript.com
+      key: owner
+  - name: forward-to-jane
+    type: mailscript-email
+    config:
+      type: forward
+      forward: jane@example.com
+      from: team@$username.mailscript.com
+      key: owner
+  - name: forward-to-brigit
+    type: mailscript-email
+    config:
+      type: forward
+      forward: brigit@example.com
+      from: team@$username.mailscript.com
+      key: owner
+  - name: forward-to-team
+    list:
+      - forward-to-alice
+      - forward-to-jane
+      - forward-to-brigit
+workflows:
+  - name: redirect to team
+    input: team@$username.mailscript.com
+    action: forward-to-team
