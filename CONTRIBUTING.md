@@ -13,18 +13,19 @@ helping us improve our community.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Security Issues](#security-issues)
-- [Community Guidelines](#community-guidelines)
-  - [Moderation](#moderation)
-- [Reporting Issues](#reporting-issues)
-- [Implementation Design](#implementation-design)
-- [Community Improvement](#community-improvement)
-- [A small note on licensing year](#a-small-note-on-licensing-year)
-- [Translations](#translations)
-- [Creating custom templates](#creating-custom-templates)
-- [Submitting a PR](#submitting-a-pr)
-- [Helping in other ways](#helping-in-other-ways)
-- [Becoming a maintainer](#becoming-a-maintainer)
+- [Contributing](#contributing)
+    - [Table of Contents](#table-of-contents)
+    - [Security Issues](#security-issues)
+    - [Community Guidelines](#community-guidelines)
+      - [Moderation](#moderation)
+    - [Reporting Issues](#reporting-issues)
+    - [Implementation Design](#implementation-design)
+    - [Community Improvement](#community-improvement)
+    - [A small note on licensing year](#a-small-note-on-licensing-year)
+    - [Translations](#translations)
+      - [Linting](#linting)
+    - [Creating Custom Templates](#creating-custom-templates)
+    - [Submitting a PR](#submitting-a-pr)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -92,62 +93,36 @@ If anyone has any issues understanding the English documentation, please let us 
 
 When contributing code, please "lint first and ask questions later." We use https://standardjs.com to lint our code.
 
-1. Install [`standard`](https://standardjs.com/):
+1. Install [`prettier`](https://prettier.io/):
 
 ```sh
-$ npm i -D standard # npm install --save-dev standard
+$ npm i -D prettier # npm install --save-dev prettier
 ```
 
-2. Add the `lint` script to `package.json`.
+1. Add the `lint` configurations as a file under root `.prettierrc`.
 
 ```json
 {
-  "scripts": {
-    "lint": "standard --env=mocha"
-  }
+  "semi": false,
+  "trailingComma": "all",
+  "singleQuote": true,
+  "printWidth": 80,
+  "tabWidth": 2
 }
 ```
 
-3. Run `standard --fix` to fix current issues.
+3. Run `prettier --write` to fix current issues.
 
 ```sh
-$ npx standard --fix
+$ npx prettier --write "./src/**/*.{ts,tsx,js,jsx}"
 ```
 
 4. Run the linter.
 
 ```
-$ npm run lint
+$ npx prettier --check "./src/**/*.{ts,tsx,js,jsx}"
 ```
 
-
-***Note:*** If you'd rather have the environment set permanently (for instance, so that your editor can notice it), add this to the `package.json`:
-
- ```json
-{
-  "standard": {
-    "env": [
-      "mocha"
-    ]
-  }
-}
-```
-
-You can also exclude files:
-
-```json
-{
- "standard": {
-   "ignore": "lib/es5/**/*.js"
- }
-}
-```
-
-For extra credit, install [`jq`](https://stedolan.github.io/jq/) and `sponge` from GNU's `moreutils` and do it in one line:
-
-```sh
-$ jq '.scripts.lint="standard --env=mocha"' package.json | sponge package.json
-```
 ### Creating Custom Templates
 
 We accept community contributions such as workflow templates. 
