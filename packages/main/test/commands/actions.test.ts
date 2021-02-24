@@ -80,6 +80,47 @@ describe('Actions', () => {
       postBody = {}
     })
 
+    describe('gdrive', () => {
+      test
+        .stdout()
+        .nock(MailscriptApiServer, nockAddAction)
+        .command([
+          'actions:add',
+          '--name',
+          'gdrive-01',
+          '--gdrive',
+          'path',
+        ])
+        .it('succeeds on valid gdrive', (ctx) => {
+          expect(ctx.stdout).to.contain('Action setup: gdrive-01')
+
+          const method = 'POST'
+
+          const body = JSON.stringify({
+            attachments: "{{msg.attachments}}",
+            driveStoragePath: 'path',
+            googleDriveAuth: "{{integrations.google}}",
+          })
+
+          const headers = {
+            'Content-Type': 'application/json',
+          }
+
+          expect(postBody).to.eql({
+            name: 'gdrive-01',
+            type: 'webhook',
+            config: {
+              url: 'gdrive.url',
+              opts: {
+                headers,
+                method,
+              },
+              body,
+            },
+          })
+        })
+    })
+
     describe('sms', () => {
       test
         .stdout()
