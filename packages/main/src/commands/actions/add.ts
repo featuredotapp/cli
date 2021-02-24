@@ -88,8 +88,7 @@ export default class ActionsAdd extends Command {
       description: 'url of the webhook to call',
     }),
     gdrive: flags.string({
-      description: 'path to save pdf attachments to in ' +
-        'Google Drive',
+      description: 'path to save pdf attachments to in ' + 'Google Drive',
     }),
     method: flags.enum({
       options: ['PUT', 'POST', 'GET'],
@@ -172,9 +171,9 @@ export default class ActionsAdd extends Command {
       const method = 'POST'
 
       const body = JSON.stringify({
-        attachments: "{{msg.attachments}}",
+        attachments: '{{msg.attachments}}',
         driveStoragePath: path,
-        googleDriveAuth: "{{integrations.google}}",
+        googleDriveAuth: '{{integrations.google}}',
       })
 
       const headers = {
