@@ -5,36 +5,31 @@ You can use this template to setup a workflow that listens in to incoming messag
 ## Workflow
 
 ```yml
-version: "0.1"
+version: "0.2"
 addresses:
-  address@mailscript.com:
+  $username@mailscript.com:
     keys:
       - name: owner
         read: true
         write: true
-accessories:
-  - name: sms to me
+actions:
+  - name: sms-to-me
     type: sms
-    sms: "+123456789"
-  - name: address@mailscript.com
-    type: mailscript-email
-    address: address@mailscript.com
-    key: owner
-workflows:
-  - name: Alerts to sms
-    trigger:
-      accessory: address@mailscript.com
-      config:
-        times:
+    config:
+      number: "+1234567890"
+      text: Two alerts arrived within 60 seconds
+triggers:
+  - name: alert-trigger
+    composition:
+      - times:
           thisManySeconds: 60
           thisManyTimes: 2
-        criterias:
-          - subjectContains: alert
-    actions:
-      - accessory: sms to me
-        config:
-          type: sms
-          text: Two alerts arrived within 60 seconds
+        criteria:
+          subjectContains: alert
+workflows:
+  - name: Alerts to sms
+    trigger: alert-trigger
+    action: sms-to-me
 ```
 
 ## Manual setup
