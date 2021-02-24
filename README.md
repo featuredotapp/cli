@@ -31,7 +31,6 @@
 <p>
 
 # Table of Contents 📚
-<!-- toc -->
 - [Table of Contents 📚](#table-of-contents-)
 - [Features](#features)
   - [Use Cases](#use-cases)
@@ -60,9 +59,7 @@
 * Read our [documentation](https://docs.mailscript.com/)
 * Take a look at the [HTTP API documentation](https://api.mailscript.com/)
 
-<!-- tocstop -->
 ## Usage 👩‍💻
-<!-- usage -->
 ### Install through npm
 In order to use the Mailscript CLI, you must first install it with the global flag. Run the following:
 ```sh-session
@@ -90,11 +87,8 @@ $ mailscript login
 You should see a browser window open prompting you to login to your Mailscript account. 
 The daemon will handle the rest upon completion
 ```
-<!-- usagestop -->
 # Commands ⌨
 Ready to dive into Mailscript? [Read the command line documentation](https://github.com/mailscript/cli/tree/main/docs)
-<!-- commands -->
-<!-- commandsstop -->
 
 # Development 💬
 
