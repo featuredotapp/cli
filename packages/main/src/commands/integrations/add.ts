@@ -32,7 +32,7 @@ export default class IntegrationsAdd extends Command {
   async add(flags: FlagsType): Promise<void> {
     if (!flags.gdrive && !flags.zoom) {
       this.log(
-        'Please provide an integrations to be setup, one of:\n  --gdrive\n  --zoom',
+        'Please provide an integrations to be setup, one of:\n  --gdrive',
       )
 
       this.exit(1)
