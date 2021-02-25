@@ -293,6 +293,14 @@ export type AddActionAliasRequest = {
 export type AddActionResponse = {
   id: string
 }
+export type Integration = {
+  id: string
+  type: 'google'
+  createdAt: string
+}
+export type GetAllIntegrationsResponse = {
+  list: Integration[]
+}
 /**
  * Get the authenticated user
  */
@@ -1081,5 +1089,50 @@ export function getDaemonToken(daemon: string, opts?: Oazapfts.RequestOpts) {
       }
   >(`/daemons/${daemon}/token`, {
     ...opts,
+  })
+}
+/**
+ * Get all integrations for the user
+ */
+export function getAllIntegrations(opts?: Oazapfts.RequestOpts) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+        data: GetAllIntegrationsResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+  >('/integrations', {
+    ...opts,
+  })
+}
+/**
+ * Delete an integration
+ */
+export function deleteIntegration(
+  integration: string,
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 204
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 404
+        data: ErrorResponse
+      }
+  >(`/integrations/${integration}`, {
+    ...opts,
+    method: 'DELETE',
   })
 }

@@ -7,7 +7,7 @@ info:
 servers:
   - url: https://api.mailscript.com/v2
     description: API server
-  # - url: http://localhost:7000/v1
+  # - url: http://localhost:7000/v2
   #   description: Local development server
 paths:
   /user:
@@ -980,6 +980,59 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /integrations:
+    get:
+      tags:
+        - integrations
+      summary: 'Get all integrations for the user'
+      operationId: 'getAllIntegrations'
+      responses:
+        '200':
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllIntegrationsResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /integrations/{integration}:
+    delete:
+      tags:
+        - 'integrations'
+      summary: 'Delete an integration'
+      operationId: 'deleteIntegration'
+      parameters:
+        - name: integration
+          in: path
+          description: ID of the integration
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: 'Successful delete operation'
+        '400':
+          description: 'Failure'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 'Key not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
     User:
@@ -1699,6 +1752,29 @@ components:
           type: array
           items:
             type: string
+    GetAllIntegrationsResponse:
+      required:
+        - list
+      properties:
+        list:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/Integration'
+    Integration:
+      required:
+        - id
+        - type
+        - createdAt
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: ['google']
+        createdAt:
+          type: string
+          format: date-time
   securitySchemes:
     bearerAuth:
       type: http
