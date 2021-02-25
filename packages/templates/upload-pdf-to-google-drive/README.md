@@ -32,7 +32,7 @@ actions:
           "driveStoragePath": "path/to/save/pdfs/in/for/google/drive",
           "googleDriveAuth": "{{integrations.google}}"
         }
-      url: "http://localhost:5001/mailscript-firebase/us-central1/googleDrivePdfUploader"
+      url: "https://us-central1-mailscript-firebase.cloudfunctions.net/googleDrivePdfUploader"
       opts:
         headers:
           Content-Type: application/json
