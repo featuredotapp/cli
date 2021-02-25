@@ -5,39 +5,38 @@ You can use this template to setup a workflow that listens in to incoming email 
 ## Workflow
 
 ```yml
-version: '0.1'
+version: "0.2"
 addresses:
-  local@mailscript.com:
+  $username@mailscript.io:
     keys:
       - name: owner
         read: true
         write: true
-accessories:
-  - name: local@mailscript.com
-    type: mailscript-email
-    address: local@mailscript.com
-    key: owner
 workflows:
-  - name: data to spreadsheet
-    trigger:
-      accessory: local@mailscript.com
-      config:
-        criterias: []
-    actions:
-      - config:
-          type: webhook
-          body: |
-            {
-              "row": "{{all}}",
-              "docId": "spreadsheet-id-in-base64",
-              "credsClientEmail": "service-account-email-address-in-base64",
-              "credsPrivateKey": "service-account-private-key-in-base64"
-            }
-          url: 'https://write-to-csv-endpoint.url'
-          opts:
-            headers:
-              Content-Type: application/json
-            method: POST
+  - name: save-pdf-to-google-drive
+    input: $username@mailscript.io
+    trigger: attachments-trigger
+    action: save-pdf-to-google-drive
+triggers:
+  - name: attachments-trigger
+    composition:
+      - criteria:
+          hasAttachments: true
+actions:
+  - name: save-pdf-to-google-drive
+    type: webhook
+    config:
+      body: |
+        {
+          "attachments": "{{msg.attachments}}",
+          "driveStoragePath": "path/to/save/pdfs/in/for/google/drive",
+          "googleDriveAuth": "{{integrations.google}}"
+        }
+      url: "https://us-central1-mailscript-firebase.cloudfunctions.net/googleDrivePdfUploader"
+      opts:
+        headers:
+          Content-Type: application/json
+        method: POST
 ```
 
 ## Manual setup

@@ -5,30 +5,31 @@ You can use this template to setup a workflow that listens in to incoming email 
 ## Workflow
 
 ```yml
-version: "0.1"
+version: "0.2"
 addresses:
-  address@mailscript.com:
+  $username@mailscript.com:
     keys:
       - name: owner
         read: true
         write: true
-accessories:
-  - name: address@mailscript.com
-    type: mailscript-email
-    address: address@mailscript.com
-    key: owner
 workflows:
   - name: auto reply to first time sender
-    trigger:
-      accessory: address@mailscript.com
-      config:
-        criterias:
-          - firstTimeSender: true
-    actions:
-      - accessory: address@mailscript.com
-        config:
-          type: reply
-          text: I will get back to you as soon as possible
+    input: $username@mailscript.com
+    trigger: first-time-trigger
+    action: first-time-reply
+triggers:
+  - name: first-time-trigger
+    composition:
+      - criteria:
+          firstTimeSender: true
+actions:
+  - name: first-time-reply
+    type: mailscript-email
+    config:
+      from: $username@mailscript.com
+      key: owner
+      type: reply
+      text: I will get back to you as soon as possible
 ```
 
 ## Manual setup

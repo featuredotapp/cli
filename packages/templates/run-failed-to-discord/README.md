@@ -5,38 +5,37 @@ You can use this template to setup a workflow that listens in to incoming messag
 ## Workflow
 
 ```yml
-version: "0.1"
+version: "0.2"
 addresses:
-  address@mailscript.com:
+  $username@mailscript.com:
     keys:
       - name: owner
         read: true
         write: true
-accessories:
-  - name: address@mailscript.com
-    type: mailscript-email
-    address: address@mailscript.com
-    key: owner
 workflows:
   - name: Build failed to discord#channel
-    trigger:
-      accessory: address@mailscript.com
-      config:
-        criterias:
-          - from: notifications@github.com
-            subjectContains: run failed
-    actions:
-      - config:
-          type: webhook
-          body: |
-            {
-              "content": "Build failed: {{msg.subject}}"
-            }
-          url: "https://discord.webhook"
-          opts:
-            headers:
-              Content-Type: application/json
-            method: POST
+    input: $username@mailscript.com
+    trigger: github-build-failed
+    action: github-build-failed-discord-action
+triggers:
+  - name: github-build-failed
+    composition:
+      - criteria:
+          from: notifications@github.com
+          subjectContains: run failed
+actions:
+  - name: github-build-failed-discord-action
+    type: webhook
+    config:
+      body: |
+        {
+          "content": "Build failed: {{msg.subject}}"
+        }
+      url: "https://discord.webhook"
+      opts:
+        headers:
+          Content-Type: application/json
+        method: POST
 ```
 
 ## Manual setup

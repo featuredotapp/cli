@@ -1,14 +1,20 @@
 version: "0.2"
 addresses:
-  $username@mailscript.com:
+  $username@mailscript.io:
     keys:
       - name: owner
         read: true
         write: true
 workflows:
   - name: save-pdf-to-google-drive
-    input: $username@mailscript.com
+    input: $username@mailscript.io
+    trigger: attachments-trigger
     action: save-pdf-to-google-drive
+triggers:
+  - name: attachments-trigger
+    composition:
+      - criteria:
+          hasAttachments: true
 actions:
   - name: save-pdf-to-google-drive
     type: webhook
@@ -16,11 +22,10 @@ actions:
       body: |
         {
           "attachments": "{{msg.attachments}}",
-          "driveStoragePath": "path-to-save-pdfs-in-for-google-drive",
-          "credsClientId": "service-account-id",
-          "credsPrivateKey": "service-account-private-key"
+          "driveStoragePath": "path/to/save/pdfs/in/for/google/drive",
+          "googleDriveAuth": "{{integrations.google}}"
         }
-      url: "https://write-to-csv-endpoint.url"
+      url: "https://us-central1-mailscript-firebase.cloudfunctions.net/googleDrivePdfUploader"
       opts:
         headers:
           Content-Type: application/json
