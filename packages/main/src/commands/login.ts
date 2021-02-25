@@ -278,7 +278,7 @@ Link or create your MailScript account
 
       await handle(
         client.addWorkflow({
-          name: 'redirect',
+          name: 'redirect to ' + targetEmail,
           input: input.id,
           action: aliasActionId,
         }),
