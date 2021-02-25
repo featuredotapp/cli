@@ -87,7 +87,9 @@ Workflows allow you to setup automations when a message arrives at any of the ad
 
 ### Triggers
 
-Currently mailscript allows you to set up triggers based on incoming messages to addresses you control. You can set criteria to filter specific messages to rigger actions (eg. messages sent from a specific address, messages that include attachments, that contain specific words in the subject or body, messages that contain attachments, mailscript even allows you to set up filters matching specific headers in your email message!)
+Currently mailscript allows you to set up triggers based on incoming messages to addresses you control. You can set criteria to filter specific messages to trigger actions (eg. messages sent from a specific address, messages that include attachments, that contain specific words in the subject or body, messages that contain attachments, mailscript even allows you to set up filters matching specific headers in your email message).
+
+Triggers can be composed together to form new named triggers. You can find details and examples in the [combined section](/cli/combined).
 
 ### Actions
 
@@ -96,6 +98,8 @@ Mailscript offers outputs based on three different kinds of actions that can hap
 - Email actions: send a new email message, forward the received email message, redirect the message to another address and reply to the sender or all participants in the received message.
 - SMS action: send an sms text to a specified number.
 - Webhook action: send a request to an endpoint. The request can be customized to suit your needs (eg. customize verbs, headers and payload; you can even use data from the received message into the delivered payload).
+
+Actions can be combined together to create a new named action. You can find details and examples in the [combined section](/cli/combined).
 
 ## Daemon
 
