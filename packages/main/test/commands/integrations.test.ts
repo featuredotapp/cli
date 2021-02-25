@@ -9,17 +9,7 @@ describe('Integrations', () => {
       .exit(1)
       .it('errors on no integrations specified', (ctx) => {
         expect(ctx.stdout).to.contain(
-          'Please provide an integrations to be setup, one of:\n  --gdrive\n  --zoom\n',
-        )
-      })
-
-    test
-      .stdout()
-      .command(['integrations:add', '--gdrive', '--zoom'])
-      .exit(1)
-      .it('errors if more than one integration is specified', (ctx) => {
-        expect(ctx.stdout).to.contain(
-          'Only one integration type can be added at a time',
+          'Please provide an integrations to be setup, one of:\n  --gdrive\n',
         )
       })
   })

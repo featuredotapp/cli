@@ -7,7 +7,6 @@ const {
 
 type FlagsType = {
   gdrive?: boolean
-  zoom?: boolean
 
   [key: string]: any
 }
@@ -19,9 +18,6 @@ export default class IntegrationsAdd extends Command {
     help: flags.help({ char: 'h' }),
     gdrive: flags.boolean({
       description: 'add google drive integration',
-    }),
-    zoom: flags.boolean({
-      description: 'add zoom integration',
     }),
   }
 
@@ -42,12 +38,6 @@ export default class IntegrationsAdd extends Command {
       this.exit(1)
     }
 
-    if (flags.gdrive && flags.zoom) {
-      this.log('Only one integration type can be added at a time')
-
-      this.exit(1)
-    }
-
     const integrationType = this._resolveIntegrationType(flags)
 
     cli.open(`${remoteLoginUrl}/integrations?force=${integrationType}`)
@@ -56,10 +46,6 @@ export default class IntegrationsAdd extends Command {
   private _resolveIntegrationType(flags: FlagsType) {
     if (flags.gdrive) {
       return 'google'
-    }
-
-    if (flags.zoom) {
-      return 'zoom'
     }
 
     throw new Error('Unknown integration type')
