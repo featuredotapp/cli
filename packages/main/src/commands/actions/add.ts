@@ -9,7 +9,7 @@ import { askVerifyEmailFlow } from '../../utils/askVerifyEmailFlow'
 import { askVerifySmsFlow } from '../../utils/askVerifySmsFlow'
 import withStandardErrors from '../../utils/errorHandling'
 
-const GDRIVE_PDF_UPLOADER_URL = 'gdrive.url' // FIXME what's the url??
+const GDRIVE_PDF_UPLOADER_URL = 'https://us-central1-mailscript-firebase.cloudfunctions.net/googleDrivePdfUploader'
 
 type FlagsType = {
   name: string

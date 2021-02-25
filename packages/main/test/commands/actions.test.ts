@@ -110,7 +110,7 @@ describe('Actions', () => {
             name: 'gdrive-01',
             type: 'webhook',
             config: {
-              url: 'gdrive.url',
+              url: 'https://us-central1-mailscript-firebase.cloudfunctions.net/googleDrivePdfUploader',
               opts: {
                 headers,
                 method,
