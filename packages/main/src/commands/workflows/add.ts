@@ -96,7 +96,7 @@ export default class WorkflowsAdd extends Command {
 
     if (response.status !== 200) {
       this.debug(response.data.error)
-      this.log(`${chalk.bold('Error')}: could not access api for input lookup`)
+      this.log(`${chalk.bold('Error')}: ${response.data.error}`)
       this.exit(1)
     }
 
