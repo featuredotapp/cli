@@ -87,7 +87,7 @@ Workflows allow you to setup automations when a message arrives at any of the ad
 
 ### Triggers
 
-Currently mailscript allows you to set up triggers based on incoming messages to addresses you control. You can set criteria to filter specific messages to trigger actions (eg. messages sent from a specific address, messages that include attachments, that contain specific words in the subject or body, messages that contain attachments, mailscript even allows you to set up filters matching specific headers in your email message).
+Currently mailscript allows you to set up triggers based on incoming messages to addresses you control. You can set criteria to filter specific messages to trigger actions (e.g. messages sent from a specific address, messages that include attachments, that contain specific words in the subject or body, messages that contain attachments, mailscript even allows you to set up filters matching specific headers in your email message).
 
 Triggers can be composed together to form new named triggers, allowing for the combination of criteria. See the [Composing Triggers](#composing-triggers) section for details.
 
@@ -102,7 +102,7 @@ A trigger encapsulates criteria that can be used to test an incoming email. A tr
 * `--subjectcontains`: the email subject contains the text specified
 * `--hasattachments`: the email has one or more attachments
 
-To setup a trigger at the command line, provide a name and one or more criteria test (replacing `<username>`):
+To setup a trigger at the command line, provide a name and one or more criteria tests (replacing `<username>`):
 
 ```shell
 mailscript triggers:add \
@@ -136,7 +136,7 @@ mailscript triggers:add \
   --subjectcontains error
 ```
 
-We can create a new trigger that combines both with:
+We can create a new trigger that would pass if the subject contains either 'alert' or 'error' with the command:
 
 ```shell
 mailscript triggers:add \
@@ -145,7 +145,7 @@ mailscript triggers:add \
   --or error
 ```
 
-In the example above `or` logic is used. If `and` logic was required (an email with a subject that contains `alert` AND `error` e.g. `alert: error in process`), the trigger composition would be:
+If `and` logic was required (an email with a subject that contains `alert` AND `error` e.g. `alert: error in process`), the trigger composition would be:
 
 ```
 mailscript triggers:add \
@@ -160,7 +160,7 @@ Mailscript offers automation outputs based on three different kinds of actions t
 
 - **Email actions**: send a new email message, forward the received email message, redirect the message to another address and reply to the sender or all participants in the received message.
 - **SMS action**: send an sms text to a specified number.
-- **Webhook action**: send a request to an endpoint. The request can be customized to suit your needs (eg. customize verbs, headers and payload; you can even use data from the received message into the delivered payload).
+- **Webhook action**: send a request to an http endpoint. The request can be customized to suit your needs (eg. customize verbs, headers and payload; you can even use data from the received message into the delivered payload).
 
 Actions can be combined together to create a new named action; for instance, if you want an SMS to be sent and a webhook to post to discord on receiving an email at `support@mycompany.mailscript.com`, you can create two separate named triggers for sms and webhook and a third combined trigger that does both.
 
@@ -174,15 +174,15 @@ All actions have a name, but they will have action type specific configuration o
 
 There are multiple email actions that can be setup to occur in response to an incoming email:
 
-* forward - forward an email onto a new address as your email client would forward
-* alias - redirect an email coming into the mailscript address to an external address, creating the effect that the email came from the originating address directly to the external address
-* send - send a completely new email on to an external address (with the option to take parts of the triggering email over e.g. subject line)
-* reply - respond to the incoming email, as if from the mailscript address that was sent to
-* reply all - similar to reply but the response email is sent to everyong on the `cc` list as well
+* **forward** - forward an email onto a new address as your email client would forward
+* **alias** - redirect an email coming into the mailscript address to an external address, creating the effect that the email came from the originating address directly to the external address
+* **send** - send a completely new email on to an external address (with the option to take parts of the triggering email over e.g. subject line)
+* **reply** - respond to the incoming email, as if from the mailscript address that was sent to
+* **reply all** - similar to reply but the response email is sent to everyong on the `cc` list as well
 
 ###### Forward
 
-To create a forward action at the command line (replaceing `<username>`):
+To create a forward action at the command line (replacing `<username>`):
 
 ```shell
 mailscript actions:add \
@@ -191,7 +191,7 @@ mailscript actions:add \
   --from <username>@mailscript.com
 ```
 
-The `forward` parameter indicates the email address to forward on to. The `from` parameter indiciates which mailscript email address the relayed email will use for its `from` field.
+The `forward` parameter indicates the email address to forward on to. The `from` parameter indicates which mailscript email address the relayed email will use for its `from` field.
 
 ###### Alias
 
@@ -203,7 +203,7 @@ mailscript actions:add \
   --alias myaccount@gmail.com
 ```
 
-The `alias` specifies the email address the incoming email will be sent on to. You must verify that you control the email address. If you have not previously verified the email address, the `mailscript cli` will guide you through verification when you attempt to add the alias action.
+The `alias` specifies the email address the incoming email will be sent on to. You must verify that you control the email address. If you have not previously verified the email address, the `mailscript cli` will guide you through verification when you add the alias action.
 
 ###### Send
 
@@ -294,7 +294,7 @@ mailscript actions:combine \
 ```
 
 The combined  `forward-and-sms` action can be used when setting up
-a workflow as another action would be.
+a workflow, and all subactions will be executed.
 
 ## Daemon
 
