@@ -1,0 +1,1267 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Mailscript brings the best features of bots and smart contracts for email.">
+      
+      
+      
+        <meta name="author" content="mailscript.com">
+      
+      
+        <link rel="canonical" href="https://docs.mailscript.com/cli/get-started/">
+      
+      <link rel="shortcut icon" href="../../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.0.2">
+    
+    
+      
+        <title>Get started - Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.1655a90d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.7fa14f5b.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../css/styles.css">
+    
+    
+      
+        
+<script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-188844195-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),"undefined"!=typeof location$&&location$.subscribe(function(e){ga("send","pageview",e.pathname)})})</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+      
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#installation-and-account-setup" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="https://docs.mailscript.com/" title="Documentation" class="md-header__button md-logo" aria-label="Documentation">
+      
+  <img src="../../images/logo-white.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Get started
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="md-header__options">
+      
+    </div>
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/mailscript/docs/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mailscript/docs
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://docs.mailscript.com/" title="Documentation" class="md-nav__button md-logo" aria-label="Documentation">
+      
+  <img src="../../images/logo-white.png" alt="logo">
+
+    </a>
+    Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/mailscript/docs/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mailscript/docs
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      <label class="md-nav__link" for="__nav_2">
+        CLI
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="CLI" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          CLI
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Get started
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Get started
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#install-the-cli-executable" class="md-nav__link">
+    Install the CLI executable
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#account-setup" class="md-nav__link">
+    Account setup
+  </a>
+  
+    <nav class="md-nav" aria-label="Account setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#offline-support" class="md-nav__link">
+    Offline support
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#initialize" class="md-nav__link">
+    Initialize
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#addresses" class="md-nav__link">
+    Addresses
+  </a>
+  
+    <nav class="md-nav" aria-label="Addresses">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#keys" class="md-nav__link">
+    Keys
+  </a>
+  
+    <nav class="md-nav" aria-label="Keys">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#smtp-gateway" class="md-nav__link">
+    SMTP gateway
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workflows" class="md-nav__link">
+    Workflows
+  </a>
+  
+    <nav class="md-nav" aria-label="Workflows">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#triggers" class="md-nav__link">
+    Triggers
+  </a>
+  
+    <nav class="md-nav" aria-label="Triggers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setting-up-triggers" class="md-nav__link">
+    Setting up Triggers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#composing-triggers" class="md-nav__link">
+    Composing Triggers
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#actions" class="md-nav__link">
+    Actions
+  </a>
+  
+    <nav class="md-nav" aria-label="Actions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setting-up-actions" class="md-nav__link">
+    Setting up Actions
+  </a>
+  
+    <nav class="md-nav" aria-label="Setting up Actions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#email-actions" class="md-nav__link">
+    Email Actions
+  </a>
+  
+    <nav class="md-nav" aria-label="Email Actions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#forward" class="md-nav__link">
+    Forward
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alias" class="md-nav__link">
+    Alias
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#send" class="md-nav__link">
+    Send
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reply" class="md-nav__link">
+    Reply
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reply-all" class="md-nav__link">
+    Reply All
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sms-action" class="md-nav__link">
+    SMS Action
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#webhook-action" class="md-nav__link">
+    Webhook Action
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#creating-combined-actions" class="md-nav__link">
+    Creating combined actions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#daemon" class="md-nav__link">
+    Daemon
+  </a>
+  
+    <nav class="md-nav" aria-label="Daemon">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setting-up-a-daemon" class="md-nav__link">
+    Setting up a daemon
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" >
+      
+      <label class="md-nav__link" for="__nav_2_2">
+        Usage & commands
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Usage & commands" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Usage & commands
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../commands/" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../addresses/" class="md-nav__link">
+        Addresses
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../keys/" class="md-nav__link">
+        Keys
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../triggers/" class="md-nav__link">
+        Triggers
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actions/" class="md-nav__link">
+        Actions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../workflows/" class="md-nav__link">
+        Workflows
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../daemon.md" class="md-nav__link">
+        Daemon
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sync/" class="md-nav__link">
+        Sync
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../login.md" class="md-nav__link">
+        Login
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../send.md" class="md-nav__link">
+        Send
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#install-the-cli-executable" class="md-nav__link">
+    Install the CLI executable
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#account-setup" class="md-nav__link">
+    Account setup
+  </a>
+  
+    <nav class="md-nav" aria-label="Account setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#offline-support" class="md-nav__link">
+    Offline support
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#initialize" class="md-nav__link">
+    Initialize
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#addresses" class="md-nav__link">
+    Addresses
+  </a>
+  
+    <nav class="md-nav" aria-label="Addresses">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#keys" class="md-nav__link">
+    Keys
+  </a>
+  
+    <nav class="md-nav" aria-label="Keys">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#smtp-gateway" class="md-nav__link">
+    SMTP gateway
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workflows" class="md-nav__link">
+    Workflows
+  </a>
+  
+    <nav class="md-nav" aria-label="Workflows">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#triggers" class="md-nav__link">
+    Triggers
+  </a>
+  
+    <nav class="md-nav" aria-label="Triggers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setting-up-triggers" class="md-nav__link">
+    Setting up Triggers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#composing-triggers" class="md-nav__link">
+    Composing Triggers
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#actions" class="md-nav__link">
+    Actions
+  </a>
+  
+    <nav class="md-nav" aria-label="Actions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setting-up-actions" class="md-nav__link">
+    Setting up Actions
+  </a>
+  
+    <nav class="md-nav" aria-label="Setting up Actions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#email-actions" class="md-nav__link">
+    Email Actions
+  </a>
+  
+    <nav class="md-nav" aria-label="Email Actions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#forward" class="md-nav__link">
+    Forward
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alias" class="md-nav__link">
+    Alias
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#send" class="md-nav__link">
+    Send
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reply" class="md-nav__link">
+    Reply
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reply-all" class="md-nav__link">
+    Reply All
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sms-action" class="md-nav__link">
+    SMS Action
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#webhook-action" class="md-nav__link">
+    Webhook Action
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#creating-combined-actions" class="md-nav__link">
+    Creating combined actions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#daemon" class="md-nav__link">
+    Daemon
+  </a>
+  
+    <nav class="md-nav" aria-label="Daemon">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setting-up-a-daemon" class="md-nav__link">
+    Setting up a daemon
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/mailscript/docs/edit/main/docs/cli/get-started.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="installation-and-account-setup">Installation and Account Setup</h1>
+<p>To create an account, you first need to install the Mailscript CLI. The CLI is where you:</p>
+<ul>
+<li>Manage accounts.</li>
+<li>Claim addresses.</li>
+<li>Create keys for your addresses.</li>
+<li>Create workflows for your automations.</li>
+<li>Add triggers for your workflows.</li>
+<li>Add actions for your workflows.</li>
+<li>And more.</li>
+</ul>
+<p>The first step is to download and install the executable.</p>
+<h2 id="install-the-cli-executable">Install the CLI executable</h2>
+<p>Install the CLI executable from the npm registry: <a href="https://www.npmjs.com/package/mailscript">mailscript</a> with</p>
+<pre><code class="language-sh">yarn global add mailscript
+</code></pre>
+<p>or</p>
+<pre><code class="language-sh">npm install -g mailscript
+</code></pre>
+<h2 id="account-setup">Account setup</h2>
+<p>The next step is to initialize an account. The CLI uses a variety of identity providers, so choose the one you prefer.</p>
+<pre><code class="language-sh">mailscript login
+</code></pre>
+<h3 id="offline-support">Offline support</h3>
+<p>The CLI offers a secondary login flow for setups without access to a browser instance (eg. a docker container). It will have ask you to go over a login flow elsewhere and return a code to resume the sign-in process within the CLI context.</p>
+<pre><code class="language-sh">mailscript login --offline
+</code></pre>
+<h3 id="initialize">Initialize</h3>
+<p>If this is the first time you are signing in you'll be prompted to pick a username. Once the you've has selected a username your account setup will be complete.</p>
+<h2 id="addresses">Addresses</h2>
+<p><code>Addresses</code> allow you to send and receive email messages. You receive a top level domain address corresponding to your selected username (eg. <em>username@mailscript.com</em>) and you can create addresses using your username as a first level subdomain (eg. <em>team@username.mailscript.com</em>)</p>
+<p>You can create an <code>address</code> easily:</p>
+<pre><code class="language-sh">mailscript addresses:add --address address@username.mailscript.com
+</code></pre>
+<h3 id="keys">Keys</h3>
+<p><code>Keys</code> allow you to share scoped access (<em>write</em> and/or <em>read</em>) to addresses you control with other people. Whenever you add an address a key is generated with full access for you.</p>
+<p>You can list the keys for any address you control with the following command:</p>
+<pre><code>mailscript keys:list --address [your email address]
+</code></pre>
+<h4 id="smtp-gateway">SMTP gateway</h4>
+<p><code>Keys</code> with the <em>write</em> access can be used to setup <code>smtp</code> access to allow email clients to send messages from any mailscript address.</p>
+<p>To do so use the following configuration:</p>
+<pre><code class="language-sh">host: smtp.mailscript.com
+port: 465
+user: full address (eg. username@mailscript.com)
+pass: a key corresponding to the address with write access
+</code></pre>
+<p>Next, you can start setting up workflows whenever your addresses receive an email message.</p>
+<h2 id="workflows">Workflows</h2>
+<p>Workflows allow you to setup automations when a message arrives at any of the addresses you control. A workflow consists of a trigger and an action. Whenever a trigger is met the corresponding actions will be executed.</p>
+<h3 id="triggers">Triggers</h3>
+<p>Currently mailscript allows you to set up triggers based on incoming messages to addresses you control. You can set criteria to filter specific messages to trigger actions (eg. messages sent from a specific address, messages that include attachments, that contain specific words in the subject or body, messages that contain attachments, mailscript even allows you to set up filters matching specific headers in your email message).</p>
+<p>Triggers can be composed together to form new named triggers, allowing for the combination of criteria. See the <a href="#composing-triggers">Composing Triggers</a> section for details.</p>
+<h4 id="setting-up-triggers">Setting up Triggers</h4>
+<p>A trigger encapsulates criteria that can be used to test an incoming email. A trigger has a name and one or more criteria tests, these can include:</p>
+<ul>
+<li><code>--from</code>: the from address equals the given value</li>
+<li><code>--sentto</code>: the address the incoming email has been sent to</li>
+<li><code>--hasthewords</code>: the email body contains the text specified e.g. 'alert'</li>
+<li><code>--domain</code>: the incoming email has a <code>from</code> address with the passed domain</li>
+<li><code>--subjectcontains</code>: the email subject contains the text specified</li>
+<li><code>--hasattachments</code>: the email has one or more attachments</li>
+</ul>
+<p>To setup a trigger at the command line, provide a name and one or more criteria test (replacing <code>&lt;username&gt;</code>):</p>
+<pre><code class="language-shell">mailscript triggers:add \
+  --name example-trigger \
+  --from notifications@github.com \
+  --sentto github@&lt;username&gt;.mailscript.com \
+  --hasthewords build failed \
+  --domain github.com \
+  --subjectcontains PR \
+  --hasattachments
+</code></pre>
+<h4 id="composing-triggers">Composing Triggers</h4>
+<p>Triggers allow you to name a criteria that can be used to filter incoming emails. Triggers can be logically composed to create new triggers, allowing for the sharing of complex conditional logic.</p>
+<p>Two or more triggers can be composed together using either <code>and</code> or <code>or</code> logic:</p>
+<ul>
+<li><strong>and</strong> - every criteria must be met for the composing trigger to be met</li>
+<li><strong>or</strong> - one criteria from the <code>or</code> list must be met for the composing trigger to be met </li>
+</ul>
+<p>Assuming the following two triggers have been setup:</p>
+<pre><code class="language-shell">mailscript triggers:add \
+  --name alert \
+  --subjectcontains alert
+
+mailscript triggers:add \
+  --name error \
+  --subjectcontains error
+</code></pre>
+<p>We can create a new trigger that combines both with:</p>
+<pre><code class="language-shell">mailscript triggers:add \
+  --name alert-or-error \
+  --or alert \
+  --or error
+</code></pre>
+<p>In the example above <code>or</code> logic is used. If <code>and</code> logic was required (an email with a subject that contains <code>alert</code> AND <code>error</code> e.g. <code>alert: error in process</code>), the trigger composition would be:</p>
+<pre><code>mailscript triggers:add \
+  --name alert-or-error \
+  --and alert \
+  --and error
+</code></pre>
+<h3 id="actions">Actions</h3>
+<p>Mailscript offers automation outputs based on three different kinds of actions that can happen when a trigger is met:</p>
+<ul>
+<li><strong>Email actions</strong>: send a new email message, forward the received email message, redirect the message to another address and reply to the sender or all participants in the received message.</li>
+<li><strong>SMS action</strong>: send an sms text to a specified number.</li>
+<li><strong>Webhook action</strong>: send a request to an endpoint. The request can be customized to suit your needs (eg. customize verbs, headers and payload; you can even use data from the received message into the delivered payload).</li>
+</ul>
+<p>Actions can be combined together to create a new named action; for instance, if you want an SMS to be sent and a webhook to post to discord on receiving an email at <code>support@mycompany.mailscript.com</code>, you can create two separate named triggers for sms and webhook and a third combined trigger that does both.</p>
+<h4 id="setting-up-actions">Setting up Actions</h4>
+<p>Email actions of all types can be created at the command line and through the api.</p>
+<p>All actions have a name, but they will have action type specific configuration options.</p>
+<h5 id="email-actions">Email Actions</h5>
+<p>There are multiple email actions that can be setup to occur in response to an incoming email:</p>
+<ul>
+<li>forward - forward an email onto a new address as your email client would forward</li>
+<li>alias - redirect an email coming into the mailscript address to an external address, creating the effect that the email came from the originating address directly to the external address</li>
+<li>send - send a completely new email on to an external address (with the option to take parts of the triggering email over e.g. subject line)</li>
+<li>reply - respond to the incoming email, as if from the mailscript address that was sent to</li>
+<li>reply all - similar to reply but the response email is sent to everyong on the <code>cc</code> list as well</li>
+</ul>
+<h6 id="forward">Forward</h6>
+<p>To create a forward action at the command line (replaceing <code>&lt;username&gt;</code>):</p>
+<pre><code class="language-shell">mailscript actions:add \
+  --name forward-to-alice \
+  --forward alice@example.com \
+  --from &lt;username&gt;@mailscript.com
+</code></pre>
+<p>The <code>forward</code> parameter indicates the email address to forward on to. The <code>from</code> parameter indiciates which mailscript email address the relayed email will use for its <code>from</code> field.</p>
+<h6 id="alias">Alias</h6>
+<p>To create an alias action at the command line:</p>
+<pre><code class="language-shell">mailscript actions:add \
+  --name alias-to-personal \
+  --alias myaccount@gmail.com
+</code></pre>
+<p>The <code>alias</code> specifies the email address the incoming email will be sent on to. You must verify that you control the email address. If you have not previously verified the email address, the <code>mailscript cli</code> will guide you through verification when you attempt to add the alias action.</p>
+<h6 id="send">Send</h6>
+<p>To send on an email with subject and body you specify, you can create a send alias at the command line (replacing <code>&lt;username&gt;</code>):</p>
+<pre><code class="language-shell">mailscript actions:add \
+  --name send-test \
+  --send jane@example.com \
+  --from &lt;username&gt;@mailscript.com \
+  --subject &quot;Important: {{msg.subject}}&quot; \
+  --text &quot;Please check discord for more information.&quot;
+</code></pre>
+<p>Send creates a bespoke email as specified and sends it to the email address passed as the <code>send</code> parameter. The <code>from</code> parameter indicates the mailscript address to use for the <code>from</code> field.</p>
+<p>The subject line of the email is specified by the <code>subject</code> parameter, and has access to the string interpolation variables (i.e. <code>{{msg.subject}}</code>, <code>{{msg.text}}</code>, <code>{{msg.html}}</code>).</p>
+<p>The body of the email must be specified, and can be passed either as plain test with <code>--text</code> or as html with <code>--html</code>.</p>
+<h6 id="reply">Reply</h6>
+<p>A reply action responds back with an email to the incoming email. to create a reply action at the command line (replacing <code>&lt;username&gt;</code>):</p>
+<pre><code class="language-shell">mailscript actions:add \
+  --name reply-test \
+  --reply \
+  --from &lt;username&gt;@mailscript.com \
+  --text 'Out of office'
+</code></pre>
+<p>The <code>reply</code> indicates the type of action. Text or html must be specified to be prepended to the body of the reply email, using the <code>--text</code> or <code>--html</code> parameters respectively.</p>
+<h6 id="reply-all">Reply All</h6>
+<p>A reply all action responds back with an email to the <code>from</code> address of the incoming email and to everyone in the <code>cc</code> list as well. To create a <code>reply all</code> action at the command line (replacing <code>&lt;username&gt;</code>):</p>
+<pre><code class="language-shell">mailscript actions:add \
+  --name replyall-test \
+  --replyall \
+  --from &lt;username&gt;@mailscript.com \
+  --text 'Out of office'
+</code></pre>
+<p>The <code>replyall</code> indicates the type of action. Text or html must be specified to be prepended to the body of the reply email, using the <code>--text</code> or <code>--html</code> parameters respectively.</p>
+<h5 id="sms-action">SMS Action</h5>
+<p>To send an SMS message in response to an incoming message, setup an SMS action at the command line:</p>
+<pre><code class="language-shell">mailscript actions:add \
+  --name sms-example \
+  --sms +447747111111 \
+  --text 'Important: {{msg.subject}}'
+</code></pre>
+<p>The phone number is provided with the <code>sms</code> parameters (include the international dialling code). Mailscript will ask you to verify the phone number if you have not already done so. The <code>text</code> parameter specifies the contents of the text and can include
+interpolation variables derieved from teh incoming email (e.g. <code>{{msg.subject}}</code>,<code>{{msg.text}}</code>).</p>
+<h5 id="webhook-action">Webhook Action</h5>
+<p>To send an webhook in response to an incoming message, setup a Webhook action at the command line (replacing <code>&lt;webhook-url&gt;</code>):</p>
+<pre><code class="language-shell">mailscript actions:add \
+  --name webhook-example \
+  --webhook &lt;webhook-url&gt;
+</code></pre>
+<p>The url endpoint that will be <code>posted</code> to is given by the <code>webhook</code> parameter. There are three optional parameters:</p>
+<ul>
+<li><code>--body</code> the path to a file that will be passed as the body, variable interpolation is available within this file e.g. <code>{{msg.subject}}</code> will substitute the incoming emails subject line.</li>
+<li><code>--method</code> to override the http method from the default <code>POST</code></li>
+<li><code>--headers</code> the path to a file of valid json that will be passed as the headers of the webhook</li>
+</ul>
+<h4 id="creating-combined-actions">Creating combined actions</h4>
+<p>We can combine two or more named actions into a new action with the combine command:</p>
+<pre><code class="language-shell">mailscript actions:combine \
+  --name forward-and-sms \
+  --action forward-to-alice \
+  --action sms-example
+</code></pre>
+<p>The combined  <code>forward-and-sms</code> action can be used when setting up
+a workflow as another action would be.</p>
+<h2 id="daemon">Daemon</h2>
+<p>The Mailscript cli allows you to use your local machine, or a server, as an output for an action in a workflow.</p>
+<p>Using the <code>mailscript daemon</code> command you can run a local daemon that will execute a script you specify as part of a <code>workflow</code> and in response to an email.</p>
+<h3 id="setting-up-a-daemon">Setting up a daemon</h3>
+<p>First register a new daemon action:</p>
+<pre><code class="language-shell">mailscript actions:add --name &quot;action name&quot; --daemon &quot;daemon name&quot;
+</code></pre>
+<p>We can now include the daemon in a workflow:</p>
+<pre><code class="language-shell">mailscript workflows:add \
+  --name &quot;workflow name&quot; \
+  --trigger &quot;trigger name&quot; \
+  --action &quot;daemon name&quot;
+</code></pre>
+<p>Any email sent to the input and that matches the trigger, will be forwarded to the daemon listening on the <code>daemon name</code> action. To setup such a daemon run:</p>
+<pre><code class="language-shell">mailscript daemon \
+  --daemon &quot;daemon name&quot;
+  --command &quot;cowsay \$subject&quot;
+</code></pre>
+<p>The command parameter specifies the shell script to run when the workflow sends an email to the daemon action, in this case the <code>cowsay</code> utility. The contents of the email are made available through the <code>$subject</code> and <code>$text</code> environment variables. The command will be executed each time on each received email.</p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        <a href="../.." class="md-footer__link md-footer__link--prev" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Home
+            </div>
+          </div>
+        </a>
+      
+      
+        <a href="../commands/" class="md-footer__link md-footer__link--next" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Overview
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            &copy; Mailscript
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+        
+        
+      
+      <a href="https://mailscript.com" target="_blank" rel="noopener" title="mailscript.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M336.5 160C322 70.7 287.8 8 248 8s-74 62.7-88.5 152h177zM152 256c0 22.2 1.2 43.5 3.3 64h185.3c2.1-20.5 3.3-41.8 3.3-64s-1.2-43.5-3.3-64H155.3c-2.1 20.5-3.3 41.8-3.3 64zm324.7-96c-28.6-67.9-86.5-120.4-158-141.6 24.4 33.8 41.2 84.7 50 141.6h108zM177.2 18.4C105.8 39.6 47.8 92.1 19.3 160h108c8.7-56.9 25.5-107.8 49.9-141.6zM487.4 192H372.7c2.1 21 3.3 42.5 3.3 64s-1.2 43-3.3 64h114.6c5.5-20.5 8.6-41.8 8.6-64s-3.1-43.5-8.5-64zM120 256c0-21.5 1.2-43 3.3-64H8.6C3.2 212.5 0 233.8 0 256s3.2 43.5 8.6 64h114.6c-2-21-3.2-42.5-3.2-64zm39.5 96c14.5 89.3 48.7 152 88.5 152s74-62.7 88.5-152h-177zm159.3 141.6c71.4-21.2 129.4-73.7 158-141.6h-108c-8.8 56.9-25.6 107.8-50 141.6zM19.3 352c28.6 67.9 86.5 120.4 158 141.6-24.4-33.8-41.2-84.7-50-141.6h-108z"/></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="https://github.com/mailscript" target="_blank" rel="noopener" title="github.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="https://discord.gg/US24HAVYq2" target="_blank" rel="noopener" title="discord.gg" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M297.216 243.2c0 15.616-11.52 28.416-26.112 28.416-14.336 0-26.112-12.8-26.112-28.416s11.52-28.416 26.112-28.416c14.592 0 26.112 12.8 26.112 28.416zm-119.552-28.416c-14.592 0-26.112 12.8-26.112 28.416s11.776 28.416 26.112 28.416c14.592 0 26.112-12.8 26.112-28.416.256-15.616-11.52-28.416-26.112-28.416zM448 52.736V512c-64.494-56.994-43.868-38.128-118.784-107.776l13.568 47.36H52.48C23.552 451.584 0 428.032 0 398.848V52.736C0 23.552 23.552 0 52.48 0h343.04C424.448 0 448 23.552 448 52.736zm-72.96 242.688c0-82.432-36.864-149.248-36.864-149.248-36.864-27.648-71.936-26.88-71.936-26.88l-3.584 4.096c43.52 13.312 63.744 32.512 63.744 32.512-60.811-33.329-132.244-33.335-191.232-7.424-9.472 4.352-15.104 7.424-15.104 7.424s21.248-20.224 67.328-33.536l-2.56-3.072s-35.072-.768-71.936 26.88c0 0-36.864 66.816-36.864 149.248 0 0 21.504 37.12 78.08 38.912 0 0 9.472-11.52 17.152-21.248-32.512-9.728-44.8-30.208-44.8-30.208 3.766 2.636 9.976 6.053 10.496 6.4 43.21 24.198 104.588 32.126 159.744 8.96 8.96-3.328 18.944-8.192 29.44-15.104 0 0-12.8 20.992-46.336 30.464 7.68 9.728 16.896 20.736 16.896 20.736 56.576-1.792 78.336-38.912 78.336-38.912z"/></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="https://facebook.com/mailscript" target="_blank" rel="noopener" title="facebook.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"/></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="https://twitter.com/getmailscript" target="_blank" rel="noopener" title="twitter.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../assets/javascripts/workers/search.f5903571.min.js", "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.3981fc68.min.js"></script>
+      
+    
+  </body>
+</html>

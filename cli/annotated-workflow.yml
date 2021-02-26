@@ -1,0 +1,72 @@
+version: "0.2"
+addresses:
+  # Specify your mailscript address below
+  combined-example@$username.mailscript.com:
+    # Keys exported from the CLI interface
+    keys:
+      - name: owner
+        read: true
+        write: true
+triggers:
+  # Specify a name of choice for best possible usability
+  - name: alert
+    composition:
+      # Set of criteria used to filter out emails
+      - criteria:
+          # Similar to a regex query
+          subjectContains: alert
+  - name: error
+    composition:
+      - criteria:
+          subjectContains: error
+  - name: alert-or-error
+    # Combine both triggers into a conditional statment
+    composition:
+      - or:
+          - alert
+          - error
+# Object of actions that will be executed upon satisfying the conditions
+actions:
+  - name: discord-team
+    type: webhook # Webhook, SMS, daemon, mailscript-email, etc.
+    config:
+      body: '{"content": "A new email for the team: {{msg.subject}}"}' # {{msg.subject}} will get substituted for the email subject.
+      url: "https://discord.com/api/webhooks/..." # endpoint of choice to relay the JSON output.
+      opts:
+        headers:
+          Content-Type: application/json
+        method: POST
+  - name: discord-engineering
+    type: webhook
+    config:
+      body: '{"content": "A new email for engineering: {{msg.subject}}"}' # {{msg.subject}} will get substituted for the email subject.
+      url: "https://discord.com/api/webhooks/..." # endpoint of choice to relay the JSON output.
+      opts:
+        headers:
+          Content-Type: application/json # HTTP endpoint content type
+        method: POST # HTTP endpoint method
+  # Example using a local daemon. Daemons are processing run on your own hardware that handles the output for emails.
+  # What runs behind the daemon can be anything you define. This could be storing a copy of the incoming email on a private database.
+  - name: mylaptop
+    type: daemon
+    config:
+      daemon: daemonName
+  # Another example: forwarding the email to your personal/secondary address
+  - name: forward-to-personal-email
+    type: mailscript-email
+    config:
+      key: owner # Name of the key specified above
+      from: github@$username.mailscript.com
+      forward: $account-email-address # Replace $account-email-address with the full email address of your personal/secondary email address..
+      type: forward     
+  # specify the index of actions to be executed.
+  - name: discord-team-and-engineering
+    list:
+      - discord-team
+      - discord-engineering
+workflows:
+  # Specify the name of the workflow, and the related index points for both the triggers actions.
+  - name: alerts-and-errors-to-team-and-engineering
+    input: combined-example@$username.mailscript.com
+    trigger: alert-or-error # Notice this is the name of the "index" above.
+    action: discord-team-and-engineering # # Notice this is the name of the "index" above.
