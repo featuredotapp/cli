@@ -14,8 +14,8 @@ See getting [key concepts](key-concepts.md) for more info about how mailscript w
 ## Examples
 - [Example YML workflow](annotated-workflow.yml)
 - [Combined triggers and actions](combined.md)
-- [Email to google spreadsheet](https://github.com/mailscript/template-email-to-google-spreadsheet)
-- [Github action failure email to notification](https://github.com/mailscript/template-github-action-failure-to-notification)
+- [Email to google spreadsheet](https://github.com/mailscript/cli/tree/main/packages/templates/email-to-google-spreadsheet)
+- [Github action failure email to notification](https://github.com/mailscript/cli/tree/main/packages/templates/github-action-failure-to-notification)
 
 
 ## Overview

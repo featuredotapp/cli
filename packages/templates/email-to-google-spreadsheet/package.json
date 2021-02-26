@@ -8,13 +8,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mailscript/template-email-to-google-spreadsheet.git"
+    "url": "git+https://github.com/mailscript/cli.git"
   },
   "author": "",
   "bugs": {
-    "url": "https://github.com/mailscript/template-email-to-google-spreadsheet/issues"
+    "url": "https://github.com/mailscript/cli/issues"
   },
-  "homepage": "https://github.com/mailscript/template-email-to-google-spreadsheet#readme",
+  "homepage": "https://github.com/mailscript/cli/tree/main/packages/templates/email-to-google-spreadsheet#readme",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",

@@ -8,13 +8,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mailscript/template-upload-pdf-to-google-drive.git"
+    "url": "git+https://github.com/mailscript/cli.git"
   },
   "author": "",
   "bugs": {
-    "url": "https://github.com/mailscript/template-upload-pdf-to-google-drive/issues"
+    "url": "https://github.com/mailscript/cli/issues"
   },
-  "homepage": "https://github.com/mailscript/template-upload-pdf-to-google-drive#readme",
+  "homepage": "https://github.com/mailscript/cli/tree/main/packages/templates/upload-pdf-to-google-drive#readme",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
