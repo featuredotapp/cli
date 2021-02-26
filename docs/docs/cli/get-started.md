@@ -89,7 +89,70 @@ Workflows allow you to setup automations when a message arrives at any of the ad
 
 Currently mailscript allows you to set up triggers based on incoming messages to addresses you control. You can set criteria to filter specific messages to trigger actions (eg. messages sent from a specific address, messages that include attachments, that contain specific words in the subject or body, messages that contain attachments, mailscript even allows you to set up filters matching specific headers in your email message).
 
-Triggers can be composed together to form new named triggers. You can find details and examples in the [combined section](/cli/combined).
+Triggers can be composed together to form new named triggers, allowing for the combination of criteria. See the [Composing Triggers](#composing-triggers) section for details.
+
+#### Setting up Triggers
+
+A trigger encapsulates criteria that can be used to test an incoming email. A trigger has a name and one or more criteria tests, these can include:
+
+* `--from`: the from address equals the given value
+* `--sentto`: the address the incoming email has been sent to
+* `--hasthewords`: the email body contains the text specified e.g. 'alert'
+* `--domain`: the incoming email has a `from` address with the passed domain
+* `--subjectcontains`: the email subject contains the text specified
+* `--hasattachments`: the email has one or more attachments
+
+To setup a trigger at the command line, provide a name and one or more criteria test (replacing `<username>`):
+
+```shell
+mailscript triggers:add \
+  --name example-trigger \
+  --from notifications@github.com \
+  --sentto github@<username>.mailscript.com \
+  --hasthewords build failed \
+  --domain github.com \
+  --subjectcontains PR \
+  --hasattachments
+```
+
+#### Composing Triggers
+
+Triggers allow you to name a criteria that can be used to filter incoming emails. Triggers can be logically composed to create new triggers, allowing for the sharing of complex conditional logic.
+
+Two or more triggers can be composed together using either `and` or `or` logic:
+
+* **and** - every criteria must be met for the composing trigger to be met
+* **or** - one criteria from the `or` list must be met for the composing trigger to be met 
+
+Assuming the following two triggers have been setup:
+
+```shell
+mailscript triggers:add \
+  --name alert \
+  --subjectcontains alert
+  
+mailscript triggers:add \
+  --name error \
+  --subjectcontains error
+```
+
+We can create a new trigger that combines both with:
+
+```shell
+mailscript triggers:add \
+  --name alert-or-error \
+  --or alert \
+  --or error
+```
+
+In the example above `or` logic is used. If `and` logic was required (an email with a subject that contains `alert` AND `error` e.g. `alert: error in process`), the trigger composition would be:
+
+```
+mailscript triggers:add \
+  --name alert-or-error \
+  --and alert \
+  --and error
+```
 
 ### Actions
 
