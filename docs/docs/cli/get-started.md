@@ -189,18 +189,48 @@ mailscript actions:add \
 
 The `replyall` indicates the type of action. Text or html must be specified to be prepended to the body of the reply email, using the `--text` or `--html` parameters respectively.
 
+##### SMS Action
+
+To send an SMS message in response to an incoming message, setup an SMS action at the command line:
+
+```shell
+mailscript actions:add \
+  --name sms-example \
+  --sms +447747111111 \
+  --text 'Important: {{msg.subject}}'
+```
+
+The phone number is provided with the `sms` parameters (include the international dialling code). Mailscript will ask you to verify the phone number if you have not already done so. The `text` parameter specifies the contents of the text and can include
+interpolation variables derieved from teh incoming email (e.g. `{{msg.subject}}`,`{{msg.text}}`).
+
+##### Webhook Action
+
+To send an webhook in response to an incoming message, setup a Webhook action at the command line (replacing `<webhook-url>`):
+
+```shell
+mailscript actions:add \
+  --name webhook-example \
+  --webhook <webhook-url>
+```
+
+The url endpoint that will be `posted` to is given by the `webhook` parameter. There are three optional parameters:
+
+* `--body` the path to a file that will be passed as the body, variable interpolation is available within this file e.g. `{{msg.subject}}` will substitute the incoming emails subject line.
+* `--method` to override the http method from the default `POST`
+* `--headers` the path to a file of valid json that will be passed as the headers of the webhook
+
 #### Creating combined actions
 
-We can combine two named actions into a new action with the combine command:
+We can combine two or more named actions into a new action with the combine command:
 
 ```shell
 mailscript actions:combine \
-  --name discord-team-and-engineering \
-  --action discord-team \
-  --action discord-engineering
+  --name forward-and-sms \
+  --action forward-to-alice \
+  --action sms-example
 ```
 
-The combined  `discord-team-and-engineering` action can be used when setting up
+The combined  `forward-and-sms` action can be used when setting up
 a workflow as another action would be.
 
 ## Daemon
