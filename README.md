@@ -25,21 +25,21 @@
 </div>
 
 <p align="center">
-  <a href="https://vimeo.com/489472356">
-    <img src="docs/media/ms_1.png">
+  <a href="https://vimeo.com/514763976">
+    <img src="docs/media/vimeo_video_min.png">
   </a>
 <p>
 
 # Table of Contents 📚
-<!-- toc -->
-* [Table of Contents 📚](#tables-of-contents-)
-* [Features](#features)
-* [Getting started 🚀](#getting-started-)
-* [Use Cases](#use-cases)
-* [Usage 👩‍💻](#usage-)
-* [Commands ⌨](#commands-)
-* [Development 💬](#development-)
-* [License ⚖](#license-)
+- [Table of Contents 📚](#table-of-contents-)
+- [Features](#features)
+  - [Use Cases](#use-cases)
+  - [Getting Started 🚀](#getting-started-)
+  - [Usage 👩‍💻](#usage-)
+    - [Install through npm](#install-through-npm)
+- [Commands ⌨](#commands-)
+- [Development 💬](#development-)
+- [License ⚖](#license-)
 
 # Features
 * Low code automations for your emails
@@ -59,9 +59,7 @@
 * Read our [documentation](https://docs.mailscript.com/)
 * Take a look at the [HTTP API documentation](https://api.mailscript.com/)
 
-<!-- tocstop -->
 ## Usage 👩‍💻
-<!-- usage -->
 ### Install through npm
 In order to use the Mailscript CLI, you must first install it with the global flag. Run the following:
 ```sh-session
@@ -89,11 +87,8 @@ $ mailscript login
 You should see a browser window open prompting you to login to your Mailscript account. 
 The daemon will handle the rest upon completion
 ```
-<!-- usagestop -->
 # Commands ⌨
 Ready to dive into Mailscript? [Read the command line documentation](https://github.com/mailscript/cli/tree/main/docs)
-<!-- commands -->
-<!-- commandsstop -->
 
 # Development 💬
 

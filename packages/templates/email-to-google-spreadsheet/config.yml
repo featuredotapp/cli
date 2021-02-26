@@ -1,0 +1,27 @@
+version: "0.2"
+addresses:
+  $username@mailscript.com:
+    keys:
+      - name: owner
+        read: true
+        write: true
+workflows:
+  - name: data to spreadsheet
+    input: $username@mailscript.com
+    action: spreadsheet-action
+actions:
+  - name: spreadsheet-action
+    type: webhook
+    config:
+      body: |
+        {
+          "row": "{{all}}",
+          "docId": "spreadsheet-id-in-base64",
+          "credsClientEmail": "service-account-email-address-in-base64",
+          "credsPrivateKey": "service-account-private-key-in-base64"
+        }
+      url: "https://write-to-csv-endpoint.url"
+      opts:
+        headers:
+          Content-Type: application/json
+        method: POST

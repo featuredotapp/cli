@@ -1,0 +1,25 @@
+version: "0.2"
+addresses:
+  $username@mailscript.com:
+    keys:
+      - name: owner
+        read: true
+        write: true
+actions:
+  - name: sms-to-me
+    type: sms
+    config:
+      number: "+1234567890"
+      text: Two alerts arrived within 60 seconds
+triggers:
+  - name: alert-trigger
+    composition:
+      - times:
+          thisManySeconds: 60
+          thisManyTimes: 2
+        criteria:
+          subjectContains: alert
+workflows:
+  - name: Alerts to sms
+    trigger: alert-trigger
+    action: sms-to-me

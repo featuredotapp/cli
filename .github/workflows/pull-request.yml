@@ -14,9 +14,11 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '10'
+      - name: Change Directory
+        run: cd packages/main
       - name: Install
         run: yarn
       - name: Lint
-        run: yarn format:check && npx eslint src/**/*.ts && npx tsc --noEmit
+        run: yarn format:check
       - name: Test
         run: yarn test

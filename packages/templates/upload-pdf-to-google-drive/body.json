@@ -1,0 +1,6 @@
+{
+  "attachments": "{{msg.attachments}}",
+  "driveStoragePath": "storage/path/on/google/drive",
+  "credsClientId": "",
+  "credsPrivateKey": ""
+}
