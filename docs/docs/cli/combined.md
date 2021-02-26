@@ -3,10 +3,14 @@
 Mailscript allows you to combine multiple triggers and actions to provide functionality similar to AND/OR based statements. These can be accomplished in two different fashions by the general user.
 
 ### Table of Contents 
-- [YML Example](#yml-example)
-- [CLI setup](#cli-setup)
-  - [Create triggers](#create-triggers)
-  - [Create triggers](#wrap-it-up)
+- [Multiple triggers and actions combination](#multiple-triggers-and-actions-combination)
+    - [Table of Contents](#table-of-contents)
+  - [YML example](#yml-example)
+  - [CLI setup](#cli-setup)
+    - [Create address](#create-address)
+    - [Create triggers](#create-triggers)
+    - [Create actions](#create-actions)
+    - [Wrap it up](#wrap-it-up)
 
 ## YML example
 
@@ -32,6 +36,7 @@ subject that contains the word alert the other the word error:
 mailscript triggers:add \
   --name alert \
   --subjectcontains alert
+  
 mailscript triggers:add \
   --name error \
   --subjectcontains error
@@ -77,6 +82,7 @@ mailscript actions:add \
 Another example could be having one discord channel for errors and one for successes.
 
 ### Wrap it up
+
 We can then combine the two actions into a single action list:
 
 ```
@@ -85,11 +91,12 @@ mailscript actions:combine \
   --action discord-team \
   --action discord-engineering
 ```
+
 Finally we can create a workflow that uses the composed trigger and the combined action (replace variables and other user supplied information where neccessary):
 
 ```
 mailscript workflows:add \
   --name alerts-and-errors-to-team-and-engineering \
-  --input <username>@.mailscript.com \
+  --input <username>@mailscript.com \
   --action discord-team-and-engineering
 ```

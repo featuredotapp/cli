@@ -93,13 +93,115 @@ Triggers can be composed together to form new named triggers. You can find detai
 
 ### Actions
 
-Mailscript offers outputs based on three different kinds of actions that can happen when a trigger is met:
+Mailscript offers automation outputs based on three different kinds of actions that can happen when a trigger is met:
 
-- Email actions: send a new email message, forward the received email message, redirect the message to another address and reply to the sender or all participants in the received message.
-- SMS action: send an sms text to a specified number.
-- Webhook action: send a request to an endpoint. The request can be customized to suit your needs (eg. customize verbs, headers and payload; you can even use data from the received message into the delivered payload).
+- **Email actions**: send a new email message, forward the received email message, redirect the message to another address and reply to the sender or all participants in the received message.
+- **SMS action**: send an sms text to a specified number.
+- **Webhook action**: send a request to an endpoint. The request can be customized to suit your needs (eg. customize verbs, headers and payload; you can even use data from the received message into the delivered payload).
 
-Actions can be combined together to create a new named action. You can find details and examples in the [combined section](/cli/combined).
+Actions can be combined together to create a new named action; for instance, if you want an SMS to be sent and a webhook to post to discord on receiving an email at `support@mycompany.mailscript.com`, you can create two separate named triggers for sms and webhook and a third combined trigger that does both.
+
+#### Setting up Actions
+
+Email actions of all types can be created at the command line and through the api.
+
+All actions have a name, but they will have action type specific configuration options.
+
+##### Email Actions
+
+There are multiple email actions that can be setup to occur in response to an incoming email:
+
+* forward - forward an email onto a new address as your email client would forward
+* alias - redirect an email coming into the mailscript address to an external address, creating the effect that the email came from the originating address directly to the external address
+* send - send a completely new email on to an external address (with the option to take parts of the triggering email over e.g. subject line)
+* reply - respond to the incoming email, as if from the mailscript address that was sent to
+* reply all - similar to reply but the response email is sent to everyong on the `cc` list as well
+
+###### Forward
+
+To create a forward action at the command line (replaceing `<username>`):
+
+```shell
+mailscript actions:add \
+  --name forward-to-alice \
+  --forward alice@example.com \
+  --from <username>@mailscript.com
+```
+
+The `forward` parameter indicates the email address to forward on to. The `from` parameter indiciates which mailscript email address the relayed email will use for its `from` field.
+
+###### Alias
+
+To create an alias action at the command line:
+
+```shell
+mailscript actions:add \
+  --name alias-to-personal \
+  --alias myaccount@gmail.com
+```
+
+The `alias` specifies the email address the incoming email will be sent on to. You must verify that you control the email address. If you have not previously verified the email address, the `mailscript cli` will guide you through verification when you attempt to add the alias action.
+
+###### Send
+
+To send on an email with subject and body you specify, you can create a send alias at the command line (replacing `<username>`):
+
+```shell
+mailscript actions:add \
+  --name send-test \
+  --send jane@example.com \
+  --from <username>@mailscript.com \
+  --subject "Important: {{msg.subject}}" \
+  --text "Please check discord for more information."
+```
+
+Send creates a bespoke email as specified and sends it to the email address passed as the `send` parameter. The `from` parameter indicates the mailscript address to use for the `from` field.
+
+The subject line of the email is specified by the `subject` parameter, and has access to the string interpolation variables (i.e. `{{msg.subject}}`, `{{msg.text}}`, `{{msg.html}}`).
+
+The body of the email must be specified, and can be passed either as plain test with `--text` or as html with `--html`.
+
+###### Reply
+
+A reply action responds back with an email to the incoming email. to create a reply action at the command line (replacing `<username>`):
+
+```shell
+mailscript actions:add \
+  --name reply-test \
+  --reply \
+  --from <username>@mailscript.com \
+  --text 'Out of office'
+```
+
+The `reply` indicates the type of action. Text or html must be specified to be prepended to the body of the reply email, using the `--text` or `--html` parameters respectively.
+
+###### Reply All
+
+A reply all action responds back with an email to the `from` address of the incoming email and to everyone in the `cc` list as well. To create a `reply all` action at the command line (replacing `<username>`):
+
+```shell
+mailscript actions:add \
+  --name replyall-test \
+  --replyall \
+  --from <username>@mailscript.com \
+  --text 'Out of office'
+```
+
+The `replyall` indicates the type of action. Text or html must be specified to be prepended to the body of the reply email, using the `--text` or `--html` parameters respectively.
+
+#### Creating combined actions
+
+We can combine two named actions into a new action with the combine command:
+
+```shell
+mailscript actions:combine \
+  --name discord-team-and-engineering \
+  --action discord-team \
+  --action discord-engineering
+```
+
+The combined  `discord-team-and-engineering` action can be used when setting up
+a workflow as another action would be.
 
 ## Daemon
 
