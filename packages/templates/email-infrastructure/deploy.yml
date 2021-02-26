@@ -1,0 +1,27 @@
+name: Sync
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@master
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "14.3.x"
+      - name: install
+        run: yarn add mailscript@latest
+      - name: api key
+        run: |
+          echo "{ \"apiKey\": \"${{ secrets.API_KEY }}\" }" > ./.mailscript-sync
+      - name: version
+        run: npx mailscript version
+      # - name: whoami
+      #   run: npx mailscript usernames
+      - name: sync:import
+        run: npx mailscript sync:import --path ./config.yml --delete

@@ -1,0 +1,84 @@
+version: "0.2"
+addresses:
+  # top level account address
+  # username@mailscript.com
+  $username@mailscript.com:
+    keys:
+      - name: owner
+        read: true
+        write: true
+
+  # individual addresses
+  # alice.smith@$username.mailscript.com:
+  #   keys:
+  #     - name: owner
+  #       read: true
+  #       write: true
+
+  # shared addresses
+  team@$username.mailscript.com:
+    keys:
+      - name: owner
+        read: true
+        write: true
+  contact@$username.mailscript.com:
+    keys:
+      - name: owner
+        read: true
+        write: true
+  support@$username.mailscript.com:
+    keys:
+      - name: owner
+        read: true
+        write: true
+actions:
+  - name: email-alias-to-me
+    type: mailscript-email
+    config:
+      type: alias
+      alias: $account-email-address
+  - name: send-to-team-discord
+    type: webhook
+    config:
+      opts:
+        headers:
+          Content-Type: application/json
+        method: POST
+      url: >-
+        http://discord.channel-team.webhook.url
+      body: '{"content": "A new email for the team: {{msg.subject}}"}'
+  - name: send-to-support-discord
+    type: webhook
+    config:
+      opts:
+        headers:
+          Content-Type: application/json
+        method: POST
+      url: >-
+        http://discord.channel-support.webhook.url
+      body: '{"content": "A new email for support: {{msg.subject}}"}'
+# workflows
+# input address -> action
+workflows:
+  # shared redirects
+  # post to external chats (eg discord)
+  # team
+  - name: team to personal address
+    input: team@$username.mailscript.com
+    action: email-alias-to-me
+  - name: team to discord#team-emails
+    input: team@$username.mailscript.com
+    action: send-to-team-discord
+
+  # contact
+  - name: contact to personal address
+    input: contact@$username.mailscript.com
+    action: email-alias-to-me
+
+  # support
+  - name: support to personal address
+    input: support@$username.mailscript.com
+    action: email-alias-to-me
+  - name: support to discord#support
+    input: support@$username.mailscript.com
+    action: send-to-support-discord
