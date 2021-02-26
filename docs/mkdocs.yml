@@ -1,16 +1,16 @@
 # Project configuration
-site_name: "Documentation"
-site_description: "Mailscript brings the best features of bots and smart contracts for email."
+site_name: 'Documentation'
+site_description: 'Mailscript brings the best features of bots and smart contracts for email.'
 site_author: mailscript.com
 site_url: https://docs.mailscript.com/
-edit_uri: "edit/main/docs/"
+edit_uri: 'edit/main/docs/'
 
 # Repository
 repo_name: mailscript/docs
 repo_url: https://github.com/mailscript/docs
 
 # Copyright
-copyright: "&copy; Mailscript"
+copyright: '&copy; Mailscript'
 
 # Configuration
 theme:
@@ -32,10 +32,10 @@ nav:
           - Triggers: cli/triggers.md
           - Actions: cli/actions.md
           - Workflows: cli/workflows.md
-          - Daemon: cli/daemon.md
           - Sync: cli/sync.md
-          - Login: cli/login.md
-          - Send: cli/send.md
+          - Login: cli/misc/#login
+          - Daemon: cli/misc/#daemon
+          - Send: cli/misc/#send
   #- API: api.md
   #- SDK Clients: sdk-clients.md
 
@@ -50,7 +50,7 @@ extra:
     - icon: fontawesome/brands/facebook
       link: https://facebook.com/mailscript
     - icon: fontawesome/brands/twitter
-      link: https://twitter.com/getmailscript 
+      link: https://twitter.com/getmailscript
 
 google_analytics:
   - UA-188844195-1
