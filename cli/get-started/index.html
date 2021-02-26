@@ -974,7 +974,7 @@ pass: a key corresponding to the address with write access
 <h2 id="workflows">Workflows</h2>
 <p>Workflows allow you to setup automations when a message arrives at any of the addresses you control. A workflow consists of a trigger and an action. Whenever a trigger is met the corresponding actions will be executed.</p>
 <h3 id="triggers">Triggers</h3>
-<p>Currently mailscript allows you to set up triggers based on incoming messages to addresses you control. You can set criteria to filter specific messages to trigger actions (eg. messages sent from a specific address, messages that include attachments, that contain specific words in the subject or body, messages that contain attachments, mailscript even allows you to set up filters matching specific headers in your email message).</p>
+<p>Currently mailscript allows you to set up triggers based on incoming messages to addresses you control. You can set criteria to filter specific messages to trigger actions (e.g. messages sent from a specific address, messages that include attachments, that contain specific words in the subject or body, messages that contain attachments, mailscript even allows you to set up filters matching specific headers in your email message).</p>
 <p>Triggers can be composed together to form new named triggers, allowing for the combination of criteria. See the <a href="#composing-triggers">Composing Triggers</a> section for details.</p>
 <h4 id="setting-up-triggers">Setting up Triggers</h4>
 <p>A trigger encapsulates criteria that can be used to test an incoming email. A trigger has a name and one or more criteria tests, these can include:</p>
@@ -986,7 +986,7 @@ pass: a key corresponding to the address with write access
 <li><code>--subjectcontains</code>: the email subject contains the text specified</li>
 <li><code>--hasattachments</code>: the email has one or more attachments</li>
 </ul>
-<p>To setup a trigger at the command line, provide a name and one or more criteria test (replacing <code>&lt;username&gt;</code>):</p>
+<p>To setup a trigger at the command line, provide a name and one or more criteria tests (replacing <code>&lt;username&gt;</code>):</p>
 <pre><code class="language-shell">mailscript triggers:add \
   --name example-trigger \
   --from notifications@github.com \
@@ -1012,13 +1012,13 @@ mailscript triggers:add \
   --name error \
   --subjectcontains error
 </code></pre>
-<p>We can create a new trigger that combines both with:</p>
+<p>We can create a new trigger that would pass if the subject contains either 'alert' or 'error' with the command:</p>
 <pre><code class="language-shell">mailscript triggers:add \
   --name alert-or-error \
   --or alert \
   --or error
 </code></pre>
-<p>In the example above <code>or</code> logic is used. If <code>and</code> logic was required (an email with a subject that contains <code>alert</code> AND <code>error</code> e.g. <code>alert: error in process</code>), the trigger composition would be:</p>
+<p>If <code>and</code> logic was required (an email with a subject that contains <code>alert</code> AND <code>error</code> e.g. <code>alert: error in process</code>), the trigger composition would be:</p>
 <pre><code>mailscript triggers:add \
   --name alert-or-error \
   --and alert \
@@ -1029,7 +1029,7 @@ mailscript triggers:add \
 <ul>
 <li><strong>Email actions</strong>: send a new email message, forward the received email message, redirect the message to another address and reply to the sender or all participants in the received message.</li>
 <li><strong>SMS action</strong>: send an sms text to a specified number.</li>
-<li><strong>Webhook action</strong>: send a request to an endpoint. The request can be customized to suit your needs (eg. customize verbs, headers and payload; you can even use data from the received message into the delivered payload).</li>
+<li><strong>Webhook action</strong>: send a request to an http endpoint. The request can be customized to suit your needs (eg. customize verbs, headers and payload; you can even use data from the received message into the delivered payload).</li>
 </ul>
 <p>Actions can be combined together to create a new named action; for instance, if you want an SMS to be sent and a webhook to post to discord on receiving an email at <code>support@mycompany.mailscript.com</code>, you can create two separate named triggers for sms and webhook and a third combined trigger that does both.</p>
 <h4 id="setting-up-actions">Setting up Actions</h4>
@@ -1038,27 +1038,27 @@ mailscript triggers:add \
 <h5 id="email-actions">Email Actions</h5>
 <p>There are multiple email actions that can be setup to occur in response to an incoming email:</p>
 <ul>
-<li>forward - forward an email onto a new address as your email client would forward</li>
-<li>alias - redirect an email coming into the mailscript address to an external address, creating the effect that the email came from the originating address directly to the external address</li>
-<li>send - send a completely new email on to an external address (with the option to take parts of the triggering email over e.g. subject line)</li>
-<li>reply - respond to the incoming email, as if from the mailscript address that was sent to</li>
-<li>reply all - similar to reply but the response email is sent to everyong on the <code>cc</code> list as well</li>
+<li><strong>forward</strong> - forward an email onto a new address as your email client would forward</li>
+<li><strong>alias</strong> - redirect an email coming into the mailscript address to an external address, creating the effect that the email came from the originating address directly to the external address</li>
+<li><strong>send</strong> - send a completely new email on to an external address (with the option to take parts of the triggering email over e.g. subject line)</li>
+<li><strong>reply</strong> - respond to the incoming email, as if from the mailscript address that was sent to</li>
+<li><strong>reply all</strong> - similar to reply but the response email is sent to everyong on the <code>cc</code> list as well</li>
 </ul>
 <h6 id="forward">Forward</h6>
-<p>To create a forward action at the command line (replaceing <code>&lt;username&gt;</code>):</p>
+<p>To create a forward action at the command line (replacing <code>&lt;username&gt;</code>):</p>
 <pre><code class="language-shell">mailscript actions:add \
   --name forward-to-alice \
   --forward alice@example.com \
   --from &lt;username&gt;@mailscript.com
 </code></pre>
-<p>The <code>forward</code> parameter indicates the email address to forward on to. The <code>from</code> parameter indiciates which mailscript email address the relayed email will use for its <code>from</code> field.</p>
+<p>The <code>forward</code> parameter indicates the email address to forward on to. The <code>from</code> parameter indicates which mailscript email address the relayed email will use for its <code>from</code> field.</p>
 <h6 id="alias">Alias</h6>
 <p>To create an alias action at the command line:</p>
 <pre><code class="language-shell">mailscript actions:add \
   --name alias-to-personal \
   --alias myaccount@gmail.com
 </code></pre>
-<p>The <code>alias</code> specifies the email address the incoming email will be sent on to. You must verify that you control the email address. If you have not previously verified the email address, the <code>mailscript cli</code> will guide you through verification when you attempt to add the alias action.</p>
+<p>The <code>alias</code> specifies the email address the incoming email will be sent on to. You must verify that you control the email address. If you have not previously verified the email address, the <code>mailscript cli</code> will guide you through verification when you add the alias action.</p>
 <h6 id="send">Send</h6>
 <p>To send on an email with subject and body you specify, you can create a send alias at the command line (replacing <code>&lt;username&gt;</code>):</p>
 <pre><code class="language-shell">mailscript actions:add \
@@ -1118,7 +1118,7 @@ interpolation variables derieved from teh incoming email (e.g. <code>{{msg.subje
   --action sms-example
 </code></pre>
 <p>The combined  <code>forward-and-sms</code> action can be used when setting up
-a workflow as another action would be.</p>
+a workflow, and all subactions will be executed.</p>
 <h2 id="daemon">Daemon</h2>
 <p>The Mailscript cli allows you to use your local machine, or a server, as an output for an action in a workflow.</p>
 <p>Using the <code>mailscript daemon</code> command you can run a local daemon that will execute a script you specify as part of a <code>workflow</code> and in response to an email.</p>
