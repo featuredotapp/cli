@@ -36,6 +36,7 @@ nav:
           - Login: cli/misc/#login
           - Daemon: cli/misc/#daemon
           - Send: cli/misc/#send
+      - Daemon: cli/daemon-tutorial.md
   #- API: api.md
   #- SDK Clients: sdk-clients.md
 
