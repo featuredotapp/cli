@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url>
      <loc>https://docs.mailscript.com/</loc>
-     <lastmod>2021-02-26</lastmod>
+     <lastmod>2021-03-02</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.mailscript.com/cli/get-started/</loc>
-     <lastmod>2021-02-26</lastmod>
+     <lastmod>2021-03-02</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.mailscript.com/cli/commands/</loc>
-     <lastmod>2021-02-26</lastmod>
+     <lastmod>2021-03-02</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.mailscript.com/cli/addresses/</loc>
-     <lastmod>2021-02-26</lastmod>
+     <lastmod>2021-03-02</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.mailscript.com/cli/keys/</loc>
-     <lastmod>2021-02-26</lastmod>
+     <lastmod>2021-03-02</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.mailscript.com/cli/triggers/</loc>
-     <lastmod>2021-02-26</lastmod>
+     <lastmod>2021-03-02</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.mailscript.com/cli/actions/</loc>
-     <lastmod>2021-02-26</lastmod>
+     <lastmod>2021-03-02</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.mailscript.com/cli/workflows/</loc>
-     <lastmod>2021-02-26</lastmod>
+     <lastmod>2021-03-02</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.mailscript.com/cli/sync/</loc>
-     <lastmod>2021-02-26</lastmod>
+     <lastmod>2021-03-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>
