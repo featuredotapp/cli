@@ -24,14 +24,8 @@
 
 </div>
 
-<iframe src="https://player.vimeo.com/video/514763976" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
-<p><a href="https://vimeo.com/514763976">Getting started with the Mailscript CLI</a> from <a href="https://vimeo.com/user128923389">team</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
+https://user-images.githubusercontent.com/30949000/109582959-ef73a400-7ab3-11eb-89de-162a2261d582.mp4
 
-<p align="center">
-  <a href="https://vimeo.com/514763976">
-    <img src="docs/media/vimeo_video_min.png">
-  </a>
-<p>
 
 # Table of Contents 📚
 - [Table of Contents 📚](#table-of-contents-)
