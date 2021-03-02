@@ -24,7 +24,9 @@
 
 </div>
 
-https://user-images.githubusercontent.com/30949000/109582959-ef73a400-7ab3-11eb-89de-162a2261d582.mp4
+[![Watch the video](docs/media/vimeo_video_min.png)](https://user-images.githubusercontent.com/30949000/109582959-ef73a400-7ab3-11eb-89de-162a2261d582.mp4)
+
+
 
 
 # Table of Contents 📚
