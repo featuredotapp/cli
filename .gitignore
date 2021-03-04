@@ -125,3 +125,5 @@ dist
 example.yaml
 
 .mailscript-test
+
+packages/main/lib
