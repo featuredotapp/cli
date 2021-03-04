@@ -27,4 +27,4 @@ mailscript daemon \
   --command "cowsay \$subject"
 ```
 
-The command parameter specifies the shell script to run when the workflow sends an email to the daemon action, in this case the `cowsay` utility. The contents of the email are made available through the `$subject` and `$text` environment variables. The command will be executed each time on each received email.
+The command parameter specifies the shell script to run when the workflow sends an email to the daemon action, in this case the `cowsay` utility. The contents of the email are made available through the `$subject` and `$text` environment variables. The complete email object as json is passed as a string to `$payload`. The command will be executed each time an email is received.
