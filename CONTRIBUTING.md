@@ -126,7 +126,7 @@ $ npx prettier --check "./src/**/*.{ts,tsx,js,jsx}"
 ### Creating Custom Templates
 
 We accept community contributions such as workflow templates. 
-See [templates folder readme](packages/templates/templates.md) for proper guide on submitting your template. Community templates should align with our [CODE OF CODUCT](CODE_OF_CONDUCT.md) and guidelines layed out in this document.
+See [templates folder readme](templates/templates.md) for proper guide on submitting your template. Community templates should align with our [CODE OF CODUCT](CODE_OF_CONDUCT.md) and guidelines layed out in this document.
 
 ### Submitting a PR
 
