@@ -1,11 +1,12 @@
 # Mailscript CLI
 ## Table of Contents
-* [Notes](#notes)
-* [Examples](#examples)
-* [Overview](#overview)
-* [Commands](#commands)
-* [Configuration](#configuration)
-* [API](API.md)
+- [Mailscript CLI](#mailscript-cli)
+  - [Table of Contents](#table-of-contents)
+  - [Notes](#notes)
+  - [Examples](#examples)
+  - [Overview](#overview)
+  - [Commands](#commands)
+  - [Configuration](#configuration)
 
 
 ## Notes
@@ -14,8 +15,8 @@ See getting [key concepts](key-concepts.md) for more info about how mailscript w
 ## Examples
 - [Example YML workflow](annotated-workflow.yml)
 - [Combined triggers and actions](combined.md)
-- [Email to google spreadsheet](https://github.com/mailscript/cli/tree/main/packages/templates/email-to-google-spreadsheet)
-- [Github action failure email to notification](https://github.com/mailscript/cli/tree/main/packages/templates/github-action-failure-to-notification)
+- [Email to google spreadsheet](https://github.com/mailscript/cli/tree/main/templates/email-to-google-spreadsheet)
+- [Github action failure email to notification](https://github.com/mailscript/cli/tree/main/templates/github-action-failure-to-notification)
 
 
 ## Overview

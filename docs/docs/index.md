@@ -46,27 +46,27 @@ Read our templates on setting up your infrastructure and automations with Mailsc
 
 #### Pipe email attachments to an endpoint
 
-Setup the first step of a pipeline with data from email attachments: [attachments to webhook](https://github.com/mailscript/cli/tree/main/packages/templates/attachments-to-webhook).
+Setup the first step of a pipeline with data from email attachments: [attachments to webhook](https://github.com/mailscript/cli/tree/main/templates/attachments-to-webhook).
 
 #### Manage your email infrastructure
 
-Version control your email infrastructure and setup a continuous integration process whenever you submit changes: [email infrastructure management](https://github.com/mailscript/cli/tree/main/packages/templates/email-infrastructure).
+Version control your email infrastructure and setup a continuous integration process whenever you submit changes: [email infrastructure management](https://github.com/mailscript/cli/tree/main/templates/email-infrastructure).
 
 #### Auto-reply to first time senders
 
-Let first time senders know you'll get back to them: [auto-reply to first time senders](https://github.com/mailscript/cli/tree/main/packages/templates/auto-reply-first-time-sender).
+Let first time senders know you'll get back to them: [auto-reply to first time senders](https://github.com/mailscript/cli/tree/main/templates/auto-reply-first-time-sender).
 
 #### Escalate notifications
 
-Send an sms text message when the important messages arrive: [two alert messages in a minute to send sms](https://github.com/mailscript/cli/tree/main/packages/templates/two-alerts-to-sms.
+Send an sms text message when the important messages arrive: [two alert messages in a minute to send sms](https://github.com/mailscript/cli/tree/main/templates/two-alerts-to-sms.
 
 #### Send messages to your team channels
 
-Notify your discord/slack channels when something needs their attention: [run failed to discord #channel](https://github.com/mailscript/cli/tree/main/packages/templates/run-failed-to-discord).
+Notify your discord/slack channels when something needs their attention: [run failed to discord #channel](https://github.com/mailscript/cli/tree/main/templates/run-failed-to-discord).
 
 #### Setup shared addresses for your team
 
-Setup a group of employees to receive messages directed to an address and have them all be able to reply from such address: [shared address for teams](https://github.com/mailscript/cli/tree/main/packages/templates/shared-address-for-team).
+Setup a group of employees to receive messages directed to an address and have them all be able to reply from such address: [shared address for teams](https://github.com/mailscript/cli/tree/main/templates/shared-address-for-team).
 
 ## Community
 

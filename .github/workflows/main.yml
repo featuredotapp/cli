@@ -17,7 +17,6 @@ jobs:
       - name: Install
         run: yarn
       - name: Lint
-        working-directory: ./packages/main
         run: yarn format:check
       - name: Test
         run: yarn test

@@ -14,7 +14,7 @@
   "bugs": {
     "url": "https://github.com/mailscript/cli/issues"
   },
-  "homepage": "https://github.com/mailscript/cli/tree/main/packages/templates/email-to-google-spreadsheet#readme",
+  "homepage": "https://github.com/mailscript/cli/tree/main/templates/email-to-google-spreadsheet#readme",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",

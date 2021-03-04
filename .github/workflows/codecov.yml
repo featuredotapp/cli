@@ -29,13 +29,12 @@ jobs:
           key: ubuntu-18.04-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ubuntu-18.04-yarn-
-      #- name: Change Directory
-      #  run: cd packages/main
+
       - name: Install
         run: yarn
-        
+
       - name: npm install -g codecov
-        run:  npm install -g codecov
+        run: npm install -g codecov
 
       - name: npm run test
         run: npm run test
