@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/media/Mailscript_Black.png">
+  <img src="../../docs/media/Mailscript_Black.png">
 </p>
 <p align="center">
   <H1>Low-code automation for inbound emails.</H1>
