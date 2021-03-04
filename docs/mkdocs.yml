@@ -33,9 +33,10 @@ nav:
           - Actions: cli/actions.md
           - Workflows: cli/workflows.md
           - Sync: cli/sync.md
-          - Login: cli/misc/#login
-          - Daemon: cli/misc/#daemon
-          - Send: cli/misc/#send
+          - Login: cli/login.md
+          - Daemon: cli/daemon.md
+          - Send: cli/send.md
+      - Daemon: cli/daemon-tutorial.md
   #- API: api.md
   #- SDK Clients: sdk-clients.md
 
