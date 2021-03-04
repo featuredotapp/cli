@@ -9,6 +9,9 @@ import { askVerifyEmailFlow } from '../../utils/askVerifyEmailFlow'
 import { askVerifySmsFlow } from '../../utils/askVerifySmsFlow'
 import withStandardErrors from '../../utils/errorHandling'
 
+const GDRIVE_PDF_UPLOADER_URL =
+  'https://us-central1-mailscript-firebase.cloudfunctions.net/googleDrivePdfUploader'
+
 type FlagsType = {
   name: string
   noninteractive: boolean
@@ -19,6 +22,7 @@ type FlagsType = {
   replyall?: boolean
   alias?: string
   webhook?: string
+  gdrive?: string
 
   text?: string
   subject?: string
@@ -83,6 +87,9 @@ export default class ActionsAdd extends Command {
     webhook: flags.string({
       char: 'w',
       description: 'url of the webhook to call',
+    }),
+    gdrive: flags.string({
+      description: 'path to save pdf attachments to in Google Drive',
     }),
     method: flags.enum({
       options: ['PUT', 'POST', 'GET'],
@@ -159,6 +166,34 @@ export default class ActionsAdd extends Command {
 
   private _resolveActionPayload(flags: FlagsType) {
     const name = flags.name
+
+    if (flags.gdrive) {
+      const path = flags.gdrive
+      const method = 'POST'
+
+      const body = JSON.stringify({
+        attachments: '{{msg.attachments}}',
+        driveStoragePath: path,
+        googleDriveAuth: '{{integrations.google}}',
+      })
+
+      const headers = {
+        'Content-Type': 'application/json',
+      }
+
+      return {
+        name,
+        type: 'webhook',
+        config: {
+          url: GDRIVE_PDF_UPLOADER_URL,
+          opts: {
+            headers,
+            method,
+          },
+          body,
+        },
+      } as api.AddActionWebhookRequest
+    }
 
     if (flags.sms) {
       if (!flags.text) {
