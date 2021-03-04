@@ -60,11 +60,11 @@
     "node": ">=10.19.0"
   },
   "files": [
-    "./bin",
-    "./lib",
-    "./www",
-    "./npm-shrinkwrap.json",
-    "./oclif.manifest.json"
+    "/bin",
+    "/lib",
+    "/www",
+    "/npm-shrinkwrap.json",
+    "/oclif.manifest.json"
   ],
   "homepage": "https://github.com/getmailscript/cli",
   "keywords": [
