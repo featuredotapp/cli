@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./media/Mailscript_Black.png">
+  <img src="../../docs/media/Mailscript_Black.png">
 </p>
 <p align="center">
   <H1>Low-code automation for inbound emails.</H1>
@@ -26,7 +26,7 @@
 
 <p align="center">
   <a href="https://vimeo.com/514763976">
-    <img src="docs/media/vimeo_video_min.png">
+    <img src="../../docs/media/vimeo_video_min.png">
   </a>
 <p>
 
