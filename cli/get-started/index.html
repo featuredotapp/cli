@@ -479,26 +479,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#daemon" class="md-nav__link">
-    Daemon
-  </a>
-  
-    <nav class="md-nav" aria-label="Daemon">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#setting-up-a-daemon" class="md-nav__link">
-    Setting up a daemon
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -617,7 +597,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../misc/#login" class="md-nav__link">
+      <a href="../login/" class="md-nav__link">
         Login
       </a>
     </li>
@@ -629,7 +609,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../misc/#daemon" class="md-nav__link">
+      <a href="../daemon/" class="md-nav__link">
         Daemon
       </a>
     </li>
@@ -641,7 +621,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../misc/#send" class="md-nav__link">
+      <a href="../send/" class="md-nav__link">
         Send
       </a>
     </li>
@@ -650,6 +630,18 @@
           
         </ul>
       </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../daemon-tutorial/" class="md-nav__link">
+        Daemon
+      </a>
     </li>
   
 
@@ -886,26 +878,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#daemon" class="md-nav__link">
-    Daemon
-  </a>
-  
-    <nav class="md-nav" aria-label="Daemon">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#setting-up-a-daemon" class="md-nav__link">
-    Setting up a daemon
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -1119,25 +1091,6 @@ interpolation variables derieved from teh incoming email (e.g. <code>{{msg.subje
 </code></pre>
 <p>The combined  <code>forward-and-sms</code> action can be used when setting up
 a workflow, and all subactions will be executed.</p>
-<h2 id="daemon">Daemon</h2>
-<p>The Mailscript cli allows you to use your local machine, or a server, as an output for an action in a workflow.</p>
-<p>Using the <code>mailscript daemon</code> command you can run a local daemon that will execute a script you specify as part of a <code>workflow</code> and in response to an email.</p>
-<h3 id="setting-up-a-daemon">Setting up a daemon</h3>
-<p>First register a new daemon action:</p>
-<pre><code class="language-shell">mailscript actions:add --name &quot;action name&quot; --daemon &quot;daemon name&quot;
-</code></pre>
-<p>We can now include the daemon in a workflow:</p>
-<pre><code class="language-shell">mailscript workflows:add \
-  --name &quot;workflow name&quot; \
-  --trigger &quot;trigger name&quot; \
-  --action &quot;daemon name&quot;
-</code></pre>
-<p>Any email sent to the input and that matches the trigger, will be forwarded to the daemon listening on the <code>daemon name</code> action. To setup such a daemon run:</p>
-<pre><code class="language-shell">mailscript daemon \
-  --daemon &quot;daemon name&quot;
-  --command &quot;cowsay \$subject&quot;
-</code></pre>
-<p>The command parameter specifies the shell script to run when the workflow sends an email to the daemon action, in this case the <code>cowsay</code> utility. The contents of the email are made available through the <code>$subject</code> and <code>$text</code> environment variables. The command will be executed each time on each received email.</p>
                 
               
               

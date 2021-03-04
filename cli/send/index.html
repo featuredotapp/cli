@@ -13,14 +13,14 @@
         <meta name="author" content="mailscript.com">
       
       
-        <link rel="canonical" href="https://docs.mailscript.com/cli/readme/">
+        <link rel="canonical" href="https://docs.mailscript.com/cli/send/">
       
       <link rel="shortcut icon" href="../../images/favicon.png">
       <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.0.3">
     
     
       
-        <title>Mailscript CLI - Documentation</title>
+        <title>Send - Documentation</title>
       
     
     
@@ -70,7 +70,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#mailscript-cli" class="md-skip">
+        <a href="#send" class="md-skip">
           Skip to content
         </a>
       
@@ -101,7 +101,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Mailscript CLI
+              Send
             
           </span>
         </div>
@@ -222,12 +222,14 @@
 
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
       
       <label class="md-nav__link" for="__nav_2">
         CLI
@@ -255,12 +257,14 @@
             
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" checked>
       
       <label class="md-nav__link" for="__nav_2_2">
         Usage & commands
@@ -384,11 +388,49 @@
             
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../send/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Send
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Send
       </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#mailscript-send-file" class="md-nav__link">
+    mailscript send [FILE]
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -442,43 +484,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#table-of-contents" class="md-nav__link">
-    Table of Contents
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#notes" class="md-nav__link">
-    Notes
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#examples" class="md-nav__link">
-    Examples
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#overview" class="md-nav__link">
-    Overview
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#commands" class="md-nav__link">
-    Commands
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#configuration" class="md-nav__link">
-    Configuration
+  <a href="#mailscript-send-file" class="md-nav__link">
+    mailscript send [FILE]
   </a>
   
 </li>
@@ -495,98 +502,25 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/mailscript/docs/edit/main/docs/cli/readme.md" title="Edit this page" class="md-content__button md-icon">
+                  <a href="https://github.com/mailscript/docs/edit/main/docs/cli/send.md" title="Edit this page" class="md-content__button md-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
                   </a>
                 
                 
-                <h1 id="mailscript-cli">Mailscript CLI</h1>
-<h2 id="table-of-contents">Table of Contents</h2>
-<ul>
-<li><a href="#notes">Notes</a></li>
-<li><a href="#examples">Examples</a></li>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#commands">Commands</a></li>
-<li><a href="#configuration">Configuration</a></li>
-<li><a href="../API/">API</a></li>
-</ul>
-<h2 id="notes">Notes</h2>
-<p>See getting <a href="../key-concepts/">key concepts</a> for more info about how mailscript works. When ready take a look at the <a href="../get-started/">get started page</a></p>
-<h2 id="examples">Examples</h2>
-<ul>
-<li><a href="../annotated-workflow.yml">Example YML workflow</a></li>
-<li><a href="../combined/">Combined triggers and actions</a></li>
-<li><a href="https://github.com/mailscript/cli/tree/main/packages/templates/email-to-google-spreadsheet">Email to google spreadsheet</a></li>
-<li><a href="https://github.com/mailscript/cli/tree/main/packages/templates/github-action-failure-to-notification">Github action failure email to notification</a></li>
-</ul>
-<h2 id="overview">Overview</h2>
-<p>In order to use the mailscript CLI must first install it wth the global flag. Run the following...</p>
-<pre><code>**Login local daemon**
-```sh-session
-$ mailscript login
-... You should see a browser window open prompting you to login to your mailscript account.
+                <h1 id="send">send</h1>
+<p>Send an email from one of your addresses</p>
+<h2 id="mailscript-send-file"><code>mailscript send [FILE]</code></h2>
+<p>send an email from a mailscript address</p>
+<pre><code>USAGE
+  $ mailscript send [FILE]
+
+OPTIONS
+  -b, --text=text        text of email
+  -f, --from=from        (required) email address to use for sending
+  -h, --help             show CLI help
+  -s, --subject=subject  (required) subject line of email
+  -t, --to=to            (required) email address to send to
 </code></pre>
-<pre><code class="language-sh">Configure and manipulate email pipeline in Mailscript from the cli
-
-VERSION
-  mailscript/0.4.9 win32-x64 node-v12.18.0
-
-USAGE
-  $ mailscript [COMMAND]
-
-TOPICS
-  actions    add an action
-  addresses  configure your email addresses
-  keys       add an address key
-  sync       import/export configuration between files and Mailscript
-  triggers   add a trigger
-  workflows  configure your workflows
-
-COMMANDS
-  daemon  Run a daemon to execute scripts on email arrival
-  help    display help for mailscript
-  login
-  send    send an email from a mailscript address
-</code></pre>
-<h2 id="commands">Commands</h2>
-<ul>
-<li><a href="../actions/"><code>mailscript actions</code></a></li>
-</ul>
-<p><em>Actions are what gets executed in response to a predetermined triggered. This can be sending a text message, forwarding the email, or ignoring the email entirely to a name few. Click the link above to see full list of available sub commands.</em></p>
-<ul>
-<li><a href="../addresses/"><code>mailscript addresses</code></a></li>
-</ul>
-<p><em>This is where you would manage all of your mailscript addresses. Listing out created addresses, creating new addresses and deleting addresses no longer in use. Click the link above to see full list of available sub commands.</em>
-* <a href="../misc/#daemon"><code>mailscript daemon</code></a></p>
-<p><em>Run a local email processing daemon. Useful for custom made email processing software.</em></p>
-<ul>
-<li><a href="../misc/#help"><code>mailscript help [COMMAND]</code></a></li>
-<li><a href="../keys/"><code>mailscript keys</code></a></li>
-</ul>
-<p><em>Manage SMTP credientials for redirecting emails from your own email address to mailscript. Click the link above to see full list of available sub commands.</em></p>
-<ul>
-<li><a href="../misc/#login"><code>mailscript login</code></a></li>
-<li><a href="../misc/#send"><code>mailscript send [FILE]</code></a></li>
-</ul>
-<p><em>Sends an email from your mailscript address</em></p>
-<ul>
-<li><a href="../sync/#mailscript-syncexport"><code>mailscript sync:export</code></a></li>
-<li><a href="../sync/#mailscript-syncimport"><code>mailscript sync:import</code></a></li>
-</ul>
-<p><em>Import/export configuration to and from mailscript.</em></p>
-<ul>
-<li><a href="../triggers/"><code>mailscript triggers</code></a></li>
-</ul>
-<p><em>Manage triggers. Triggers are rule sets which help mailscript know where to redirect an email to. Triggers are combined with actions to create a workflow. Click the link above to see full list of available sub commands.</em></p>
-<ul>
-<li><a href="../workflows/"><code>mailscript workflows</code></a></li>
-</ul>
-<p>*Manage workflows. Workflows are a conjunction of actions and triggers defining the filter -&gt; action relationship. They also include other metadata such as specifiying a different email address. It is possible to have multiple email addresses and workflows on the same account. Click the link above to see full list of available sub commands.</p>
-<h2 id="configuration">Configuration</h2>
-<p>The mailscript CLI saves a configuration file at the follow location for windows, macOSX and Linux. In the event this must be removed for whatever reason the default location is available here.</p>
-<p>Windows: <code>/Users/&lt;Username&gt;/.mailscript</code></p>
-<p>Linux: <code>~/.mailscript</code></p>
-<p>MacOSX: <code>~/.mailscript</code></p>
                 
               
               
@@ -601,6 +535,39 @@ COMMANDS
       
         
 <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        <a href="../daemon/" class="md-footer__link md-footer__link--prev" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Daemon
+            </div>
+          </div>
+        </a>
+      
+      
+        <a href="../daemon-tutorial/" class="md-footer__link md-footer__link--next" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Daemon
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
