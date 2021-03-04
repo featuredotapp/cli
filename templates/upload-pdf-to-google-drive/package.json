@@ -14,7 +14,7 @@
   "bugs": {
     "url": "https://github.com/mailscript/cli/issues"
   },
-  "homepage": "https://github.com/mailscript/cli/tree/main/packages/templates/upload-pdf-to-google-drive#readme",
+  "homepage": "https://github.com/mailscript/cli/tree/main/templates/upload-pdf-to-google-drive#readme",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
