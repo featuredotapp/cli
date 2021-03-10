@@ -134,7 +134,10 @@ export default class Sync extends Command {
     const inputs = await handle(
       client.getAllInputs(),
       withStandardErrors(
-        { '200': ({ list }: api.GetAllInputsResponse) => list },
+        {
+          '200': ({ list }: api.GetAllInputsResponse) => list,
+          '403': () => [],
+        },
         this,
       ),
     )

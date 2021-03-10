@@ -454,14 +454,7 @@ export default class Sync extends Command {
 
     const inputsResponse = await client.getAllInputs()
 
-    if (inputsResponse.status !== 200) {
-      this.log('Error reading inputs')
-      this.exit(1)
-    }
-
-    const {
-      data: { list: inputs },
-    } = inputsResponse
+    const inputs = inputsResponse.status === 200 ? inputsResponse.data.list : []
 
     const inputIdsMappings = inputs.reduce(
       (acc, item) => ({ ...acc, [item.name]: item.id }),
@@ -479,6 +472,11 @@ export default class Sync extends Command {
         triggerIdsMappings,
         actionIdMappings,
       )
+
+      if (!payload.input) {
+        this.log('Error reading inputs')
+        this.exit(1)
+      }
 
       if (existingWorkflow) {
         if (
