@@ -29,6 +29,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+    put:
+      tags:
+        - 'user'
+      summary: 'Update a user'
+      operationId: 'updateUser'
+      requestBody:
+        description: User body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserRequest'
+      responses:
+        '200':
+          description: 'Successful update operation'
+        '400':
+          description: 'Failure'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Bad credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /send:
     post:
       tags:
@@ -1224,6 +1251,12 @@ components:
         - error
       properties:
         error:
+          type: string
+    UpdateUserRequest:
+      required:
+        - displayName
+      properties:
+        displayName:
           type: string
     AddWorkspaceRequest:
       required:

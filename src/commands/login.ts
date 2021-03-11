@@ -30,9 +30,7 @@ const {
 } = process.env
 
 export default class LoginCommand extends Command {
-  static description = `
-Link or create your MailScript account
-`
+  static description = `Link or create your MailScript account`
 
   static flags = {
     offline: flags.boolean({ char: 'o', default: false, required: false }),

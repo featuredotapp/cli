@@ -24,6 +24,9 @@ export type User = {
 export type ErrorResponse = {
   error: string
 }
+export type UpdateUserRequest = {
+  displayName: string
+}
 export type SendRequest = {
   to: string
   from: string
@@ -317,6 +320,34 @@ export function getAuthenticatedUser(opts?: Oazapfts.RequestOpts) {
   >('/user', {
     ...opts,
   })
+}
+/**
+ * Update a user
+ */
+export function updateUser(
+  updateUserRequest: UpdateUserRequest,
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+  >(
+    '/user',
+    oazapfts.json({
+      ...opts,
+      method: 'PUT',
+      body: updateUserRequest,
+    }),
+  )
 }
 /**
  * Send an email
