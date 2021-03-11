@@ -4,7 +4,6 @@ import { handle } from 'oazapfts'
 import setupApiClient from '../../setupApiClient'
 import withStandardErrors from '../../utils/errorHandling'
 import { cli } from 'cli-ux'
-import chalk from 'chalk'
 
 export default class AddressesList extends Command {
   static description = 'list your email addresses'
@@ -39,19 +38,13 @@ export default class AddressesList extends Command {
             }
 
             this.log('')
-            this.log(chalk.bold('Addresses'))
-            this.log('')
 
             cli.table(
               list.sort((a, b) => a.id.localeCompare(b.id)),
               {
                 address: {
-                  header: 'Address',
+                  header: 'Addresses',
                   get: (row) => row.id,
-                },
-                name: {
-                  header: 'Display Name',
-                  get: (row) => row.displayName || '-',
                 },
               },
               { printLine: this.log },
