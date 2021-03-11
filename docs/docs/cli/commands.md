@@ -41,6 +41,7 @@ COMMANDS
 - [`triggers`](/cli/triggers) - Manipulates triggers
 - [`sync`](/cli/sync) - Allows to import/export triggers, actions and workflows
 - [`workflows`](/cli/workflows) - Manipulates workflows
+- [`user`](/cli/user) - Update your user details
 - [`login`](/cli/login) - Sign up or login to your account
 - [`send`](/cli/send) - Send an email from one of your addresses
 - [`usernames`](/cli/usernames) - Manipulates usernames

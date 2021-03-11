@@ -79,17 +79,26 @@
       "@oclif/plugin-help"
     ],
     "topics": {
-      "accessories": {
-        "description": "configure your accessories"
+      "actions": {
+        "description": "configure your workflow actions"
       },
       "addresses": {
         "description": "configure your email addresses"
       },
-      "key": {
+      "integrations": {
+        "description": "configure your third party integrations"
+      },
+      "keys": {
         "description": "configure your address keys"
       },
       "sync": {
         "description": "import/export configuration between files and Mailscript"
+      },
+      "triggers": {
+        "description": "configure your workflow triggers"
+      },
+      "user": {
+        "description": "configure your user details"
       },
       "workflows": {
         "description": "configure your workflows"
