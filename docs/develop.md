@@ -25,3 +25,13 @@ To run a command:
 ```shell
 node bin/run version
 ```
+
+## Publishing
+
+To publish to npm, ensure you are on the main branch and that all tests pass. Then run increment the version and publish:
+
+```
+yarn test
+npm version patch # or minor or major
+npm publish
+```
