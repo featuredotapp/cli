@@ -33,5 +33,6 @@ To publish to npm, ensure you are on the main branch and that all tests pass. Th
 ```
 yarn test
 npm version patch # or minor or major
-npm publish
+git push # so the updated version number is in git
+npm publish # you need to be logged in as team@mailscript.com
 ```
