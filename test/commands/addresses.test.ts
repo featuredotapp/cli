@@ -50,6 +50,47 @@ describe('Addresses', () => {
 
         expect(addressBody).to.eql({ address: 'another@test.mailscript.io' })
       })
+
+    test
+      .stdout()
+      .nock(MailscriptApiServer, (api) =>
+        api
+          .post('/addresses', (body: any) => {
+            addressBody = body
+            return true
+          })
+          .reply(405, { error: 'The workspace does not exist' }),
+      )
+      .command([
+        'addresses:add',
+        '--address',
+        'another@nonexistant.mailscript.io',
+      ])
+      .exit(1)
+      .it(
+        'errors if the address is on an incorrect workspace/username',
+        (ctx) => {
+          expect(ctx.stdout).to.contain(
+            'addresses can only be added under your username e.g. example@username.mailscript.com, another@username.mailscript.com',
+          )
+        },
+      )
+
+    test
+      .stdout()
+      .nock(MailscriptApiServer, (api) =>
+        api
+          .post('/addresses', (body: any) => {
+            addressBody = body
+            return true
+          })
+          .reply(405, { error: 'Something wrong with the address' }),
+      )
+      .command(['addresses:add', '--address', '[redacted]@test.mailscript.io'])
+      .exit(1)
+      .it('errors if the address cannot be added', (ctx) => {
+        expect(ctx.stdout).to.contain('Something wrong with the address')
+      })
   })
 
   describe('delete', () => {

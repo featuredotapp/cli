@@ -1,4 +1,5 @@
 import { Command, flags } from '@oclif/command'
+import chalk from 'chalk'
 import * as api from '../../api'
 import { handle } from 'oazapfts'
 import setupApiClient from '../../setupApiClient'
@@ -9,7 +10,29 @@ export async function addAddress(
   command: Command,
   address: string,
 ) {
-  await handle(client.addAddress({ address }), withStandardErrors({}, command))
+  await handle(
+    client.addAddress({ address }),
+    withStandardErrors(
+      {
+        '405': ({ error }: api.ErrorResponse) => {
+          if (error === 'The workspace does not exist') {
+            command.log(
+              chalk.red(
+                `${chalk.bold(
+                  'Error',
+                )}: addresses can only be added under your username e.g. example@username.mailscript.com, another@username.mailscript.com`,
+              ),
+            )
+          } else {
+            command.log(chalk.red(`${chalk.bold('Error')}: ${error}`))
+          }
+
+          command.exit(1)
+        },
+      },
+      command,
+    ),
+  )
 
   return { address }
 }
