@@ -59,6 +59,24 @@ export type Address = {
 export type GetAllAddressesResponse = {
   list: Address[]
 }
+export type AddDomainRequest = {
+  domain: string
+}
+export type DomainResponse = {
+  domain: string
+  records: {
+    type: string
+    name: string
+    value: string
+  }[]
+}
+export type GetAllDomainsResponse = {
+  id?: string[]
+}
+export type CheckDomainVerify = {
+  domain: string
+  success: boolean
+}
 export type Criteria = {
   sentTo?: string
   subjectContains?: string
@@ -478,6 +496,147 @@ export function getAllAddresses(opts?: Oazapfts.RequestOpts) {
       }
   >('/addresses', {
     ...opts,
+  })
+}
+/**
+ * Claim a new Domain
+ */
+export function addDomain(
+  addDomainRequest: AddDomainRequest,
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+        data: DomainResponse
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 405
+        data: ErrorResponse
+      }
+  >(
+    '/domains',
+    oazapfts.json({
+      ...opts,
+      method: 'POST',
+      body: addDomainRequest,
+    }),
+  )
+}
+/**
+ * Get all domains you have access to
+ */
+export function getAllDomains(opts?: Oazapfts.RequestOpts) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+        data: GetAllDomainsResponse
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 405
+        data: ErrorResponse
+      }
+  >('/domains', {
+    ...opts,
+  })
+}
+/**
+ * Remove a domain
+ */
+export function removeDomainVerify(
+  domain: string,
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 405
+        data: ErrorResponse
+      }
+  >(`/domains/${domain}`, {
+    ...opts,
+    method: 'DELETE',
+  })
+}
+/**
+ * Get domain verification
+ */
+export function getDomainVerify(domain: string, opts?: Oazapfts.RequestOpts) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+        data: DomainResponse
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 405
+        data: ErrorResponse
+      }
+  >(`/domains/verify/${domain}`, {
+    ...opts,
+  })
+}
+/**
+ * Check a new Domain
+ */
+export function checkDomainVerify(domain: string, opts?: Oazapfts.RequestOpts) {
+  return oazapfts.fetchJson<
+    | {
+        status: 200
+        data: CheckDomainVerify
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 401
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 405
+        data: ErrorResponse
+      }
+  >(`/domains/verify/${domain}`, {
+    ...opts,
+    method: 'POST',
   })
 }
 /**
