@@ -90,7 +90,7 @@ You should see a browser window open prompting you to login to your Mailscript a
 The daemon will handle the rest upon completion
 ```
 # Commands ⌨
-Ready to dive into Mailscript? [Read the command line documentation](https://github.com/mailscript/cli/tree/main/docs)
+Ready to dive into Mailscript? [Read the command line documentation](https://github.com/mailscript/cli/tree/main/docs/docs/cli)
 
 # Development 💬
 

@@ -4,39 +4,39 @@
 
 # Development
 
+The cli is node app built on the `oclif` command line framework.
+
+To install dependencies, run yarn in the root:
+
+```sh
+yarn
+```
+
 In development a `.env` file is used:
-****
+
 ```shell
-MAILSCRIPT_CONFIG_PATH=.mailscript-test # path to use for .mailscript config file
+MAILSCRIPT_CONFIG_PATH=.mailscript-test # override path to use for .mailscript config file
 MAILSCRIPT_LOGIN_URL=http://localhost:3000 # login website url
 MAILSCRIPT_API_SERVER=http://localhost:7000/v2 # api server url
-MAILSCRIPT_EMAIL_DOMAIN=mailscript.io # the domain to use when assign email addresses
-MAILSCRIPT_DAEMON_BRIDGE_URL=ws://localhost:8888 # the daemon bridge service
+MAILSCRIPT_EMAIL_DOMAIN=mailscript.io # the domain to use when assign email addresses (mailscript.io in development)
+MAILSCRIPT_DAEMON_BRIDGE_URL=ws://localhost:8888 # the daemon bridge service endpoint
 ```
+
+If a `.env` file is not used, the cli will use the default live values.
 
 To run a command:
 
 ```shell
-nvm use
 node bin/run version
 ```
 
-# Publish
+## Publishing
 
-Publishing the cli is a manual process.
+To publish to npm, ensure you are on the main branch and that all tests pass. Then run increment the version and publish:
 
-First check that the cli passes tests and linting:
-
-```shell
-y format:check
-y test
 ```
-
-To publish, ensure you are on `main`. Then you will need the `team@mailscript` login to npm to publish:
-
-```shell
-npm login
-npm version patch # or major or minor
-git push
-npm publish
+yarn test
+npm version patch # or minor or major
+git push # so the updated version number is in git
+npm publish # you need to be logged in as team@mailscript.com
 ```
