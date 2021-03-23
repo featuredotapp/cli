@@ -38,6 +38,7 @@ nav:
           - Daemon: cli/daemon.md
           - Send: cli/send.md
       - Daemon: cli/daemon-tutorial.md
+      - Custom Domains: cli/domains.md
   #- API: api.md
   #- SDK Clients: sdk-clients.md
 
