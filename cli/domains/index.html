@@ -533,12 +533,14 @@
 <li>A mailscript account</li>
 <li>Basic understanding of DNS configuration</li>
 </ul>
-<p>The configuration flow goes as follows:
-1. Create mailscript account (if you don't have one already)
-2. Set the correct MX, DMARC and DKIM values in your domain configuration panel. (More on this later)
-3. Run <code>mailscript domains:add example.org</code>; After this you will be prompted to add a verification code to your domain
-4. After sometime has passed you can run <code>mailscript domains:verify example.org</code> to check your domain manually... This process will happen automatically, so no need to rerun this command over and over until the domain has been verified. Once verification is complete you should see all active domains available when running <code>mailscript domains:list</code>
-5. Done! You can now start creating addresses using the <code>workspace</code> command similar to any other workspace.</p>
+<p>The configuration flow goes as follows:</p>
+<ol>
+<li>Create mailscript account (if you don't have one already)</li>
+<li>Set the correct MX, DMARC and DKIM values in your domain configuration panel. (More on this later)</li>
+<li>Run <code>mailscript domains:add example.org</code>; After this you will be prompted to add a verification code to your domain</li>
+<li>After sometime has passed you can run <code>mailscript domains:verify example.org</code> to check your domain manually... This process will happen automatically, so no need to rerun this command over and over until the domain has been verified. Once verification is complete you should see all active domains available when running <code>mailscript domains:list</code></li>
+<li>Done! You can now start creating addresses using the <code>workspace</code> command similar to any other workspace.</li>
+</ol>
 <p>An example verification code looks like:</p>
 <p><code>ms_verify=76bc4d64-9389-4fbe-86d6-61a90227c74d</code></p>
 <p>Keep in mind these codes are unique to your account, and in the event the verification code is removed you may lose access to the workspace attached with your domain. </p>
