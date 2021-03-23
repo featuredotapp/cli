@@ -457,6 +457,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#records" class="md-nav__link">
+    Records:
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#commands" class="md-nav__link">
     Commands
   </a>
@@ -502,6 +509,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#records" class="md-nav__link">
+    Records:
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#commands" class="md-nav__link">
     Commands
   </a>
@@ -541,9 +555,29 @@
 <li>After sometime has passed you can run <code>mailscript domains:verify example.org</code> to check your domain manually... This process will happen automatically, so no need to rerun this command over and over until the domain has been verified. Once verification is complete you should see all active domains available when running <code>mailscript domains:list</code></li>
 <li>Done! You can now start creating addresses using the <code>workspace</code> command similar to any other workspace.</li>
 </ol>
-<p>An example verification code looks like:</p>
-<p><code>ms_verify=76bc4d64-9389-4fbe-86d6-61a90227c74d</code></p>
-<p>Keep in mind these codes are unique to your account, and in the event the verification code is removed you may lose access to the workspace attached with your domain. </p>
+<h3 id="records">Records:</h3>
+<pre><code>name: @
+type: SPF
+value: &quot;v=spf1 ip4:45.79.221.22 ip4:45.79.202.226 include:mailgun.org ~all&quot;
+</code></pre>
+<pre><code>name: _dmarc
+type: TXT
+values: &quot;v=DMARC1; p=quarantine; rua=mailto:1a8046a6@mxtoolbox.dmarc-report.com; ruf=mailto:1a8046a6@forensics.dmarc-report.com&quot;
+</code></pre>
+<pre><code>name: dkim._domainkey
+type: TXT
+value: &quot;v=DKIM1;k=rsa;t=s;s=email;p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwHkMPooK9E2QFJNy5KZkLLnxrm8CzwpJ3g2n/MZnm8+wuh8SLZfCQrOx32QyJpeTi6QYw8bIT/EbQIjJ/2hQJBelhgvq2gUTt8SazcWlPAUUXErUW8kdUhNUpdo43QYyIxBgJfNyPvBeX/8J7MPRfDwQP95D+zd3qt35+QF3g1rJwXIXBc6HT3G&quot; &quot; WP1DwDRLTFc8fy3fq7CKI7Xtq6NUlB2ojbB/6rhUVfk3GycVnEMs1LVU8kRFnz/G3B6rTkULlYoELyoKZbFSdl7jsvmLyFoFtLQS4/OS4jINNoTPvkjSq4c3AUfZsXW+qQTbZcku3m2Aa7Ap2Si3j8Nu+9wTPPQIDAQAB&quot;
+</code></pre>
+<pre><code>name: @
+type: TXT
+value: &quot;ms_verify=(Insert the verification code provided by the CLI here)&quot;
+</code></pre>
+<p>Note: These values might change in the future, but we will try our best to keep you up to date on any changes.</p>
+<p>Keep in mind the <code>ms_verify</code> value is unique to your account, in the event the verification code is removed from the domain you may lose access to the workspace attached with your domain. </p>
+<p>Feel free to reach out to us over <a href="https://discord.gg/US24HAVYq2">discord</a> if something is missing in the docs or need assistence setting up your domain.</p>
+<p>Finally, your DNS settings should look something similar to this:</p>
+<p><img src="media/example_dns_config.png"/>
+In the screenshot above we are using Google domains. The console for your domain might look a bit different.</p>
 <h2 id="commands">Commands</h2>
 <p>TODO when commands are implemented</p>
                 
