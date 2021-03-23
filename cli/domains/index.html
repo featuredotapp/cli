@@ -13,14 +13,14 @@
         <meta name="author" content="mailscript.com">
       
       
-        <link rel="canonical" href="https://docs.mailscript.com/cli/send/">
+        <link rel="canonical" href="https://docs.mailscript.com/cli/domains/">
       
       <link rel="icon" href="../../images/favicon.png">
       <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.0.6">
     
     
       
-        <title>Send - Documentation</title>
+        <title>Custom Domains - Documentation</title>
       
     
     
@@ -70,7 +70,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#send" class="md-skip">
+        <a href="#custom-domain-support" class="md-skip">
           Skip to content
         </a>
       
@@ -99,7 +99,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Send
+              Custom Domains
             
           </span>
         </div>
@@ -253,14 +253,12 @@
             
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" >
       
       <label class="md-nav__link" for="__nav_2_2">
         Usage & commands
@@ -396,49 +394,11 @@
             
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Send
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../send/" class="md-nav__link">
         Send
       </a>
-      
-        
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#mailscript-send-file" class="md-nav__link">
-    mailscript send [FILE]
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -464,11 +424,49 @@
             
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../domains/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Custom Domains
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Custom Domains
       </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#commands" class="md-nav__link">
+    Commands
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -504,8 +502,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#mailscript-send-file" class="md-nav__link">
-    mailscript send [FILE]
+  <a href="#commands" class="md-nav__link">
+    Commands
   </a>
   
 </li>
@@ -522,25 +520,30 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/mailscript/docs/edit/main/docs/cli/send.md" title="Edit this page" class="md-content__button md-icon">
+                  <a href="https://github.com/mailscript/docs/edit/main/docs/cli/domains.md" title="Edit this page" class="md-content__button md-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
                   </a>
                 
                 
-                <h1 id="send">send</h1>
-<p>Send an email from one of your addresses</p>
-<h2 id="mailscript-send-file"><code>mailscript send [FILE]</code></h2>
-<p>send an email from a mailscript address</p>
-<pre><code>USAGE
-  $ mailscript send [FILE]
-
-OPTIONS
-  -b, --text=text        text of email
-  -f, --from=from        (required) email address to use for sending
-  -h, --help             show CLI help
-  -s, --subject=subject  (required) subject line of email
-  -t, --to=to            (required) email address to send to
-</code></pre>
+                <h1 id="custom-domain-support">Custom domain support</h1>
+<p>As part of mailscript we offer the ability to use your own domain for sending and receiving emails.</p>
+<p>For this to work correctly there are a couple of things you will need.</p>
+<ul>
+<li>A domain name</li>
+<li>A mailscript account</li>
+<li>Basic understanding of DNS configuration</li>
+</ul>
+<p>The configuration flow goes as follows:
+1. Create mailscript account (if you don't have one already)
+2. Set the correct MX, DMARC and DKIM values in your domain configuration panel. (More on this later)
+3. Run <code>mailscript domains:add example.org</code>; After this you will be prompted to add a verification code to your domain
+4. After sometime has passed you can run <code>mailscript domains:verify example.org</code> to check your domain manually... This process will happen automatically, so no need to rerun this command over and over until the domain has been verified. Once verification is complete you should see all active domains available when running <code>mailscript domains:list</code>
+5. Done! You can now start creating addresses using the <code>workspace</code> command similar to any other workspace.</p>
+<p>An example verification code looks like:</p>
+<p><code>ms_verify=76bc4d64-9389-4fbe-86d6-61a90227c74d</code></p>
+<p>Keep in mind these codes are unique to your account, and in the event the verification code is removed you may lose access to the workspace attached with your domain. </p>
+<h2 id="commands">Commands</h2>
+<p>TODO when commands are implemented</p>
                 
               
               
@@ -558,7 +561,7 @@ OPTIONS
   
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
-        <a href="../daemon/" class="md-footer__link md-footer__link--prev" rel="prev">
+        <a href="../daemon-tutorial/" class="md-footer__link md-footer__link--prev" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -572,20 +575,6 @@ OPTIONS
           </div>
         </a>
       
-      
-        <a href="../daemon-tutorial/" class="md-footer__link md-footer__link--next" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              Daemon
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
-          </div>
-        </a>
       
     </nav>
   
