@@ -39,6 +39,7 @@ nav:
           - Send: cli/send.md
       - Daemon: cli/daemon-tutorial.md
       - Custom Domains: cli/domains.md
+      - Workflow Variables: cli/workflow-variables.md
   #- API: api.md
   #- SDK Clients: sdk-clients.md
 
