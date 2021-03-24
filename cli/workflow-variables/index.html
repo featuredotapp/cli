@@ -593,13 +593,13 @@
                 
                 <h1 id="workflow-variables">Workflow Variables</h1>
 <h2 id="intro">Intro</h2>
-<p>In workflows there are multiple variables that are passed down to the built in parser. In mailscript we use handlebars to allow you to substitute text in for processed variables. If you are unaware of the background on handlbars I'd suggest you read up on it <a href="https://handlebarsjs.com/">here</a></p>
-<p>Some exmaple syntax</p>
-<p><code>My subject is {{subject}}</code>
-Assuming the variable subject is not undefined and defined as "did you receive my email?"</p>
+<p>In workflows there are multiple variables that are passed down to the built in parser. In mailscript we use handlebars to allow you to substitute text in for processed variables. If you are unfamiliar with handlbars I'd suggest you read up on it <a href="https://handlebarsjs.com/">here</a></p>
+<p>Some example handlebars syntax</p>
+<p><code>My subject is {{subject}}</code></p>
+<p>Assuming the variable subject is not undefined and defined as "did you receive my email?"</p>
 <p>The processed output would look like: "My subject is did you receive my email?"</p>
 <h2 id="available-variables">Available variables</h2>
-<p>We provide various out of the box variables that can be used in the body section of the action in your workflow. These variables will show up regardless of what integration, or trigger is used. Additional variables might be supplied depending on the integration used in the workflow.</p>
+<p>We provide a couple of different out of the box variables, which can be used in the body section of the action in your workflow. These variables will be available regardless of what integration, or trigger is used. Additional variables may be supplied depending on what integration is used.</p>
 <table>
 <thead>
 <tr>
@@ -635,7 +635,7 @@ Assuming the variable subject is not undefined and defined as "did you receive m
 <pre><code class="language-sh">mailscript actions:add --from=MyEmail@mailscript.com --forward=john@example.com --subject=&quot;{{msg.subject}}&quot; --text=&quot;The body of the email is {{msg.text}}&quot;
 </code></pre>
 <p>Sending a SMS message
-Note: This will require you to verify the sms number ahead of time for this to work correctly.</p>
+Note: This will require you to verify the sms number used ahead of time or this will not be able to receive SMS messages upon execution of the action.</p>
 <pre><code class="language-sh">mailscript actions:add --sms=1235555000 --text &quot;The body of the email is {{msg.text}}&quot;
 </code></pre>
                 
