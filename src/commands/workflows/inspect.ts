@@ -45,7 +45,7 @@ export default class Sync extends Command {
 
   async inspect(
     client: typeof api,
-    flags: { path?: string; explicit?: Boolean; verbose?: Boolean },
+    flags: { path?: string; explicit?: boolean; verbose?: boolean },
     args: any,
   ): Promise<void> {
     const addresses: Array<string> = (
@@ -165,7 +165,7 @@ export default class Sync extends Command {
         ),
       )
     ).map(({ name, input, trigger, action, id }: api.Workflow) => {
-      var cleanedInputs = inputs.map(
+      const cleanedInputs = inputs.map(
         (ixl: {
           createdBy?: string
           createdAt?: string
@@ -191,8 +191,8 @@ export default class Sync extends Command {
       const inputName = cleanedInputs.find(({ id }: any) => id === input)
       const actionName = actions.find(({ id }: any) => id === action)
 
-      //console.log(id)
-      //console.log(foundTrigger)
+      // console.log(id)
+      // console.log(foundTrigger)
       if (!foundTrigger) {
         return {
           id,
@@ -210,11 +210,11 @@ export default class Sync extends Command {
         action: actionName,
       }
     })
-    /*const data = yaml.dump({
+    /* const data = yaml.dump({
             version: '0.2',
             workflows: workflows.find(({ id }: any) => id === args.id),
-        })*/
-    var tree: archy.Data = this._transformToArchy(
+        }) */
+    const tree: archy.Data = this._transformToArchy(
       workflows.find(({ id }: any) => id === args.id),
       'workflow',
       true,
@@ -230,24 +230,24 @@ export default class Sync extends Command {
     label: string,
     recursive?: boolean,
   ): archy.Data {
-    var out: archy.Data = {
+    const out: archy.Data = {
       label,
       nodes: [],
     }
-    for (var itemKey in objects) {
-      var item: any = objects[itemKey]
+    // eslint-disable-next-line guard-for-in
+    for (const itemKey in objects) {
+      const item: any = objects[itemKey]
 
-      var nodes
-      //console.log(`LN 236 is ${typeof item} or ${item}`)
+      let nodes
+      // console.log(`LN 236 is ${typeof item} or ${item}`)
       if (typeof item === 'string') {
         nodes = [item]
+      } else if (recursive === true) {
+        // console.log(item)
+
+        nodes = this._transformToArchy(item, '', recursive).nodes
       } else {
-        //console.log(item)
-        if (recursive === true) {
-          nodes = this._transformToArchy(item, '', recursive).nodes
-        } else {
-          nodes = [item.name, item.id]
-        }
+        nodes = [item.name, item.id]
       }
 
       out.nodes?.push({

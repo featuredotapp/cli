@@ -95,11 +95,11 @@ export default class Sync extends Command {
       },
     )
 
-    var importantObject = actions.find(({ id }: any) => id === args.id)
+    const importantObject = actions.find(({ id }: any) => id === args.id)
     if (!importantObject) {
       this.error('Action not found')
     }
-    var tree: archy.Data = this._transformToArchy(
+    const tree: archy.Data = this._transformToArchy(
       importantObject,
       'Action',
       true,
@@ -115,22 +115,21 @@ export default class Sync extends Command {
     label: string,
     recursive?: boolean,
   ): archy.Data {
-    var out: archy.Data = {
+    const out: archy.Data = {
       label,
       nodes: [],
     }
-    for (var itemKey in objects) {
-      var item: any = objects[itemKey]
+    // eslint-disable-next-line guard-for-in
+    for (const itemKey in objects) {
+      const item: any = objects[itemKey]
 
-      var nodes
+      let nodes
       if (typeof item === 'string') {
         nodes = [item]
+      } else if (recursive === true) {
+        nodes = this._transformToArchy(item, '', recursive).nodes
       } else {
-        if (recursive === true) {
-          nodes = this._transformToArchy(item, '', recursive).nodes
-        } else {
-          nodes = [item.name, item.id]
-        }
+        nodes = [item.name, item.id]
       }
 
       out.nodes?.push({

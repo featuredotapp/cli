@@ -36,16 +36,6 @@ export default class Sync extends Command {
   }
 
   async inspect(client: typeof api, flags: any, args: any): Promise<void> {
-    const addresses: Array<string> = (
-      await handle(
-        client.getAllAddresses(),
-        withStandardErrors(
-          { '200': ({ list }: api.GetAllAddressesResponse) => list },
-          this,
-        ),
-      )
-    ).map(({ id }: api.Address) => id)
-
     const triggers = (
       await handle(
         client.getAllTriggers(),
@@ -84,18 +74,18 @@ export default class Sync extends Command {
         return comparison
       })
 
-    var importantObject = triggers.find(({ id }: any) => id === args.id)
+    const importantObject = triggers.find(({ id }: any) => id === args.id)
     if (!importantObject) {
       this.error('Trigger not found')
     }
-    var tree: archy.Data = this._transformToArchy(
+    const tree: archy.Data = this._transformToArchy(
       importantObject,
       'Trigger',
       true,
     )
 
     this.log(archy(tree))
-    //this.log(data)
+    // this.log(data)
 
     this.exit(0)
   }
@@ -105,31 +95,29 @@ export default class Sync extends Command {
     label: string,
     recursive?: boolean,
   ): archy.Data {
-    var out: archy.Data = {
+    const out: archy.Data = {
       label,
       nodes: [],
     }
-    for (var itemKey in objects) {
-      var item: any = objects[itemKey]
+    // eslint-disable-next-line guard-for-in
+    for (const itemKey in objects) {
+      const item: any = objects[itemKey]
 
-      var nodes
-      //console.log(`LN 236 is ${typeof item} or ${item}`)
+      let nodes
       if (typeof item === 'string') {
         nodes = [item]
+      } else if (recursive === true) {
+        // console.log(item)
+        nodes = this._transformToArchy(item, '', recursive).nodes
       } else {
-        //console.log(item)
-        if (recursive === true) {
-          nodes = this._transformToArchy(item, '', recursive).nodes
-        } else {
-          nodes = [item.name, item.id]
-        }
+        nodes = [item.name, item.id]
       }
 
       out.nodes?.push({
         label: itemKey,
         nodes,
       })
-      //out.nodes.push(this._transformToArchy(item))
+      // out.nodes.push(this._transformToArchy(item))
     }
     return out
   }
