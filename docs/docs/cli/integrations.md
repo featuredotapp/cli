@@ -1,7 +1,7 @@
 
 ## Overview
 
-Mailscript provides integrations with the external services Google Drive and Zoom. These integrations provide validated OAuth tokens to Mailscript Actions after the integrations are setup. The provided OAuth tokens can be used to interact directly with the integrated service.
+Mailscript provides integrations with external services such as Google Drive and Zoom. These integrations provide validated OAuth tokens to Mailscript Actions after the integrations are setup. The provided OAuth tokens can be used to interact directly with the integrated service.
 
 ## Google Drive
 
@@ -9,7 +9,7 @@ The Google Drive Integration provides an OAuth token with the permissions define
 
 ### Setup
 
-To setup the Google Drive Integration, simply ensure you are logged in under the CLI with:
+To setup the Google Drive Integration, first ensure you are logged in under the CLI with:
 ```
 mailscript login
 ```
