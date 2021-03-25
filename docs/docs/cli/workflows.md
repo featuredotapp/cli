@@ -40,3 +40,20 @@ list the workflows
 USAGE
   $ mailscript workflows:list
 ```
+## `mailscript workflows:inspect`
+
+Inspect a workflow
+
+```
+USAGE
+  $ mailscript workflows:inspect ID
+
+ARGUMENTS
+  ID  id of the workflow
+
+OPTIONS
+  -e, --explicit  Show information that may compromise account security.
+  -h, --help      show CLI help
+  -v, --verbose   Verbose
+
+```
