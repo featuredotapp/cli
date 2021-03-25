@@ -1,13 +1,13 @@
 version: "0.2"
 addresses:
-  $username@mailscript.io:
+  $username@mailscript.com:
     keys:
       - name: owner
         read: true
         write: true
 workflows:
   - name: save-pdf-to-google-drive
-    input: $username@mailscript.io
+    input: $username@mailscript.com
     trigger: attachments-trigger
     action: save-pdf-to-google-drive
 triggers:
