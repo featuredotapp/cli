@@ -8,172 +8,168 @@ import { flat } from '../../utils/flat'
 import archy from 'archy'
 
 export default class Sync extends Command {
-    static description = 'export your Mailscript config to file'
+  static description = 'export your Mailscript config to file'
 
-    static flags = {
-        help: flags.help({
-            char: 'h',
-        })
+  static flags = {
+    help: flags.help({
+      char: 'h',
+    }),
+  }
+
+  static args = [
+    {
+      name: 'id',
+      required: true,
+      description: 'id of the workflow',
+    },
+  ]
+
+  async run() {
+    const { flags, args } = this.parse(Sync)
+    const client = await setupApiClient()
+
+    if (!client) {
+      this.exit(1)
     }
 
-    static args = [
-        {
-            name: 'id',
-            required: true,
-            description: 'id of the workflow'
-        },
-    ]
+    return this.inspect(client, flags, args)
+  }
 
+  async inspect(client: typeof api, flags: any, args: any): Promise<void> {
+    const addresses: Array<string> = (
+      await handle(
+        client.getAllAddresses(),
+        withStandardErrors(
+          { '200': ({ list }: api.GetAllAddressesResponse) => list },
+          this,
+        ),
+      )
+    ).map(({ id }: api.Address) => id)
 
-    async run() {
-        const { flags, args } = this.parse(Sync)
-        const client = await setupApiClient()
-
-        if (!client) {
-            this.exit(1)
-        }
-
-        return this.inspect(client, flags, args)
-    }
-
-    async inspect(client: typeof api, flags: any, args: any): Promise<void> {
-        const addresses: Array<string> = (
-            await handle(
-                client.getAllAddresses(),
-                withStandardErrors(
-                    { '200': ({ list }: api.GetAllAddressesResponse) => list },
-                    this,
-                ),
-            )
-        ).map(({ id }: api.Address) => id)
-
-        const triggers = (
-            await handle(
-                client.getAllTriggers(),
-                withStandardErrors(
-                    { '200': ({ list }: api.GetAllTriggersResponse) => list },
-                    this,
-                ),
-            )
-        )
-            .map(({ id, name, composition }: any) => ({
-                id,
-                name,
-                composition: composition.map((comp: any) => {
-                    if (comp.type === 'inner') {
-                        return {
-                            [comp.operand]: comp.nodes.map((n: { name: string }) => n.name),
-                        }
-                    }
-
-                    if (comp.type === 'leaf') {
-                        return { criteria: comp.criteria }
-                    }
-
-                    throw new Error(`Unknown composition type ${comp.type}`)
-                }),
-            }))
-            .sort(({ name: left }: any, { name: right }: any) => {
-                let comparison = 0
-
-                if (left > right) {
-                    comparison = 1
-                } else if (left < right) {
-                    comparison = -1
-                }
-
-                return comparison
-            })
-
-        var importantObject = triggers.find(({ id }: any) => id === args.id);
-        if(!importantObject) {
-            this.error("Trigger not found")
-        }
-        var tree: archy.Data = this._transformToArchy(importantObject, "Trigger", true)
-
-        this.log(archy(tree))
-        //this.log(data)
-
-        this.exit(0)
-    }
-
-    private _transformToArchy(
-        objects: any[],
-        label: string,
-        recursive?: boolean
-    ): archy.Data {
-        var out: archy.Data = {
-            label,
-            nodes: [
-
-            ]
-        };
-        for (var itemKey in objects) {
-            var item: any = objects[itemKey];
-
-            var nodes;
-            //console.log(`LN 236 is ${typeof item} or ${item}`)
-            if (typeof item === "string") {
-                nodes = [
-                    item
-                ]
-            } else {
-                //console.log(item)
-                if (recursive === true) {
-                    nodes = this._transformToArchy(item, "", recursive).nodes
-                } else {
-                    nodes = [
-                        item.name,
-                        item.id
-                    ]
-                }
+    const triggers = (
+      await handle(
+        client.getAllTriggers(),
+        withStandardErrors(
+          { '200': ({ list }: api.GetAllTriggersResponse) => list },
+          this,
+        ),
+      )
+    )
+      .map(({ id, name, composition }: any) => ({
+        id,
+        name,
+        composition: composition.map((comp: any) => {
+          if (comp.type === 'inner') {
+            return {
+              [comp.operand]: comp.nodes.map((n: { name: string }) => n.name),
             }
+          }
 
-            out.nodes?.push({
-                label: itemKey,
-                nodes
-            })
-            //out.nodes.push(this._transformToArchy(item))
+          if (comp.type === 'leaf') {
+            return { criteria: comp.criteria }
+          }
+
+          throw new Error(`Unknown composition type ${comp.type}`)
+        }),
+      }))
+      .sort(({ name: left }: any, { name: right }: any) => {
+        let comparison = 0
+
+        if (left > right) {
+          comparison = 1
+        } else if (left < right) {
+          comparison = -1
         }
-        return out;
+
+        return comparison
+      })
+
+    var importantObject = triggers.find(({ id }: any) => id === args.id)
+    if (!importantObject) {
+      this.error('Trigger not found')
+    }
+    var tree: archy.Data = this._transformToArchy(
+      importantObject,
+      'Trigger',
+      true,
+    )
+
+    this.log(archy(tree))
+    //this.log(data)
+
+    this.exit(0)
+  }
+
+  private _transformToArchy(
+    objects: any[],
+    label: string,
+    recursive?: boolean,
+  ): archy.Data {
+    var out: archy.Data = {
+      label,
+      nodes: [],
+    }
+    for (var itemKey in objects) {
+      var item: any = objects[itemKey]
+
+      var nodes
+      //console.log(`LN 236 is ${typeof item} or ${item}`)
+      if (typeof item === 'string') {
+        nodes = [item]
+      } else {
+        //console.log(item)
+        if (recursive === true) {
+          nodes = this._transformToArchy(item, '', recursive).nodes
+        } else {
+          nodes = [item.name, item.id]
+        }
+      }
+
+      out.nodes?.push({
+        label: itemKey,
+        nodes,
+      })
+      //out.nodes.push(this._transformToArchy(item))
+    }
+    return out
+  }
+
+  private _keyNameSubstitute(
+    keys: {
+      address: string
+      keys: any
+    }[],
+    config: any,
+  ) {
+    if (!config || !config.key) {
+      return config
     }
 
-    private _keyNameSubstitute(
-        keys: {
-            address: string
-            keys: any
-        }[],
-        config: any,
-    ) {
-        if (!config || !config.key) {
-            return config
-        }
+    return {
+      ...config,
+      key: this._lookupKeyName(keys, config.key),
+    }
+  }
 
-        return {
-            ...config,
-            key: this._lookupKeyName(keys, config.key),
-        }
+  private _lookupKeyName(
+    keys: {
+      address: string
+      keys: any
+    }[],
+    keyId: string,
+  ): string | null {
+    if (!keyId) {
+      return null
     }
 
-    private _lookupKeyName(
-        keys: {
-            address: string
-            keys: any
-        }[],
-        keyId: string,
-    ): string | null {
-        if (!keyId) {
-            return null
-        }
+    const key = flat(keys.map((ke) => ke.keys)).find(
+      (k: { id: string }) => k.id === keyId,
+    )
 
-        const key = flat(keys.map((ke) => ke.keys)).find(
-            (k: { id: string }) => k.id === keyId,
-        )
-
-        if (!key) {
-            return null
-        }
-
-        return key.name
+    if (!key) {
+      return null
     }
+
+    return key.name
+  }
 }
