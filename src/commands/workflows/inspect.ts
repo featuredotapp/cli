@@ -206,7 +206,7 @@ export default class Inspect extends Command {
         name,
         id,
         input: inputName,
-        trigger: foundTrigger ? foundTrigger.name : undefined,
+        trigger: foundTrigger ? foundTrigger : undefined,
         action: actionName,
       }
     })
