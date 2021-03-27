@@ -7,8 +7,8 @@ import withStandardErrors from '../../utils/errorHandling'
 import { flat } from '../../utils/flat'
 import archy from 'archy'
 
-export default class Sync extends Command {
-  static description = 'export your Mailscript config to file'
+export default class Inspect extends Command {
+  static description = 'Inspect your actions'
 
   static flags = {
     help: flags.help({
@@ -25,7 +25,7 @@ export default class Sync extends Command {
   ]
 
   async run() {
-    const { flags, args } = this.parse(Sync)
+    const { flags, args } = this.parse(Inspect)
     const client = await setupApiClient()
 
     if (!client) {
