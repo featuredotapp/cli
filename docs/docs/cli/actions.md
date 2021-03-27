@@ -56,3 +56,18 @@ USAGE
 OPTIONS
   -h, --help  show CLI help
 ```
+
+## `mailscript actions:inspect`
+
+Inspect an action
+
+```
+USAGE
+  $ mailscript actions:inspect ID
+
+ARGUMENTS
+  ID  id of the action
+
+OPTIONS
+  -h, --help      show CLI help
+```

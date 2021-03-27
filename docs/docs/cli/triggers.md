@@ -55,3 +55,18 @@ OPTIONS
   -h, --help  show CLI help
 
 ```
+
+## `mailscript triggers:inspect`
+
+Inspect a trigger
+
+```
+USAGE
+  $ mailscript triggers:inspect ID
+
+ARGUMENTS
+  ID  id of the trigger
+
+OPTIONS
+  -h, --help      show CLI help
+```
