@@ -6,6 +6,8 @@ import setupApiClient from '../../setupApiClient'
 import { handle } from 'oazapfts'
 import withStandardErrors from '../../utils/errorHandling'
 
+import staticDns from './staticDnsRecords'
+
 type FlagsType = {
   domain?: string
 
@@ -55,7 +57,7 @@ export default class DomainsAdd extends Command {
               domain + ',',
               'to verify your ownership',
             )
-            for (const { type, name, value } of records) {
+            for (const { type, name, value } of [ ...records, ...staticDns ]) {
               this.log()
               this.log('Type:', type)
               this.log('Name:', name)
