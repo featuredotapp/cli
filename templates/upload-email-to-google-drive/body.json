@@ -1,0 +1,5 @@
+{
+  "content": "{{all}}",
+  "driveStoragePath": "storage/path/on/google/drive",
+  "googleDriveAuth": "{{integrations.google}}"
+}
