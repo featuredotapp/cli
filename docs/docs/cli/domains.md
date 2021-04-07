@@ -20,11 +20,6 @@ The configuration flow goes as follows:
 ### Records:
 
 ```
-name: @
-type: SPF
-value: "v=spf1 ip4:45.79.221.22 ip4:45.79.202.226 include:mailgun.org ~all"
-```
-```
 name: _dmarc
 type: TXT
 values: "v=DMARC1; p=quarantine; rua=mailto:1a8046a6@mxtoolbox.dmarc-report.com; ruf=mailto:1a8046a6@forensics.dmarc-report.com"
@@ -40,12 +35,13 @@ type: TXT
 value: "ms_verify=(Insert the verification code provided by the CLI here)"
 ```
 
-Note: These values might change in the future, but we will try our best to keep you up to date on any changes.
+Note 1: These values might change in the future, but we will try our best to keep you up to date on any changes.
+
+Note 2: There might be additional records that will be required... Please follow what is provided by the CLI over what provided in this doc. Ensuring your domain is setup correctly is your responsibility.
 
 Keep in mind the `ms_verify` value is unique to your account, in the event the verification code is removed from the domain you may lose access to the workspace attached with your domain. 
 
 Feel free to reach out to us over [discord](https://discord.gg/US24HAVYq2) if something is missing in the docs or need assistance setting up your domain.
-
 
 
 Finally, your DNS settings should look something similar to this:
