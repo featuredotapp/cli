@@ -108,6 +108,14 @@ export type AddWorkflowRequest = {
   trigger?: string
   action: string
 }
+export type KeyValuePair = {
+  key: string
+  value: any
+}
+export type SetWorkflowRequest = {
+  id: string
+  pairs: KeyValuePair[]
+}
 export type Workflow = {
   id: string
   name: string
@@ -117,6 +125,7 @@ export type Workflow = {
   input: string
   trigger: string
   action: string
+  active?: boolean
 }
 export type GetAllWorkflowsResponse = {
   list: Workflow[]
@@ -673,6 +682,38 @@ export function addWorkflow(
       ...opts,
       method: 'POST',
       body: addWorkflowRequest,
+    }),
+  )
+}
+/**
+ * Set workflow property
+ */
+export function setWorkflow(
+  setWorkflowRequest: SetWorkflowRequest,
+  opts?: Oazapfts.RequestOpts,
+) {
+  return oazapfts.fetchJson<
+    | {
+        status: 204
+      }
+    | {
+        status: 400
+        data: ErrorResponse
+      }
+    | {
+        status: 403
+        data: ErrorResponse
+      }
+    | {
+        status: 405
+        data: ErrorResponse
+      }
+  >(
+    '/workflows/set',
+    oazapfts.json({
+      ...opts,
+      method: 'POST',
+      body: setWorkflowRequest,
     }),
   )
 }
