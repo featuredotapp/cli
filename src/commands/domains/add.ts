@@ -6,7 +6,7 @@ import setupApiClient from '../../setupApiClient'
 import { handle } from 'oazapfts'
 import withStandardErrors from '../../utils/errorHandling'
 
-import staticDns from './staticDnsRecords'
+import staticDnsRecords from './staticDnsRecords'
 
 type FlagsType = {
   domain?: string
@@ -57,7 +57,7 @@ export default class DomainsAdd extends Command {
               domain + ',',
               'to verify your ownership',
             )
-            for (const { type, name, value } of [...records, ...staticDns]) {
+            for (const { type, name, value } of [...records, ...staticDnsRecords]) {
               this.log()
               this.log('Type:', type)
               this.log('Name:', name)
@@ -65,7 +65,7 @@ export default class DomainsAdd extends Command {
             }
             this.log()
             this.log('Type: MX')
-            this.log('Name:', record_name)
+            this.log('Name: @')
             this.log('Value #1: haraka.mailscript.com')
             this.log('Value #2: in.mailscript.com')
           },

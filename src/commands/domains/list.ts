@@ -39,6 +39,10 @@ export default class DomainsList extends Command {
       withStandardErrors(
         {
           '200'({ id }: api.GetAllDomainsResponse) {
+            if (!id) {
+              this.log("You don't own any domains")
+              return
+            }
             this.log('Your domains:')
             for (const domain of id) {
               this.log('-', domain)

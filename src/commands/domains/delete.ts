@@ -46,7 +46,7 @@ export default class DomainsDelete extends Command {
     }
 
     return handle(
-      client.removeDomainVeriy(domain),
+      client.removeDomainVerify(domain),
       withStandardErrors(
         {
           '200'() {

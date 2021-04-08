@@ -1,4 +1,4 @@
-export const staticDns = [
+export default [
   {
     type: 'TXT',
     name: '_dmarc',

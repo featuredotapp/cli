@@ -6,7 +6,7 @@ import setupApiClient from '../../setupApiClient'
 import { handle } from 'oazapfts'
 import withStandardErrors from '../../utils/errorHandling'
 
-import staticDns from './staticDnsRecords'
+import staticDnsRecords from './staticDnsRecords'
 
 type FlagsType = {
   domain?: string
@@ -53,7 +53,7 @@ export default class DomainsInspect extends Command {
         {
           '200'({ domain, records }: api.DomainResponse) {
             this.log('DNS records for', domain, 'should include the following:')
-            for (const { type, name, value } of [...records, ...staticDns]) {
+            for (const { type, name, value } of [...records, ...staticDnsRecords]) {
               this.log()
               this.log('Type:', type)
               this.log('Name:', name)
@@ -61,7 +61,7 @@ export default class DomainsInspect extends Command {
             }
             this.log()
             this.log('Type: MX')
-            this.log('Name:', record_name)
+            this.log('Name: @')
             this.log('Value #1: haraka.mailscript.com')
             this.log('Value #2: in.mailscript.com')
           },
