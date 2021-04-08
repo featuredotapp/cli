@@ -78,6 +78,7 @@ export default class WorkflowsActive extends Command {
       }
       default: {
         this.log(`Invalid input ${args.value}`)
+        return
       }
     }
     const pairs: api.KeyValuePair = {
@@ -93,8 +94,8 @@ export default class WorkflowsActive extends Command {
       client.setWorkflow(payload),
       withStandardErrors(
         {
-          '201': () => {
-            this.log(`Workflow property has been set to ${args.value}`)
+          '204': () => {
+            this.log(`Workflow has been set to ${args.value}`)
           },
           '403': ({ error }: api.ErrorResponse) => {
             this.log(chalk.red(`${chalk.bold('Error')}: ${error}`))

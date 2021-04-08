@@ -55,7 +55,7 @@ export default class Workflows extends Command {
                 },
                 active: {
                   header: 'Active',
-                  get: (row) => row.active === undefined ? true : row.active,
+                  get: (row) => (row.active === undefined ? true : row.active),
                 },
               },
               { printLine: this.log },
