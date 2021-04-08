@@ -6,7 +6,7 @@ import setupApiClient from '../../setupApiClient'
 import { handle } from 'oazapfts'
 import withStandardErrors from '../../utils/errorHandling'
 
-import staticDnsRecords from './staticDnsRecords'
+import staticDnsRecords from '../../utils/staticDnsRecords'
 
 type FlagsType = {
   domain?: string
