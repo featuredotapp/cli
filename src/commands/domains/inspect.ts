@@ -53,7 +53,7 @@ export default class DomainsInspect extends Command {
         {
           '200'({ domain, records }: api.DomainResponse) {
             this.log('DNS records for', domain, 'should include the following:')
-            for (const { type, name, value } of [ ...records, ...staticDns ]) {
+            for (const { type, name, value } of [...records, ...staticDns]) {
               this.log()
               this.log('Type:', type)
               this.log('Name:', name)

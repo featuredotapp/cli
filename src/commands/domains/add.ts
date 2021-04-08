@@ -57,7 +57,7 @@ export default class DomainsAdd extends Command {
               domain + ',',
               'to verify your ownership',
             )
-            for (const { type, name, value } of [ ...records, ...staticDns ]) {
+            for (const { type, name, value } of [...records, ...staticDns]) {
               this.log()
               this.log('Type:', type)
               this.log('Name:', name)
