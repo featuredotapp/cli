@@ -1,39 +1,37 @@
-openapi: '3.0.0'
+openapi: 3.0.0
 info:
   version: 0.4.0
   title: Mailscript
   license:
     name: MIT
 servers:
-  - url: https://api.mailscript.com/v2
+  - url: 'https://api.mailscript.com/v2'
     description: API server
-  # - url: http://localhost:7000/v2
-  #   description: Local development server
 paths:
   /user:
     get:
       tags:
-        - 'user'
-      summary: 'Get the authenticated user'
-      operationId: 'getAuthenticatedUser'
+        - user
+      summary: Get the authenticated user
+      operationId: getAuthenticatedUser
       responses:
         '200':
-          description: 'successful operation'
+          description: successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     put:
       tags:
-        - 'user'
-      summary: 'Update a user'
-      operationId: 'updateUser'
+        - user
+      summary: Update a user
+      operationId: updateUser
       requestBody:
         description: User body
         required: true
@@ -43,15 +41,15 @@ paths:
               $ref: '#/components/schemas/UpdateUserRequest'
       responses:
         '200':
-          description: 'Successful update operation'
+          description: Successful update operation
         '400':
-          description: 'Failure'
+          description: Failure
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
@@ -59,9 +57,9 @@ paths:
   /send:
     post:
       tags:
-        - 'send'
-      summary: 'Send an email'
-      operationId: 'send'
+        - send
+      summary: Send an email
+      operationId: send
       requestBody:
         description: request body
         required: true
@@ -71,15 +69,15 @@ paths:
               $ref: '#/components/schemas/SendRequest'
       responses:
         '200':
-          description: 'successful operation'
+          description: successful operation
         '400':
-          description: 'Invalid input'
+          description: Invalid input
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
@@ -87,10 +85,10 @@ paths:
   /workspaces:
     post:
       tags:
-        - 'workspaces'
-      summary: 'Claim a Mailscript workspace'
-      description: 'An attendant address will be created as well'
-      operationId: 'addWorkspace'
+        - workspaces
+      summary: Claim a Mailscript workspace
+      description: An attendant address will be created as well
+      operationId: addWorkspace
       requestBody:
         description: request body
         required: true
@@ -100,46 +98,46 @@ paths:
               $ref: '#/components/schemas/AddWorkspaceRequest'
       responses:
         '201':
-          description: 'successful operation'
+          description: successful operation
         '400':
-          description: 'Bad request'
+          description: Bad request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '405':
-          description: 'Invalid input'
+          description: Invalid input
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     get:
       tags:
-        - 'workspaces'
-      summary: 'Get all workspaces you have access to'
+        - workspaces
+      summary: Get all workspaces you have access to
       description: ''
-      operationId: 'getAllWorkspaces'
+      operationId: getAllWorkspaces
       responses:
         '200':
-          description: 'successful operation'
+          description: successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetAllWorkspacesResponse'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '405':
-          description: 'Invalid input'
+          description: Invalid input
           content:
             application/json:
               schema:
@@ -147,10 +145,10 @@ paths:
   /addresses:
     post:
       tags:
-        - 'addresses'
-      summary: 'Claim a new Mailscript address'
+        - addresses
+      summary: Claim a new Mailscript address
       description: ''
-      operationId: 'addAddress'
+      operationId: addAddress
       requestBody:
         description: Address body
         required: true
@@ -160,57 +158,284 @@ paths:
               $ref: '#/components/schemas/AddAddressRequest'
       responses:
         '200':
-          description: 'successful operation'
+          description: successful operation
         '400':
-          description: 'Internal error'
+          description: Internal error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '405':
-          description: 'Invalid input'
+          description: Invalid input
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     get:
       tags:
-        - 'addresses'
-      summary: 'Get all addresses you have access to'
+        - addresses
+      summary: Get all addresses you have access to
       description: ''
-      operationId: 'getAllAddresses'
+      operationId: getAllAddresses
       responses:
         '200':
-          description: 'successful operation'
+          description: successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetAllAddressesResponse'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '405':
-          description: 'Invalid input'
+          description: Invalid input
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /addresses/{address}:
+  /domains:
+    post:
+      tags:
+        - domains
+      summary: Claim a new Domain
+      description: ''
+      operationId: addDomain
+      requestBody:
+        description: Domain body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddDomainRequest'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DomainResponse'
+              examples:
+                Add:
+                  value: |-
+                    {
+                      "id": "hielle.com",
+                      "records": [
+                        {
+                          "type:" "TXT",
+                          "name": "@",
+                          "value": "ms_verify=eecbb911-d940-41ea-8fc2-2c83295f418b"
+                        }
+                      ]
+                    }
+        '400':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Bad credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '405':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      tags:
+        - domains
+      summary: Get all domains you have access to
+      description: ''
+      operationId: getAllDomains
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllDomainsResponse'
+              examples:
+                list:
+                  value: |-
+                    {
+                    "list": ["hielle.com"]
+                    }
+        '400':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Bad credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '405':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  '/domains/{domain}':
     delete:
       tags:
-        - 'addresses'
-      summary: 'Delete a mailscript address'
+        - domains
+      summary: Remove a domain
       description: ''
-      operationId: 'deleteAddress'
+      operationId: removeDomainVerify
+      parameters:
+        - name: domain
+          in: path
+          description: Full Top-level domain name
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Bad credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '405':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  '/domains/verify/{domain}':
+    get:
+      tags:
+        - domains
+      summary: Get domain verification
+      description: ''
+      operationId: getDomainVerify
+      parameters:
+        - name: domain
+          in: path
+          description: Full Top-level domain name
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DomainResponse'
+              examples:
+                Domain verification record:
+                  value: |-
+                    {
+                      "id": "hielle.com",
+                      "records": [
+                        {
+                          "type:" "TXT",
+                          "name": "@",
+                          "value": "ms_verify=eecbb911-d940-41ea-8fc2-2c83295f418b"
+                        }
+                      ]
+                    }
+        '400':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Bad credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '405':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+        - domains
+      summary: Check a new Domain
+      description: ''
+      operationId: CheckDomainVerify
+      parameters:
+        - name: domain
+          in: path
+          description: Full Top-level domain name
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckDomainVerify'
+              examples:
+                checkDomainVerify:
+                  value: |-
+                    {
+                    "id":"hielle.com",
+                    "success": true
+                    }
+        '400':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Authorization failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Bad credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '405':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  '/addresses/{address}':
+    delete:
+      tags:
+        - addresses
+      summary: Delete a mailscript address
+      description: ''
+      operationId: deleteAddress
       parameters:
         - name: address
           in: path
@@ -220,15 +445,15 @@ paths:
             type: string
       responses:
         '204':
-          description: 'successful delete operation'
+          description: successful delete operation
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '405':
-          description: 'Invalid input'
+          description: Invalid input
           content:
             application/json:
               schema:
@@ -236,35 +461,35 @@ paths:
   /triggers:
     get:
       tags:
-        - 'triggers'
-      summary: 'Get all triggers you have access to'
+        - triggers
+      summary: Get all triggers you have access to
       description: ''
-      operationId: 'getAllTriggers'
+      operationId: getAllTriggers
       responses:
         '200':
-          description: 'successful operation'
+          description: successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetAllTriggersResponse'
         '400':
-          description: 'Invalid input'
+          description: Invalid input
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     post:
       tags:
-        - 'triggers'
-      summary: 'Setup a trigger'
+        - triggers
+      summary: Setup a trigger
       description: ''
-      operationId: 'addTrigger'
+      operationId: addTrigger
       requestBody:
         description: Trigger body
         required: true
@@ -274,29 +499,29 @@ paths:
               $ref: '#/components/schemas/AddTriggerRequest'
       responses:
         '201':
-          description: 'successful add operation'
+          description: successful add operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/AddTriggerResponse'
         '400':
-          description: 'Invalid input'
+          description: Invalid input
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /triggers/{trigger}:
+  '/triggers/{trigger}':
     put:
       tags:
-        - 'triggers'
-      summary: 'Update a trigger'
-      operationId: 'updateTrigger'
+        - triggers
+      summary: Update a trigger
+      operationId: updateTrigger
       parameters:
         - name: trigger
           in: path
@@ -313,30 +538,30 @@ paths:
               $ref: '#/components/schemas/AddTriggerRequest'
       responses:
         '200':
-          description: 'Successful update operation'
+          description: Successful update operation
         '400':
-          description: 'Failure'
+          description: Failure
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '404':
-          description: 'Key not found'
+          description: Key not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     delete:
       tags:
-        - 'triggers'
-      summary: 'Delete a trigger'
-      operationId: 'deleteTrigger'
+        - triggers
+      summary: Delete a trigger
+      operationId: deleteTrigger
       parameters:
         - name: trigger
           in: path
@@ -346,21 +571,21 @@ paths:
             type: string
       responses:
         '204':
-          description: 'Successful delete operation'
+          description: Successful delete operation
         '400':
-          description: 'Failure'
+          description: Failure
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '404':
-          description: 'Key not found'
+          description: Key not found
           content:
             application/json:
               schema:
@@ -368,10 +593,10 @@ paths:
   /inputs:
     get:
       tags:
-        - 'inputs'
-      summary: 'Get all inputs you have access to'
+        - inputs
+      summary: Get all inputs you have access to
       description: ''
-      operationId: 'getAllInputs'
+      operationId: getAllInputs
       parameters:
         - name: name
           in: query
@@ -380,19 +605,19 @@ paths:
             type: string
       responses:
         '200':
-          description: 'successful operation'
+          description: successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetAllInputsResponse'
         '400':
-          description: 'Invalid input'
+          description: Invalid input
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
@@ -400,10 +625,10 @@ paths:
   /workflows:
     post:
       tags:
-        - 'workflows'
-      summary: 'Setup workflow'
+        - workflows
+      summary: Setup workflow
       description: ''
-      operationId: 'addWorkflow'
+      operationId: addWorkflow
       requestBody:
         description: Workflow body
         required: true
@@ -413,56 +638,56 @@ paths:
               $ref: '#/components/schemas/AddWorkflowRequest'
       responses:
         '201':
-          description: 'successful operation'
+          description: successful operation
         '400':
-          description: 'Internal error'
+          description: Internal error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '405':
-          description: 'Invalid input'
+          description: Invalid input
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     get:
       tags:
-        - 'workflows'
-      summary: 'Get all workflows you have access to'
+        - workflows
+      summary: Get all workflows you have access to
       description: ''
-      operationId: 'getAllWorkflows'
+      operationId: getAllWorkflows
       responses:
         '200':
-          description: 'successful operation'
+          description: successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetAllWorkflowsResponse'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '405':
-          description: 'Invalid input'
+          description: Invalid input
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /workflows/{workflow}:
+  '/workflows/{workflow}':
     put:
       tags:
-        - 'workflows'
-      summary: 'Update an workflow'
-      operationId: 'updateWorkflow'
+        - workflows
+      summary: Update an workflow
+      operationId: updateWorkflow
       parameters:
         - name: workflow
           in: path
@@ -479,30 +704,30 @@ paths:
               $ref: '#/components/schemas/AddWorkflowRequest'
       responses:
         '200':
-          description: 'Successful update operation'
+          description: Successful update operation
         '400':
-          description: 'Failure'
+          description: Failure
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '404':
-          description: 'Key not found'
+          description: Key not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     delete:
       tags:
-        - 'workflows'
-      summary: 'Delete a workflow'
-      operationId: 'deleteWorkflow'
+        - workflows
+      summary: Delete a workflow
+      operationId: deleteWorkflow
       parameters:
         - name: workflow
           in: path
@@ -512,30 +737,30 @@ paths:
             type: string
       responses:
         '204':
-          description: 'Successful delete operation'
+          description: Successful delete operation
         '400':
-          description: 'Failure'
+          description: Failure
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '404':
-          description: 'Key not found'
+          description: Key not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /addresses/{address}/keys:
+  '/addresses/{address}/keys':
     get:
       tags:
-        - 'keys'
-      summary: 'List address keys'
+        - keys
+      summary: List address keys
       operationId: getAllKeys
       parameters:
         - name: address
@@ -546,27 +771,27 @@ paths:
             type: string
       responses:
         '200':
-          description: 'successful operation'
+          description: successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetAllKeysResponse'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '404':
-          description: 'Address not found'
+          description: Address not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     post:
       tags:
-        - 'keys'
-      summary: 'Add address key'
+        - keys
+      summary: Add address key
       operationId: addKey
       parameters:
         - name: address
@@ -584,28 +809,28 @@ paths:
               $ref: '#/components/schemas/AddKeyRequest'
       responses:
         '201':
-          description: 'successful operation'
+          description: successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/AddKeyResponse'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '404':
-          description: 'Address not found'
+          description: Address not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /addresses/{address}/keys/{key}:
+  '/addresses/{address}/keys/{key}':
     get:
       tags:
-        - 'keys'
-      summary: 'Get address key'
+        - keys
+      summary: Get address key
       operationId: getKey
       parameters:
         - name: address
@@ -622,28 +847,28 @@ paths:
             type: string
       responses:
         '200':
-          description: 'successful operation'
+          description: successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Key'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '404':
-          description: 'Key not found'
+          description: Key not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     put:
       tags:
-        - 'keys'
-      summary: 'Update an address key'
-      operationId: 'updateKey'
+        - keys
+      summary: Update an address key
+      operationId: updateKey
       parameters:
         - name: address
           in: path
@@ -666,33 +891,33 @@ paths:
               $ref: '#/components/schemas/UpdateKeyRequest'
       responses:
         '200':
-          description: 'Successful operation'
+          description: Successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Key'
         '400':
-          description: 'Failure'
+          description: Failure
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '404':
-          description: 'Key not found'
+          description: Key not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     delete:
       tags:
-        - 'keys'
-      summary: 'Delete address key'
+        - keys
+      summary: Delete address key
       operationId: deleteKey
       parameters:
         - name: address
@@ -709,21 +934,21 @@ paths:
             type: string
       responses:
         '204':
-          description: 'Successful delete operation'
+          description: Successful delete operation
         '400':
-          description: 'Failure'
+          description: Failure
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '404':
-          description: 'Key not found'
+          description: Key not found
           content:
             application/json:
               schema:
@@ -731,27 +956,27 @@ paths:
   /verifications:
     get:
       tags:
-        - 'verifications'
-      summary: 'Get all verificats for the user'
-      operationId: 'getAllVerifications'
+        - verifications
+      summary: Get all verificats for the user
+      operationId: getAllVerifications
       responses:
         '200':
-          description: 'Successful operation'
+          description: Successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetAllVerificationsResponse'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     post:
       tags:
-        - 'verifications'
-      summary: 'Start verification process for external email address or sms number'
-      operationId: 'addVerification'
+        - verifications
+      summary: Start verification process for external email address or sms number
+      operationId: addVerification
       requestBody:
         description: Key body
         required: true
@@ -763,29 +988,29 @@ paths:
                 - $ref: '#/components/schemas/AddSmsVerificationRequest'
       responses:
         '201':
-          description: 'Successful operation'
+          description: Successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/AddVerificationResponse'
         '400':
-          description: 'Failure'
+          description: Failure
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /verifications/{verification}/verify:
+  '/verifications/{verification}/verify':
     post:
       tags:
-        - 'verifications'
-      summary: 'Verify an email address or sms number with a code'
-      operationId: 'verify'
+        - verifications
+      summary: Verify an email address or sms number with a code
+      operationId: verify
       parameters:
         - name: verification
           in: path
@@ -804,21 +1029,21 @@ paths:
                 - $ref: '#/components/schemas/VerifySmsRequest'
       responses:
         '200':
-          description: 'Successful operation'
+          description: Successful operation
         '400':
-          description: 'Failure'
+          description: Failure
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
-          description: 'Not authorized or bad code'
+          description: Not authorized or bad code
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '404':
-          description: 'Not found'
+          description: Not found
           content:
             application/json:
               schema:
@@ -827,17 +1052,17 @@ paths:
     get:
       tags:
         - actions
-      summary: 'Get all actions for the user'
-      operationId: 'getAllActions'
+      summary: Get all actions for the user
+      operationId: getAllActions
       responses:
         '200':
-          description: 'Successful operation'
+          description: Successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetAllActionsResponse'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
@@ -845,8 +1070,8 @@ paths:
     post:
       tags:
         - actions
-      summary: 'Add an action'
-      operationId: 'addAction'
+      summary: Add an action
+      operationId: addAction
       requestBody:
         description: Add action body
         required: true
@@ -866,29 +1091,35 @@ paths:
                 - $ref: '#/components/schemas/AddActionAliasRequest'
       responses:
         '201':
-          description: 'Successful operation'
+          description: Successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/AddActionResponse'
+              examples:
+                list:
+                  value: |-
+                    [
+                    "hielle.com"
+                    ]
         '400':
-          description: 'Failure'
+          description: Failure
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
-          description: 'Not authorized or bad code'
+          description: Not authorized or bad code
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /actions/{action}:
+  '/actions/{action}':
     put:
       tags:
-        - 'actions'
-      summary: 'Update an action key'
-      operationId: 'updateAction'
+        - actions
+      summary: Update an action key
+      operationId: updateAction
       parameters:
         - name: action
           in: path
@@ -915,34 +1146,34 @@ paths:
                 - $ref: '#/components/schemas/AddActionAliasRequest'
       responses:
         '200':
-          description: 'Successful update operation'
+          description: Successful update operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Key'
         '400':
-          description: 'Failure'
+          description: Failure
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '404':
-          description: 'Key not found'
+          description: Key not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     delete:
       tags:
-        - 'actions'
-      summary: 'Delete an action'
-      operationId: 'deleteAction'
+        - actions
+      summary: Delete an action
+      operationId: deleteAction
       parameters:
         - name: action
           in: path
@@ -952,30 +1183,30 @@ paths:
             type: string
       responses:
         '204':
-          description: 'Successful delete operation'
+          description: Successful delete operation
         '400':
-          description: 'Failure'
+          description: Failure
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '404':
-          description: 'Key not found'
+          description: Key not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /daemons/{daemon}/token:
+  '/daemons/{daemon}/token':
     get:
       tags:
         - daemon
-      summary: 'Get a token for opening a daemon connection'
+      summary: Get a token for opening a daemon connection
       operationId: getDaemonToken
       parameters:
         - name: daemon
@@ -986,7 +1217,7 @@ paths:
             type: string
       responses:
         '200':
-          description: 'Successful get operation'
+          description: Successful get operation
           content:
             application/json:
               schema:
@@ -996,13 +1227,13 @@ paths:
                   token:
                     type: string
         '400':
-          description: 'Failure'
+          description: Failure
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
@@ -1011,27 +1242,27 @@ paths:
     get:
       tags:
         - integrations
-      summary: 'Get all integrations for the user'
-      operationId: 'getAllIntegrations'
+      summary: Get all integrations for the user
+      operationId: getAllIntegrations
       responses:
         '200':
-          description: 'Successful operation'
+          description: Successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetAllIntegrationsResponse'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /integrations/{integration}:
+  '/integrations/{integration}':
     delete:
       tags:
-        - 'integrations'
-      summary: 'Delete an integration'
-      operationId: 'deleteIntegration'
+        - integrations
+      summary: Delete an integration
+      operationId: deleteIntegration
       parameters:
         - name: integration
           in: path
@@ -1041,21 +1272,21 @@ paths:
             type: string
       responses:
         '204':
-          description: 'Successful delete operation'
+          description: Successful delete operation
         '400':
-          description: 'Failure'
+          description: Failure
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
-          description: 'Bad credentials'
+          description: Bad credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '404':
-          description: 'Key not found'
+          description: Key not found
           content:
             application/json:
               schema:
@@ -1220,7 +1451,8 @@ components:
           type: string
         type:
           type: string
-          enum: ['email']
+          enum:
+            - email
         email:
           type: string
         verified:
@@ -1236,7 +1468,8 @@ components:
           type: string
         type:
           type: string
-          enum: ['sms']
+          enum:
+            - sms
         sms:
           type: string
         verified:
@@ -1280,6 +1513,51 @@ components:
       properties:
         address:
           type: string
+    AddDomainRequest:
+      required:
+        - domain
+      properties:
+        domain:
+          type: string
+    DomainResponse:
+      required:
+        - domain
+        - records
+      properties:
+        domain:
+          type: string
+        records:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+              name:
+                type: string
+              value:
+                type: string
+            required:
+              - type
+              - name
+              - value
+    GetAllDomainsResponse:
+      required:
+        - list
+      properties:
+        id:
+          type: array
+          items:
+            type: string
+    CheckDomainVerify:
+      required:
+        - domain
+        - success
+      properties:
+        domain:
+          type: string
+        success:
+          type: boolean
     GetAllAddressesResponse:
       required:
         - list
@@ -1316,9 +1594,9 @@ components:
           type: string
     SendRequest:
       required:
-        - 'to'
-        - 'from'
-        - 'subject'
+        - to
+        - from
+        - subject
       properties:
         to:
           type: string
@@ -1342,9 +1620,9 @@ components:
               - $ref: '#/components/schemas/Key'
     AddKeyRequest:
       required:
-        - 'name'
-        - 'read'
-        - 'write'
+        - name
+        - read
+        - write
       properties:
         name:
           type: string
@@ -1354,9 +1632,9 @@ components:
           type: boolean
     UpdateKeyRequest:
       required:
-        - 'name'
-        - 'read'
-        - 'write'
+        - name
+        - read
+        - write
       properties:
         name:
           type: string
@@ -1375,7 +1653,8 @@ components:
       properties:
         type:
           type: string
-          enum: ['email']
+          enum:
+            - email
         email:
           type: string
     AddSmsVerificationRequest:
@@ -1385,7 +1664,8 @@ components:
       properties:
         type:
           type: string
-          enum: ['sms']
+          enum:
+            - sms
         sms:
           type: string
     AddVerificationResponse:
@@ -1479,7 +1759,8 @@ components:
           type: string
         type:
           type: string
-          enum: ['mailescript-email']
+          enum:
+            - mailescript-email
         owner:
           type: string
         createdAt:
@@ -1499,7 +1780,8 @@ components:
           type: string
         type:
           type: string
-          enum: ['mailscript-email']
+          enum:
+            - mailscript-email
         config:
           type: object
           required:
@@ -1510,7 +1792,8 @@ components:
           properties:
             type:
               type: string
-              enum: ['forward']
+              enum:
+                - forward
             forward:
               type: string
             from:
@@ -1538,7 +1821,8 @@ components:
           type: string
         type:
           type: string
-          enum: ['sms']
+          enum:
+            - sms
         config:
           type: object
           required:
@@ -1559,7 +1843,8 @@ components:
           type: string
         type:
           type: string
-          enum: ['daemon']
+          enum:
+            - daemon
         config:
           type: object
           required:
@@ -1579,7 +1864,8 @@ components:
           type: string
         type:
           type: string
-          enum: ['webhook']
+          enum:
+            - webhook
         config:
           type: object
           required:
@@ -1599,7 +1885,10 @@ components:
                   type: object
                 method:
                   type: string
-                  enum: ['POST', 'GET', 'DELETE']
+                  enum:
+                    - POST
+                    - GET
+                    - DELETE
             body:
               type: string
     AddActionSendRequest:
@@ -1612,7 +1901,8 @@ components:
           type: string
         type:
           type: string
-          enum: ['mailscript-email']
+          enum:
+            - mailscript-email
         config:
           type: object
           required:
@@ -1623,7 +1913,8 @@ components:
           properties:
             type:
               type: string
-              enum: ['send']
+              enum:
+                - send
             to:
               type: string
             subject:
@@ -1646,7 +1937,8 @@ components:
           type: string
         type:
           type: string
-          enum: ['mailscript-email']
+          enum:
+            - mailscript-email
         config:
           type: object
           required:
@@ -1656,7 +1948,8 @@ components:
           properties:
             type:
               type: string
-              enum: ['reply']
+              enum:
+                - reply
             text:
               type: string
             html:
@@ -1675,7 +1968,8 @@ components:
           type: string
         type:
           type: string
-          enum: ['mailscript-email']
+          enum:
+            - mailscript-email
         config:
           type: object
           required:
@@ -1685,7 +1979,8 @@ components:
           properties:
             type:
               type: string
-              enum: ['replyAll']
+              enum:
+                - replyAll
             text:
               type: string
             html:
@@ -1704,13 +1999,15 @@ components:
           type: string
         type:
           type: string
-          enum: ['mailscript-email']
+          enum:
+            - mailscript-email
         config:
           type: object
           properties:
             type:
               type: string
-              enum: ['alias']
+              enum:
+                - alias
             alias:
               type: string
     GetAllActionsResponse:
@@ -1804,7 +2101,8 @@ components:
           type: string
         type:
           type: string
-          enum: ['google']
+          enum:
+            - google
         createdAt:
           type: string
           format: date-time
