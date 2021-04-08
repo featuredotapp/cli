@@ -2,6 +2,15 @@
 
 Configure your workflows
 
+### Index
+- [mailscript workflows:add](#mailscript-workflows:add)
+- [mailscript workflows:delete](#mailscript-workflows:delete)
+- [mailscript workflows:list](#mailscript-workflows:list)
+- [mailscript workflows:inspect](#mailscript-workflows:inspect)
+- [mailscript workflows:active](#mailscript-workflows:active)
+- [mailscript workflows:set](#mailscript-workflows:set)
+
+
 ## `mailscript workflows:add`
 
 add a workflow
@@ -56,4 +65,37 @@ OPTIONS
   -h, --help      show CLI help
   -v, --verbose   Verbose
 
+```
+## `mailscript workflows:active`
+
+Retrieve whether a workflow is enabled or not; Optionally enable/disable a workflow.
+
+```
+USAGE
+  $ mailscript workflows:active ID [VALUE]
+
+ARGUMENTS
+  ID     id of the workflow to be acted on
+  VALUE  "on" or "off"
+
+OPTIONS
+  -h, --help  show CLI help
+
+```
+## `mailscript workflows:set`
+
+Set a property of a workflow
+
+```
+USAGE
+  $ mailscript workflows:set ID KEY VALUE
+
+ARGUMENTS
+  ID     id of the workflow to be acted on
+  KEY    key of the property
+  VALUE  value of the property
+
+OPTIONS
+  -h, --help       show CLI help
+  -t, --type=type  type of the value
 ```
