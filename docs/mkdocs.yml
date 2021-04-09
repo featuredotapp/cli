@@ -6,8 +6,8 @@ site_url: https://docs.mailscript.com/
 edit_uri: 'edit/main/docs/'
 
 # Repository
-repo_name: mailscript/docs
-repo_url: https://github.com/mailscript/docs
+repo_name: Mailscript()
+repo_url: https://github.com/mailscript/cli
 
 # Copyright
 copyright: '&copy; Mailscript'
@@ -39,7 +39,8 @@ nav:
           - Send: cli/send.md
       - Daemon: cli/daemon-tutorial.md
       - Custom Domains: cli/domains.md
-      - Workflow Variables: cli/workflow-variables.md
+      - Data Field Interpolation: cli/workflow-variables.md
+      - Integrations: cli/integrations.md
   #- API: api.md
   #- SDK Clients: sdk-clients.md
 
