@@ -40,6 +40,7 @@ nav:
       - Daemon: cli/daemon-tutorial.md
       - Custom Domains: cli/domains.md
       - Workflow Variables: cli/workflow-variables.md
+      - Integrations: cli/integrations.md
   #- API: api.md
   #- SDK Clients: sdk-clients.md
 
